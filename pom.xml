@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.mycore.pica2mods</groupId>
+  <artifactId>pica2mods-parent</artifactId>
+  <version>1.3-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>MyCoRe Pica2MODS</name>
+  <description>an XSL based transformer from PicaXML to MODS</description>
+  <licenses>
+    <license>
+      <name>GNU General Public License, version 3</name>
+      <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <properties>
+    <maven.compiler.release>11</maven.compiler.release>
+  </properties>
+  <repositories>
+    <!-- central is required for bibsonomy not to take over every artifact -->
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>central</id>
+      <name>Central Repository</name>
+      <url>https://repo.maven.apache.org/maven2</url>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>dev.bibsonomy.org</id>
+      <name>Official Source Code Releases of selected BibSonomy Modules</name>
+      <url>http://dev.bibsonomy.org/maven2/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <dependencyManagement>
+    <dependencies>
+    </dependencies>
+  </dependencyManagement>
+  <developers>
+    <developer>
+      <id>mcrsteph</id>
+      <name>Robert Stephan</name>
+      <email>robert.stephan (at) uni-rostock.de</email>
+      <organization>Universität Rostock, Universitätsbibliothek</organization>
+      <organizationUrl>http://www.ub.uni-rostock.de</organizationUrl>
+      <roles>
+        <role>coordination</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+    <developer>
+      <id>mcrkrebs</id>
+      <name>Kathleen Neumann</name>
+      <email>Kathleen.Neumann (at) gbv.de</email>
+      <organization>Verbundzentrale des GBV (VZG), Document Management System</organization>
+      <organizationUrl>http://www.gbv.de</organizationUrl>
+      <roles>
+        <role>coordination</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+
+  </developers>
+  <modules>
+    <module>pica2mods-xslt</module>
+    <module>pica2mods-webapp</module>
+  </modules>
+</project>

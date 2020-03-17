@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Convert Pica To MODS</title>
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/webjars/highlightjs/styles/default.css}" rel="stylesheet" />
+</head>
+<body>
+  <div class="d-flex flex-column justify-content-between vh-100">
+    <div class="container-fluid pt-3">
+      <div style="float: right; margin-top: 12px">
+        <div th:if="${not(#strings.isEmpty(ppn))}" th:unless="${xmlSchemaError}">
+          <a class="btn btn-success btn-sm" th:href="@{ppn__${ppn}__.mods.xml}">
+            <strong>&#128190; MODS valid</strong>
+          </a>
+        </div>
+        <span th:if="${xmlSchemaError}" style="font-size: 100%" class="badge badge-danger">MODS ERROR!</span>
+      </div>
+      <h2>UB Rostock: Pica2MODS Konverter</h2>
+      <form th:action="@{/}" method="GET">
+        <div class="form-group row mt-3">
+          <div class="col-3">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                <span class="input-group-text">PPN:</span>
+              </div>
+              <input class="form-control form-control" type="text" id="ppn" name="ppn" th:value="${ppn}" />
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-1">
+            <a class="btn btn-outline-secondary btn-sm d-block" th:href="${'http://opac.lbs-rostock.gbv.de/DB=1/XMLPRS=N/PPN?PPN='+ppn}">OPAC</a>
+          </div>
+          <div class="col-2">
+            <a class="btn btn-outline-secondary btn-sm d-block"
+              th:href="${'http://sru.k10plus.de/k10plus?operation=searchRetrieve&amp;maximumRecords=1&amp;recordSchema=picaxml&amp;query=pica.ppn%3D'+ppn}">PicaPlus
+              O-Aufn. (SRU, K10plus)</a>
+          </div>
+          <div class="col-2">
+            <a class="btn btn-outline-secondary btn-sm d-block"
+              th:href="${'http://unapi.k10plus.de/?&amp;format=picaxml&amp;id=opac-de-28:ppn:'+ppn}">PicaPlus O-Aufn. (UnAPI, DE-28)</a>
+          </div>
+          <div class="col-2">
+            <a class="btn btn-outline-secondary btn-sm d-block"
+              th:href="${'http://unapi.k10plus.de/?&amp;format=picaxml&amp;id=k10plus:ppn:'+ppnA}">PicaPlus A-Aufn. (UnAPI, K10plus)</a>
+          </div>
+
+          <div class="col-2" th:if="${ppnHost}">
+            <a class="btn btn-info btn-sm d-block" th:href="*{'?ppn=__${ppnHost}__'}" th:text="'MODS_Host (__${ppnHost}__)'">Pica2MODS_Host</a>
+          </div>
+        </div>
+
+        <div class="row mt-4" th:if="${xmlSchemaError}">
+          <div class="col">
+            <div class="alert alert-danger pt-0" role="alert" style="white-space: pre-line;" th:text="${xmlSchemaError}"></div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <code class="flex-grow-1 m-3 border border-secondary d-inline-block" style="white-space: pre;" th:text="${modsxml}"></code>
+
+    <div class="container-fluid">
+      <div class="row mb-3">
+        <div class="col-2">
+          <strong>XSL-Dateien:</strong>
+        </div>
+        <div class="col-10">
+          <div class="row">
+            <div class="col-3" th:each="x:${xslFiles}">
+              <a th:href="@{xsl/__${x}__}" th:text="${x}"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <script th:src="@{/webjars/highlightjs/highlight.min.js}"></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('code').forEach((block) => {
+          hljs.highlightBlock(block);
+        });
+      });
+    </script>
+</body>
+</html>
