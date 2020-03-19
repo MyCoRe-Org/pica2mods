@@ -3,10 +3,10 @@
 <xsl:stylesheet version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:p="info:srw/schema/5/picaXML-v1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:fn="http://www.w3.org/2005/xpath-functions" exclude-result-prefixes="p xalan fn">
-  <xsl:import href="cp:ubr_pica2mods_EPUB.xsl" />
-  <xsl:import href="cp:ubr_pica2mods_KXP.xsl" />
-  <xsl:import href="cp:ubr_pica2mods_RAK.xsl" />
-  <xsl:import href="cp:ubr_pica2mods_RDA.xsl" />
+  <xsl:import href="cp:ubr/ubr_pica2mods_EPUB.xsl" />
+  <xsl:import href="cp:ubr/ubr_pica2mods_KXP.xsl" />
+  <xsl:import href="cp:ubr/ubr_pica2mods_RAK.xsl" />
+  <xsl:import href="cp:ubr/ubr_pica2mods_RDA.xsl" />
   
   <xsl:output method="xml" indent="yes" xalan:indent-amount="4" />
   <xsl:variable name="XSL_VERSION_PICA2MODS">pica2mods-xslt v1.2.3</xsl:variable>

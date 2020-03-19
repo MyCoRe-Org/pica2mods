@@ -31,7 +31,7 @@ public class Pica2ModsGenerator {
     private final Logger LOGGER = LoggerFactory.getLogger(Pica2ModsGenerator.class);
 
     public static final String PICA2MODS_XSLT_PATH = "META-INF/resources/xsl/pica2mods/";
-    private static final String PICA2MODS_XSLT_START_FILE = "ubr_pica2mods.xsl";
+    private static final String PICA2MODS_XSLT_START_FILE = "ubr/ubr_pica2mods.xsl";
     private static final String NS_PICA = "info:srw/schema/5/picaXML-v1.0";
     private static DocumentBuilderFactory DBF;
 

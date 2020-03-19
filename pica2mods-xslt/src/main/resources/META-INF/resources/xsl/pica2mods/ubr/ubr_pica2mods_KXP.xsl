@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:xalan="http://xml.apache.org/xalan" xmlns:fn="http://www.w3.org/2005/xpath-functions"
   xmlns:p="info:srw/schema/5/picaXML-v1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="p xalan fn">
-  <xsl:import href="cp:ubr_pica2mods_common.xsl" />
+  <xsl:import href="cp:ubr/ubr_pica2mods_common.xsl" />
   <xsl:variable name="XSL_VERSION_KXP" select="concat('ubr_pica2mods_KXP.xsl from ',$XSL_VERSION_PICA2MODS)" />
   <xsl:template match="/p:record" mode="KXP">
   	<xsl:variable name="ppnA" select="./p:datafield[@tag='039D'][./p:subfield[@code='C']='GBV']/p:subfield[@code='6']/text()" />
