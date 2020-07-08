@@ -9,8 +9,8 @@
   <xsl:import href="cp:ubr/ubr_pica2mods_RDA.xsl" />
   
   <xsl:output method="xml" indent="yes" xalan:indent-amount="4" />
-  <xsl:variable name="XSL_VERSION_PICA2MODS">pica2mods-xslt v1.2.3</xsl:variable>
-  <xsl:variable name="ubr_pica2mods_version">UB Rostock: Pica2MODS 20191206</xsl:variable>
+  <xsl:variable name="XSL_VERSION_PICA2MODS">pica2mods-xslt v1.3.0</xsl:variable>
+  <xsl:variable name="ubr_pica2mods_version">UB Rostock: Pica2MODS 20200708</xsl:variable>
   <xsl:variable name="mycoreRestAPIBaseURL" select="concat($WebApplicationBaseURL,'api/v1/')" />
   <xsl:param name="WebApplicationBaseURL">http://rosdok.uni-rostock.de/</xsl:param>
 
