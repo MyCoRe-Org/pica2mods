@@ -186,17 +186,21 @@
               <mods:extent><xsl:value-of select="." /></mods:extent>
           </xsl:for-each>
           
-          <xsl:for-each select="./p:datafield[@tag='037H']/p:subfield[@code='a']">   <!-- 4238 Technische Angaben zum elektr. Dokument  -->
-             <xsl:if test="contains(., 'Digitalisierungsvorlage: Original')"> <!-- alt -->
+          <xsl:choose> <!-- 4238 Technische Angaben zum elektr. Dokument  -->
+            <xsl:when test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Original')"> <!-- alt -->
                 <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-             </xsl:if>
-             <xsl:if test="contains(., 'Digitalisierungsvorlage: Primärausgabe')">
+            </xsl:when>
+            <xsl:when test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Primärausgabe')">
                 <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-             </xsl:if>
-             <xsl:if test="contains(., 'Digitalisierungsvorlage: Mikrofilm')">
+            </xsl:when>
+            <xsl:when test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Mikrofilm')">
                 <mods:digitalOrigin>digitized microfilm</mods:digitalOrigin>
-             </xsl:if>
-          </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+             	<mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+          	</xsl:otherwise>
+		  </xsl:choose>
+          
         </mods:physicalDescription>
         
        <mods:originInfo eventType="online_publication">

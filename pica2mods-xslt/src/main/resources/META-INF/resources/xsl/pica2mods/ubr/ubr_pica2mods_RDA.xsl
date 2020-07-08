@@ -248,19 +248,21 @@
       </mods:location>
     </xsl:for-each>
       
-      
       <xsl:variable name="digitalOrigin">
-        <xsl:for-each select="./p:datafield[@tag='037H']/p:subfield[@code='a']">   <!-- 4238 Technische Angaben zum elektr. Dokument, RDA ok -->
-          <xsl:if test="contains(., 'Digitalisierungsvorlage: Original')"> <!-- alt -->
+        <xsl:choose>  <!-- 4238 Technische Angaben zum elektr. Dokument, RDA ok -->
+          <xsl:when test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Original')"> <!-- alt -->
             <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-          </xsl:if>
-          <xsl:if test="contains(., 'Digitalisierungsvorlage: Primärausgabe')">
+          </xsl:when>
+          <xsl:when test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Primärausgabe')">
             <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-          </xsl:if>
-          <xsl:if test="contains(., 'Digitalisierungsvorlage: Mikrofilm')">
+          </xsl:when>
+          <xsl:when test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Mikrofilm')">
             <mods:digitalOrigin>digitized microfilm</mods:digitalOrigin>
-          </xsl:if>
-        </xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise>
+            <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:variable>
       <!-- pysicalDescription RDA vorangig aus A-Aufnahme -->
       <xsl:choose>
