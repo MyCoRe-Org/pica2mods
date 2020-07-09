@@ -15,9 +15,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  <properties>
-    <maven.compiler.release>11</maven.compiler.release>
-  </properties>
   <repositories>
     <!-- central is required for bibsonomy not to take over every artifact -->
     <repository>
