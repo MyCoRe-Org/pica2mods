@@ -72,9 +72,9 @@
       </xsl:if>
     </mods:titleInfo>
 
-    <xsl:if test="./../p:datafield[@tag='021A' or @tag='036F']/p:subfield[@code='h']">
+    <xsl:if test="./../p:datafield[@tag='021A']/p:subfield[@code='h']">
       <mods:note type="statement of responsibility">
-        <xsl:value-of select="./../p:datafield[@tag='021A' or @tag='036F']/p:subfield[@code='h']" />
+        <xsl:value-of select="./../p:datafield[@tag='021A']/p:subfield[@code='h']" />
       </mods:note>
     </xsl:if>
   </xsl:template>
