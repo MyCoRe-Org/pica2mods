@@ -1,5 +1,7 @@
 package org.mycore.pica2mods.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -94,6 +97,23 @@ public class XMLSchemaValidator {
                     isValid = false;
                 }
             });
+            docBuilder.setEntityResolver(new EntityResolver() {
+				
+				@Override
+				public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+					try {
+						InputStream is = getClass().getResourceAsStream("/xml_schemas/"+ systemId.substring(systemId.lastIndexOf("/")+1));
+						if(is!=null) {
+						return new InputSource(is);
+						}
+					}
+					catch(Exception e) {
+						System.err.println("Error resolving entity: " + e.getMessage());
+						e.printStackTrace();
+					}
+					return null;
+				}
+			});
 
             docBuilder.parse(new InputSource(new StringReader(xmlContent)));
         } catch (Exception e) {
