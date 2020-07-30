@@ -794,13 +794,14 @@
   <xsl:template name="COMMON_UBR_Class_Collection">
     <xsl:for-each select="./p:datafield[@tag='036E' or @tag='036L']/p:subfield[@code='a']/text()">
       <xsl:variable name="pica4110" select="translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ', 'abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ')" />
-      <xsl:for-each select="document('classification:collection')//category/label[@xml:lang='de']">
-        <xsl:if test="$pica4110 = translate(./@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ', 'abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ')">
+      <xsl:for-each select="document('classification:collection')//category/label[@xml:lang='x-pica-4110']">
+        <xsl:if test="starts-with($pica4110, translate(./@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ', 'abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ'))">
           <xsl:element name="mods:classification">
             <xsl:attribute name="authorityURI">http://rosdok.uni-rostock.de/classifications/collection</xsl:attribute>
             <xsl:attribute name="valueURI"><xsl:value-of select="concat('http://rosdok.uni-rostock.de/classifications/collection#', ./../@ID)" /></xsl:attribute>
             <xsl:attribute name="displayLabel">collection</xsl:attribute>
-            <xsl:value-of select="./../label[@xml:lang='de']/@text" />
+            <!-- TODO: check after update, if we should switch back to [@xml:lang='de'] -->
+            <xsl:value-of select="./../label[@xml:lang='x-pica-4110']/@text" />
           </xsl:element>
         </xsl:if>
       </xsl:for-each>
