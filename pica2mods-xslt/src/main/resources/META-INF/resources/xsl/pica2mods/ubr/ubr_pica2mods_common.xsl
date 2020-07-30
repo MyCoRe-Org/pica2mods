@@ -806,6 +806,37 @@
       </xsl:for-each>
     </xsl:for-each>
   </xsl:template>
+  <xsl:template name="COMMON_UBR_Class_Provider">
+    <xsl:variable name="provider_class">
+      <xsl:for-each select="./p:datafield[@tag='036E' or @tag='036L']/p:subfield[@code='a']/text()">
+        <xsl:variable name="pica4110" select="translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ', 'abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ')" />
+        <xsl:for-each select="document('classification:provider')//category/label[@xml:lang='x-pica-4110']">
+          <xsl:if test="$pica4110 = translate(./@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ', 'abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ')">
+            <xsl:element name="mods:classification">
+              <xsl:attribute name="authorityURI">http://rosdok.uni-rostock.de/classifications/provider</xsl:attribute>
+              <xsl:attribute name="valueURI"><xsl:value-of select="concat('http://rosdok.uni-rostock.de/classifications/provider#', ./../@ID)" /></xsl:attribute>
+              <xsl:attribute name="displayLabel">provider</xsl:attribute>
+              <xsl:value-of select="./../label[@xml:lang='de']/@text" />
+            </xsl:element>
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:choose>
+      <!-- <xsl:when test="$provider_class"> looks better, but does not go into otherwise -->
+      <xsl:when test="$provider_class!=''">
+        <xsl:copy-of select="$provider_class" />
+      </xsl:when>
+      <xsl:otherwise>
+            <xsl:element name="mods:classification">
+              <xsl:attribute name="authorityURI">http://rosdok.uni-rostock.de/classifications/provider</xsl:attribute>
+              <xsl:attribute name="valueURI">http://rosdok.uni-rostock.de/classifications/provider#ubr</xsl:attribute>
+              <xsl:attribute name="displayLabel">provider</xsl:attribute>
+              <xsl:text>Universitätsbibliothek Rostock</xsl:text>
+            </xsl:element>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
   
    <xsl:template name="COMMON_UBR_Class_AADGenres">
       <xsl:for-each select="./p:subfield[@code='9']/text()">

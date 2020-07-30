@@ -243,6 +243,7 @@
          </xsl:for-each>     
          
          <xsl:call-template name="COMMON_UBR_Class_Collection" />
+         <xsl:call-template name="COMMON_UBR_Class_Provider" />
          <xsl:call-template name="COMMON_UBR_Class_Doctype" />
          <xsl:call-template name="COMMON_CLASS" />
 
