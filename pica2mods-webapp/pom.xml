@@ -9,6 +9,7 @@
   </parent>
   <artifactId>pica2mods-webapp</artifactId>
   <name>Pica2Mods Web Application</name>
+  <packaging>jar</packaging>
   <properties>
     <revision>1.3-SNAPSHOT</revision>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -68,12 +69,20 @@
 
   <build>
     <plugins>
+      <!-- see: https://memorynotfound.com/spring-boot-create-executable-using-maven-without-parent-pom/ -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <executable>true</executable>
         </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
