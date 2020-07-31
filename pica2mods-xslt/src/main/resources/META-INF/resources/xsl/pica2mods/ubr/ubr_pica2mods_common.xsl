@@ -749,7 +749,7 @@
         <mods:classification displayLabel="licenseinfo" authorityURI="http://digibib.hs-nb.de/classifications/licenseinfo" valueURI="http://digibib.hs-nb.de/classifications/licenseinfo#work.rightsreserved">alle Rechte vorbehalten</mods:classification>
       </xsl:if>
       <xsl:if test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and starts-with(text(), 'DBHSNB:accesscondition:openaccess')])">
-        <mods:classification displayLabel="accesscondition" authorityURI="http://rosdok.uni-rostock.de/classifications/accesscondition" valueURI="http://rosdok.uni-rostock.de/classifications/accesscondition#openaccess">frei zugänglich (Open Access)</mods:classification>
+        <mods:classification displayLabel="accesscondition" authorityURI="http://digibib.hs-nb.de/classifications/licenseinfo" valueURI="http://digibib.hs-nb.de/classifications/accesscondition#openaccess">frei zugänglich (Open Access)</mods:classification>
       </xsl:if>
     </xsl:when>
     <xsl:otherwise>
