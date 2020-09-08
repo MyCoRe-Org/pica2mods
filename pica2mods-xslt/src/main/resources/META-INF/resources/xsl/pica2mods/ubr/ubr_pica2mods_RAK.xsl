@@ -480,8 +480,8 @@
               <xsl:if test="./p:subfield[@code='l']">
                 <mods:detail type="volume"><mods:number><xsl:value-of select="./p:subfield[@code='l']" /></mods:number></mods:detail>
               </xsl:if>
-              <xsl:if test="./p:subfield[@code='x']">
-                  <mods:text type="sortstring"><xsl:value-of select="./p:subfield[@code='x']" /></mods:text>
+              <xsl:if test="./p:subfield[@code='X' or @code='x']">
+                  <mods:text type="sortstring"><xsl:value-of select="./p:subfield[@code='X' or @code='x']" /></mods:text>
               </xsl:if>
             </mods:part>
           
@@ -529,8 +529,8 @@
                     <xsl:value-of select="substring(./p:subfield[@code='x'],1,4)" />   
                  </xsl:attribute>
               </xsl:if>
-              <xsl:if test="./p:subfield[@code='x']">
-                  <mods:text type="sortstring"><xsl:value-of select="./p:subfield[@code='x']" /></mods:text>
+              <xsl:if test="./p:subfield[@code='X' or @code='x']">
+                  <mods:text type="sortstring"><xsl:value-of select="./p:subfield[@code='X' or @code='x']" /></mods:text>
               </xsl:if>
               <xsl:for-each select="./../p:datafield[@tag='031A']" > <!-- 4070 -->
                  <!-- Volume -->

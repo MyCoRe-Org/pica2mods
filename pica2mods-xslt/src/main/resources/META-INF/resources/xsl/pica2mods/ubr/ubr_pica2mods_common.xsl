@@ -213,9 +213,9 @@
             </mods:number>
           </mods:detail>
         </xsl:if>
-        <xsl:if test="@tag='036D' and ./p:subfield[@code='x']">
+        <xsl:if test="@tag='036D' and ./p:subfield[@code='X']">
           <mods:text type="sortstring">
-            <xsl:value-of select="./p:subfield[@code='x']" />
+            <xsl:value-of select="./p:subfield[@code='X']" />
           </mods:text>
         </xsl:if>
         <xsl:if test="@tag='036F' and ./p:subfield[@code='X']">
@@ -274,9 +274,9 @@
 						<xsl:value-of select="substring(./p:subfield[@code='x'],1,4)" />   
 					</xsl:attribute>
         </xsl:if>
-        <xsl:if test="./p:subfield[@code='x']">
+        <xsl:if test="./p:subfield[@code='X']">
           <mods:text type="sortstring">
-            <xsl:value-of select="./p:subfield[@code='x']" />
+            <xsl:value-of select="./p:subfield[@code='X']" />
           </mods:text>
         </xsl:if>
         <xsl:for-each select="./../p:datafield[@tag='031A']"> <!-- 4070 -->
