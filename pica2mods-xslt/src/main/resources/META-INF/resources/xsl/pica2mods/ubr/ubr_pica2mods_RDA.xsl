@@ -62,7 +62,7 @@
     </xsl:for-each>
 
     <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241 übergeordnetes Werk -->
-      <xsl:call-template name="COMMON_ArticleParent" />
+      <xsl:call-template name="COMMON_AppearsIn" />
     </xsl:for-each>
 
     <xsl:for-each select="./p:datafield[@tag='036D']"> <!-- 4160 übergeordnetes Werk -->

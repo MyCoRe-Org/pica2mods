@@ -226,128 +226,52 @@
       </mods:part>
     </mods:relatedItem>
   </xsl:template>
-
-  <xsl:template name="COMMON_ArticleParent">
+  
+  <xsl:template name="COMMON_AppearsIn">
     <mods:relatedItem>
-      <!-- ToDo teilweise redundant mit title template -->
       <xsl:attribute name="type">host</xsl:attribute>
       <xsl:attribute name="displayLabel">appears_in</xsl:attribute>
-      <mods:titleInfo>
-        <xsl:if test="./p:subfield[@code='a']">
-          <xsl:variable name="mainTitle" select="./p:subfield[@code='a']" />
-          <xsl:choose>
-            <xsl:when test="contains($mainTitle, '@')">
-              <xsl:variable name="nonSort" select="normalize-space(substring-before($mainTitle, '@'))" />
-              <xsl:choose>
-                <xsl:when test="string-length(nonSort) &lt; 9">
-                  <mods:nonSort>
-                    <xsl:value-of select="$nonSort" />
-                  </mods:nonSort>
-                  <mods:title>
-                    <xsl:value-of select="substring-after($mainTitle, '@')" />
-                  </mods:title>
-                </xsl:when>
-                <xsl:otherwise>
-                  <mods:title>
-                    <xsl:value-of select="$mainTitle" />
-                  </mods:title>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:when>
-            <xsl:otherwise>
-              <mods:title>
-                <xsl:value-of select="$mainTitle" />
-              </mods:title>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:if>
-        <xsl:if test="./p:subfield[@code='d']">
-          <mods:subTitle>
-            <xsl:value-of select="./p:subfield[@code='d']" />
-          </mods:subTitle>
-        </xsl:if>
-      </mods:titleInfo>
-
-      <mods:part>
-        <xsl:if test="./p:subfield[@code='x']">
-          <xsl:attribute name="order">
-						<xsl:value-of select="substring(./p:subfield[@code='x'],1,4)" />   
-					</xsl:attribute>
-        </xsl:if>
-        <xsl:if test="./p:subfield[@code='X']">
-          <mods:text type="sortstring">
-            <xsl:value-of select="./p:subfield[@code='X']" />
-          </mods:text>
-        </xsl:if>
-        <xsl:for-each select="./../p:datafield[@tag='031A']"> <!-- 4070 -->
-          <!-- Volume -->
-          <xsl:if test="./p:subfield[@code='d']">
-            <mods:detail type="volume">
-              <mods:number>
-                <xsl:value-of select="./p:subfield[@code='d']" />
-              </mods:number>
-            </mods:detail>
-          </xsl:if>
-          <!-- Issue -->
-          <xsl:if test="./p:subfield[@code='e']">
-            <mods:detail type="issue">
-              <mods:number>
-                <xsl:value-of select="./p:subfield[@code='e']" />
-              </mods:number>
-            </mods:detail>
-          </xsl:if>
-
-          <!-- Seitenzahlen zu Pica to MODS -->
-          <xsl:if test="./p:subfield[@code='h' or @code='g']">
-            <mods:extent unit="page">
-              <xsl:if test="./p:subfield[@code='g']">
-                <mods:total>
-                  <xsl:value-of select="./p:subfield[@code='g']" />
-                </mods:total>
-              </xsl:if>
-              <xsl:if test="./p:subfield[@code='h']">
-                <xsl:if test="not (contains(./p:subfield[@code='h'], ','))">
-                  <xsl:if test="not (contains(./p:subfield[@code='h'], '-'))">
-                    <mods:start>
-                      <xsl:value-of select="./p:subfield[@code='h']" />
-                    </mods:start>
-                  </xsl:if>
-                  <xsl:if test="contains(./p:subfield[@code='h'], '-')">
-                    <mods:start>
-                      <xsl:value-of select="substring-before(./p:subfield[@code='h'], '-')" />
-                    </mods:start>
-                    <mods:end>
-                      <xsl:value-of select="substring-after(./p:subfield[@code='h'], '-')" />
-                    </mods:end>
-                  </xsl:if>
-                </xsl:if>
-                <xsl:if test="contains(./p:subfield[@code='h'], ',')">
-                  <mods:list>
-                    <xsl:value-of select="./p:subfield[@code='h']" />
-                  </mods:list>
-                </xsl:if>
-              </xsl:if>
-            </mods:extent>
-          </xsl:if>
-
-          <!-- Date -->
-          <xsl:if test="./p:subfield[@code='j']">
-            <mods:date encoding="iso8601">
-              <xsl:value-of select="substring(./p:subfield[@code='j'],1,4)" />
-            </mods:date>
-          </xsl:if>
-          <xsl:if test="./p:subfield[@code='y']">
-            <mods:text type="display">
-              <xsl:value-of select="substring(./p:subfield[@code='y'],1,4)" />
-            </mods:text>
-          </xsl:if>
-          <xsl:for-each select="./../p:datafield[@tag='031C']"> <!-- 4072 -->
-            <mods:text type="article series">
-              <xsl:value-of select="./p:subfield[@code='a']" />
-            </mods:text>
-          </xsl:for-each>
-        </xsl:for-each>
-      </mods:part>
+      <xsl:if test="./p:subfield[@code='l']">
+    <mods:name>
+      <mods:displayForm>
+        <xsl:value-of select="./p:subfield[@code='l']" />
+      </mods:displayForm>
+    </mods:name>
+    </xsl:if>
+    <xsl:if test="./p:subfield[@code='t']">
+    <mods:titleInfo>
+        <mods:title>
+        <xsl:value-of select="./p:subfield[@code='t']" />
+            </mods:title>
+    </mods:titleInfo>
+    </xsl:if>
+    <xsl:if test="./p:subfield[@code='p']">
+    <mods:part>
+      <mods:text>
+        <xsl:value-of select="./p:subfield[@code='p']" />
+      </mods:text>
+    </mods:part>
+    </xsl:if>
+    <xsl:if test="./p:subfield[@code='C' and text()='DOI']">
+        <mods:identifier type="doi">
+          <xsl:value-of select="./p:subfield[@code='C' and text()='DOI']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
+        </mods:identifier>
+      </xsl:if>
+    <xsl:if test="./p:subfield[@code='C' and text()='ISBN']">
+        <mods:identifier type="isbn">
+          <xsl:value-of select="./p:subfield[@code='C' and text()='ISBN']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
+        </mods:identifier>
+      </xsl:if>
+    <xsl:if test="./p:subfield[@code='C' and text()='ISSN']">
+        <mods:identifier type="issn">
+          <xsl:value-of select="./p:subfield[@code='C' and text()='ISSN']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
+        </mods:identifier>
+      </xsl:if>
+    <xsl:if test="./p:subfield[@code='C' and text()='ZDB']">
+        <mods:identifier type="zdb">
+          <xsl:value-of select="./p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
+        </mods:identifier>
+      </xsl:if>
     </mods:relatedItem>
   </xsl:template>
 
