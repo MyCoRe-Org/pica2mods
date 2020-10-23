@@ -26,11 +26,13 @@ public class Pica2ModsXSLTransformerService {
      * ("/some/pkg/resource.properties");
      */
     public static String CLASSPATH_PREFIX = "META-INF/resources/xsl/pica2mods/";
+
     // public static String XPATH_APPN =
     // "/p:record/p:datafield[@tag='039I'][./p:subfield[@code='C']='GBV']/p:subfield[@code='6']/text()";
     // public static String XPATH_HOST_PPN = "/p:record/p:datafield[@tag='036D' or
     // @tag='036F']/p:subfield[@code='9']/text()";
     public static String XPATH_APPN = "/mods:mods/mods:note[@type='PPN-A']/text()";
+
     public static String XPATH_HOST_PPN = "/mods:mods/mods:relatedItem/mods:recordInfo/mods:recordIdentifier[@source='DE-28']/text()";
 
     @Value("${pica2mods.sru.url}")
@@ -116,7 +118,7 @@ public class Pica2ModsXSLTransformerService {
             }
         }
 
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @SuppressWarnings({ "rawtypes" })
         public Iterator getPrefixes(String namespace) {
             return null;
         }

@@ -69,7 +69,9 @@ public class Pica2ModsController {
         return "index";
     }
 
-    @RequestMapping(value = "/ppn{ppn}.mods.xml", method = RequestMethod.GET, produces = {
+    @RequestMapping(value = "/ppn{ppn}.mods.xml",
+        method = RequestMethod.GET,
+        produces = {
             MediaType.APPLICATION_XML_VALUE })
     @ResponseBody
     String getXML(@PathVariable(name = "ppn", required = false) String ppn, Model model) {
