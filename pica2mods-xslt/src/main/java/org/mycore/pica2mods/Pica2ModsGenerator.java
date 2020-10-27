@@ -31,8 +31,11 @@ public class Pica2ModsGenerator {
     private final Logger LOGGER = LoggerFactory.getLogger(Pica2ModsGenerator.class);
 
     public static final String PICA2MODS_XSLT_PATH = "META-INF/resources/xsl/pica2mods/";
+
     private static final String PICA2MODS_XSLT_START_FILE = "ubr/ubr_pica2mods.xsl";
+
     private static final String NS_PICA = "info:srw/schema/5/picaXML-v1.0";
+
     private static DocumentBuilderFactory DBF;
 
     static {
@@ -42,10 +45,11 @@ public class Pica2ModsGenerator {
 
     public static Pica2ModsGenerator instanceForRosDok() {
         return new Pica2ModsGenerator("http://sru.k10plus.de", "http://unapi.k10plus.de",
-                "http://rosdok.uni-rostock.de/");
+            "http://rosdok.uni-rostock.de/");
     }
 
     private String sruURL;
+
     private String unapiURL;
 
     /**
@@ -73,8 +77,8 @@ public class Pica2ModsGenerator {
     // http://sru.gbv.de/opac-de-28?operation=searchRetrieve&maximumRecords=1&recordSchema=picaxml&query=pica.ppn%3D1023803275
     public Element retrievePicaXMLViaSRU(String database, String sruQuery) throws Exception {
         URL url = new URL(
-                sruURL + "/" + database + "?operation=searchRetrieve&maximumRecords=1&recordSchema=picaxml&query="
-                        + URLEncoder.encode(sruQuery, "UTF-8"));
+            sruURL + "/" + database + "?operation=searchRetrieve&maximumRecords=1&recordSchema=picaxml&query="
+                + URLEncoder.encode(sruQuery, "UTF-8"));
         int loop = 0;
         Document document = null;
         do {
@@ -160,7 +164,7 @@ public class Pica2ModsGenerator {
 
         //for Java 8 we set the class name explicitely
         TransformerFactory TRANS_FACTORY = TransformerFactory.newInstance(
-                "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", getClass().getClassLoader());
+            "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", getClass().getClassLoader());
 
         TRANS_FACTORY.setURIResolver(new Pica2ModsURIResolver(this));
         try {
@@ -168,7 +172,7 @@ public class Pica2ModsGenerator {
 
             if (picaRecord != null) {
                 Source xsl = new StreamSource(getClass().getClassLoader()
-                        .getResourceAsStream(PICA2MODS_XSLT_PATH + PICA2MODS_XSLT_START_FILE));
+                    .getResourceAsStream(PICA2MODS_XSLT_PATH + PICA2MODS_XSLT_START_FILE));
 
                 Transformer transformer = TRANS_FACTORY.newTransformer(xsl);
                 transformer.setParameter("WebApplicationBaseURL", mycoreBaseURL);
@@ -183,7 +187,7 @@ public class Pica2ModsGenerator {
     public static String outputXML(Node node) {
         // ein Stylesheet zur Identitätskopie ...
         String IDENTITAETS_XSLT = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>"
-                + "<xsl:template match='/'><xsl:copy-of select='.'/>" + "</xsl:template></xsl:stylesheet>";
+            + "<xsl:template match='/'><xsl:copy-of select='.'/>" + "</xsl:template></xsl:stylesheet>";
 
         Source xmlSource = new DOMSource(node);
         Source xsltSource = new StreamSource(new StringReader(IDENTITAETS_XSLT));
@@ -210,7 +214,7 @@ public class Pica2ModsGenerator {
         try {
             DocumentBuilder dBuilder = DBF.newDocumentBuilder();
             Document doc = dBuilder.parse(
-                    getClass().getClassLoader().getResourceAsStream(PICA2MODS_XSLT_PATH + PICA2MODS_XSLT_START_FILE));
+                getClass().getClassLoader().getResourceAsStream(PICA2MODS_XSLT_PATH + PICA2MODS_XSLT_START_FILE));
             NodeList nl = doc.getDocumentElement().getElementsByTagName("xsl:variable");
 
             for (int i = 0; i < nl.getLength(); i++) {

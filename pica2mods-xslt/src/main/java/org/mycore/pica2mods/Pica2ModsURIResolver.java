@@ -47,7 +47,7 @@ public class Pica2ModsURIResolver implements URIResolver {
         if (href.startsWith("cp:")) {
             String path = href.substring("cp:".length());
             InputStream is = getClass().getClassLoader()
-                    .getResourceAsStream(Pica2ModsGenerator.PICA2MODS_XSLT_PATH + path);
+                .getResourceAsStream(Pica2ModsGenerator.PICA2MODS_XSLT_PATH + path);
             return new StreamSource(is);
         }
 
@@ -102,7 +102,7 @@ public class Pica2ModsURIResolver implements URIResolver {
                     return s;
 
                 } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-                        | InvocationTargetException e) {
+                    | InvocationTargetException e) {
                     LOGGER.error("Error with Java Reflection API", e);
                 }
             } catch (ClassNotFoundException e) {
