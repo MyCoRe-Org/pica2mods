@@ -17,6 +17,7 @@ import org.xml.sax.SAXParseException;
 
 public class XMLSchemaValidator {
     static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+
     static final String JAXP_SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
 
     static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
@@ -91,29 +92,29 @@ public class XMLSchemaValidator {
 
                 private void outputError(SAXParseException exception) throws SAXException {
                     String msg = "Line: " + exception.getLineNumber() + ", Column: " + exception.getColumnNumber()
-                            + " - " + exception.getMessage();
+                        + " - " + exception.getMessage();
                     errorMsg += "\n" + msg;
                     System.err.println(msg);
                     isValid = false;
                 }
             });
             docBuilder.setEntityResolver(new EntityResolver() {
-				
-				@Override
-				public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-					try {
-						InputStream is = getClass().getResourceAsStream("/xml_schemas/"+ systemId.substring(systemId.lastIndexOf("/")+1));
-						if(is!=null) {
-						return new InputSource(is);
-						}
-					}
-					catch(Exception e) {
-						System.err.println("Error resolving entity: " + e.getMessage());
-						e.printStackTrace();
-					}
-					return null;
-				}
-			});
+
+                @Override
+                public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+                    try {
+                        InputStream is = getClass()
+                            .getResourceAsStream("/xml_schemas/" + systemId.substring(systemId.lastIndexOf("/") + 1));
+                        if (is != null) {
+                            return new InputSource(is);
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error resolving entity: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            });
 
             docBuilder.parse(new InputSource(new StringReader(xmlContent)));
         } catch (Exception e) {
