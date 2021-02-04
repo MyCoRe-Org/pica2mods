@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods:mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
+  <mods:recordInfo>
+    <mods:recordIdentifier source="DE-28">rosdok/id00002886</mods:recordIdentifier>
+    <mods:descriptionStandard>rda</mods:descriptionStandard>
+    <mods:recordOrigin>Converted from PICA to MODS using ubr_pica2mods_EPUB.xsl from pica2mods-xslt v1.3.0</mods:recordOrigin>
+  </mods:recordInfo>
+  <mods:identifier type="purl">http://purl.uni-rostock.de/rosdok/id00002886</mods:identifier>
+  <mods:identifier type="PPN">1744582424</mods:identifier>
+  <mods:identifier type="urn">urn:nbn:de:gbv:28-rosdok_id00002886-5</mods:identifier>
+  <mods:identifier type="doi">10.18453/rosdok_id00002886</mods:identifier>
+  <mods:identifier type="isbn">9783732237838</mods:identifier>
+  <mods:name type="personal">
+    <mods:nameIdentifier type="gnd">14241753X</mods:nameIdentifier>
+    <mods:namePart type="given">Hilde</mods:namePart>
+    <mods:namePart type="family">Michael</mods:namePart>
+    <mods:namePart type="date">1980 -</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="text" authority="GBV">VerfasserIn</mods:roleTerm>
+      <mods:roleTerm type="code" authority="marcrelator">aut</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:titleInfo usage="primary">
+    <mods:title>Recht und Verfassung der Universität Rostock im Spiegel wesentlicher Rechtsquellen</mods:title>
+    <mods:subTitle>1419 - 1563</mods:subTitle>
+    <mods:partNumber>Teil 1</mods:partNumber>
+    <mods:partName>Darstellung</mods:partName>
+  </mods:titleInfo>
+  <mods:language>
+    <mods:languageTerm type="code" authority="iso639-2b">ger</mods:languageTerm>
+  </mods:language>
+  <mods:language>
+    <mods:languageTerm type="code" authority="iso639-2b">lat</mods:languageTerm>
+  </mods:language>
+  <mods:relatedItem type="host">
+    <mods:recordInfo>
+      <mods:recordIdentifier source="DE-28">rosdok/id00002885</mods:recordIdentifier>
+    </mods:recordInfo>
+    <mods:identifier type="purl">http://purl.uni-rostock.de/rosdok/id00002885</mods:identifier>
+    <mods:identifier type="PPN">1744576599</mods:identifier>
+    <mods:titleInfo>
+      <mods:title>Recht und Verfassung der Universität Rostock im Spiegel wesentlicher Rechtsquellen</mods:title>
+    </mods:titleInfo>
+    <mods:part>
+      <mods:detail type="volume">
+        <mods:number>Teil 1</mods:number>
+      </mods:detail>
+      <mods:text type="sortstring">0001</mods:text>
+    </mods:part>
+  </mods:relatedItem>
+  <mods:relatedItem type="host">
+    <mods:recordInfo>
+      <mods:recordIdentifier source="DE-28">rosdok/id00002109</mods:recordIdentifier>
+    </mods:recordInfo>
+    <mods:identifier type="purl">http://purl.uni-rostock.de/rosdok/id00002109</mods:identifier>
+    <mods:identifier type="PPN">576712159</mods:identifier>
+    <mods:identifier type="zdb">2448336-9</mods:identifier>
+    <mods:titleInfo>
+      <mods:title>Rostocker Studien zur Universitätsgeschichte</mods:title>
+    </mods:titleInfo>
+    <mods:part>
+      <mods:detail type="volume">
+        <mods:number>Band 23</mods:number>
+      </mods:detail>
+      <mods:text type="sortstring">0023</mods:text>
+    </mods:part>
+  </mods:relatedItem>
+  <mods:originInfo eventType="publication">
+    <mods:publisher>Books on Demand</mods:publisher>
+    <mods:place>
+      <mods:placeTerm type="text">Norderstedt</mods:placeTerm>
+    </mods:place>
+    <mods:dateIssued keyDate="yes" encoding="iso8601">2013</mods:dateIssued>
+    <mods:issuance>monographic</mods:issuance>
+  </mods:originInfo>
+  <mods:originInfo eventType="online_publication">
+    <mods:publisher>Universitätsbibliothek</mods:publisher>
+    <mods:place>
+      <mods:placeTerm type="text">Rostock</mods:placeTerm>
+    </mods:place>
+    <mods:dateCaptured encoding="iso8601">2021</mods:dateCaptured>
+  </mods:originInfo>
+  <mods:location>
+    <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
+    <mods:url usage="primary" access="object in context">http://purl.uni-rostock.de/rosdok/id00002886</mods:url>
+  </mods:location>
+  <mods:physicalDescription>
+    <mods:extent unit="pages">354</mods:extent>
+  </mods:physicalDescription>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/SDNB" valueURI="http://rosdok.uni-rostock.de/classifications/SDNB#943" displayLabel="sdnb">943 Geschichte Deutschlands</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/institution" valueURI="http://rosdok.uni-rostock.de/classifications/institution#unirostock" displayLabel="institution">Universität Rostock</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/doctype" valueURI="http://rosdok.uni-rostock.de/classifications/doctype#epub.monograph" displayLabel="doctype">Monographie</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#work.rightsreserved" displayLabel="licenseinfo">alle Rechte vorbehalten</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#deposit.rightsunirostock" displayLabel="licenseinfo">Rechteinhaber Universität Rostock</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#metadata.cc0" displayLabel="licenseinfo">Lizenz Metadaten: CC0</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/accesscondition" valueURI="http://rosdok.uni-rostock.de/classifications/accesscondition#openaccess" displayLabel="accesscondition">frei zugänglich (Open Access)</mods:classification>
+</mods:mods>

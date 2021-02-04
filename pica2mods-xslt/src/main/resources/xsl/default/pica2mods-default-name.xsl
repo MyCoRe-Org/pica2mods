@@ -107,7 +107,7 @@
     </xsl:template>
 
     <xsl:template name="COMMON_PersonalName_ROLES">
-        <xsl:param name="datafield"></xsl:param>
+        <xsl:param name="datafield" />
         <xsl:choose>
             <xsl:when test="$datafield/p:subfield[@code='4']">
                 <xsl:for-each select="$datafield/p:subfield[@code='4']">

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods:mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
+  <mods:recordInfo>
+    <mods:recordIdentifier source="DE-28">rosdok/ppn812707060</mods:recordIdentifier>
+    <mods:recordOrigin>Converted from PICA to MODS using ubr_pica2mods_KXP.xsl from pica2mods-xslt v1.3.0</mods:recordOrigin>
+  </mods:recordInfo>
+  <mods:identifier type="purl">http://purl.uni-rostock.de/rosdok/ppn812707060</mods:identifier>
+  <mods:identifier type="PPN">812707060</mods:identifier>
+  <mods:identifier type="vd18">90333322</mods:identifier>
+  <mods:name type="personal">
+    <mods:nameIdentifier type="gnd">115822992</mods:nameIdentifier>
+    <mods:namePart type="given">Franz Joachim</mods:namePart>
+    <mods:namePart type="family">Aepinus</mods:namePart>
+    <mods:namePart type="date">1737 - 1817</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="code" authority="marcrelator">aut</mods:roleTerm>
+      <mods:roleTerm type="text" authority="GBV">Verfasser</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:name type="personal">
+    <mods:nameIdentifier type="gnd">121064069</mods:nameIdentifier>
+    <mods:namePart type="given">Christian Gottlob</mods:namePart>
+    <mods:namePart type="family">Korb</mods:namePart>
+    <mods:namePart type="date">1746 - 1825</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="text" authority="GBV">DruckerIn</mods:roleTerm>
+      <mods:roleTerm type="code" authority="marcrelator">prt</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:titleInfo usage="primary">
+    <mods:nonSort>Die</mods:nonSort>
+    <mods:title>Geschichte von Meklenburg für Jedermann in einer Folge von Briefen</mods:title>
+    <mods:subTitle>/ [Franz Joachim Aepinus]</mods:subTitle>
+    <mods:partNumber>Th. 1</mods:partNumber>
+  </mods:titleInfo>
+  <mods:language>
+    <mods:languageTerm type="code" authority="iso639-2b">ger</mods:languageTerm>
+  </mods:language>
+  <mods:relatedItem type="host">
+    <mods:recordInfo>
+      <mods:recordIdentifier source="DE-28">rosdok/ppn812697456</mods:recordIdentifier>
+    </mods:recordInfo>
+    <mods:identifier type="purl">http://purl.uni-rostock.de/rosdok/ppn812697456</mods:identifier>
+    <mods:identifier type="PPN">812697456</mods:identifier>
+    <mods:titleInfo>
+      <mods:nonSort>Die</mods:nonSort>
+      <mods:title>Geschichte von Meklenburg für Jedermann in einer Folge von Briefen</mods:title>
+    </mods:titleInfo>
+    <mods:part order="1">
+      <mods:detail type="volume">
+        <mods:number>Th. 1</mods:number>
+      </mods:detail>
+      <mods:text type="sortstring">1.1791</mods:text>
+    </mods:part>
+  </mods:relatedItem>
+  <mods:originInfo eventType="creation">
+    <mods:publisher>Korb</mods:publisher>
+    <mods:place>
+      <mods:placeTerm type="text">Neubrandenburg</mods:placeTerm>
+    </mods:place>
+    <mods:dateIssued keyDate="yes" encoding="iso8601">1791</mods:dateIssued>
+    <mods:issuance>monographic</mods:issuance>
+  </mods:originInfo>
+  <mods:location>
+    <mods:physicalLocation type="current" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
+    <mods:shelfLocator>MK-1076(1)</mods:shelfLocator>
+  </mods:location>
+  <mods:physicalDescription>
+    <mods:extent>XIX, 376 S.</mods:extent>
+    <mods:extent>8°</mods:extent>
+    <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+  </mods:physicalDescription>
+  <mods:originInfo eventType="online_publication">
+    <mods:publisher>Universitätsbibliothek</mods:publisher>
+    <mods:place>
+      <mods:placeTerm type="text">Rostock</mods:placeTerm>
+    </mods:place>
+    <mods:edition>[Electronic edition]</mods:edition>
+    <mods:dateCaptured encoding="iso8601" keyDate="yes">2014</mods:dateCaptured>
+  </mods:originInfo>
+  <mods:location>
+    <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
+    <mods:url usage="primary" access="object in context">http://purl.uni-rostock.de/rosdok/ppn812707060</mods:url>
+  </mods:location>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/collection" valueURI="http://rosdok.uni-rostock.de/classifications/collection#VD18" displayLabel="collection">VD18 digital</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/collection" valueURI="http://rosdok.uni-rostock.de/classifications/collection#DigiDrucke" displayLabel="collection">Digitalisierte Drucke</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/collection" valueURI="http://rosdok.uni-rostock.de/classifications/collection#MecklDigital" displayLabel="collection">Projekt Mecklenburgica Digital</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/provider" valueURI="http://rosdok.uni-rostock.de/classifications/provider#ubr" displayLabel="provider">Universitätsbibliothek Rostock</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/doctype" valueURI="http://rosdok.uni-rostock.de/classifications/doctype#histbest.print.multipartpart" displayLabel="doctype">Teil eines mehrbändigen Werks</mods:classification>
+  <mods:classification displayLabel="licenseinfo" authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#metadata.cc0">Lizenz Metadaten: CC0</mods:classification>
+  <mods:classification displayLabel="licenseinfo" authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#digitisedimages.cclicense.cc-by-sa.v40">Lizenz Digitalisate: CC BY SA 4.0</mods:classification>
+  <mods:classification displayLabel="licenseinfo" authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#deposit.publicdomain">gemeinfrei</mods:classification>
+  <mods:classification displayLabel="licenseinfo" authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#work.publicdomain">gemeinfrei</mods:classification>
+  <mods:classification displayLabel="accesscondition" authorityURI="http://rosdok.uni-rostock.de/classifications/accesscondition" valueURI="http://rosdok.uni-rostock.de/classifications/accesscondition#openaccess">frei zugänglich (Open Access)</mods:classification>
+  <mods:note type="source note">Vorlageform des Erscheinungsvermerks: Gedruckt in Neubrandenburg von C. G. Korb, Herzoglichen Hofbuchdrukker. 1791.</mods:note>
+  <mods:note type="source note">In Fraktur</mods:note>
+  <mods:note type="titlewordindex">Mecklenburg</mods:note>
+</mods:mods>

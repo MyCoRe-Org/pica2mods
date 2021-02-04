@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods:mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
+  <mods:recordInfo>
+    <mods:recordIdentifier source="DE-28">rosdok/ppn873996445</mods:recordIdentifier>
+    <mods:recordOrigin>Converted from PICA to MODS using ubr_pica2mods_KXP.xsl from pica2mods-xslt v1.3.0</mods:recordOrigin>
+  </mods:recordInfo>
+  <mods:identifier type="purl">http://purl.uni-rostock.de/rosdok/ppn873996445</mods:identifier>
+  <mods:identifier type="PPN">873996445</mods:identifier>
+  <mods:identifier type="vd16">T949</mods:identifier>
+  <mods:identifier type="rism">B, 1564/1</mods:identifier>
+  <mods:name type="personal">
+    <mods:nameIdentifier type="gnd">123256038</mods:nameIdentifier>
+    <mods:namePart type="given">Ulrich</mods:namePart>
+    <mods:namePart type="family">Neuber</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="text" authority="GBV">DruckerIn</mods:roleTerm>
+      <mods:roleTerm type="code" authority="marcrelator">prt</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:name type="corporate">
+    <mods:nameIdentifier type="gnd">6145709-7</mods:nameIdentifier>
+    <mods:namePart>Johann Vom Berg Erben</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="code" authority="marcrelator">pbl</mods:roleTerm>
+      <mods:roleTerm type="text" authority="GBV">Verlag</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:titleInfo usage="primary">
+    <mods:title>Thesavrvs Mvsicvs Continens Selectissimas Octo, Septem, Sex, Qvinqve Et Qvatvor Vocvm Harmonias, tam à ueteribus quàm recentioribus Symphonistis compositas, &amp; ad omnis generis instrumenta Musica accommododatas</mods:title>
+    <mods:partNumber>T. 1</mods:partNumber>
+    <mods:partName>Thesavrvs Mvsicvs ... Tomi Primi Continentis Cantiones Octo Vocvm ...</mods:partName>
+  </mods:titleInfo>
+  <mods:titleInfo type="alternative">
+    <mods:title>Thesaurus musicus continens selectissimas octo, septem, sex, quinque et quatuor vocum Harmonias, tam a veteribus quam recentioribus Symphonistis compositas, &amp; ad omnis generis instrumenta musica accommododatas</mods:title>
+  </mods:titleInfo>
+  <mods:titleInfo type="alternative">
+    <mods:title>Thesaurus Musicus ... Tomi Primi Continentis Cantiones Octo Vocum ...</mods:title>
+  </mods:titleInfo>
+  <mods:language>
+    <mods:languageTerm type="code" authority="iso639-2b">lat</mods:languageTerm>
+  </mods:language>
+  <mods:relatedItem type="host">
+    <mods:recordInfo>
+      <mods:recordIdentifier source="DE-28">rosdok/ppn874332931</mods:recordIdentifier>
+    </mods:recordInfo>
+    <mods:identifier type="purl">http://purl.uni-rostock.de/rosdok/ppn874332931</mods:identifier>
+    <mods:identifier type="PPN">874332931</mods:identifier>
+    <mods:titleInfo>
+      <mods:title>Thesaurus musicus continens selectissimas octo, septem, sex, quinque et quatuor vocum Harmonias, tam a veteribus quam recentioribus Symphonistis compositas, &amp; ad omnis generis instrumenta musica accommododatas</mods:title>
+    </mods:titleInfo>
+    <mods:part order="1">
+      <mods:text type="sortstring">1.1564</mods:text>
+    </mods:part>
+  </mods:relatedItem>
+  <mods:originInfo eventType="creation">
+    <mods:publisher>Montanus</mods:publisher>
+    <mods:place>
+      <mods:placeTerm type="text">Noribergae</mods:placeTerm>
+    </mods:place>
+    <mods:publisher>Neuber</mods:publisher>
+    <mods:place>
+      <mods:placeTerm type="text">Noribergae</mods:placeTerm>
+    </mods:place>
+    <mods:dateIssued keyDate="yes" encoding="iso8601">1554</mods:dateIssued>
+    <mods:edition>[Musikdruck]</mods:edition>
+    <mods:issuance>monographic</mods:issuance>
+  </mods:originInfo>
+  <mods:location>
+    <mods:physicalLocation type="current">Universitätsbibliothek Rostock</mods:physicalLocation>
+    <mods:shelfLocator>Mus.Saec. XVI-62.1(T, TII, D, DII, A, AII, B, BII)</mods:shelfLocator>
+  </mods:location>
+  <mods:physicalDescription>
+    <mods:extent>8 St. (Tenor I: [76] Bl.; Tenor II: [75] Bl.; Discantus: [76] Bl.;</mods:extent>
+    <mods:extent>Ill. (Holzschn.)</mods:extent>
+    <mods:extent>quer-4°</mods:extent>
+    <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+  </mods:physicalDescription>
+  <mods:originInfo eventType="online_publication">
+    <mods:publisher>Universitätsbibliothek</mods:publisher>
+    <mods:place>
+      <mods:placeTerm type="text">Rostock</mods:placeTerm>
+    </mods:place>
+    <mods:edition>[Electronic edition]</mods:edition>
+    <mods:dateCaptured encoding="iso8601" keyDate="yes">2016</mods:dateCaptured>
+  </mods:originInfo>
+  <mods:location>
+    <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
+    <mods:url usage="primary" access="object in context">http://purl.uni-rostock.de/rosdok/ppn873996445</mods:url>
+  </mods:location>
+  <mods:genre type="aadgenre">Musiknoten</mods:genre>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/aadgenre" valueURI="http://rosdok.uni-rostock.de/classifications/aadgenre#ppn096632399" displayLabel="aadgenre">Musiknoten</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/collection" valueURI="http://rosdok.uni-rostock.de/classifications/collection#DigiMusikalien" displayLabel="collection">Digitalisierte Musikalien</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/collection" valueURI="http://rosdok.uni-rostock.de/classifications/collection#DigiDrucke" displayLabel="collection">Digitalisierte Drucke</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/provider" valueURI="http://rosdok.uni-rostock.de/classifications/provider#ubr" displayLabel="provider">Universitätsbibliothek Rostock</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/doctype" valueURI="http://rosdok.uni-rostock.de/classifications/doctype#histbest.print.multipartpart" displayLabel="doctype">Teil eines mehrbändigen Werks</mods:classification>
+  <mods:classification displayLabel="licenseinfo" authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#metadata.cc0">Lizenz Metadaten: CC0</mods:classification>
+  <mods:classification displayLabel="licenseinfo" authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#digitisedimages.cclicense.cc-by-sa.v40">Lizenz Digitalisate: CC BY SA 4.0</mods:classification>
+  <mods:classification displayLabel="licenseinfo" authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#deposit.publicdomain">gemeinfrei</mods:classification>
+  <mods:classification displayLabel="licenseinfo" authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#work.publicdomain">gemeinfrei</mods:classification>
+  <mods:classification displayLabel="accesscondition" authorityURI="http://rosdok.uni-rostock.de/classifications/accesscondition" valueURI="http://rosdok.uni-rostock.de/classifications/accesscondition#openaccess">frei zugänglich (Open Access)</mods:classification>
+  <mods:note type="source note">Bibliogr. Nachweis: RISM B, 1564/1; VD 16 T 949</mods:note>
+  <mods:note type="source note">Titelbl. "Tenor" in Rot- und Schwarzdr.</mods:note>
+  <mods:note type="source note">Signaturformel nach Ex. der UB Rostock: Tenor I: a-t4; Tenor II: aa-tt4 [tt4 leer]; Discantus: A-T4; Cantus II: AA-TT4; Altus I: AAa-TTt4 [TTt4 leer]; Altus II: AAA-SSS4 [SSS4 leer]; Bassus I: Aa-Ss4; Bassus II: Aaa-Sss4 [Sss4 leer]</mods:note>
+  <mods:note type="source note">8 Stimmbücher: Tenor I, Tenor II, Discantus, Cantus II, Altus I, Altus II, Bassus I, Bassus II</mods:note>
+  <mods:note type="source note">Vorlage des Erscheinungsvermerks: Noribergae Excvdebant Ioannes Montanus, &amp; Vlricus Neuberus collegæ, Anno Christi Immanuelis nostri nati M. D. LXIIII.</mods:note>
+</mods:mods>

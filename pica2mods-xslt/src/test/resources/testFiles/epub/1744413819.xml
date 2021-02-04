@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods:mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
+  <mods:recordInfo>
+    <mods:recordIdentifier source="DE-28">rosdok/id00002749</mods:recordIdentifier>
+    <mods:descriptionStandard>rda</mods:descriptionStandard>
+    <mods:recordOrigin>Converted from PICA to MODS using ubr_pica2mods_EPUB.xsl from pica2mods-xslt v1.3.0</mods:recordOrigin>
+  </mods:recordInfo>
+  <mods:identifier type="purl">http://purl.uni-rostock.de/rosdok/id00002749</mods:identifier>
+  <mods:identifier type="PPN">1744413819</mods:identifier>
+  <mods:identifier type="urn">urn:nbn:de:gbv:28-rosdok_id00002749-0</mods:identifier>
+  <mods:identifier type="doi">10.18453/rosdok_id00002749</mods:identifier>
+  <mods:identifier type="isbn">9783860095126</mods:identifier>
+  <mods:name type="personal">
+    <mods:nameIdentifier type="gnd">104977115X</mods:nameIdentifier>
+    <mods:namePart type="given">Antje</mods:namePart>
+    <mods:namePart type="family">Strahl</mods:namePart>
+    <mods:namePart type="date">1978 -</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="text" authority="GBV">VerfasserIn</mods:roleTerm>
+      <mods:roleTerm type="code" authority="marcrelator">aut</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:name type="personal">
+    <mods:nameIdentifier type="gnd">133437922</mods:nameIdentifier>
+    <mods:namePart type="given">Angela</mods:namePart>
+    <mods:namePart type="family">Hartwig</mods:namePart>
+    <mods:namePart type="date">1960 -</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="text" authority="GBV">Sonstige Person, Familie und Körperschaft</mods:roleTerm>
+      <mods:roleTerm type="code" authority="marcrelator">oth</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:name type="personal">
+    <mods:namePart type="given">Christiane</mods:namePart>
+    <mods:namePart type="family">Lamberz</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="text" authority="GBV">Sonstige Person, Familie und Körperschaft</mods:roleTerm>
+      <mods:roleTerm type="code" authority="marcrelator">oth</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:name type="personal">
+    <mods:namePart type="given">Julia</mods:namePart>
+    <mods:namePart type="family">Tetzke</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="text" authority="GBV">FotografIn</mods:roleTerm>
+      <mods:roleTerm type="code" authority="marcrelator">pht</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:name type="corporate">
+    <mods:nameIdentifier type="gnd">38329-6</mods:nameIdentifier>
+    <mods:namePart>Universität Rostock</mods:namePart>
+    <mods:namePart type="date">1419 -</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="text" authority="GBV">Herausgebendes Organ</mods:roleTerm>
+      <mods:roleTerm type="code" authority="marcrelator">isb</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:name type="corporate">
+    <mods:nameIdentifier type="gnd">5207145-5</mods:nameIdentifier>
+    <mods:namePart>Beginen e.V.</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="text" authority="GBV">Herausgebendes Organ</mods:roleTerm>
+      <mods:roleTerm type="code" authority="marcrelator">isb</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:titleInfo usage="primary">
+    <mods:title>Kluge Köpfe</mods:title>
+    <mods:subTitle>aus 600 Jahren Universität Rostock in den Augen der Kunst</mods:subTitle>
+  </mods:titleInfo>
+  <mods:note type="statement of responsibility">Autorinnen und Autoren: Dr. Antje Strahl, 21 Künstler*innen ; Redaktion: Dr. Angela Hartwig, Christiane Lamberz ; Fotos: Julia Tetzke ; Satz/Layout: Anne Schmidt</mods:note>
+  <mods:language>
+    <mods:languageTerm type="code" authority="iso639-2b">ger</mods:languageTerm>
+  </mods:language>
+  <mods:relatedItem type="host">
+    <mods:recordInfo>
+      <mods:recordIdentifier source="DE-28">rosdok/id00002625</mods:recordIdentifier>
+    </mods:recordInfo>
+    <mods:identifier type="purl">http://purl.uni-rostock.de/rosdok/id00002625</mods:identifier>
+    <mods:identifier type="PPN">1691045896</mods:identifier>
+    <mods:identifier type="zdb">3009747-2</mods:identifier>
+    <mods:titleInfo>
+      <mods:title>Kleine Schriften des Universitätsarchivs Rostock</mods:title>
+    </mods:titleInfo>
+    <mods:part>
+      <mods:detail type="volume">
+        <mods:number>Heft 3</mods:number>
+      </mods:detail>
+      <mods:text type="sortstring">0003</mods:text>
+    </mods:part>
+  </mods:relatedItem>
+  <mods:originInfo eventType="publication">
+    <mods:publisher>Universitätsarchiv Rostock</mods:publisher>
+    <mods:place>
+      <mods:placeTerm type="text">Rostock</mods:placeTerm>
+    </mods:place>
+    <mods:dateIssued keyDate="yes" encoding="iso8601">2020</mods:dateIssued>
+    <mods:issuance>monographic</mods:issuance>
+  </mods:originInfo>
+  <mods:originInfo eventType="online_publication">
+    <mods:publisher>Universitätsbibliothek</mods:publisher>
+    <mods:place>
+      <mods:placeTerm type="text">Rostock</mods:placeTerm>
+    </mods:place>
+    <mods:dateCaptured encoding="iso8601">2020</mods:dateCaptured>
+  </mods:originInfo>
+  <mods:location>
+    <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
+    <mods:url usage="primary" access="object in context">http://purl.uni-rostock.de/rosdok/id00002749</mods:url>
+  </mods:location>
+  <mods:physicalDescription>
+    <mods:extent unit="pages">82</mods:extent>
+  </mods:physicalDescription>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/SDNB" valueURI="http://rosdok.uni-rostock.de/classifications/SDNB#943" displayLabel="sdnb">943 Geschichte Deutschlands</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/institution" valueURI="http://rosdok.uni-rostock.de/classifications/institution#unirostock.uar" displayLabel="institution">Universitätsarchiv</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/doctype" valueURI="http://rosdok.uni-rostock.de/classifications/doctype#epub.monograph" displayLabel="doctype">Monographie</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#work.rightsreserved" displayLabel="licenseinfo">alle Rechte vorbehalten</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#deposit.rightsunirostock" displayLabel="licenseinfo">Rechteinhaber Universität Rostock</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#metadata.cc0" displayLabel="licenseinfo">Lizenz Metadaten: CC0</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/accesscondition" valueURI="http://rosdok.uni-rostock.de/classifications/accesscondition#openaccess" displayLabel="accesscondition">frei zugänglich (Open Access)</mods:classification>
+  <mods:abstract type="summary" lang="ger" xml:lang="de">Das Jubiläum 600 Jahre Universität Rostock 2019 bot die Möglichkeit, die 22. »KUNST-FORMATE« in einer neuen künstlerischen Idee umzusetzen. Dazu entwickelte die Organisatorin Christiane Lamberz gemeinsam mit Alexander von Stenglin das Konzept einer Installation zum Thema »Kluge Köpfe«. Es wurden Keramiker*innen, Schmuck- und Metallgestalter*innen aus ganz Deutschland eingeladen. Auf der Innenwiese des Kulturhistorischen Museums sollte mit den entstandenen Kunstobjekten die Jubiläumsausstellung »Menschen – Wissenschaft – Lebenswege« im Kulturhistorischen Museum begleitet werden. In der vorliegenden Publikation sind alle Kunstwerke als Frontalansicht und in Detailabbildungen zu bewundern. Die dargestellten »Klugen Köpfe« der Universität Rostock werden durch eine Kurzbiografie vorgestellt. Die Künstler*innen kommen selbst zu Wort und geben interessante Einblicke in ihre Wahl der jeweiligen Persönlichkeit und ihre Art der künstlerischen Auseinandersetzung mit ihr.</mods:abstract>
+  <mods:note type="other">Umschlagtitel</mods:note>
+</mods:mods>

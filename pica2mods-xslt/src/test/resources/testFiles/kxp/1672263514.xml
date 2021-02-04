@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods:mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
+  <mods:recordInfo>
+    <mods:recordIdentifier source="DE-28">rosdok/ppn1672263514</mods:recordIdentifier>
+    <mods:recordOrigin>Converted from PICA to MODS using ubr_pica2mods_KXP.xsl from pica2mods-xslt v1.3.0</mods:recordOrigin>
+  </mods:recordInfo>
+  <mods:identifier type="purl">http://purl.uni-rostock.de/rosdok/ppn1672263514</mods:identifier>
+  <mods:identifier type="PPN">1672263514</mods:identifier>
+  <mods:identifier type="vd18">10762302</mods:identifier>
+  <mods:identifier type="kalliope">DE-611-HS-3515626</mods:identifier>
+  <mods:note type="bibliographic_reference">Steinschneider, M. Bibliographisches Handbuch 452 und Nachtrag 1</mods:note>
+  <mods:name type="personal">
+    <mods:nameIdentifier type="gnd">116025883</mods:nameIdentifier>
+    <mods:namePart type="given">Johann Andreas</mods:namePart>
+    <mods:namePart type="family">Danz</mods:namePart>
+    <mods:namePart type="date">1654 - 1727</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="text" authority="GBV">VerfasserIn</mods:roleTerm>
+      <mods:roleTerm type="code" authority="marcrelator">aut</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:name type="personal">
+    <mods:nameIdentifier type="gnd">121502988</mods:nameIdentifier>
+    <mods:namePart type="given">Johann Heinrich</mods:namePart>
+    <mods:namePart type="family">Zopf</mods:namePart>
+    <mods:namePart type="date">1691 - 1774</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="text" authority="GBV">HerausgeberIn</mods:roleTerm>
+      <mods:roleTerm type="code" authority="marcrelator">edt</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:name type="personal">
+    <mods:nameIdentifier type="gnd">12860090X</mods:nameIdentifier>
+    <mods:namePart type="given">Johann Felix</mods:namePart>
+    <mods:namePart type="family">Bielcke</mods:namePart>
+    <mods:role>
+      <mods:roleTerm type="text" authority="GBV">Verlag</mods:roleTerm>
+      <mods:roleTerm type="code" authority="marcrelator">pbl</mods:roleTerm>
+    </mods:role>
+  </mods:name>
+  <mods:titleInfo usage="primary">
+    <mods:title>Handexemplar: Ioh. Andr. Danzii Medaḳdeḳ Sive Compendivm Grammaticae Hebrææ Seivncto Chaldaismo Ad Arctiores Limites Redactvm</mods:title>
+    <mods:subTitle>Accesservnt I. Paradigmata Verborum Perf. &amp; Imperf. II. Syntaxis &amp; Idiotismi Hebræorum: III. Accentuatio Prosaica: IV. Copia DXXX. Vocabulorum, in XXIV. pensa digestorum, una cum Oratione Domino Ebræa. V. Quatuor priora Capita Geneseos. VI. Brevis Manuductio ad Analysin Grammaticam. : CIc-1950.3 + Mss. orient. 281.32</mods:subTitle>
+  </mods:titleInfo>
+  <mods:note type="statement of responsibility">Opera Et Studio Ioan. Henrici Zopfii</mods:note>
+  <mods:titleInfo type="alternative">
+    <mods:title>Compendium Grammaticae Hebraeae</mods:title>
+  </mods:titleInfo>
+  <mods:titleInfo type="uniform">
+    <mods:title>Medaḳdeḳ Sive Compendivm Grammaticae Hebrææ</mods:title>
+  </mods:titleInfo>
+  <mods:language>
+    <mods:languageTerm type="code" authority="iso639-2b">lat</mods:languageTerm>
+  </mods:language>
+  <mods:language>
+    <mods:languageTerm type="code" authority="iso639-2b">heb</mods:languageTerm>
+  </mods:language>
+  <mods:originInfo eventType="creation">
+    <mods:publisher>Bielcke</mods:publisher>
+    <mods:place>
+      <mods:placeTerm type="text">Ienae</mods:placeTerm>
+    </mods:place>
+    <mods:place supplied="yes">
+      <mods:placeTerm lang="ger" type="text">Jena</mods:placeTerm>
+    </mods:place>
+    <mods:dateIssued keyDate="yes" encoding="iso8601" point="start">1735</mods:dateIssued>
+    <mods:dateIssued encoding="iso8601" point="end">1765</mods:dateIssued>
+    <mods:dateIssued qualifier="approximate">[1735-nach 1760]</mods:dateIssued>
+    <mods:edition>[Nachlassmaterialien]</mods:edition>
+    <mods:issuance>monographic</mods:issuance>
+  </mods:originInfo>
+  <mods:location>
+    <mods:physicalLocation type="current" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
+    <mods:shelfLocator>CIc-1950.3 + Mss. orient. 281.32</mods:shelfLocator>
+  </mods:location>
+  <mods:physicalDescription>
+    <mods:extent>Seiten 1-160, [165-176 = Blätter 1-14], [161-164 = Blätter 15-17], 177-199</mods:extent>
+    <mods:extent>8°</mods:extent>
+    <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+  </mods:physicalDescription>
+  <mods:originInfo eventType="online_publication">
+    <mods:publisher>Universitätsbibliothek</mods:publisher>
+    <mods:place>
+      <mods:placeTerm type="text">Rostock</mods:placeTerm>
+    </mods:place>
+    <mods:edition>[Electronic edition]</mods:edition>
+    <mods:dateCaptured encoding="iso8601" keyDate="yes">2019</mods:dateCaptured>
+  </mods:originInfo>
+  <mods:location>
+    <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
+    <mods:url usage="primary" access="object in context">http://purl.uni-rostock.de/rosdok/ppn1672263514</mods:url>
+  </mods:location>
+  <mods:genre type="aadgenre">Grammatik</mods:genre>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/aadgenre" valueURI="http://rosdok.uni-rostock.de/classifications/aadgenre#ppn09663183X" displayLabel="aadgenre">Grammatik</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/collection" valueURI="http://rosdok.uni-rostock.de/classifications/collection#NachlassTychsen" displayLabel="collection">Nachlass Oluf Gerhard Tychsen digital</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/collection" valueURI="http://rosdok.uni-rostock.de/classifications/collection#DigiNachlassmaterialien" displayLabel="collection">Digitalisierte Nachlassmaterialien</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/provider" valueURI="http://rosdok.uni-rostock.de/classifications/provider#ubr" displayLabel="provider">Universitätsbibliothek Rostock</mods:classification>
+  <mods:classification authorityURI="http://rosdok.uni-rostock.de/classifications/doctype" valueURI="http://rosdok.uni-rostock.de/classifications/doctype#histbest.personalpapers" displayLabel="doctype">Nachlassmaterialien</mods:classification>
+  <mods:classification displayLabel="licenseinfo" authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#metadata.cc0">Lizenz Metadaten: CC0</mods:classification>
+  <mods:classification displayLabel="licenseinfo" authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#digitisedimages.cclicense.cc-by-sa.v40">Lizenz Digitalisate: CC BY SA 4.0</mods:classification>
+  <mods:classification displayLabel="licenseinfo" authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#deposit.publicdomain">gemeinfrei</mods:classification>
+  <mods:classification displayLabel="licenseinfo" authorityURI="http://rosdok.uni-rostock.de/classifications/licenseinfo" valueURI="http://rosdok.uni-rostock.de/classifications/licenseinfo#work.publicdomain">gemeinfrei</mods:classification>
+  <mods:classification displayLabel="accesscondition" authorityURI="http://rosdok.uni-rostock.de/classifications/accesscondition" valueURI="http://rosdok.uni-rostock.de/classifications/accesscondition#openaccess">frei zugänglich (Open Access)</mods:classification>
+  <mods:note type="source note" xlink:href="http://kalliope-verbund.info/DE-611-HS-3515626">Kalliope</mods:note>
+  <mods:note type="source note">Dieses Exemplar, mit dem Tychsen bereits seit seiner Gymnasialzeit in Altona arbeitete, war später auch Grundlage für seinen eigenen Hebräischunterricht in Halle, Bützow und Rostock. Es enthält zahlreiche Unterstreichungen und Marginalien. Die im Titel genannten Abschnitte III und IV wurden von Tychsen herausgetrennt, in umgekehrte Reihenfolge gebracht und mit Papier durchschossen. Dieses Faszikel fand sich im lange unbearbeiteten Teil des Nachlasses und wurde mit der Signatur Mss. orient. 281.32 versehen.</mods:note>
+  <mods:note type="source note">Die im Exemplar der ULB Halle vorhandene, zu Seite 164 gehörige Kupfertafel "Tab. Accent. Prosaicae" fehlt hier.</mods:note>
+  <mods:note type="source note">Vorlageform des Erscheinungsvermerks: Ienae, Apvd Ioh. Felicem Bielckivm. M DCC XXXV.</mods:note>
+  <mods:note type="titlewordindex">Medaqdēq seiuncto redactum accesserunt Hebraeorum Ebraea</mods:note>
+</mods:mods>
