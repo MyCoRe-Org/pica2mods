@@ -1,5 +1,5 @@
 /.project
 /.settings
 /**/.flattened-pom.xml
-pica2mods*.iml
-saxon-he-10.3.jar
+/target
+*.iml

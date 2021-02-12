@@ -4,6 +4,17 @@
                 xmlns:xsL="http://www.w3.org/1999/XSL/Transform" version="3.0"
                 exclude-result-prefixes="mods">
 
+    <xsl:import href="picaMode.xsl"/>
+    <xsl:import href="picaURLResolver.xsl"/>
+    <xsl:import href="picaDate.xsl"/>
+
+    <!-- This template is for testing purposes-->
+    <xsl:template match="p:record">
+        <mods:mods>
+            <xsl:call-template name="modsRecordInfo" />
+        </mods:mods>
+    </xsl:template>
+
 
     <xsl:template name="modsRecordInfo">
         <xsl:variable name="picaMode">

@@ -4,6 +4,16 @@
                 xmlns:xsL="http://www.w3.org/1999/XSL/Transform" version="3.0"
                 exclude-result-prefixes="mods">
 
+    <xsl:import href="picaMode.xsl"/>
+    <xsl:import href="picaURLResolver.xsl"/>
+    <xsl:import href="picaDate.xsl"/>
+
+    <!-- This template is for testing purposes-->
+    <xsl:template match="p:record">
+        <mods:mods>
+            <xsl:call-template name="modsGenre" />
+        </mods:mods>
+    </xsl:template>
 
     <xsl:template name="modsGenre">
         <xsl:variable name="picaMode">
@@ -12,7 +22,6 @@
         <xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)"/>
 
         <xsl:choose>
-
             <xsl:when test="$picaMode = $pica_RDA">
                 <xsl:if test="not($pica0500_2='v')">
                     <xsl:variable name="ppnA" select="./p:datafield[@tag='039I']/p:subfield[@code='9'][1]/text()"/>

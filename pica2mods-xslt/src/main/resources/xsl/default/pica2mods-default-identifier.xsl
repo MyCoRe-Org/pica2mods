@@ -4,6 +4,16 @@
                 xmlns:xsL="http://www.w3.org/1999/XSL/Transform" version="3.0"
                 exclude-result-prefixes="mods">
 
+    <xsl:import href="picaMode.xsl"/>
+    <xsl:import href="picaURLResolver.xsl"/>
+    <xsl:import href="picaDate.xsl"/>
+
+    <!-- This template is for testing purposes-->
+    <xsl:template match="p:record">
+        <mods:mods>
+            <xsl:call-template name="modsIdentifier" />
+        </mods:mods>
+    </xsl:template>
 
     <xsl:template name="modsIdentifier">
         <xsl:variable name="picaMode">
@@ -27,29 +37,28 @@
 
 
     <xsl:template name="COMMON_Identifier">
-        <xsl:for-each select="./p:datafield[@tag='017C']"> <!-- 4950 (kein eigenes Feld) -->
-            <xsl:if test="contains(./p:subfield[@code='u'], '//purl.uni-rostock.de')">
-                <mods:identifier type="purl">
-                    <xsl:value-of select="./p:subfield[@code='u']"/>
+        <xsl:for-each select="./p:datafield[@tag='017C']/p:subfield[@code='u']">
+            <!-- 4950 (kein eigenes Feld) -->
+            <mods:identifier type="url">
+                    <xsl:value-of select="."/>
                 </mods:identifier>
-            </xsl:if>
         </xsl:for-each>
 
-        <xsl:for-each select="./p:datafield[@tag='003@']"> <!--  0100 -->
+        <xsl:for-each select="./p:datafield[@tag='003@']/p:subfield[@code='0']"> <!--  0100 -->
             <mods:identifier type="PPN">
-                <xsl:value-of select="./p:subfield[@code='0']"/>
+                <xsl:value-of select="."/>
             </mods:identifier>
         </xsl:for-each>
         <xsl:for-each
-                select="./p:datafield[@tag='004U' and contains(./p:subfield[@code='0'], 'urn:nbn:de:gbv:28')]"> <!-- 2050 -->
+                select="./p:datafield[@tag='004U']/p:subfield[@code='0']"> <!-- 2050 -->
             <mods:identifier type="urn">
-                <xsl:value-of select="./p:subfield[@code='0']"/>
+                <xsl:value-of select="."/>
             </mods:identifier>
         </xsl:for-each>
         <xsl:for-each
-                select="./p:datafield[@tag='004V' and contains(./p:subfield[@code='0'], '10.18453/')]"> <!-- 2051 -->
+                select="./p:datafield[@tag='004V']/p:subfield[@code='0']"> <!-- 2051 -->
             <mods:identifier type="doi">
-                <xsl:value-of select="./p:subfield[@code='0']"/>
+                <xsl:value-of select="."/>
             </mods:identifier>
         </xsl:for-each>
         <xsl:for-each

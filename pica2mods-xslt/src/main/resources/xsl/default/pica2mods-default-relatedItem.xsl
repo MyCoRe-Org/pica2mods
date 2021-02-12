@@ -5,6 +5,7 @@
                 exclude-result-prefixes="mods">
 
 
+    <!-- not sure if we can test this easy -->
     <xsl:template name="modsRelatedItem">
         <xsl:variable name="picaMode">
             <xsl:call-template name="detectPicaMode"/>

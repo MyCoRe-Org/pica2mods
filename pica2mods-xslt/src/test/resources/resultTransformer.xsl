@@ -12,8 +12,14 @@
                 <title>Test - Result</title>
                 <style>
                     .compare {
-                        width: 47%;
-                        display: inline-block;
+                    width: 47%;
+                    display: inline-block;
+                    }
+                    .failed {
+                    background: red;
+                    }
+                    .success{
+                    background: green;
                     }
                 </style>
                 <link rel="stylesheet"
@@ -36,36 +42,52 @@
                 <xsl:variable name="ppn" select="@ppn"/>
                 <li>
                     <a href="#ppn_{$ppn}">
+                        <xsl:choose>
+                            <xsl:when test="@failed='true'">
+                                <xsl:attribute name="class">failed</xsl:attribute>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="class">success</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
                         <xsl:value-of select="@ppn"/>
+                        <xsl:text> - </xsl:text>
+                        <xsl:value-of select="@name"/>
                     </a>
                 </li>
-                <ol>
-                    <xsl:for-each select="tle">
-                        <li>
-                            <a href="#ppn_{$ppn}_{@name}">
-                                <xsl:value-of select="@name"/>
-                            </a>
-                        </li>
-                    </xsl:for-each>
-                </ol>
             </xsl:for-each>
         </ol>
         <xsl:for-each select="compare">
             <xsl:variable name="ppn" select="@ppn"/>
             <h2 id="ppn_{$ppn}">
+                <xsl:attribute name="class">
+                    <xsl:choose>
+                        <xsl:when test="@failed='true'">
+                            <xsl:attribute name="class">failed</xsl:attribute>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="class">success</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
                 <xsl:value-of select="$ppn"/>
             </h2>
-            <xsl:for-each select="tle">
-                <h3 id="ppn_{$ppn}_{@name}">
-                    <xsl:value-of select="@name"/>
-                </h3>
-                <pre class="compare"><code class="xml left">
+            <h3 id="ppn_{$ppn}_{@name}">
+                <xsl:value-of select="@name"/>
+            </h3>
+            <pre class="compare">
+                <code class="xml left">
                     <xsl:value-of select="transformed"/>
-                </code></pre>
-                <pre class="compare"><code class="xml right">
+                </code>
+            </pre>
+            <pre class="compare">
+                <code class="xml right">
                     <xsl:value-of select="expected"/>
-                </code></pre>
-            </xsl:for-each>
+                </code>
+            </pre>
+            <xsl:if test="reason">
+                <pre><xsl:value-of select="reason" /></pre>
+            </xsl:if>
         </xsl:for-each>
     </xsl:template>
 

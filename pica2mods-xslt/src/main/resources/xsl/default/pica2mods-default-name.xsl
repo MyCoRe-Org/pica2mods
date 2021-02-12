@@ -1,12 +1,22 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
                 version="3.0"
                 exclude-result-prefixes="mods">
 
+    <xsl:import href="picaMode.xsl"/>
+    <xsl:import href="picaURLResolver.xsl"/>
+    <xsl:import href="picaDate.xsl"/>
+
+    <!-- This template is for testing purposes-->
+    <xsl:template match="p:record">
+        <mods:mods>
+            <xsl:call-template name="modsName"/>
+        </mods:mods>
+    </xsl:template>
+
     <xsl:template name="modsName">
-        <xsl:call-template name="COMMON_PersonalName" />
-        <xsl:call-template name="COMMON_CorporateName" />
+        <xsl:call-template name="COMMON_PersonalName"/>
+        <xsl:call-template name="COMMON_CorporateName"/>
     </xsl:template>
 
     <xsl:template name="COMMON_PersonalName">
@@ -22,11 +32,6 @@
                     </xsl:variable>
                     <xsl:if test="starts-with($tp/p:record/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tp')">
                         <mods:name type="personal">
-                            <mods:nameIdentifier type="gnd"><xsl:value-of select="$tp/p:record/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" /></mods:nameIdentifier>
-                            <xsl:if test="$tp/p:record/p:datafield[@tag='006X' and ./p:subfield[@code='S']='orcid']">
-                                <mods:nameIdentifier type="orcid"><xsl:value-of select="$tp/p:record/p:datafield[@tag='006X' and ./p:subfield[@code='S']='orcid']/p:subfield[@code='0']" /></mods:nameIdentifier>
-                            </xsl:if>
-
                             <xsl:if test="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='d']">
                                 <mods:namePart type="given"><xsl:value-of select="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='d']" /></mods:namePart>
                             </xsl:if>
@@ -48,19 +53,33 @@
                             <xsl:for-each select="$tp/p:record/p:datafield[@tag='060R' and ./p:subfield[@code='4']='datl']">
                                 <xsl:if test="./p:subfield[@code='a']">
                                     <xsl:variable name="out_date">
-                                        <xsl:value-of select="./p:subfield[@code='a']" />
+                                        <xsl:value-of select="./p:subfield[@code='a']"/>
                                         -
-                                        <xsl:value-of select="./p:subfield[@code='b']" />
+                                        <xsl:value-of select="./p:subfield[@code='b']"/>
                                     </xsl:variable>
-                                    <mods:namePart type="date"><xsl:value-of select="normalize-space($out_date)"></xsl:value-of></mods:namePart>
+                                    <mods:namePart type="date">
+                                        <xsl:value-of select="normalize-space($out_date)"></xsl:value-of>
+                                    </mods:namePart>
                                 </xsl:if>
                                 <xsl:if test="./p:subfield[@code='d']">
-                                    <mods:namePart type="date"><xsl:value-of select="./p:subfield[@code='d']"></xsl:value-of></mods:namePart>
+                                    <mods:namePart type="date">
+                                        <xsl:value-of select="./p:subfield[@code='d']"></xsl:value-of>
+                                    </mods:namePart>
                                 </xsl:if>
                             </xsl:for-each>
                             <xsl:call-template name="COMMON_PersonalName_ROLES">
-                                <xsl:with-param name="datafield" select="." />
+                                <xsl:with-param name="datafield" select="."/>
                             </xsl:call-template>
+                            <mods:nameIdentifier type="gnd">
+                                <xsl:value-of
+                                        select="$tp/p:record/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']"/>
+                            </mods:nameIdentifier>
+                            <xsl:if test="$tp/p:record/p:datafield[@tag='006X' and ./p:subfield[@code='S']='orcid']">
+                                <mods:nameIdentifier type="orcid">
+                                    <xsl:value-of
+                                            select="$tp/p:record/p:datafield[@tag='006X' and ./p:subfield[@code='S']='orcid']/p:subfield[@code='0']"/>
+                                </mods:nameIdentifier>
+                            </xsl:if>
                         </mods:name>
                     </xsl:if>
                 </xsl:when>

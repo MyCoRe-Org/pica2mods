@@ -5,6 +5,17 @@
                 exclude-result-prefixes="mods">
 
 
+    <xsl:import href="picaMode.xsl"/>
+    <xsl:import href="picaURLResolver.xsl"/>
+    <xsl:import href="picaDate.xsl"/>
+
+    <!-- This template is for testing purposes-->
+    <xsl:template match="p:record">
+        <mods:mods>
+            <xsl:call-template name="modsNote" />
+        </mods:mods>
+    </xsl:template>
+
     <xsl:template name="modsNote">
         <xsl:variable name="picaMode">
             <xsl:call-template name="detectPicaMode"/>

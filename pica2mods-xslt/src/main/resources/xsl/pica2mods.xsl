@@ -17,12 +17,10 @@
     <xsl:import href="default/pica2mods-default-abstract.xsl"/>
     <xsl:import href="default/pica2mods-default-relatedItem.xsl"/>
 
-    <xsl:import href="mir/pica2mods-mir-classification.xsl"/>
 
     <xsl:import href="picaMode.xsl"/>
     <xsl:import href="picaURLResolver.xsl"/>
     <xsl:import href="picaDate.xsl"/>
-
     <xsl:param name="CONVERTER_VERSION" select="'Pica2Mods 2.0'"/>
 
     <xsl:template match="p:record">
