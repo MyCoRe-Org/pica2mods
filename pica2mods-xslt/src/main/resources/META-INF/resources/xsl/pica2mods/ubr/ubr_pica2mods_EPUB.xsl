@@ -43,8 +43,8 @@
           <xsl:call-template name="COMMON_Title" />
         </xsl:for-each>
       </xsl:when>
-      <xsl:when test="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='v' and ./p:datafield[@tag='027D']">
-        <xsl:for-each select="./p:datafield[@tag='027D']">
+      <xsl:when test="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='v' and ./p:datafield[@tag='036F']">
+        <xsl:for-each select="./p:datafield[@tag='036F']">
           <xsl:call-template name="COMMON_Title" />
         </xsl:for-each>
       </xsl:when>
