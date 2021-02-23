@@ -3,3 +3,4 @@
 /**/.flattened-pom.xml
 /target
 *.iml
+pica2mods-xslt/result.html
