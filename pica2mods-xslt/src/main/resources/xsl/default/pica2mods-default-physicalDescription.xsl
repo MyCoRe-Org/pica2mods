@@ -139,7 +139,12 @@
                         </xsl:when>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:variable name="picaA" select="document($query)"/>
+
+                <xsl:variable name="picaA">
+                    <xsl:if test="string-length($query)&gt;0">
+                        <xsl:copy-of select="document($query)" />
+                    </xsl:if>
+                </xsl:variable>
                 <xsl:choose>
                     <xsl:when
                             test="$picaA/p:record/p:datafield[@tag='034D' or @tag='034M' or @tag='034I' or @tag='034K']">

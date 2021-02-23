@@ -83,7 +83,11 @@
                             </xsl:choose>
                         </xsl:variable>
 
-                        <xsl:variable name="picaA" select="document($query)"/>
+                        <xsl:variable name="picaA">
+                            <xsl:if test="string-length($query)&gt;0">
+                                <xsl:copy-of select="document($query)" />
+                            </xsl:if>
+                        </xsl:variable>
 
                         <xsl:if test="$picaA">
                             <mods:originInfo eventType="creation">
