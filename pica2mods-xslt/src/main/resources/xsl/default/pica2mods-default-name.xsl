@@ -3,9 +3,9 @@
                 version="3.0"
                 exclude-result-prefixes="mods">
 
-    <xsl:import href="picaMode.xsl"/>
-    <xsl:import href="picaURLResolver.xsl"/>
-    <xsl:import href="picaDate.xsl"/>
+    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaMode.xsl" />
+    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaURLResolver.xsl"/>
+    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaDate.xsl"/>
 
     <!-- This template is for testing purposes-->
     <xsl:template match="p:record">
