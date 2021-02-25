@@ -146,7 +146,7 @@
             <!-- ToDo teilweise redundant mit title template -->
             <mods:titleInfo>
                 <xsl:if test="./p:subfield[@code='a']">
-                    <xsl:variable name="mainTitle" select="./p:subfield[@code='a']"/>
+                    <xsl:variable name="mainTitle" select="./p:subfield[@code='a'][1]"/>
                     <xsl:choose>
                         <xsl:when test="contains($mainTitle, '@')">
                             <xsl:variable name="nonSort" select="normalize-space(substring-before($mainTitle, '@'))"/>
