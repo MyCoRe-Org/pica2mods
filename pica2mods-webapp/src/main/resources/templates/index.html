@@ -19,41 +19,53 @@
         </div>
         <span th:if="${xmlSchemaError}" style="font-size: 100%" class="badge badge-danger">MODS ERROR!</span>
       </div>
-      <h2>UB Rostock: Pica2MODS Konverter</h2>
+      <h2> <img alt="MyCoRe" th:src="@{mycore_logo_170x40_frei.png}" valign="center"/> Pica2MODS Konverter</h2>
+
       <form th:action="@{/}" method="GET">
         <div class="form-group row mt-3">
           <div class="col-3">
             <div class="input-group input-group-sm">
               <div class="input-group-prepend">
+                <span class="input-group-text">Katalog:</span>
+              </div>
+              <select class="form-control" name="catalog">
+                  <option th:each="key : ${catalogs}" th:value="${key}" th:text="${catalogNames.get(key)}"
+                          th:selected=${key==catalog}></option>
+              </select>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
                 <span class="input-group-text">PPN:</span>
               </div>
-              <input class="form-control form-control" type="text" id="ppn" name="ppn" th:value="${ppn}" />
+              <input class="form-control" type="text" id="ppn" name="ppn" th:value="${ppn}" />
               <div class="input-group-append">
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </div>
           </div>
+          
           <div class="col-1">
-            <a class="btn btn-outline-secondary btn-sm d-block" th:href="${'http://opac.lbs-rostock.gbv.de/DB=1/XMLPRS=N/PPN?PPN='+ppn}">OPAC</a>
+            <a class="btn btn-outline-secondary btn-sm d-block" th:href="${catalogUrls.get(catalog) + 'XMLPRS=N/PPN?PPN=' + ppn}">OPAC</a>
           </div>
           <div class="col-2">
             <a class="btn btn-outline-secondary btn-sm d-block"
-              th:href="${'http://sru.k10plus.de/k10plus?operation=searchRetrieve&amp;maximumRecords=1&amp;recordSchema=picaxml&amp;query=pica.ppn%3D'+ppn}">PicaPlus
-              O-Aufn. (SRU, K10plus)</a>
+              th:href="${'http://unapi.k10plus.de/?&amp;format=picaxml&amp;id=' + catalogUnapiKeys.get(catalog) + ':ppn:' + ppn}" 
+              th:utext="'UnAPI <br />(__${catalogUnapiKeys.get(catalog)}__)'">
+              (UnAPI (Katalog))</a>
           </div>
-          <div class="col-2">
-            <a class="btn btn-outline-secondary btn-sm d-block"
-              th:href="${'http://unapi.k10plus.de/?&amp;format=picaxml&amp;id=opac-de-28:ppn:'+ppn}">PicaPlus O-Aufn. (UnAPI, DE-28)</a>
+          <div class="col-3" th:with="p=${#lists.size(related)>0}">
+            <span th:each="r : ${related}">
+              <a class="btn btn-outline-secondary btn-sm d-block"
+                 th:href="@{/(catalog=${catalog}, ppn=${r.ppn})}"
+                 th:text="${r.type + ' (PPN '+ r.ppn +')'}">
+                 Druckausgabe [UnAPI(gvk)]
+            </a>
+            </span>
           </div>
-          <div class="col-2">
-            <a class="btn btn-outline-secondary btn-sm d-block"
-              th:href="${'http://unapi.k10plus.de/?&amp;format=picaxml&amp;id=k10plus:ppn:'+ppnA}">PicaPlus A-Aufn. (UnAPI, K10plus)</a>
-          </div>
-
-          <div class="col-2" th:if="${ppnHost}">
-            <a class="btn btn-info btn-sm d-block" th:href="*{'?ppn=__${ppnHost}__'}" th:text="'MODS_Host (__${ppnHost}__)'">Pica2MODS_Host</a>
-          </div>
-        </div>
+       </div>
+         
 
         <div class="row mt-4" th:if="${xmlSchemaError}">
           <div class="col">
@@ -73,7 +85,6 @@
             </div>
         </div>
       </div>
-    </div>
   </div>
   <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
   <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>

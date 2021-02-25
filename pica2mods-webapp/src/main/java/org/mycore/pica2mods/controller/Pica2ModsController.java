@@ -5,13 +5,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.mycore.pica2mods.Pica2ModsMetadataService;
 import org.mycore.pica2mods.util.XMLSchemaValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.http.MediaType;
@@ -31,8 +34,33 @@ public class Pica2ModsController {
     @Autowired
     private Pica2ModsXSLTransformerService transformer;
 
+    @Autowired
+    private Pica2ModsMetadataService metadataService;
+
+    @Value("#{'${pica2mods.catalogs}'.split(',')}")
+    private List<String> catalogs;
+
+    @Value("#{${pica2mods.catalogs.names}}")
+    private Map<String, String> catalogNames;
+
+    @Value("#{${pica2mods.catalogs.urls}}")
+    private Map<String, String> catalogUrls;
+
+    @Value("#{${pica2mods.catalogs.unapikeys}}")
+    private Map<String, String> catalogUnapiKeys;
+
     @GetMapping("/")
-    String index(@RequestParam(name = "ppn", required = false) String ppn, Model model) {
+    String index(@RequestParam(name = "ppn", required = false) String ppn,
+        @RequestParam(name = "catalog", defaultValue = "ubr") String catalog,
+        Model model) {
+
+        model.addAttribute("catalog", catalog);
+        model.addAttribute("catalogs", catalogs);
+        model.addAttribute("catalogNames", catalogNames);
+        model.addAttribute("catalogUrls", catalogUrls);
+        model.addAttribute("catalogUnapiKeys", catalogUnapiKeys);
+        model.addAttribute("related", metadataService.resolveOtherIssues(catalog, ppn));
+
         if (ppn != null) {
             ppn = ppn.trim();
             model.addAttribute("ppn", ppn);
@@ -75,23 +103,23 @@ public class Pica2ModsController {
         return "index";
     }
 
-    @GetMapping(value="/files/xsl/**",produces = MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(value = "/files/xsl/**", produces = MediaType.APPLICATION_XML_VALUE)
     @ResponseBody
-    StreamingResponseBody returnXSLFile(HttpServletRequest request){
+    StreamingResponseBody returnXSLFile(HttpServletRequest request) {
         return new StreamingResponseBody() {
-            
+
             @Override
             public void writeTo(OutputStream outputStream) throws IOException {
                 //String x = "xsl/"+filepath;
-                String x = "xsl/"+request.getServletPath().replace("/files/xsl",  "").replaceAll("\\.+",  ".");
-                 try(InputStream is = getClass().getClassLoader().getResourceAsStream(x)){
-                     //Java9: //inputStream.transferTo(targetStream);
+                String x = "xsl/" + request.getServletPath().replace("/files/xsl", "").replaceAll("\\.+", ".");
+                try (InputStream is = getClass().getClassLoader().getResourceAsStream(x)) {
+                    //Java9: //inputStream.transferTo(targetStream);
                     IOUtils.copy(is, outputStream);
-                 }
+                }
             }
         };
     }
-    
+
     @RequestMapping(value = "/ppn{ppn}.mods.xml",
         method = RequestMethod.GET,
         produces = {
