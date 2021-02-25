@@ -65,7 +65,7 @@ public class Pica2ModsXSLTransformerService {
         Map<String, String> xslParams = new HashMap<>();
         xslParams.put("CONVERTER_VERSION", Pica2ModsWebapp.PICA2MODS_VERSION);
 
-        pica2modsGenerator.createMODSDocumentFromSRU(catalogKeys.get(catalog), "pica.ppn=" + ppn,
+        pica2modsGenerator.createMODSDocumentFromSRU(Pica2ModsWebapp.DEFAULT_CATALOG_KEY_K10PLUS, "pica.ppn=" + ppn,
             catalogXSLs.get(catalog), result, xslParams);
 
         return sw.toString();
