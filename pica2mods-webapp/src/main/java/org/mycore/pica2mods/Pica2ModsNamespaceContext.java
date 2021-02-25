@@ -5,7 +5,8 @@ import java.util.Iterator;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 
-class PicaModsNamespaceContext implements NamespaceContext {
+public class Pica2ModsNamespaceContext implements NamespaceContext {
+
     public String getNamespaceURI(String prefix) {
         if (prefix.equals("p")) {
             return "info:srw/schema/5/picaXML-v1.0";

@@ -13,7 +13,7 @@
     <div class="container-fluid pt-3">
       <div style="float: right; margin-top: 12px">
         <div th:if="${not(#strings.isEmpty(ppn))}" th:unless="${xmlSchemaError}">
-          <a class="btn btn-success btn-sm" th:href="@{ppn__${ppn}__.mods.xml}">
+          <a class="btn btn-success btn-sm" th:href="@{/ppn__${ppn}__.mods.xml?catalog=__${catalog}__}">
             <strong>&#128190; MODS valid</strong>
           </a>
         </div>
