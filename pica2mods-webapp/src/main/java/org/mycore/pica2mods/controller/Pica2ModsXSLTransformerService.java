@@ -47,8 +47,11 @@ public class Pica2ModsXSLTransformerService {
     @Value("${pica2mods.mycore.base.url}")
     private String mycoreBaseURL;
     
-    @Value("#{${pica2mods.catalogs.unapikeys}}")
-    private Map<String, String> catalogUnapiKeys;
+    @Value("#{${pica2mods.catalogs.keys}}")
+    private Map<String, String> catalogKeys;
+    
+    @Value("#{${pica2mods.catalogs.xsls}}")
+    private Map<String, String> catalogXSLs;
 
     private XPathFactory factory = XPathFactory.newInstance();
     
@@ -57,14 +60,14 @@ public class Pica2ModsXSLTransformerService {
         Result result = new StreamResult(sw);
 
         Pica2ModsGenerator pica2modsGenerator = new Pica2ModsGenerator(sruURL, unapiURL, mycoreBaseURL);
-        pica2modsGenerator.createMODSDocumentFromSRU("pica.ppn=" + ppn, result);
+        pica2modsGenerator.createMODSDocumentFromSRU(catalogKeys.get(catalog), "pica.ppn=" + ppn, catalogXSLs.get(catalog), result);
 
         return sw.toString();
     }
 
     public List<PPNLink> resolveOtherIssues(String catalog, String ppn) {
         List<PPNLink> result = new ArrayList<>();
-        String url = unapiURL + "?format=picaxml&id=" + catalogUnapiKeys.get(catalog) + ":ppn:" + ppn;
+        String url = unapiURL + "?format=picaxml&id=" + catalogKeys.get(catalog) + ":ppn:" + ppn;
         XPath xpath = factory.newXPath();
         xpath.setNamespaceContext(new Pica2ModsNamespaceContext());
 

@@ -40,8 +40,8 @@ public class Pica2ModsController {
     @Value("#{${pica2mods.catalogs.urls}}")
     private Map<String, String> catalogUrls;
 
-    @Value("#{${pica2mods.catalogs.unapikeys}}")
-    private Map<String, String> catalogUnapiKeys;
+    @Value("#{${pica2mods.catalogs.keys}}")
+    private Map<String, String> catalogKeys;
 
     @Value("#{${pica2mods.catalogs.xsls}}")
     private Map<String, String> catalogXSLs;
@@ -55,7 +55,7 @@ public class Pica2ModsController {
         model.addAttribute("catalogs", catalogs);
         model.addAttribute("catalogNames", catalogNames);
         model.addAttribute("catalogUrls", catalogUrls);
-        model.addAttribute("catalogUnapiKeys", catalogUnapiKeys);
+        model.addAttribute("catalogKeys", catalogKeys);
         model.addAttribute("related", transformerService.resolveOtherIssues(catalog, ppn));
 
         if (ppn != null) {

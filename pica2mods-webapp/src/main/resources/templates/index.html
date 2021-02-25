@@ -51,8 +51,8 @@
           </div>
           <div class="col-2">
             <a class="btn btn-outline-secondary btn-sm d-block"
-              th:href="${'http://unapi.k10plus.de/?&amp;format=picaxml&amp;id=' + catalogUnapiKeys.get(catalog) + ':ppn:' + ppn}" 
-              th:utext="'UnAPI <br />(__${catalogUnapiKeys.get(catalog)}__)'">
+              th:href="${'http://unapi.k10plus.de/?&amp;format=picaxml&amp;id=' + catalogKeys.get(catalog) + ':ppn:' + ppn}" 
+              th:utext="'UnAPI <br />(__${catalogKeys.get(catalog)}__)'">
               (UnAPI (Katalog))</a>
           </div>
           <div class="col-3" th:with="p=${#lists.size(related)>0}">
