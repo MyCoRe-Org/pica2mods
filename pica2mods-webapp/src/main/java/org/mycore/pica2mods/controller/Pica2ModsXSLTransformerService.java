@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import javax.xml.xpath.XPathFactory;
 
 import org.mycore.pica2mods.Pica2ModsGenerator;
 import org.mycore.pica2mods.Pica2ModsNamespaceContext;
+import org.mycore.pica2mods.Pica2ModsWebapp;
 import org.mycore.pica2mods.model.PPNLink;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,7 @@ public class Pica2ModsXSLTransformerService {
      * ("/some/pkg/resource.properties");
      */
     public static String CLASSPATH_PREFIX = "xsl/";
-    
+
     public static String XPATH_PARALLEL = "concat(//p:datafield[@tag='039D']/p:subfield[@code='n'], //p:datafield[@tag='039D']/p:subfield[@code='i' and not(./../p:subfield[@code='n'])], '|',//p:datafield[@tag='039D']/p:subfield[@code='C' and text()='KXP']/following-sibling::p:subfield[@code='6'][1])";
 
     public static String XPATH_PPN_MBW = "//p:datafield[@tag='036D']/p:subfield[@code='9']";
@@ -46,21 +48,25 @@ public class Pica2ModsXSLTransformerService {
 
     @Value("${pica2mods.mycore.base.url}")
     private String mycoreBaseURL;
-    
+
     @Value("#{${pica2mods.catalogs.keys}}")
     private Map<String, String> catalogKeys;
-    
+
     @Value("#{${pica2mods.catalogs.xsls}}")
     private Map<String, String> catalogXSLs;
 
     private XPathFactory factory = XPathFactory.newInstance();
-    
+
     public String transform(String catalog, String ppn) {
         StringWriter sw = new StringWriter();
         Result result = new StreamResult(sw);
 
         Pica2ModsGenerator pica2modsGenerator = new Pica2ModsGenerator(sruURL, unapiURL, mycoreBaseURL);
-        pica2modsGenerator.createMODSDocumentFromSRU(catalogKeys.get(catalog), "pica.ppn=" + ppn, catalogXSLs.get(catalog), result);
+        Map<String, String> xslParams = new HashMap<>();
+        xslParams.put("CONVERTER_VERSION", Pica2ModsWebapp.PICA2MODS_VERSION);
+
+        pica2modsGenerator.createMODSDocumentFromSRU(catalogKeys.get(catalog), "pica.ppn=" + ppn,
+            catalogXSLs.get(catalog), result, xslParams);
 
         return sw.toString();
     }
@@ -109,5 +115,5 @@ public class Pica2ModsXSLTransformerService {
 
         return result;
     }
-       
+
 }

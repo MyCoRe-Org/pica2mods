@@ -19,7 +19,9 @@
         </div>
         <span th:if="${xmlSchemaError}" style="font-size: 100%" class="badge badge-danger">MODS ERROR!</span>
       </div>
-      <h2> <img alt="MyCoRe" th:src="@{mycore_logo_170x40_frei.png}" valign="center"/> Pica2MODS Konverter</h2>
+      <h2> <img alt="MyCoRe" th:src="@{mycore_logo_170x40_frei.png}" valign="center"/> Pica2MODS Konverter
+        <sup><small><a class="btn btn-link" th:title="${pica2modsVersion}">&#128712;</a></small></sup>
+      </h2>
 
       <form th:action="@{/}" method="GET">
         <div class="form-group row mt-3">

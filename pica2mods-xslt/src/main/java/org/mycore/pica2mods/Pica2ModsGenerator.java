@@ -1,12 +1,17 @@
 package org.mycore.pica2mods;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Enumeration;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,7 +33,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class Pica2ModsGenerator {
-    private final Logger LOGGER = LoggerFactory.getLogger(Pica2ModsGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Pica2ModsGenerator.class);
 
     public static final String PICA2MODS_XSLT_PATH = "xsl/";
 
@@ -152,7 +157,7 @@ public class Pica2ModsGenerator {
         }
     }
 
-    public void createMODSDocumentFromSRU(String catalogKey, String sruQuery, String xslFile, Result result) {
+    public void createMODSDocumentFromSRU(String catalogKey, String sruQuery, String xslFile, Result result, Map<String, String> parameter) {
         //uses the configured Transformer-Factory (e.g. XALAN, if installed)
         //TransformerFactory TRANS_FACTORY = TransformerFactory.newInstance();
         //Java 9 provides a method newDefaultInstance() to retrieve the built-in system default implementation
@@ -183,6 +188,9 @@ public class Pica2ModsGenerator {
                 */
 
                 transformer.setParameter("WebApplicationBaseURL", mycoreBaseURL);
+                for(String key: parameter.keySet()) {
+                    transformer.setParameter(key, parameter.get(key));
+                }
                 transformer.transform(new DOMSource(picaRecord), result);
             }
 
@@ -216,6 +224,7 @@ public class Pica2ModsGenerator {
         return sw.toString();
     }
 
+    @Deprecated
     public String getPica2MODSVersion(String xslFile) throws Pica2ModsException {
         String version = "";
         try {
@@ -235,5 +244,34 @@ public class Pica2ModsGenerator {
             throw new Pica2ModsException("Error getting mods metadata: " + e.getMessage());
         }
         return version;
+    }
+ 
+    //does not work from Eclipse
+    public static String retrieveBuildInfosFromManifest(boolean addCommitInfos) {
+
+        Enumeration<URL> resources;
+        try {
+            resources = Pica2ModsGenerator.class.getClassLoader().getResources("META-INF/MANIFEST.MF");
+            while (resources.hasMoreElements()) {
+                URL url = resources.nextElement();
+
+                Manifest manifest = new Manifest(url.openStream());
+                Attributes attributes = manifest.getMainAttributes();
+                if ("pica2mods-xslt".equals(attributes.getValue("Implementation-Artifact-ID"))) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(attributes.getValue("Implementation-Title"))
+                        .append(" ").append(attributes.getValue("Implementation-Version"));
+                    if (addCommitInfos) {
+                        sb.append(" [SCM: \"").append(attributes.getValue("SCM-Branch"))
+                            .append("\" \"").append(attributes.getValue("SCM-Commit"))
+                            .append("\" \"" + attributes.getValue("SCM-Time")).append("\"]");
+                    }
+                    return sb.toString();
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.error("Unable to read manifest entry", e);
+        }
+        return "Pica2MODS";
     }
 }

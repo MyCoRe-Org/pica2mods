@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.mycore.pica2mods.Pica2ModsWebapp;
 import org.mycore.pica2mods.util.XMLSchemaValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,6 +58,7 @@ public class Pica2ModsController {
         model.addAttribute("catalogUrls", catalogUrls);
         model.addAttribute("catalogKeys", catalogKeys);
         model.addAttribute("related", transformerService.resolveOtherIssues(catalog, ppn));
+        model.addAttribute("pica2modsVersion", Pica2ModsWebapp.PICA2MODS_VERSION);
 
         if (ppn != null) {
             ppn = ppn.trim();
