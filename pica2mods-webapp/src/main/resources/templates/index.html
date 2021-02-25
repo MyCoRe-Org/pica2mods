@@ -66,16 +66,11 @@
     <code class="flex-grow-1 m-3 border border-secondary d-inline-block" style="white-space: pre;" th:text="${modsxml}"></code>
 
     <div class="container-fluid">
+      <h4>XSL-Dateien</h4>
       <div class="row mb-3">
-        <div class="col-2">
-          <strong>XSL-Dateien:</strong>
-        </div>
-        <div class="col-10">
-          <div class="row">
-            <div class="col-3" th:each="x:${xslFiles}">
-              <a th:href="@{xsl/__${x}__}" th:text="${x}"></a>
+            <div class="col-lg-3 col-md-6 col-12" th:each="x:${xslFiles}">
+              <a th:href="@{files/xsl/__${x}__}" th:text="${x}"></a>
             </div>
-          </div>
         </div>
       </div>
     </div>
