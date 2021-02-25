@@ -11,7 +11,7 @@
   <name>Pica2Mods Web Application</name>
   <packaging>jar</packaging>
   <properties>
-    <revision>1.3-SNAPSHOT</revision>
+    <revision>2.0-SNAPSHOT</revision>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
   </properties>
@@ -39,6 +39,12 @@
       <groupId>org.mycore.pica2mods</groupId>
       <artifactId>pica2mods-xslt</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.sf.saxon</groupId>
+        <artifactId>Saxon-HE</artifactId>
+        <version>10.2</version>
+        <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.webjars</groupId>
