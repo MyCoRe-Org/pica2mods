@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -30,9 +31,10 @@ import org.w3c.dom.NodeList;
 public class Pica2ModsGenerator {
     private final Logger LOGGER = LoggerFactory.getLogger(Pica2ModsGenerator.class);
 
-    public static final String PICA2MODS_XSLT_PATH = "META-INF/resources/xsl/pica2mods/";
+    public static final String PICA2MODS_XSLT_PATH = "xsl/";
 
-    private static final String PICA2MODS_XSLT_START_FILE = "ubr/ubr_pica2mods.xsl";
+    //private static final String PICA2MODS_XSLT_START_FILE = "ubr/ubr_pica2mods.xsl";
+    private static final String PICA2MODS_XSLT_START_FILE = "pica2mods.xsl";
 
     private static final String NS_PICA = "info:srw/schema/5/picaXML-v1.0";
 
@@ -164,7 +166,7 @@ public class Pica2ModsGenerator {
 
         //for Java 8 we set the class name explicitely
         TransformerFactory TRANS_FACTORY = TransformerFactory.newInstance(
-            "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", getClass().getClassLoader());
+            "net.sf.saxon.TransformerFactoryImpl", getClass().getClassLoader());
 
         TRANS_FACTORY.setURIResolver(new Pica2ModsURIResolver(this));
         try {
@@ -173,8 +175,20 @@ public class Pica2ModsGenerator {
             if (picaRecord != null) {
                 Source xsl = new StreamSource(getClass().getClassLoader()
                     .getResourceAsStream(PICA2MODS_XSLT_PATH + PICA2MODS_XSLT_START_FILE));
-
+                xsl.setSystemId(PICA2MODS_XSLT_PATH + PICA2MODS_XSLT_START_FILE);
                 Transformer transformer = TRANS_FACTORY.newTransformer(xsl);
+                
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+
+                /*
+                <xsl:param name="MCR.SRU.URL" select="'http://sru.k10plus.de'"/>
+                <xsl:param name="MCR.UNAPI.URL" select="'http://unapi.k10plus.de'"/>
+                <xsl:param name="MCR.PICA.DATABASE.k10plus" select="'k10plus'"/>
+                <xsl:param name="MCR.MODS.DateEncoding" select="'w3cdtf'"/>
+                <xsl:param name="CONVERTER_VERSION" select="'Pica2Mods 2.0'"/>
+                */
+                
                 transformer.setParameter("WebApplicationBaseURL", mycoreBaseURL);
                 transformer.transform(new DOMSource(picaRecord), result);
             }
