@@ -111,7 +111,7 @@ public class Pica2ModsController {
             @Override
             public void writeTo(OutputStream outputStream) throws IOException {
                 //String x = "xsl/"+filepath;
-                String x = "xsl/" + request.getServletPath().replace("/files/xsl", "").replaceAll("\\.+", ".");
+                String x = "xsl" + request.getServletPath().substring(request.getServletPath().indexOf("/files/xsl")+"/files/xsl".length()).replaceAll("\\.+", ".");
                 try (InputStream is = getClass().getClassLoader().getResourceAsStream(x)) {
                     //Java9: //inputStream.transferTo(targetStream);
                     IOUtils.copy(is, outputStream);
