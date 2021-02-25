@@ -20,7 +20,7 @@ import org.xml.sax.InputSource;
 
 @Service
 public class Pica2ModsMetadataService {
-    public static String XPATH_PARALLEL = "concat(//p:datafield[@tag='039D']/p:subfield[@code='n' or @code='i'], '|',//p:datafield[@tag='039D']/p:subfield[@code='C' and text()='KXP']/following-sibling::p:subfield[@code='6'][1])";
+    public static String XPATH_PARALLEL = "concat(//p:datafield[@tag='039D']/p:subfield[@code='n'], //p:datafield[@tag='039D']/p:subfield[@code='i' and not(./../p:subfield[@code='n'])], '|',//p:datafield[@tag='039D']/p:subfield[@code='C' and text()='KXP']/following-sibling::p:subfield[@code='6'][1])";
 
     public static String XPATH_PPN_MBW = "//p:datafield[@tag='036D']/p:subfield[@code='9']";
 
