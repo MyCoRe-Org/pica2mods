@@ -144,6 +144,7 @@ public class Pica2ModsTest {
         String stylePath = "xsl/" + test.getType() + "/pica2mods-" + test.getType() + "-" + test.getTopLevelElement()
             + ".xsl";
         System.out.println("Transforming " + ppn + " with " + stylePath);
+        System.setProperty("XSL_TESTING","true");
 
         try (InputStream styleIS = getClass().getClassLoader().getResourceAsStream(stylePath)) {
             final URL url = new URL(URL_BASE + ppn);
@@ -153,7 +154,6 @@ public class Pica2ModsTest {
                 final StreamSource streamSource = new StreamSource(styleIS);
                 final Transformer transformer = getTFactory().newTransformer(streamSource);
                 final JDOMResult jdomResult = new JDOMResult();
-
                 transformer.transform(new JDOMSource(jdom), jdomResult);
 
                 return jdomResult.getDocument();
