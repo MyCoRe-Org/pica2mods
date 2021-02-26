@@ -7,8 +7,8 @@
   xmlns:err="http://www.w3.org/2005/xqt-errors"
   exclude-result-prefixes="mods fn xs">
 
-  <xsl:param name="MCR.PICA2MODS.SRU.URL" select="'http://sru.k10plus.de'" />
-  <xsl:param name="MCR.PICA2MODS.UNAPI.URL" select="'http://unapi.k10plus.de'" />
+  <xsl:param name="MCR.PICA2MODS.SRU.URL" select="'https://sru.k10plus.de'" />
+  <xsl:param name="MCR.PICA2MODS.UNAPI.URL" select="'https://unapi.k10plus.de'" />
 
   <xsl:function name="pica2mods:querySRUForPicaWithQuery" as="element()?">
     <xsl:param name="database" as="xs:string" />

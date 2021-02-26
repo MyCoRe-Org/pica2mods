@@ -47,7 +47,7 @@ public class Pica2ModsGenerator {
     }
 
     public static Pica2ModsGenerator instanceForRosDok() {
-        return new Pica2ModsGenerator("http://sru.k10plus.de", "http://unapi.k10plus.de",
+        return new Pica2ModsGenerator("https://sru.k10plus.de", "https://unapi.k10plus.de",
             "http://rosdok.uni-rostock.de/");
     }
 
@@ -116,7 +116,7 @@ public class Pica2ModsGenerator {
         }
     }
 
-    //http://unapi.k10plus.de/?&format=picaxml&id=opac-de-28:ppn:1662436106
+    //https://unapi.k10plus.de/?&format=picaxml&id=opac-de-28:ppn:1662436106
     public Element retrievePicaXMLViaUnAPI(String catalogKey, String ppn) throws Exception {
         return retrievePicaXMLViaUnAPI(catalogKey + ":ppn:" + ppn);
     }
@@ -180,8 +180,8 @@ public class Pica2ModsGenerator {
                 transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
                 /*
-                <xsl:param name="MCR.SRU.URL" select="'http://sru.k10plus.de'"/>
-                <xsl:param name="MCR.UNAPI.URL" select="'http://unapi.k10plus.de'"/>
+                <xsl:param name="MCR.SRU.URL" select="'https://sru.k10plus.de'"/>
+                <xsl:param name="MCR.UNAPI.URL" select="'https://unapi.k10plus.de'"/>
                 <xsl:param name="MCR.PICA.DATABASE.k10plus" select="'k10plus'"/>
                 <xsl:param name="MCR.MODS.DateEncoding" select="'w3cdtf'"/>
                 <xsl:param name="CONVERTER_VERSION" select="'Pica2Mods 2.0'"/>
