@@ -24,13 +24,13 @@
                         <xsl:value-of select="concat('rosdok/ppn',./p:datafield[@tag='003@']/p:subfield[@code='0'])" />
                     </mods:recordIdentifier>
                     <mods:descriptionStandard>rda</mods:descriptionStandard>
-                    <mods:recordOrigin><xsl:value-of select="normalize-space(concat('Converted from PICA to MODS using ',$CONVERTER_VERSION))" /></mods:recordOrigin>
+                    <mods:recordOrigin><xsl:value-of select="normalize-space(concat('Converted from PICA to MODS using ',$MCR.PICA2MODS.CONVERTER_VERSION))" /></mods:recordOrigin>
                 </mods:recordInfo>
             </xsl:when>
             <xsl:when test="$picaMode = 'KXP'">
                 <mods:recordInfo>
                     <mods:recordIdentifier source="DE-28"><xsl:value-of select="concat('rosdok/ppn', ./p:datafield[@tag='003@']/p:subfield[@code='0'])" /></mods:recordIdentifier>
-                    <mods:recordOrigin><xsl:value-of select="normalize-space(concat('Converted from PICA to MODS using ',$CONVERTER_VERSION))" /></mods:recordOrigin>
+                    <mods:recordOrigin><xsl:value-of select="normalize-space(concat('Converted from PICA to MODS using ',$MCR.PICA2MODS.CONVERTER_VERSION))" /></mods:recordOrigin>
                 </mods:recordInfo>
             </xsl:when>
             <xsl:when test="$picaMode = 'EPUB'">
@@ -53,7 +53,7 @@
                         <mods:descriptionStandard>rda</mods:descriptionStandard>
                     </xsl:if>
                     <mods:recordOrigin>
-                        <xsl:value-of select="normalize-space(concat('Converted from PICA to MODS using ',$CONVERTER_VERSION))" />
+                        <xsl:value-of select="normalize-space(concat('Converted from PICA to MODS using ',$MCR.PICA2MODS.CONVERTER_VERSION))" />
                     </mods:recordOrigin>
                 </mods:recordInfo>
             </xsl:when>

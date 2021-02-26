@@ -24,7 +24,7 @@
     <xsl:import href="default/pica2mods-default-relatedItem.xsl"/>
 
     <xsl:import href="_common/pica2mods-functions.xsl"/>
-    <xsl:param name="CONVERTER_VERSION" select="'Pica2Mods 2.0'"/>
+    <xsl:param name="MCR.PICA2MODS.CONVERTER_VERSION" select="'Pica2Mods 2.0'"/>
 
     <xsl:template match="p:record">
         <mods:mods>
