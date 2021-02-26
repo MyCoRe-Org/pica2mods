@@ -183,7 +183,6 @@ public class Pica2ModsGenerator {
                 <xsl:param name="MCR.SRU.URL" select="'https://sru.k10plus.de'"/>
                 <xsl:param name="MCR.UNAPI.URL" select="'https://unapi.k10plus.de'"/>
                 <xsl:param name="MCR.PICA.DATABASE.k10plus" select="'k10plus'"/>
-                <xsl:param name="MCR.MODS.DateEncoding" select="'w3cdtf'"/>
                 <xsl:param name="CONVERTER_VERSION" select="'Pica2Mods 2.0'"/>
                 */
 

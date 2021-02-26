@@ -7,7 +7,6 @@
 
 
     <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl"/>
-    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaDate.xsl"/>
 
     <!-- This template is for testing purposes-->
     <xsl:template match="p:record">
@@ -50,7 +49,7 @@
                     <xsl:when test="($pica0500_2='v')">
                         <mods:originInfo eventType="creation">
                             <xsl:if test="./p:datafield[@tag='011@']/p:subfield[@code='r']">
-                                <mods:dateIssued encoding="{$MCR.MODS.DateEncoding}" keyDate="yes">
+                                <mods:dateIssued encoding="w3cdtf" keyDate="yes">
                                     <xsl:value-of select="./p:datafield[@tag='011@']/p:subfield[@code='r']"/>
                                 </mods:dateIssued>
                             </xsl:if>
@@ -123,10 +122,10 @@
                                 <xsl:for-each select="$picaA/p:record/p:datafield[@tag='011@']">
                                     <xsl:choose>
                                         <xsl:when test="./p:subfield[@code='b']">
-                                            <mods:dateIssued keyDate="yes" encoding="{$MCR.MODS.DateEncoding}" point="start">
+                                            <mods:dateIssued keyDate="yes" encoding="w3cdtf" point="start">
                                                 <xsl:value-of select="./p:subfield[@code='a']"/>
                                             </mods:dateIssued>
-                                            <mods:dateIssued encoding="{$MCR.MODS.DateEncoding}" point="end">
+                                            <mods:dateIssued encoding="w3cdtf" point="end">
                                                 <xsl:value-of select="./p:subfield[@code='b']"/>
                                             </mods:dateIssued>
                                             <xsl:if test="./p:subfield[@code='n']">
@@ -138,11 +137,11 @@
                                         <xsl:otherwise>
                                             <xsl:choose>
                                                 <xsl:when test="contains(./p:subfield[@code='a'], 'X')">
-                                                    <mods:dateIssued keyDate="yes" encoding="{$MCR.MODS.DateEncoding}" point="start">
+                                                    <mods:dateIssued keyDate="yes" encoding="w3cdtf" point="start">
                                                         <xsl:value-of
                                                                 select="translate(./p:subfield[@code='a'], 'X','0')"/>
                                                     </mods:dateIssued>
-                                                    <mods:dateIssued encoding="{$MCR.MODS.DateEncoding}" point="end">
+                                                    <mods:dateIssued encoding="w3cdtf" point="end">
                                                         <xsl:value-of
                                                                 select="translate(./p:subfield[@code='a'], 'X', '9')"/>
                                                     </mods:dateIssued>
@@ -153,7 +152,7 @@
                                                     </xsl:if>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                    <mods:dateIssued keyDate="yes" encoding="{$MCR.MODS.DateEncoding}">
+                                                    <mods:dateIssued keyDate="yes" encoding="w3cdtf">
                                                         <xsl:value-of select="./p:subfield[@code='a']"/>
                                                     </mods:dateIssued>
                                                     <xsl:if test="./p:subfield[@code='n']">
@@ -241,15 +240,15 @@
                     <xsl:for-each select="./p:datafield[@tag='011@']">   <!-- 1109, RDA 1100 011@ -->
                         <xsl:choose>
                             <xsl:when test="./p:subfield[@code='b']">
-                                <mods:dateCaptured encoding="{$MCR.MODS.DateEncoding}" keyDate="yes" point="start">
+                                <mods:dateCaptured encoding="w3cdtf" keyDate="yes" point="start">
                                     <xsl:value-of select="./p:subfield[@code='a']"/>
                                 </mods:dateCaptured>
-                                <mods:dateCaptured encoding="{$MCR.MODS.DateEncoding}" point="end">
+                                <mods:dateCaptured encoding="w3cdtf" point="end">
                                     <xsl:value-of select="./p:subfield[@code='b']"/>
                                 </mods:dateCaptured>
                             </xsl:when>
                             <xsl:otherwise>
-                                <mods:dateCaptured encoding="{$MCR.MODS.DateEncoding}" keyDate="yes">
+                                <mods:dateCaptured encoding="w3cdtf" keyDate="yes">
                                     <xsl:value-of select="./p:subfield[@code='a']"/>
                                 </mods:dateCaptured>
                             </xsl:otherwise>
@@ -377,10 +376,10 @@
         <xsl:for-each select="./p:datafield[@tag='011@']">
             <xsl:choose>
                 <xsl:when test="./p:subfield[@code='b']">
-                    <mods:dateIssued keyDate="yes" encoding="{$MCR.MODS.DateEncoding}" point="start">
+                    <mods:dateIssued keyDate="yes" encoding="w3cdtf" point="start">
                         <xsl:value-of select="./p:subfield[@code='a']"/>
                     </mods:dateIssued>
-                    <mods:dateIssued encoding="{$MCR.MODS.DateEncoding}" point="end">
+                    <mods:dateIssued encoding="w3cdtf" point="end">
                         <xsl:value-of select="./p:subfield[@code='b']"/>
                     </mods:dateIssued>
                 </xsl:when>
@@ -388,15 +387,15 @@
                     <xsl:choose>
                         <!-- TODO: check how different this is to epubDate-->
                         <xsl:when test="contains(./p:subfield[@code='a'], 'X')">
-                            <mods:dateIssued keyDate="yes" encoding="{$MCR.MODS.DateEncoding}" point="start">
+                            <mods:dateIssued keyDate="yes" encoding="w3cdtf" point="start">
                                 <xsl:value-of select="translate(./p:subfield[@code='a'], 'X','0')"/>
                             </mods:dateIssued>
-                            <mods:dateIssued encoding="{$MCR.MODS.DateEncoding}" point="end">
+                            <mods:dateIssued encoding="w3cdtf" point="end">
                                 <xsl:value-of select="translate(./p:subfield[@code='a'], 'X', '9')"/>
                             </mods:dateIssued>
                         </xsl:when>
                         <xsl:otherwise>
-                            <mods:dateIssued keyDate="yes" encoding="{$MCR.MODS.DateEncoding}">
+                            <mods:dateIssued keyDate="yes" encoding="w3cdtf">
                                 <xsl:value-of select="./p:subfield[@code='a']"/>
                             </mods:dateIssued>
                         </xsl:otherwise>
@@ -482,15 +481,15 @@
         <xsl:for-each select="./p:datafield[@tag='011@']">   <!-- 1100 -->
             <xsl:choose>
                 <xsl:when test="./p:subfield[@code='b']">
-                    <mods:dateIssued keyDate="yes" encoding="{$MCR.MODS.DateEncoding}" point="start">
+                    <mods:dateIssued keyDate="yes" encoding="w3cdtf" point="start">
                         <xsl:value-of select="./p:subfield[@code='a']"/>
                     </mods:dateIssued>
-                    <mods:dateIssued encoding="{$MCR.MODS.DateEncoding}" point="end">
+                    <mods:dateIssued encoding="w3cdtf" point="end">
                         <xsl:value-of select="./p:subfield[@code='b']"/>
                     </mods:dateIssued>
                 </xsl:when>
                 <xsl:otherwise>
-                    <mods:dateIssued keyDate="yes" encoding="{$MCR.MODS.DateEncoding}">
+                    <mods:dateIssued keyDate="yes" encoding="w3cdtf">
                         <xsl:if test="substring(../p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='b' or substring(../p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='d'">
                             <xsl:attribute name="point">start</xsl:attribute>
                         </xsl:if>
@@ -506,7 +505,7 @@
         </xsl:for-each>
 
         <xsl:if test="./p:datafield[@tag='037C']/p:subfield[@code='f']">  <!-- 4204 Hochschulschriftenvermerk, Jahr der Verteidigung -->
-            <mods:dateOther type="defence" encoding="{$MCR.MODS.DateEncoding}">
+            <mods:dateOther type="defence" encoding="w3cdtf">
                 <xsl:value-of select="./p:datafield[@tag='037C']/p:subfield[@code='f']"/>
             </mods:dateOther>
         </xsl:if>
