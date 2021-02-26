@@ -1,6 +1,7 @@
-/.project
-/.settings
+**/.project
+**/.settings
+**/.classpath
 /**/.flattened-pom.xml
-/target
+**/target
 *.iml
 pica2mods-xslt/result.html
