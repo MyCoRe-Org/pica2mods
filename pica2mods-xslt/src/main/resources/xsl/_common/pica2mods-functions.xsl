@@ -56,5 +56,25 @@
     </xsl:try>
   </xsl:function>
 
+  <xsl:function name="pica2mods:detectPicaMode" as="xs:string">
+    <xsl:param name="record" as="element()" />
+    <xsl:choose>
+      <xsl:when test="$record/p:datafield[@tag='209O']/p:subfield[@code='a' and contains(.,':doctype:epub')]">
+        <xsl:value-of select="'EPUB'" />
+      </xsl:when>
+      <xsl:when test="$record/p:datafield[@tag='007G']/p:subfield[@code='i']/text()='KXP'">
+        <xsl:value-of select="'KXP'" />
+      </xsl:when>
+      <xsl:when
+        test="not($record/p:datafield[@tag='011B']) and $record/p:datafield[@tag='010E']/p:subfield[@code='e']/text()='rda'">
+        <xsl:value-of select="'RDA'" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'KXP'" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+  
+
 </xsl:stylesheet>
      

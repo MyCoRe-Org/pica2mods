@@ -1,10 +1,11 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
-                xmlns:xsL="http://www.w3.org/1999/XSL/Transform" version="3.0"
-                exclude-result-prefixes="mods">
+                version="3.0"
+                xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions"
+                exclude-result-prefixes="mods pica2mods">
 
-    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaMode.xsl" />
+    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl"/>
     <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaDate.xsl"/>
 
     <!-- This template is for testing purposes-->
@@ -15,13 +16,11 @@
     </xsl:template>
 
     <xsl:template name="modsGenre">
-        <xsl:variable name="picaMode">
-            <xsl:call-template name="detectPicaMode"/>
-        </xsl:variable>
+        <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
         <xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)"/>
 
         <xsl:choose>
-            <xsl:when test="$picaMode = $pica_RDA">
+            <xsl:when test="$picaMode = 'RDA'">
                 <xsl:if test="not($pica0500_2='v')">
                     <xsl:variable name="ppnA" select="./p:datafield[@tag='039I']/p:subfield[@code='9'][1]/text()"/>
                     <xsl:variable name="zdbA"
@@ -50,12 +49,12 @@
                     </xsl:for-each>
                 </xsl:if>
             </xsl:when>
-            <xsl:when test="$picaMode = $pica_KXP">
+            <xsl:when test="$picaMode = 'KXP'">
                 <xsl:for-each select="./p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD -->
                     <mods:genre type="aadgenre"><xsl:value-of select="./p:subfield[@code='a']"/></mods:genre>
                 </xsl:for-each>
             </xsl:when>
-            <xsl:when test="$picaMode = $pica_EPUB">
+            <xsl:when test="$picaMode = 'EPUB'">
 
             </xsl:when>
 

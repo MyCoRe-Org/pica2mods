@@ -5,14 +5,13 @@
                 xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions"
                 exclude-result-prefixes="mods pica2mods">
 
+    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl"/>
 
     <!-- not sure if we can test this easy -->
     <xsl:template name="modsRelatedItem">
-        <xsl:variable name="picaMode">
-            <xsl:call-template name="detectPicaMode"/>
-        </xsl:variable>
+        <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
         <xsl:choose>
-            <xsl:when test="$picaMode = $pica_EPUB">
+            <xsl:when test="$picaMode = 'EPUB'">
                 <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241 übergeordnetes Werk -->
                     <xsl:call-template name="COMMON_AppearsIn"/>
                 </xsl:for-each>
@@ -29,7 +28,7 @@
                     <xsl:call-template name="COMMON_Review"/>
                 </xsl:for-each>
             </xsl:when>
-            <xsl:when test="$picaMode = $pica_RDA">
+            <xsl:when test="$picaMode = 'RDA'">
                 <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241 übergeordnetes Werk -->
                     <xsl:call-template name="COMMON_AppearsIn" />
                 </xsl:for-each>
@@ -48,7 +47,7 @@
                 </xsl:for-each>
                 <xsl:call-template name="common_relatedItemPreceding"/>
             </xsl:when>
-            <xsl:when test="$picaMode = $pica_KXP">
+            <xsl:when test="$picaMode = 'KXP'">
                 <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241  übergeordnetes Werk-->
                     <xsl:call-template name="COMMON_AppearsIn"/>
                 </xsl:for-each>

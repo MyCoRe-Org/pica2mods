@@ -1,10 +1,11 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
+                xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:xsL="http://www.w3.org/1999/XSL/Transform" version="3.0"
-                exclude-result-prefixes="mods">
+                exclude-result-prefixes="mods pica2mods">
 
-    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaMode.xsl" />
+    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl"/>
     <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaDate.xsl"/>
 
     <!-- This template is for testing purposes-->
@@ -15,11 +16,9 @@
     </xsl:template>
 
     <xsl:template name="modsLocation">
-        <xsl:variable name="picaMode">
-            <xsl:call-template name="detectPicaMode"/>
-        </xsl:variable>
+        <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
         <xsl:choose>
-            <xsl:when test="$picaMode = $pica_RDA">
+            <xsl:when test="$picaMode = 'RDA'">
                 <xsl:for-each select="./p:datafield[@tag='009A']"> <!-- 4065 Besitznachweis der Vorlage, RDA ok -->
                     <mods:location>
                         <xsl:if test="./p:subfield[@code='c']">
@@ -42,7 +41,7 @@
                     </mods:location>
                 </xsl:for-each>
             </xsl:when>
-            <xsl:when test="$picaMode = $pica_KXP">
+            <xsl:when test="$picaMode = 'KXP'">
                 <xsl:for-each select="./p:datafield[@tag='017C' and contains(./p:subfield[@code='u'], '//purl.uni-rostock.de')][1]">
                     <mods:location>
                         <!-- TODO: delete/generalize rostok specific code -->
@@ -51,7 +50,7 @@
                     </mods:location>
                 </xsl:for-each>
             </xsl:when>
-            <xsl:when test="$picaMode = $pica_EPUB">
+            <xsl:when test="$picaMode = 'EPUB'">
                 <xsl:for-each select="./p:datafield[@tag='017C' and contains(./p:subfield[@code='u'], 'rosdok')][1]">
                     <mods:location>
                         <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>

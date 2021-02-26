@@ -1,10 +1,11 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
-                xmlns:xsL="http://www.w3.org/1999/XSL/Transform" version="3.0"
-                exclude-result-prefixes="mods">
+                xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions" 
+                version="3.0"
+                exclude-result-prefixes="mods pica2mods">
 
-    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaMode.xsl" />
+    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl"/>
     <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaDate.xsl"/>
 
     <!-- This template is for testing purposes-->
@@ -15,11 +16,9 @@
     </xsl:template>
 
     <xsl:template name="modsIdentifier">
-        <xsl:variable name="picaMode">
-            <xsl:call-template name="detectPicaMode"/>
-        </xsl:variable>
+        <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
         <xsl:choose>
-            <xsl:when test="$picaMode = $pica_EPUB">
+            <xsl:when test="$picaMode = 'EPUB'">
                 <!-- todo: seems like rosdok specific code -->
                 <xsl:for-each
                         select="./p:datafield[@tag='209O']/p:subfield[@code='a' and starts-with(., 'ROSDOK_MD:openaire:')]"> <!-- ISBN einer anderen Ausgabe (z.B. printISBN) -->

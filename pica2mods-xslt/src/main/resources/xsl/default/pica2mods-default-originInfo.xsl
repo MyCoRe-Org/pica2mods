@@ -1,11 +1,12 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions"
                 xmlns:xsL="http://www.w3.org/1999/XSL/Transform" version="3.0"
-                exclude-result-prefixes="mods">
+                exclude-result-prefixes="mods pica2mods">
 
 
-    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaMode.xsl" />
+    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl"/>
     <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaDate.xsl"/>
 
     <!-- This template is for testing purposes-->
@@ -18,11 +19,9 @@
     <xsl:template name="modsOriginInfo">
         <xsl:variable name="pica0500_2"
                       select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)"/>
-        <xsl:variable name="picaMode">
-            <xsl:call-template name="detectPicaMode"/>
-        </xsl:variable>
+        <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
         <xsl:choose>
-            <xsl:when test="$picaMode = $pica_EPUB">
+            <xsl:when test="$picaMode = 'EPUB'">
                 <mods:originInfo eventType="publication"> <!-- 4030 033A -->
                     <!--  <xsl:call-template name="epubPublisher"/>
                     <xsl:call-template name="epubPlace"/>-->
@@ -33,7 +32,7 @@
                 </mods:originInfo>
                 <xsl:call-template name="epubOnlinePublication"/>
             </xsl:when>
-            <xsl:when test="$picaMode = $pica_KXP">
+            <xsl:when test="$picaMode = 'KXP'">
                 <!-- check use of eventtype attribute -->
                 <mods:originInfo eventType="creation">
                     <xsl:call-template name="common_publisher_place"/>
@@ -46,7 +45,7 @@
                 </mods:originInfo>
                 <xsl:call-template name="kxpOnlinePublication"/>
             </xsl:when>
-            <xsl:when test="$picaMode = $pica_RDA">
+            <xsl:when test="$picaMode = 'RDA'">
                 <xsl:choose>
                     <xsl:when test="($pica0500_2='v')">
                         <mods:originInfo eventType="creation">
