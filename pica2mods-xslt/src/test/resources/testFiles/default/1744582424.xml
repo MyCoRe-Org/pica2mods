@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.6"
+           xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
+  <mods:titleInfo usage="primary">
+    <mods:title>Recht und Verfassung der Universität Rostock im Spiegel wesentlicher Rechtsquellen</mods:title>
+    <mods:subTitle>1419 - 1563</mods:subTitle>
+    <mods:partNumber>Teil 1</mods:partNumber>
+    <mods:partName>Darstellung</mods:partName>
+  </mods:titleInfo>
+</mods:mods>

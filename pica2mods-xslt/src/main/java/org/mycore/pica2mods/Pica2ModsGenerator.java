@@ -1,21 +1,26 @@
 package org.mycore.pica2mods;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Enumeration;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -28,11 +33,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class Pica2ModsGenerator {
-    private final Logger LOGGER = LoggerFactory.getLogger(Pica2ModsGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Pica2ModsGenerator.class);
 
-    public static final String PICA2MODS_XSLT_PATH = "META-INF/resources/xsl/pica2mods/";
-
-    private static final String PICA2MODS_XSLT_START_FILE = "ubr/ubr_pica2mods.xsl";
+    public static final String PICA2MODS_XSLT_PATH = "xsl/";
 
     private static final String NS_PICA = "info:srw/schema/5/picaXML-v1.0";
 
@@ -114,8 +117,12 @@ public class Pica2ModsGenerator {
     }
 
     //http://unapi.k10plus.de/?&format=picaxml&id=opac-de-28:ppn:1662436106
-    public Element retrievePicaXMLViaUnAPI(String unApiID) throws Exception {
-        URL url = new URL(unapiURL + "?format=picaxml&id=" + unApiID);
+    public Element retrievePicaXMLViaUnAPI(String catalogKey, String ppn) throws Exception {
+        return retrievePicaXMLViaUnAPI(catalogKey + ":ppn:" + ppn);
+    }
+
+    public Element retrievePicaXMLViaUnAPI(String unapiID) throws Exception {
+        URL url = new URL(unapiURL + "?format=picaxml&id=" + unapiID);
         int loop = 0;
         Document document = null;
         do {
@@ -150,32 +157,40 @@ public class Pica2ModsGenerator {
         }
     }
 
-    public Document createMODSDocumentFromSRU(String sruQuery) throws Exception {
-        DOMResult out = new DOMResult();
-        createMODSDocumentFromSRU(sruQuery, out);
-        return (Document) (out.getNode());
-
-    }
-
-    public void createMODSDocumentFromSRU(String sruQuery, Result result) {
+    public void createMODSDocumentFromSRU(String catalogKey, String sruQuery, String xslFile, Result result, Map<String, String> parameter) {
         //uses the configured Transformer-Factory (e.g. XALAN, if installed)
         //TransformerFactory TRANS_FACTORY = TransformerFactory.newInstance();
         //Java 9 provides a method newDefaultInstance() to retrieve the built-in system default implementation
 
         //for Java 8 we set the class name explicitely
         TransformerFactory TRANS_FACTORY = TransformerFactory.newInstance(
-            "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", getClass().getClassLoader());
+            "net.sf.saxon.TransformerFactoryImpl", getClass().getClassLoader());
 
         TRANS_FACTORY.setURIResolver(new Pica2ModsURIResolver(this));
         try {
-            Element picaRecord = retrievePicaXMLViaSRU("k10plus", sruQuery);
+            Element picaRecord = retrievePicaXMLViaSRU(catalogKey, sruQuery);
 
             if (picaRecord != null) {
                 Source xsl = new StreamSource(getClass().getClassLoader()
-                    .getResourceAsStream(PICA2MODS_XSLT_PATH + PICA2MODS_XSLT_START_FILE));
-
+                    .getResourceAsStream(PICA2MODS_XSLT_PATH + xslFile));
+                xsl.setSystemId(PICA2MODS_XSLT_PATH + xslFile);
                 Transformer transformer = TRANS_FACTORY.newTransformer(xsl);
+
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+
+                /*
+                <xsl:param name="MCR.SRU.URL" select="'http://sru.k10plus.de'"/>
+                <xsl:param name="MCR.UNAPI.URL" select="'http://unapi.k10plus.de'"/>
+                <xsl:param name="MCR.PICA.DATABASE.k10plus" select="'k10plus'"/>
+                <xsl:param name="MCR.MODS.DateEncoding" select="'w3cdtf'"/>
+                <xsl:param name="CONVERTER_VERSION" select="'Pica2Mods 2.0'"/>
+                */
+
                 transformer.setParameter("WebApplicationBaseURL", mycoreBaseURL);
+                for(String key: parameter.keySet()) {
+                    transformer.setParameter(key, parameter.get(key));
+                }
                 transformer.transform(new DOMSource(picaRecord), result);
             }
 
@@ -209,12 +224,13 @@ public class Pica2ModsGenerator {
         return sw.toString();
     }
 
-    public String getPica2MODSVersion() throws Pica2ModsException {
+    @Deprecated
+    public String getPica2MODSVersion(String xslFile) throws Pica2ModsException {
         String version = "";
         try {
             DocumentBuilder dBuilder = DBF.newDocumentBuilder();
             Document doc = dBuilder.parse(
-                getClass().getClassLoader().getResourceAsStream(PICA2MODS_XSLT_PATH + PICA2MODS_XSLT_START_FILE));
+                getClass().getClassLoader().getResourceAsStream(PICA2MODS_XSLT_PATH + xslFile));
             NodeList nl = doc.getDocumentElement().getElementsByTagName("xsl:variable");
 
             for (int i = 0; i < nl.getLength(); i++) {
@@ -228,5 +244,34 @@ public class Pica2ModsGenerator {
             throw new Pica2ModsException("Error getting mods metadata: " + e.getMessage());
         }
         return version;
+    }
+ 
+    //does not work from Eclipse
+    public static String retrieveBuildInfosFromManifest(boolean addCommitInfos) {
+
+        Enumeration<URL> resources;
+        try {
+            resources = Pica2ModsGenerator.class.getClassLoader().getResources("META-INF/MANIFEST.MF");
+            while (resources.hasMoreElements()) {
+                URL url = resources.nextElement();
+
+                Manifest manifest = new Manifest(url.openStream());
+                Attributes attributes = manifest.getMainAttributes();
+                if ("pica2mods-xslt".equals(attributes.getValue("Implementation-Artifact-ID"))) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(attributes.getValue("Implementation-Title"))
+                        .append(" ").append(attributes.getValue("Implementation-Version"));
+                    if (addCommitInfos) {
+                        sb.append(" [SCM: \"").append(attributes.getValue("SCM-Branch"))
+                            .append("\" \"").append(attributes.getValue("SCM-Commit"))
+                            .append("\" \"" + attributes.getValue("SCM-Time")).append("\"]");
+                    }
+                    return sb.toString();
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.error("Unable to read manifest entry", e);
+        }
+        return "Pica2MODS";
     }
 }

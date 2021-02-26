@@ -119,6 +119,11 @@ public class Pica2ModsURIResolver implements URIResolver {
                 }
             }
         }
-        return null;
+
+        //default:
+        String path = href;
+        InputStream is = getClass().getClassLoader()
+            .getResourceAsStream(Pica2ModsGenerator.PICA2MODS_XSLT_PATH + path);
+        return new StreamSource(is);
     }
 }
