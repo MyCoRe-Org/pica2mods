@@ -132,7 +132,7 @@ public class Pica2ModsURIResolver implements URIResolver {
         return new StreamSource(is);
     }
 
-    private Source gbvCatalogCall(String href) {
+    private StreamSource gbvCatalogCall(String href) {
        try {
         URL url = new URL(href);
         int loop = 0;
@@ -141,13 +141,12 @@ public class Pica2ModsURIResolver implements URIResolver {
             LOGGER.debug("Getting catalogue data for: " + url.toString());
             try {
                 return new StreamSource(url.openStream());
+                
             } catch (Exception e) {
                 if (loop <= 2) {
                     LOGGER.error("An error occurred - waiting 5 min and try again", e);
                     TimeUnit.MINUTES.sleep(5);
-                } else {
-                    throw e;
-                }
+                } else throw e;
             }
         } while (loop <= 2);
        }
