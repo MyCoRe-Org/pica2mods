@@ -205,7 +205,7 @@
             <xsl:choose>
                 <xsl:when test="./p:subfield[@code='9']">
                     <xsl:variable name="ppn" select="./p:subfield[@code='9']" />
-                    <xsl:variable name="$tb/" select="pica2mods:queryUnAPIForPicaWithPPN('k10plus', $ppn)" />
+                    <xsl:variable name="tb" select="pica2mods:queryUnAPIForPicaWithPPN('k10plus', $ppn)" />
                     <xsl:if test="starts-with($tb/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tb')">
                         <mods:name type="corporate">
                             <mods:nameIdentifier type="gnd"><xsl:value-of select="$tb/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" /></mods:nameIdentifier>
