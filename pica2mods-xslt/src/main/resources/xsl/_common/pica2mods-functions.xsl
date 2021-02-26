@@ -3,7 +3,9 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mods="http://www.loc.gov/mods/v3"
   xmlns:p="info:srw/schema/5/picaXML-v1.0" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:map="http://www.w3.org/2005/xpath-functions/map"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="mods fn xs">
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:err="http://www.w3.org/2005/xqt-errors"
+  exclude-result-prefixes="mods fn xs">
 
   <xsl:param name="MCR.PICA2MODS.SRU.URL" select="'http://sru.k10plus.de'" />
   <xsl:param name="MCR.PICA2MODS.UNAPI.URL" select="'http://unapi.k10plus.de'" />
@@ -17,7 +19,17 @@
       select="concat($MCR.PICA2MODS.SRU.URL, '/', $database,'/',
         '?operation=searchRetrieve&amp;maximumRecords=1&amp;recordSchema=picaxml&amp;query=',
         $encodedSruQuery)" />
-    <xsl:sequence select="document($requestURL)//p:record" />
+    <xsl:try>
+      <xsl:sequence select="document($requestURL)//p:record" />
+      <xsl:catch>
+        <xsl:message>
+          No result for SRUQuery: <xsl:value-of select="$query" />
+          Error code: <xsl:value-of select="$err:code" />
+          Reason: <xsl:value-of select="$err:description" />
+        </xsl:message>
+        <xsl:sequence select="()" />
+      </xsl:catch>
+    </xsl:try>
   </xsl:function>
 
   <xsl:function name="pica2mods:querySRUForPicaWithPPN" as="element()?">
@@ -31,8 +43,17 @@
     <xsl:param name="ppn" as="xs:string" />
     <xsl:variable name="requestURL"
       select="concat($MCR.PICA2MODS.UNAPI.URL, '?format=picaxml&amp;id=', $database,':ppn:', $ppn)" />
-      <xsl:message select="$requestURL" />
-    <xsl:sequence select="document($requestURL)//p:record" />
+    <xsl:try>
+      <xsl:sequence select="document($requestURL)//p:record" />
+      <xsl:catch>
+        <xsl:message>
+          No result for UnAPIQuery: <xsl:value-of select="fn:concat($database,':ppn:',$ppn)" />
+          Error code: <xsl:value-of select="$err:code" />
+          Reason: <xsl:value-of select="$err:description" />
+        </xsl:message>
+        <xsl:sequence select="()" />
+      </xsl:catch>
+    </xsl:try>
   </xsl:function>
 
 </xsl:stylesheet>
