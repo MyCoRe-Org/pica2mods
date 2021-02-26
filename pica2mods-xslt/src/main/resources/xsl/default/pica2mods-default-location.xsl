@@ -5,7 +5,6 @@
                 exclude-result-prefixes="mods">
 
     <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaMode.xsl" />
-    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaURLResolver.xsl"/>
     <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaDate.xsl"/>
 
     <!-- This template is for testing purposes-->

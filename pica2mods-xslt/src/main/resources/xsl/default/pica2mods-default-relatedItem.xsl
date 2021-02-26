@@ -2,7 +2,8 @@
                 xmlns:mods="http://www.loc.gov/mods/v3"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:xsL="http://www.w3.org/1999/XSL/Transform" version="3.0"
-                exclude-result-prefixes="mods">
+                xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions"
+                exclude-result-prefixes="mods pica2mods">
 
 
     <!-- not sure if we can test this easy -->
@@ -104,16 +105,12 @@
     <xsl:template name="COMMON_HostOrSeries">
         <mods:relatedItem>
             <xsl:if test="./p:subfield[@code='9']">
-                <xsl:variable name="od">
-                    <xsl:call-template name="retrieveXMLViaUnapi">
-                        <xsl:with-param name="unApiID" select="concat('k10plus:ppn:',./p:subfield[@code='9'])"/>
-                    </xsl:call-template>
-                </xsl:variable>
+                <xsl:variable name="od" select="pica2mods:queryUnAPIForPicaWithPPN('k10plus', ./p:subfield[@code='9'])" />
                 <xsl:choose>
                     <xsl:when
-                            test="$od/p:record/p:datafield[@tag='017C']/p:subfield[@code='u'][starts-with(.,'http://purl.uni-rostock.de/')][1]">
+                            test="$od/p:datafield[@tag='017C']/p:subfield[@code='u'][starts-with(.,'http://purl.uni-rostock.de/')][1]">
                         <xsl:for-each
-                                select="$od/p:record/p:datafield[@tag='017C']/p:subfield[@code='u'][starts-with(.,'http://purl.uni-rostock.de/')][1]">
+                                select="$od/p:datafield[@tag='017C']/p:subfield[@code='u'][starts-with(.,'http://purl.uni-rostock.de/')][1]">
                             <xsl:attribute name="type">host</xsl:attribute>
 
                             <mods:recordInfo>
@@ -131,11 +128,11 @@
                     </xsl:otherwise>
                 </xsl:choose>
                 <mods:identifier type="PPN">
-                    <xsl:value-of select="$od/p:record/p:datafield[@tag='003@']/p:subfield[@code='0']"/>
+                    <xsl:value-of select="$od/p:datafield[@tag='003@']/p:subfield[@code='0']"/>
                 </mods:identifier>
-                <xsl:if test="$od/p:record/p:datafield[@tag='006Z']/p:subfield[@code='0']">
+                <xsl:if test="$od/p:datafield[@tag='006Z']/p:subfield[@code='0']">
                     <mods:identifier type="zdb">
-                        <xsl:value-of select="$od/p:record/p:datafield[@tag='006Z']/p:subfield[@code='0']"/>
+                        <xsl:value-of select="$od/p:datafield[@tag='006Z']/p:subfield[@code='0']"/>
                     </mods:identifier>
                 </xsl:if>
             </xsl:if>

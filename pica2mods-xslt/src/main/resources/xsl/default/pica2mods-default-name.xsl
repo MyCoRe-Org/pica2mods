@@ -1,10 +1,12 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:p="info:srw/schema/5/picaXML-v1.0"
+<xsl:stylesheet version="3.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+                xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
-                version="3.0"
-                exclude-result-prefixes="mods">
+                xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions"
+                exclude-result-prefixes="mods pica2mods">
 
+    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl"/>
     <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaMode.xsl" />
-    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaURLResolver.xsl"/>
     <xsl:import use-when="system-property('XSL_TESTING')='true'" href="picaDate.xsl"/>
 
     <!-- This template is for testing purposes-->
@@ -24,33 +26,29 @@
         <xsl:for-each select="./p:datafield[starts-with(@tag, '028') or @tag='033J']">
             <xsl:choose>
                 <xsl:when test="./p:subfield[@code='9']">
-                    <xsl:variable name="query" select="concat('k10plus:ppn:', ./p:subfield[@code='9'])" />
-                    <xsl:variable name="tp">
-                        <xsl:call-template name="retrieveXMLViaUnapi">
-                            <xsl:with-param name="unApiID" select="$query" />
-                        </xsl:call-template>
-                    </xsl:variable>
-                    <xsl:if test="starts-with($tp/p:record/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tp')">
+                    <xsl:variable name="ppn" select="./p:subfield[@code='9']" />
+                    <xsl:variable name="tp" select="pica2mods:queryUnAPIForPicaWithPPN('k10plus', $ppn)" />
+                    <xsl:if test="starts-with($tp/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tp')">
                         <mods:name type="personal">
-                            <xsl:if test="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='d']">
-                                <mods:namePart type="given"><xsl:value-of select="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='d']" /></mods:namePart>
+                            <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='d']">
+                                <mods:namePart type="given"><xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='d']" /></mods:namePart>
                             </xsl:if>
-                            <xsl:if test="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='a']">
-                                <mods:namePart type="family"><xsl:value-of select="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='a']" /></mods:namePart>
+                            <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='a']">
+                                <mods:namePart type="family"><xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='a']" /></mods:namePart>
                             </xsl:if>
-                            <xsl:if test="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='P']">
-                                <mods:namePart type="family"><xsl:value-of select="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='P']" /></mods:namePart>
+                            <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='P']">
+                                <mods:namePart type="family"><xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='P']" /></mods:namePart>
                             </xsl:if>
-                            <xsl:if test="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='c']">
-                                <mods:namePart type="termsOfAddress"><xsl:value-of select="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='c']" /></mods:namePart>
+                            <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='c']">
+                                <mods:namePart type="termsOfAddress"><xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='c']" /></mods:namePart>
                             </xsl:if>
-                            <xsl:if test="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='n']">
-                                <mods:namePart type="termsOfAddress"><xsl:value-of select="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='n']" /></mods:namePart>
+                            <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='n']">
+                                <mods:namePart type="termsOfAddress"><xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='n']" /></mods:namePart>
                             </xsl:if>
-                            <xsl:if test="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='l']">
-                                <mods:namePart type="termsOfAddress"><xsl:value-of select="$tp/p:record/p:datafield[@tag='028A']/p:subfield[@code='l']" /></mods:namePart>
+                            <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='l']">
+                                <mods:namePart type="termsOfAddress"><xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='l']" /></mods:namePart>
                             </xsl:if>
-                            <xsl:for-each select="$tp/p:record/p:datafield[@tag='060R' and ./p:subfield[@code='4']='datl']">
+                            <xsl:for-each select="$tp/p:datafield[@tag='060R' and ./p:subfield[@code='4']='datl']">
                                 <xsl:if test="./p:subfield[@code='a']">
                                     <xsl:variable name="out_date">
                                         <xsl:value-of select="./p:subfield[@code='a']"/>
@@ -72,12 +70,12 @@
                             </xsl:call-template>
                             <mods:nameIdentifier type="gnd">
                                 <xsl:value-of
-                                        select="$tp/p:record/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']"/>
+                                        select="$tp/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']"/>
                             </mods:nameIdentifier>
-                            <xsl:if test="$tp/p:record/p:datafield[@tag='006X' and ./p:subfield[@code='S']='orcid']">
+                            <xsl:if test="$tp/p:datafield[@tag='006X' and ./p:subfield[@code='S']='orcid']">
                                 <mods:nameIdentifier type="orcid">
                                     <xsl:value-of
-                                            select="$tp/p:record/p:datafield[@tag='006X' and ./p:subfield[@code='S']='orcid']/p:subfield[@code='0']"/>
+                                            select="$tp/p:datafield[@tag='006X' and ./p:subfield[@code='S']='orcid']/p:subfield[@code='0']"/>
                                 </mods:nameIdentifier>
                             </xsl:if>
                         </mods:name>
@@ -206,32 +204,28 @@
         <xsl:for-each select="./p:datafield[starts-with(@tag, '029') or @tag='033J']">
             <xsl:choose>
                 <xsl:when test="./p:subfield[@code='9']">
-                    <xsl:variable name="query" select="concat('k10plus:ppn:', ./p:subfield[@code='9'])" />
-                    <xsl:variable name="tb">
-                        <xsl:call-template name="retrieveXMLViaUnapi">
-                            <xsl:with-param name="unApiID" select="$query" />
-                        </xsl:call-template>
-                    </xsl:variable>
-                    <xsl:if test="starts-with($tb/p:record/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tb')">
+                    <xsl:variable name="ppn" select="./p:subfield[@code='9']" />
+                    <xsl:variable name="$tb/" select="pica2mods:queryUnAPIForPicaWithPPN('k10plus', $ppn)" />
+                    <xsl:if test="starts-with($tb/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tb')">
                         <mods:name type="corporate">
-                            <mods:nameIdentifier type="gnd"><xsl:value-of select="$tb/p:record/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" /></mods:nameIdentifier>
-                            <xsl:if test="$tb/p:record/p:datafield[@tag='029A']/p:subfield[@code='a']">
-                                <mods:namePart><xsl:value-of select="$tb/p:record/p:datafield[@tag='029A']/p:subfield[@code='a']" /></mods:namePart>
+                            <mods:nameIdentifier type="gnd"><xsl:value-of select="$tb/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" /></mods:nameIdentifier>
+                            <xsl:if test="$tb/p:datafield[@tag='029A']/p:subfield[@code='a']">
+                                <mods:namePart><xsl:value-of select="$tb/p:datafield[@tag='029A']/p:subfield[@code='a']" /></mods:namePart>
                             </xsl:if>
-                            <xsl:if test="$tb/p:record/p:datafield[@tag='029A']/p:subfield[@code='b']">
-                                <mods:namePart><xsl:value-of select="$tb/p:record/p:datafield[@tag='029A']/p:subfield[@code='b']" /></mods:namePart>
+                            <xsl:if test="$tb/p:datafield[@tag='029A']/p:subfield[@code='b']">
+                                <mods:namePart><xsl:value-of select="$tb/p:datafield[@tag='029A']/p:subfield[@code='b']" /></mods:namePart>
                             </xsl:if>
-                            <xsl:if test="$tb/p:record/p:datafield[@tag='029A']/p:subfield[@code='g']">
-                                <mods:namePart><xsl:value-of select="$tb/p:record/p:datafield[@tag='029A']/p:subfield[@code='g']" /></mods:namePart>
+                            <xsl:if test="$tb/p:datafield[@tag='029A']/p:subfield[@code='g']">
+                                <mods:namePart><xsl:value-of select="$tb/p:datafield[@tag='029A']/p:subfield[@code='g']" /></mods:namePart>
                             </xsl:if>
-                            <xsl:if test="$tb/p:record/p:datafield[@tag='065A']/p:subfield[@code='a']">
-                                <mods:namePart><xsl:value-of select="$tb/p:record/p:datafield[@tag='065A']/p:subfield[@code='a']" /></mods:namePart>
+                            <xsl:if test="$tb/p:datafield[@tag='065A']/p:subfield[@code='a']">
+                                <mods:namePart><xsl:value-of select="$tb/p:datafield[@tag='065A']/p:subfield[@code='a']" /></mods:namePart>
                             </xsl:if>
-                            <xsl:if test="$tb/p:record/p:datafield[@tag='065A']/p:subfield[@code='g']">
-                                <mods:namePart><xsl:value-of select="$tb/p:record/p:datafield[@tag='065A']/p:subfield[@code='g']" /></mods:namePart>
+                            <xsl:if test="$tb/p:datafield[@tag='065A']/p:subfield[@code='g']">
+                                <mods:namePart><xsl:value-of select="$tb/p:datafield[@tag='065A']/p:subfield[@code='g']" /></mods:namePart>
                             </xsl:if>
 
-                            <xsl:for-each select="$tb/p:record/p:datafield[@tag='060R' and (./p:subfield[@code='4']='datb' or ./p:subfield[@code='4']='datv')]">
+                            <xsl:for-each select="$tb/p:datafield[@tag='060R' and (./p:subfield[@code='4']='datb' or ./p:subfield[@code='4']='datv')]">
                                 <xsl:if test="./p:subfield[@code='a']">
                                     <xsl:variable name="out_date">
                                         <xsl:value-of select="./p:subfield[@code='a']" />
