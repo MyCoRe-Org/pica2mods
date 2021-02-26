@@ -2,10 +2,12 @@ package org.mycore.pica2mods.xsl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -30,6 +32,9 @@ public class Pica2ModsURIResolver implements URIResolver {
     public Source resolve(String href, String base) throws TransformerException {
         //default: resolve internet sources
         if (href.startsWith("http:") || href.startsWith("https:")) {
+            if(href.startsWith("https://unapi.k10plus.de?") || href.startsWith("https://sru.k10plus.de?")) {
+                return gbvCatalogCall(href);
+            }
             URL url;
             try {
                 url = new URL(href);
@@ -125,5 +130,30 @@ public class Pica2ModsURIResolver implements URIResolver {
         InputStream is = getClass().getClassLoader()
             .getResourceAsStream(Pica2ModsGenerator.PICA2MODS_XSLT_PATH + path);
         return new StreamSource(is);
+    }
+
+    private Source gbvCatalogCall(String href) {
+       try {
+        URL url = new URL(href);
+        int loop = 0;
+        do {
+            loop++;
+            LOGGER.debug("Getting catalogue data for: " + url.toString());
+            try {
+                return new StreamSource(url.openStream());
+            } catch (Exception e) {
+                if (loop <= 2) {
+                    LOGGER.error("An error occurred - waiting 5 min and try again", e);
+                    TimeUnit.MINUTES.sleep(5);
+                } else {
+                    throw e;
+                }
+            }
+        } while (loop <= 2);
+       }
+       catch(Exception e) {
+           LOGGER.error("Error retrieving catalog data from "+ href, e);
+       }
+       return new StreamSource(new StringReader(""));
     }
 }
