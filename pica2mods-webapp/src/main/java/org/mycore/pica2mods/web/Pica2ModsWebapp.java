@@ -1,5 +1,6 @@
-package org.mycore.pica2mods;
+package org.mycore.pica2mods.web;
 
+import org.mycore.pica2mods.xsl.Pica2ModsGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

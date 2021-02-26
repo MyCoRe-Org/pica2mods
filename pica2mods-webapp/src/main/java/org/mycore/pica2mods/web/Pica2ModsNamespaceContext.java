@@ -1,4 +1,4 @@
-package org.mycore.pica2mods;
+package org.mycore.pica2mods.web;
 
 import java.util.Iterator;
 

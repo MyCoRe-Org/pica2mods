@@ -1,4 +1,4 @@
-package org.mycore.pica2mods;
+package org.mycore.pica2mods.xsl;
 
 import java.io.IOException;
 import java.io.InputStream;

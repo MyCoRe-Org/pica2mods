@@ -1,4 +1,4 @@
-package org.mycore.pica2mods.controller;
+package org.mycore.pica2mods.web.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.mycore.pica2mods.Pica2ModsWebapp;
-import org.mycore.pica2mods.util.XMLSchemaValidator;
+import org.mycore.pica2mods.web.Pica2ModsWebapp;
+import org.mycore.pica2mods.web.util.XMLSchemaValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;

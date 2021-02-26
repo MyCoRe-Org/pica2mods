@@ -1,4 +1,4 @@
-package org.mycore.pica2mods.controller;
+package org.mycore.pica2mods.web.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,10 +16,10 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.mycore.pica2mods.Pica2ModsGenerator;
-import org.mycore.pica2mods.Pica2ModsNamespaceContext;
-import org.mycore.pica2mods.Pica2ModsWebapp;
-import org.mycore.pica2mods.model.PPNLink;
+import org.mycore.pica2mods.web.Pica2ModsNamespaceContext;
+import org.mycore.pica2mods.web.Pica2ModsWebapp;
+import org.mycore.pica2mods.web.model.PPNLink;
+import org.mycore.pica2mods.xsl.Pica2ModsGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;

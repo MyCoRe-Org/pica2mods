@@ -1,4 +1,4 @@
-package org.mycore.pica2mods.model;
+package org.mycore.pica2mods.web.model;
 
 public class PPNLink {
 
