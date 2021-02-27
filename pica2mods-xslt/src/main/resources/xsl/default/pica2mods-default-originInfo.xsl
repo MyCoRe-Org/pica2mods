@@ -66,21 +66,7 @@
                         </mods:originInfo>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:variable name="ppnA" select="./p:datafield[@tag='039I']/p:subfield[@code='9'][1]/text()"/>
-                        <xsl:variable name="zdbA"
-                                      select="./p:datafield[@tag='039I']/p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]/text()"/>
-                        <!--  TODO move to function -->
-                        <xsl:variable name="picaA">
-                            <xsl:choose>
-                                <xsl:when test="$ppnA">
-                                    <xsl:value-of select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.ppn=', $ppnA))"/>
-                                </xsl:when>
-                                <xsl:when test="$zdbA">
-                                    <xsl:value-of select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.zdb=', $zdbA))"/>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:variable>
-
+                        <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
                         <xsl:if test="$picaA/*">
                             <mods:originInfo eventType="creation">
                                 <xsl:for-each select="$picaA/p:datafield[@tag='033A']">

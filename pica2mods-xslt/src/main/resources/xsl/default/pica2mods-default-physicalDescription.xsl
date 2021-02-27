@@ -123,20 +123,7 @@
                 </xsl:variable>
 
                 <!-- RDA -->
-                <xsl:variable name="ppnA" select="./p:datafield[@tag='039I']/p:subfield[@code='9'][1]/text()"/>
-                <xsl:variable name="zdbA"
-                              select="./p:datafield[@tag='039I']/p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]/text()"/>
-                <!--  TODO move to function -->
-                <xsl:variable name="picaA">
-                            <xsl:choose>
-                                <xsl:when test="$ppnA">
-                                    <xsl:value-of select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.ppn=', $ppnA))"/>
-                                </xsl:when>
-                                <xsl:when test="$zdbA">
-                                    <xsl:value-of select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.zdb=', $zdbA))"/>
-                                </xsl:when>
-                            </xsl:choose>
-                </xsl:variable>
+                <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
                 <xsl:choose>
                     <xsl:when test="$picaA/p:datafield[@tag='034D' or @tag='034M' or @tag='034I' or @tag='034K']">
                         <mods:physicalDescription>

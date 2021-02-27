@@ -55,7 +55,32 @@
       </xsl:catch>
     </xsl:try>
   </xsl:function>
-
+  
+  <xsl:function name="pica2mods:queryPicaDruck" as="element()?">
+    <xsl:param name="current" as="element()" />
+    <xsl:choose>
+      <!-- wenn keine O-Aufnahme - Rückgabe der Eingabe -->
+      <xsl:when test="not(starts-with($current/p:datafield[@tag='002@']/p:subfield[@code='0'],'O'))">
+        <xsl:sequence select="$current" />
+      </xsl:when>
+      <!--  4256 Beziehungen zur Reproduktion in anderer physischer Form -->
+      <!--  Verknüpfung über PPN -->
+      <xsl:when test="$current/p:datafield[@tag='039I']/p:subfield[@code='9']">
+         <xsl:variable name="ppnA" select="$current/p:datafield[@tag='039I']/p:subfield[@code='9'][1]/text()" />
+         <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.ppn=', $ppnA))" />
+      </xsl:when>
+      <!--  Verknüpfung über ZDB-ID -->
+      <xsl:when test="$current/p:datafield[@tag='039I']/p:subfield[@code='C' and text()='ZDB']">
+        <xsl:variable name="zdbA" select="$current/p:datafield[@tag='039I']/p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]/text()" />
+         <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.zdb=', $zdbA))"/>
+      </xsl:when>
+      <!-- Fallback: leere Sequence -->  
+      <xsl:otherwise>
+          <xsl:sequence select="()" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+  
   <xsl:function name="pica2mods:detectPicaMode" as="xs:string">
     <xsl:param name="record" as="element()" />
     <xsl:choose>
