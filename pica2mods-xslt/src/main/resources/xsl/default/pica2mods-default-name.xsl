@@ -25,7 +25,7 @@
             <xsl:choose>
                 <xsl:when test="./p:subfield[@code='9']">
                     <xsl:variable name="ppn" select="./p:subfield[@code='9']" />
-                    <xsl:variable name="tp" select="pica2mods:queryUnAPIForPicaWithPPN('k10plus', $ppn)" />
+                    <xsl:variable name="tp" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', $ppn)" />
                     <xsl:if test="starts-with($tp/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tp')">
                         <mods:name type="personal">
                             <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='d']">
@@ -203,7 +203,7 @@
             <xsl:choose>
                 <xsl:when test="./p:subfield[@code='9']">
                     <xsl:variable name="ppn" select="./p:subfield[@code='9']" />
-                    <xsl:variable name="tb" select="pica2mods:queryUnAPIForPicaWithPPN('k10plus', $ppn)" />
+                    <xsl:variable name="tb" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', $ppn)" />
                     <xsl:if test="starts-with($tb/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tb')">
                         <mods:name type="corporate">
                             <mods:nameIdentifier type="gnd"><xsl:value-of select="$tb/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" /></mods:nameIdentifier>

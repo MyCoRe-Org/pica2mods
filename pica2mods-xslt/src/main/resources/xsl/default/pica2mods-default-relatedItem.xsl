@@ -104,7 +104,7 @@
     <xsl:template name="COMMON_HostOrSeries">
         <mods:relatedItem>
             <xsl:if test="./p:subfield[@code='9']">
-                <xsl:variable name="od" select="pica2mods:queryUnAPIForPicaWithPPN('k10plus', ./p:subfield[@code='9'])" />
+                <xsl:variable name="od" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
                 <xsl:choose>
                     <xsl:when
                             test="$od/p:datafield[@tag='017C']/p:subfield[@code='u'][starts-with(.,'http://purl.uni-rostock.de/')][1]">
