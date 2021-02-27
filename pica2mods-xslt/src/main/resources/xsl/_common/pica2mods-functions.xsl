@@ -38,7 +38,7 @@
     <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery($database, concat('ppn=',$ppn))" />
   </xsl:function>
 
-  <xsl:function name="pica2mods:queryUnAPIForPicaWithPPN" as="element()?">
+  <xsl:function name="pica2mods:queryPicaFromUnAPIWithPPN" as="element()?">
     <xsl:param name="database" as="xs:string" />
     <xsl:param name="ppn" as="xs:string" />
     <xsl:variable name="requestURL"
