@@ -10,7 +10,7 @@
   <xsl:param name="MCR.PICA2MODS.SRU.URL" select="'https://sru.k10plus.de'" />
   <xsl:param name="MCR.PICA2MODS.UNAPI.URL" select="'https://unapi.k10plus.de'" />
 
-  <xsl:function name="pica2mods:querySRUForPicaWithQuery" as="element()?">
+  <xsl:function name="pica2mods:queryPicaFromSRUWithQuery" as="element()?">
     <xsl:param name="database" as="xs:string" />
     <xsl:param name="query" as="xs:string" />
 
@@ -32,10 +32,10 @@
     </xsl:try>
   </xsl:function>
 
-  <xsl:function name="pica2mods:querySRUForPicaWithPPN" as="element()?">
+  <xsl:function name="pica2mods:queryPicaFromSRUWithPPN" as="element()?">
     <xsl:param name="database" as="xs:string" />
     <xsl:param name="ppn" as="xs:string" />
-    <xsl:sequence select="pica2mods:querySRUForPicaWithQuery($database, concat('ppn=',$ppn))" />
+    <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery($database, concat('ppn=',$ppn))" />
   </xsl:function>
 
   <xsl:function name="pica2mods:queryUnAPIForPicaWithPPN" as="element()?">

@@ -130,10 +130,10 @@
                 <xsl:variable name="picaA">
                             <xsl:choose>
                                 <xsl:when test="$ppnA">
-                                    <xsl:value-of select="pica2mods:querySRUForPicaWithQuery('k10plus', concat('pica.ppn=', $ppnA))"/>
+                                    <xsl:value-of select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.ppn=', $ppnA))"/>
                                 </xsl:when>
                                 <xsl:when test="$zdbA">
-                                    <xsl:value-of select="pica2mods:querySRUForPicaWithQuery('k10plus', concat('pica.zdb=', $zdbA))"/>
+                                    <xsl:value-of select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.zdb=', $zdbA))"/>
                                 </xsl:when>
                             </xsl:choose>
                 </xsl:variable>
