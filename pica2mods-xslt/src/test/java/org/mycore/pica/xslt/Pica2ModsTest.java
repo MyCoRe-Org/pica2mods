@@ -43,7 +43,9 @@ public class Pica2ModsTest {
         new PicaTest("1744582424", "default", "titleInfo"),
         new PicaTest("1729046428", "default", "identifier"),
         new PicaTest("1729046428", "default", "abstract"),
-        new PicaTest("1729046428", "default", "name")
+        new PicaTest("1729046428", "default", "name"),
+        new PicaTest("1747633283", "default", "originInfo"),
+        new PicaTest("883825902",  "default", "originInfo")
     )
         .collect(Collectors.toList());
     private static final String MODS_URL = "http://www.loc.gov/mods/v3";

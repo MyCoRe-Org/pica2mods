@@ -86,7 +86,11 @@
                             </xsl:if>
                         </xsl:variable>
 
-                        <xsl:if test="$picaA">
+                        <xsl:if test="$picaA and ($picaA/p:record/p:datafield[@tag='033A'] or
+                                                  (./p:datafield[@tag='033D' and not(./p:subfield[@code='4']='uvp')]) or
+                                                  $picaA/p:record/p:datafield[@tag='011@'] or
+                                                  $picaA/p:record/p:datafield[@tag='032@'] or
+                                                  $picaA/p:record/p:datafield[@tag='002@'])">
                             <mods:originInfo eventType="creation">
                                 <xsl:for-each select="$picaA/p:record/p:datafield[@tag='033A']">
                                     <xsl:if test="./p:subfield[@code='n']">  <!-- 4030 Ort, Verlag -->

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3"
+    xmlns:p="info:srw/schema/5/picaXML-v1.0"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <mods:titleInfo usage="primary">
+        <mods:title>Aerosol jet printing</mods:title>
+        <mods:subTitle>contactless deposition technique for solar cell metallization</mods:subTitle>
+    </mods:titleInfo>
+    <mods:name type="personal">
+        <mods:namePart type="given">Sebastian</mods:namePart>
+        <mods:namePart type="family">Binder</mods:namePart>
+        <mods:namePart type="date">1983 -</mods:namePart>
+        <mods:role>
+            <mods:roleTerm type="text" authority="GBV">VerfasserIn</mods:roleTerm>
+            <mods:roleTerm type="code" authority="marcrelator">aut</mods:roleTerm>
+        </mods:role>
+        <mods:nameIdentifier type="gnd">1122119844</mods:nameIdentifier>
+        <mods:nameIdentifier type="orcid">0000-0002-8285-9921</mods:nameIdentifier>
+    </mods:name>
+    <mods:name type="personal">
+        <mods:namePart type="given">Edda</mods:namePart>
+        <mods:namePart type="family">Rädlein</mods:namePart>
+        <mods:namePart type="date">1960 -</mods:namePart>
+        <mods:role>
+            <mods:roleTerm type="text" authority="GBV">GutachterIn</mods:roleTerm>
+            <mods:roleTerm type="code" authority="marcrelator">oth</mods:roleTerm>
+        </mods:role>
+        <mods:nameIdentifier type="gnd">121667375</mods:nameIdentifier>
+    </mods:name>
+    <mods:name type="personal">
+        <mods:namePart type="given">Gerhard P.</mods:namePart>
+        <mods:namePart type="family">Willeke</mods:namePart>
+        <mods:namePart type="date">1954 -</mods:namePart>
+        <mods:role>
+            <mods:roleTerm type="text" authority="GBV">GutachterIn</mods:roleTerm>
+            <mods:roleTerm type="code" authority="marcrelator">oth</mods:roleTerm>
+        </mods:role>
+        <mods:nameIdentifier type="gnd">1028692420</mods:nameIdentifier>
+    </mods:name>
+    <mods:name type="personal">
+        <mods:namePart type="given">Jens</mods:namePart>
+        <mods:namePart type="family">Müller</mods:namePart>
+        <mods:namePart type="date">1965 -</mods:namePart>
+        <mods:role>
+            <mods:roleTerm type="text" authority="GBV">GutachterIn</mods:roleTerm>
+            <mods:roleTerm type="code" authority="marcrelator">oth</mods:roleTerm>
+        </mods:role>
+        <mods:nameIdentifier type="gnd">115554440</mods:nameIdentifier>
+    </mods:name>
+    <mods:name type="corporate">
+        <mods:nameIdentifier type="gnd">2125187-3</mods:nameIdentifier>
+        <mods:namePart>Technische Universität Ilmenau</mods:namePart>
+        <mods:namePart type="date">1992 -</mods:namePart>
+        <mods:role>
+            <mods:roleTerm type="text" authority="GBV">Grad-verleihende Institution</mods:roleTerm>
+            <mods:roleTerm type="code" authority="marcrelator">dgg</mods:roleTerm>
+        </mods:role>
+    </mods:name>
+    <mods:identifier type="url">http://nbn-resolving.de/urn:nbn:de:gbv:ilm1-2016000765</mods:identifier>
+    <mods:identifier type="url">https://www.db-thueringen.de/receive/dbt_mods_00032073</mods:identifier>
+    <mods:identifier type="url">http://nbn-resolving.de/urn:nbn:de:gbv:ilm1-2016000765</mods:identifier>
+    <mods:identifier type="url">http://d-nb.info/1155559266/34</mods:identifier>
+    <mods:identifier type="url">https://www.db-thueringen.de/receive/dbt_mods_00032073</mods:identifier>
+    <mods:identifier type="PPN">883825902</mods:identifier>
+    <mods:identifier type="urn">urn:nbn:de:gbv:ilm1-2016000765</mods:identifier>
+    <mods:identifier type="isbn">9783863601539</mods:identifier>
+    <mods:language>
+        <mods:languageTerm type="code" authority="iso639-2b">eng</mods:languageTerm>
+    </mods:language>
+    <mods:physicalDescription>
+        <mods:extent>1 Online-Ressource  (xiii, 184 Seiten)</mods:extent>
+        <mods:extent>Illustrationen, Diagramme</mods:extent>
+        <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+    </mods:physicalDescription>
+    <mods:originInfo eventType="online_publication">
+        <mods:publisher>Universitätsverlag Ilmenau</mods:publisher>
+        <mods:place>
+            <mods:placeTerm type="text">Ilmenau</mods:placeTerm>
+        </mods:place>
+        <mods:publisher>Universitätsbibliothek</mods:publisher>
+        <mods:place>
+            <mods:placeTerm type="text">Ilmenau</mods:placeTerm>
+        </mods:place>
+        <mods:edition>[Electronic edition]</mods:edition>
+        <mods:dateCaptured encoding="w3cdtf" keyDate="yes">2017</mods:dateCaptured>
+    </mods:originInfo>
+    <mods:recordInfo>
+        <mods:recordIdentifier source="DE-28">rosdok/ppn883825902</mods:recordIdentifier>
+        <mods:descriptionStandard>rda</mods:descriptionStandard>
+        <mods:recordOrigin>Converted from PICA to MODS using Pica2Mods XSLT Transformator 2.0-SNAPSHOT [SCM: "master" "v1.3.1-46" "2021-02-26T20:53:04+0100"]</mods:recordOrigin>
+    </mods:recordInfo>
+    <mods:note type="statement of responsibility">Sebastian Binder</mods:note>
+    <mods:relatedItem type="series">
+        <mods:identifier type="PPN">607535474</mods:identifier>
+        <mods:identifier type="zdb">2511565-0</mods:identifier>
+        <mods:titleInfo>
+            <mods:title>Werkstofftechnik aktuell</mods:title>
+        </mods:titleInfo>
+        <mods:part>
+            <mods:detail type="volume">
+                <mods:number>Band 15</mods:number>
+            </mods:detail>
+            <mods:text type="sortstring">0015</mods:text>
+        </mods:part>
+    </mods:relatedItem>
+</mods:mods>

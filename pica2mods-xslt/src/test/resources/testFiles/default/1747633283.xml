@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3"
+    xmlns:p="info:srw/schema/5/picaXML-v1.0"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <mods:titleInfo usage="primary">
+        <mods:title>Elektrophysiologische Charakterisierung und Nachweis einer funktionellen Expression Barium-sensitiver Kaliumkanäle in Gliomzellen</mods:title>
+    </mods:titleInfo>
+    <mods:abstract type="summary" lang="ger" xml:lang="de">Der einwärtsgleichrichtende Kaliumkanal Kir4.1 ist bedeutsam in der Regulation von Proliferation und Differenzierung von Glia und der Modulation neuronaler Erregbarkeit und somit ein interessantes Target im Hinblick auf tumorassoziierte Epilepsie. Daher wurden für diese Arbeit patient*innennahe Glioblastomzelllinien bezüglich der molekularen und funktionellen Kir4-1-Expression untersucht. Dabei zeigte sich eine differenzielle Expression zwischen den verschiedenen Zelllinien mit damit einhergehenden signifikanten Unterschieden der elektrophysiologischen Eigenschaften.</mods:abstract>
+    <mods:name type="personal">
+        <mods:namePart type="given">Annett</mods:namePart>
+        <mods:namePart type="family">Madadi</mods:namePart>
+        <mods:namePart type="date">1992 -</mods:namePart>
+        <mods:role>
+            <mods:roleTerm type="text" authority="GBV">VerfasserIn</mods:roleTerm>
+            <mods:roleTerm type="code" authority="marcrelator">aut</mods:roleTerm>
+        </mods:role>
+        <mods:nameIdentifier type="gnd">1225956366</mods:nameIdentifier>
+    </mods:name>
+    <mods:name type="personal">
+        <mods:namePart type="given">Timo</mods:namePart>
+        <mods:namePart type="family">Kirschstein</mods:namePart>
+        <mods:namePart type="date">1974 -</mods:namePart>
+        <mods:role>
+            <mods:roleTerm type="text" authority="GBV">AkademischeR BetreuerIn</mods:roleTerm>
+            <mods:roleTerm type="code" authority="marcrelator">dgs</mods:roleTerm>
+        </mods:role>
+        <mods:nameIdentifier type="gnd">123070171</mods:nameIdentifier>
+    </mods:name>
+    <mods:name type="personal">
+        <mods:namePart type="given">Astrid</mods:namePart>
+        <mods:namePart type="family">Bertsche</mods:namePart>
+        <mods:namePart type="date">1972 -</mods:namePart>
+        <mods:role>
+            <mods:roleTerm type="text" authority="GBV">AkademischeR BetreuerIn</mods:roleTerm>
+            <mods:roleTerm type="code" authority="marcrelator">dgs</mods:roleTerm>
+        </mods:role>
+        <mods:nameIdentifier type="gnd">121799689</mods:nameIdentifier>
+        <mods:nameIdentifier type="orcid">0000-0003-2832-0156</mods:nameIdentifier>
+    </mods:name>
+    <mods:name type="personal">
+        <mods:namePart type="given">Toni</mods:namePart>
+        <mods:namePart type="family">Schneider</mods:namePart>
+        <mods:role>
+            <mods:roleTerm type="text" authority="GBV">AkademischeR BetreuerIn</mods:roleTerm>
+            <mods:roleTerm type="code" authority="marcrelator">dgs</mods:roleTerm>
+        </mods:role>
+        <mods:nameIdentifier type="gnd">1216124590</mods:nameIdentifier>
+        <mods:nameIdentifier type="orcid">0000-0003-2816-2696</mods:nameIdentifier>
+    </mods:name>
+    <mods:name type="corporate">
+        <mods:nameIdentifier type="gnd">38329-6</mods:nameIdentifier>
+        <mods:namePart>Universität Rostock</mods:namePart>
+        <mods:namePart type="date">1419 -</mods:namePart>
+        <mods:role>
+            <mods:roleTerm type="text" authority="GBV">Grad-verleihende Institution</mods:roleTerm>
+            <mods:roleTerm type="code" authority="marcrelator">dgg</mods:roleTerm>
+        </mods:role>
+    </mods:name>
+    <mods:name type="corporate">
+        <mods:nameIdentifier type="gnd">1029510660</mods:nameIdentifier>
+        <mods:namePart>Universitätsmedizin Rostock</mods:namePart>
+        <mods:role>
+            <mods:roleTerm type="text" authority="GBV">Grad-verleihende Institution</mods:roleTerm>
+            <mods:roleTerm type="code" authority="marcrelator">dgg</mods:roleTerm>
+        </mods:role>
+    </mods:name>
+    <mods:identifier type="PPN">1747633283</mods:identifier>
+    <mods:language>
+        <mods:languageTerm type="code" authority="iso639-2b">ger</mods:languageTerm>
+    </mods:language>
+    <mods:physicalDescription>
+        <mods:extent>VII, 88 Blätter</mods:extent>
+        <mods:extent>Illustrationen, Diagramme</mods:extent>
+        <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+    </mods:physicalDescription>
+    <mods:originInfo eventType="creation">
+        <mods:place>
+            <mods:placeTerm type="text">Rostock</mods:placeTerm>
+        </mods:place>
+        <mods:dateIssued keyDate="yes" encoding="w3cdtf">2020</mods:dateIssued>
+        <mods:dateIssued qualifier="approximate">März 2020</mods:dateIssued>
+        <mods:issuance>monographic</mods:issuance>
+    </mods:originInfo>
+    <mods:originInfo eventType="online_publication">
+        <mods:edition>[Electronic edition]</mods:edition>
+    </mods:originInfo>
+    <mods:recordInfo>
+        <mods:recordIdentifier source="DE-28">rosdok/ppn1747633283</mods:recordIdentifier>
+        <mods:recordOrigin>Converted from PICA to MODS using Pica2Mods XSLT Transformator 2.0-SNAPSHOT [SCM: "master" "v1.3.1-46" "2021-02-26T20:53:04+0100"]</mods:recordOrigin>
+    </mods:recordInfo>
+    <mods:note type="source note">GutachterInnen: Prof. Dr. med. Timo Kirschstein (Oscar Langendorff Institut für Physiologie, Universitätsmedizin Rostock), Prof. Dr. med. Astrid Bertsche (Kinder- und Jugendklinik, Universitätsmedizin Rostock), Prof. Dr. med. Toni Schneider (Universitätsklinikum Köln, Institut für Neurophysiologie)</mods:note>
+    <mods:note type="statement of responsibility">vorgelegt von Annett Madadi ; 1. Gutachter Prof. Dr. med. Timo Kirschstein (Oscar Langendorff Institut für Physiologie, Universitätsmedizin Rostock), 2. Gutachterin Prof. Dr. med. Astrid Bertsche (Kinder- und Jugendklinik, Universitätsmedizin Rostock), 3. Gutachter Prof. Dr. med. Toni Schneider (Universitätsklinikum Köln, Institut für Neurophysiologie)</mods:note>
+</mods:mods>
