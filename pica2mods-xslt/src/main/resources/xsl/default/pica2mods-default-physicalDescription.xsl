@@ -147,7 +147,7 @@
                                 </mods:extent>
                             </xsl:for-each>
                             <xsl:for-each
-                                $picaAlect="$picaA/p:datafield[@tag='034M']/p:subfield[@code='a']">   <!-- 4061 Illustrationen -->
+                                select="$picaA/p:datafield[@tag='034M']/p:subfield[@code='a']">   <!-- 4061 Illustrationen -->
                                 <mods:extent>
                                     <xsl:value-of select="."/>
                                 </mods:extent>
