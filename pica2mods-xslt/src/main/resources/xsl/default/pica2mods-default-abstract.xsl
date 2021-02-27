@@ -14,47 +14,42 @@
             <xsl:call-template name="modsAbstract" />
         </mods:mods>
     </xsl:template>
+    
+    <!-- Diskussion:
+         RS 27.02.21:
+         Das Feld erlaubt neuerdings für nichtlateinische Sprachen das Unterfeld $L für Sprache nach ISO-639-2b
+         Können / Wollen wir dort "kreativ" auch unsere Sprachcodes ger, eng, fra, spa, codieren?
+         
+         Alternativ würde ich eine kleine Sprachheuristik für Deutsch und Englisch (häufigste Worte) implementieren.
+         Wenn das Ergebnis eindeutig ist, könnte die Sprache gesetzt werden. 
+         Sonst könnte "mis" gesetzt werden, damit die Datensätze suchbar sind und gelegentlich manuell korrigiert werden können. 
+     -->
 
     <xsl:template name="modsAbstract">
-        <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
-        <xsl:choose>
-            <xsl:when test="$picaMode = 'EPUB'">
-                <xsl:call-template name="COMMON_ABSTRACT" />
-            </xsl:when>
-            <xsl:when test="$picaMode = 'RDA'">
-
-            </xsl:when>
-            <xsl:when test="$picaMode = 'KXP'">
-                <xsl:call-template name="COMMON_ABSTRACT" />
-            </xsl:when>
-        </xsl:choose>
-
-    </xsl:template>
-
-    <xsl:template name="COMMON_ABSTRACT">
+        <!-- 4207 inhaltliche Zusammenfassung -->
         <!--mods:abstract aus 047I mappen und lang-Attribut aus spitzen Klammern am Ende -->
         <xsl:for-each select="./p:datafield[@tag='047I']/p:subfield[@code='a']">
             <mods:abstract type="summary">
                 <xsl:choose>
-                    <xsl:when test="contains(.,'&lt;ger&gt;')">
+                    <xsl:when test="ends-with(.,'&lt;ger&gt;')">
                         <xsl:attribute name="lang">ger</xsl:attribute>
                         <xsl:attribute name="xml:lang">de</xsl:attribute>
-                        <xsl:value-of select="normalize-space(substring-before(., '&lt;ger&gt;'))" />
+                        <xsl:value-of select="normalize-space(substring(., 1, string-length(.)-5))" />
                     </xsl:when>
-                    <xsl:when test="contains(.,'&lt;eng&gt;')">
+                    <xsl:when test="ends-with(.,'&lt;eng&gt;')">
                         <xsl:attribute name="lang">eng</xsl:attribute>
                         <xsl:attribute name="xml:lang">en</xsl:attribute>
-                        <xsl:value-of select="normalize-space(substring-before(., '&lt;eng&gt;'))" />
+                        <xsl:value-of select="normalize-space(substring(., 1, string-length(.)-5))" />
                     </xsl:when>
-                    <xsl:when test="contains(.,'&lt;spa&gt;')">
+                    <xsl:when test="ends-with(.,'&lt;spa&gt;')">
                         <xsl:attribute name="lang">spa</xsl:attribute>
                         <xsl:attribute name="xml:lang">es</xsl:attribute>
-                        <xsl:value-of select="normalize-space(substring-before(., '&lt;spa&gt;'))" />
+                        <xsl:value-of select="normalize-space(substring(., 1, string-length(.)-5))" />
                     </xsl:when>
-                    <xsl:when test="contains(.,'&lt;fra&gt;')">
+                    <xsl:when test="ends-with(.,'&lt;fra&gt;')">
                         <xsl:attribute name="lang">fra</xsl:attribute>
                         <xsl:attribute name="xml:lang">fr</xsl:attribute>
-                        <xsl:value-of select="normalize-space(substring-before(., '&lt;fra&gt;'))" />
+                        <xsl:value-of select="normalize-space(substring(., 1, string-length(.)-5))" />
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:value-of select="." />
