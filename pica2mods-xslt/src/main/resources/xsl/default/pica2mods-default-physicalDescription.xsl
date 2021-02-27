@@ -126,46 +126,40 @@
                 <xsl:variable name="ppnA" select="./p:datafield[@tag='039I']/p:subfield[@code='9'][1]/text()"/>
                 <xsl:variable name="zdbA"
                               select="./p:datafield[@tag='039I']/p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]/text()"/>
-                <xsl:variable name="query">
-                    <xsl:choose>
-                        <xsl:when test="$ppnA">
-                            <xsl:value-of select="concat('sru-k10plus:pica.ppn=', $ppnA)"/>
-                        </xsl:when>
-                        <xsl:when test="$zdbA">
-                            <xsl:value-of select="concat('sru-k10plus:pica.zdb=', $zdbA)"/>
-                        </xsl:when>
-                    </xsl:choose>
-                </xsl:variable>
-
+                <!--  TODO move to function -->
                 <xsl:variable name="picaA">
-                    <xsl:if test="string-length($query)&gt;0">
-                        <xsl:copy-of select="document($query)" />
-                    </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="$ppnA">
+                                    <xsl:value-of select="pica2mods:querySRUForPicaWithQuery('k10plus', concat('pica.ppn=', $ppnA))"/>
+                                </xsl:when>
+                                <xsl:when test="$zdbA">
+                                    <xsl:value-of select="pica2mods:querySRUForPicaWithQuery('k10plus', concat('pica.zdb=', $zdbA))"/>
+                                </xsl:when>
+                            </xsl:choose>
                 </xsl:variable>
                 <xsl:choose>
-                    <xsl:when
-                            test="$picaA/p:record/p:datafield[@tag='034D' or @tag='034M' or @tag='034I' or @tag='034K']">
+                    <xsl:when test="$picaA/p:datafield[@tag='034D' or @tag='034M' or @tag='034I' or @tag='034K']">
                         <mods:physicalDescription>
                             <xsl:for-each
-                                    select="$picaA/p:record/p:datafield[@tag='034D']/p:subfield[@code='a']">   <!-- 4060 Umfang, Seiten -->
+                                    select="$picaA/p:datafield[@tag='034D']/p:subfield[@code='a']">   <!-- 4060 Umfang, Seiten -->
                                 <mods:extent>
                                     <xsl:value-of select="."/>
                                 </mods:extent>
                             </xsl:for-each>
                             <xsl:for-each
-                                    select="$picaA/p:record/p:datafield[@tag='034M']/p:subfield[@code='a']">   <!-- 4061 Illustrationen -->
+                                $picaAlect="$picaA/p:datafield[@tag='034M']/p:subfield[@code='a']">   <!-- 4061 Illustrationen -->
                                 <mods:extent>
                                     <xsl:value-of select="."/>
                                 </mods:extent>
                             </xsl:for-each>
                             <xsl:for-each
-                                    select="$picaA/p:record/p:datafield[@tag='034I']/p:subfield[@code='a']">   <!-- 4062 Format, Größe -->
+                                    select="$picaA/p:datafield[@tag='034I']/p:subfield[@code='a']">   <!-- 4062 Format, Größe -->
                                 <mods:extent>
                                     <xsl:value-of select="."/>
                                 </mods:extent>
                             </xsl:for-each>
                             <xsl:for-each
-                                    select="$picaA/p:record/p:datafield[@tag='034K']/p:subfield[@code='a']">   <!-- 4063 Begleitmaterial -->
+                                    select="$picaA/p:datafield[@tag='034K']/p:subfield[@code='a']">   <!-- 4063 Begleitmaterial -->
                                 <mods:extent>
                                     <xsl:value-of select="."/>
                                 </mods:extent>

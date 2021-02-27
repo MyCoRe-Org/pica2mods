@@ -24,23 +24,19 @@
                     <xsl:variable name="ppnA" select="./p:datafield[@tag='039I']/p:subfield[@code='9'][1]/text()"/>
                     <xsl:variable name="zdbA"
                                   select="./p:datafield[@tag='039I']/p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]/text()"/>
-                    <xsl:variable name="query">
-                        <xsl:choose>
-                            <xsl:when test="$ppnA">
-                                <xsl:value-of select="concat('sru-k10plus:pica.ppn=', $ppnA)"/>
-                            </xsl:when>
-                            <xsl:when test="$zdbA">
-                                <xsl:value-of select="concat('sru-k10plus:pica.zdb=', $zdbA)"/>
-                            </xsl:when>
-                        </xsl:choose>
-                    </xsl:variable>
-                    <xsl:variable name="picaA">
-                        <xsl:if test="string-length($query)&gt;0">
-                            <xsl:copy-of select="document($query)" />
-                        </xsl:if>
+                   <!--  TODO move to function -->
+                   <xsl:variable name="picaA">
+                            <xsl:choose>
+                                <xsl:when test="$ppnA">
+                                    <xsl:value-of select="pica2mods:querySRUForPicaWithQuery('k10plus', concat('pica.ppn=', $ppnA))"/>
+                                </xsl:when>
+                                <xsl:when test="$zdbA">
+                                    <xsl:value-of select="pica2mods:querySRUForPicaWithQuery('k10plus', concat('pica.zdb=', $zdbA))"/>
+                                </xsl:when>
+                            </xsl:choose>
                     </xsl:variable>
                     <xsl:for-each
-                            select="$picaA/p:record/p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD, RDA aus A-Aufnahme -->
+                            select="$picaA/p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD, RDA aus A-Aufnahme -->
                         <mods:genre type="aadgenre">
                             <xsl:value-of select="./p:subfield[@code='a']"/>
                         </mods:genre>
