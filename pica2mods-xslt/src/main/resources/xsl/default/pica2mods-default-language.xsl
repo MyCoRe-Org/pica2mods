@@ -15,9 +15,6 @@
     </xsl:template>
 
     <xsl:template name="modsLanguage">
-        <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
-        <xsl:choose>
-            <xsl:when test="$picaMode = 'EPUB' or $picaMode = 'KXP' or $picaMode = 'RDA'">
                 <xsl:for-each select="./p:datafield[@tag='010@']"> <!-- 1500 Language -->
                     <!-- weiter Unterfelder für Orginaltext / Zwischenübersetzung nicht abbildbar -->
                     <xsl:for-each select="./p:subfield[@code='a']">
@@ -28,9 +25,6 @@
                         </mods:language>
                     </xsl:for-each>
                 </xsl:for-each>
-            </xsl:when>
-        </xsl:choose>
-
     </xsl:template>
 
 </xsl:stylesheet>
