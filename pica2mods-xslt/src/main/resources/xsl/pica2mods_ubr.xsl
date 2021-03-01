@@ -9,7 +9,7 @@
    Wir könnten den MODS-Output hier gleich nochmal per Stylesheet nachbearbeiten 
    und alle date*/@encoding auf 'iso8601' umstellen 
     -->
-    
+    <xsl:import href="ubr/pica2mods-ubr-recordInfo.xsl"/>    
     <xsl:import href="default/pica2mods-default-titleInfo.xsl"/>
     <xsl:import href="default/pica2mods-default-name.xsl"/>
     <xsl:import href="default/pica2mods-default-identifier.xsl"/>
@@ -18,7 +18,6 @@
     <xsl:import href="default/pica2mods-default-physicalDescription.xsl"/>
     <xsl:import href="default/pica2mods-default-originInfo.xsl"/>
     <xsl:import href="default/pica2mods-default-genre.xsl"/>
-    <xsl:import href="default/pica2mods-default-recordInfo.xsl"/>
     <xsl:import href="default/pica2mods-default-note.xsl"/>
     <xsl:import href="default/pica2mods-default-abstract.xsl"/>
     <xsl:import href="default/pica2mods-default-relatedItem.xsl"/>
@@ -28,6 +27,7 @@
 
     <xsl:template match="p:record">
         <mods:mods>
+            <xsl:call-template name="modsRecordInfo"/>
             <xsl:call-template name="modsTitleInfo"/>
             <xsl:call-template name="modsAbstract"/>
             <xsl:call-template name="modsName"/>
@@ -37,7 +37,6 @@
             <xsl:call-template name="modsOriginInfo"/>
             <xsl:call-template name="modsGenre"/>
             <xsl:call-template name="modsLocation"/>
-            <xsl:call-template name="modsRecordInfo"/>
             <xsl:call-template name="modsNote"/>
             <xsl:call-template name="modsRelatedItem"/>
         </mods:mods>
