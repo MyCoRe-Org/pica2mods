@@ -16,7 +16,7 @@
 
     <xsl:variable name="encodedSruQuery" select="encode-for-uri($query)" />
     <xsl:variable name="requestURL"
-      select="concat($MCR.PICA2MODS.SRU.URL, '/', $database,'/',
+      select="concat($MCR.PICA2MODS.SRU.URL, '/', $database,
         '?operation=searchRetrieve&amp;maximumRecords=1&amp;recordSchema=picaxml&amp;query=',
         $encodedSruQuery)" />
     <xsl:try>
