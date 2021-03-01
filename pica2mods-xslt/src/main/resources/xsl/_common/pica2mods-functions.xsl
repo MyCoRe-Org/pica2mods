@@ -35,14 +35,26 @@
   <xsl:function name="pica2mods:queryPicaFromSRUWithPPN" as="element()?">
     <xsl:param name="database" as="xs:string" />
     <xsl:param name="ppn" as="xs:string" />
-    <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery($database, concat('ppn=',$ppn))" />
+    
+    <xsl:if test="contains($ppn, 'x')">
+        <xsl:message>
+          PPN {$ppn} ends with small 'x' Please fix it!
+        </xsl:message>
+    </xsl:if>
+    <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery($database, concat('ppn=', upper-case($ppn)))" />
   </xsl:function>
 
   <xsl:function name="pica2mods:queryPicaFromUnAPIWithPPN" as="element()?">
     <xsl:param name="database" as="xs:string" />
     <xsl:param name="ppn" as="xs:string" />
+    
+    <xsl:if test="contains($ppn, 'x')">
+        <xsl:message>
+          PPN {$ppn} ends with small 'x' Please fix it!
+        </xsl:message>
+    </xsl:if>
     <xsl:variable name="requestURL"
-      select="concat($MCR.PICA2MODS.UNAPI.URL, '?format=picaxml&amp;id=', $database,':ppn:', $ppn)" />
+      select="concat($MCR.PICA2MODS.UNAPI.URL, '?format=picaxml&amp;id=', $database,':ppn:', upper-case($ppn))" />
     <xsl:try>
       <xsl:sequence select="document($requestURL)//p:record" />
       <xsl:catch>
