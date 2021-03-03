@@ -234,7 +234,7 @@
       <xsl:if test="$pica/p:datafield[@tag='045F']/p:subfield[@code='a'] = ./@ID">
         <xsl:element name="mods:classification">
           <xsl:attribute name="authorityURI">{$WebApplicationBaseURL}classifications/SDNB</xsl:attribute>
-          <xsl:attribute name="valueURI">{$WebApplicationBaseURL,}classifications/SDNB#{./@ID}" /></xsl:attribute>
+          <xsl:attribute name="valueURI">{$WebApplicationBaseURL}classifications/SDNB#{./@ID}</xsl:attribute>
           <xsl:attribute name="displayLabel">sdnb</xsl:attribute>
           <xsl:value-of select="./label[@xml:lang='de']/@text" />
         </xsl:element>
