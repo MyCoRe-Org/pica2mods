@@ -96,6 +96,12 @@
   <xsl:function name="pica2mods:detectPicaMode" as="xs:string">
     <xsl:param name="record" as="element()" />
     <xsl:choose>
+      <!-- wenn keine PURL UB Rostock -->
+      <xsl:when test="not($record/p:datafield[@tag='017C']/p:subfield[@code='u' and starts-with(.,'http://purl.uni-rostock.de')])">
+        <!-- dann EPUB für alle anderen (auch HSNB!) -->
+        <xsl:value-of select="'EPUB'" />
+      </xsl:when>
+
       <xsl:when test="$record/p:datafield[@tag='209O']/p:subfield[@code='a' and contains(.,':doctype:epub')]">
         <xsl:value-of select="'EPUB'" />
       </xsl:when>
