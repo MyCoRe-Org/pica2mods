@@ -16,58 +16,7 @@
             <mods:identifier type="purl"><xsl:value-of select="./p:subfield[@code='u']" /></mods:identifier>
           </xsl:if>          
       </xsl:for-each>
-      
-      <xsl:for-each select="./p:datafield[@tag='003@']"> <!--  0100 -->
-          <mods:identifier type="PPN"><xsl:value-of select="./p:subfield[@code='0']" /></mods:identifier>          
-      </xsl:for-each> 
-      <xsl:for-each select="./p:datafield[@tag='004U' and contains(./p:subfield[@code='0'], 'urn:nbn:de:gbv:28')]"> <!-- 2050 -->
-          <mods:identifier type="urn"><xsl:value-of select="./p:subfield[@code='0']" /></mods:identifier>
-      </xsl:for-each> 
-      <xsl:for-each select="./p:datafield[@tag='004V' and contains(./p:subfield[@code='0'], '/10.18453/')]"> <!-- 2051 -->
-          <mods:identifier type="doi"><xsl:value-of select="./p:subfield[@code='0']" /></mods:identifier>
-      </xsl:for-each> 
-      <xsl:for-each select="./p:datafield[@tag='006W']"> <!--  2191 -->
-          <mods:identifier type="vd17"><xsl:value-of select="./p:subfield[@code='0']" /></mods:identifier>          
-      </xsl:for-each>
-      <!-- VD17 nur nicht in 2191, sondern als bibliogr. Zitat in 2277 -->
-      <xsl:if test="not(./p:datafield[@tag='006W'])">
-      	<xsl:for-each select="./p:datafield[@tag='007S' and starts-with(./p:subfield[@code='0'], 'VD17')]">
-      	 	<mods:identifier type="vd17">
-      	 		<xsl:value-of select="normalize-space(substring-after(./p:subfield[@code='0'], 'VD17'))" />
-  	 		</mods:identifier>          
-     	 </xsl:for-each>
-      </xsl:if>
-      <xsl:for-each select="./p:datafield[@tag='006M']"> <!--  2192 -->
-          <mods:identifier type="vd18"><xsl:value-of select="./p:subfield[@code='0']" /></mods:identifier>          
-      </xsl:for-each>
-       <!--VD18 nicht nur in 2192, sondern als bibliogr. Zitat in 2277 -->
-	  <xsl:if test="not(./p:datafield[@tag='006M'])">
-		  <xsl:for-each select="./p:datafield[@tag='007S' and starts-with(./p:subfield[@code='0'], 'VD18')]">
-			<mods:identifier type="vd18">
-			  <xsl:value-of select="normalize-space(substring-after(./p:subfield[@code='0'], 'VD18'))" />
-			</mods:identifier>
-		  </xsl:for-each>
-	  </xsl:if>
-      <xsl:for-each select="./p:datafield[@tag='006Z']"> <!--  2110 -->
-          <mods:identifier type="zdb"><xsl:value-of select="./p:subfield[@code='0']" /></mods:identifier>          
-      </xsl:for-each>       
-      <xsl:for-each select="./p:datafield[@tag='007S']"><!-- 2277 -->
-        <xsl:if test="starts-with(./p:subfield[@code='0'], 'VD 16') or starts-with(./p:subfield[@code='0'], 'VD16')">
-          <mods:identifier type="vd16"><xsl:value-of select="normalize-space(substring-after(./p:subfield[@code='0'], '16'))" /></mods:identifier>
-        </xsl:if>
-        <xsl:if test="starts-with(./p:subfield[@code='0'], 'RISM')">
-          <mods:identifier type="rism"><xsl:value-of select="normalize-space(substring-after(./p:subfield[@code='0'], 'RISM'))" /></mods:identifier>
-        </xsl:if>
-        <xsl:if test="starts-with(./p:subfield[@code='0'], 'Kalliope')">
-          <mods:identifier type="kalliope"><xsl:value-of select="normalize-space(substring-after(./p:subfield[@code='0'], 'Kalliope'))" /></mods:identifier>
-        </xsl:if>
-      </xsl:for-each>
-      <xsl:for-each select="./p:datafield[@tag='004P']/p:subfield[@code='0']"> <!-- ISBN einer anderen Ausgabe (z.B. printISBN) -->
-        <mods:identifier type="isbn"> <!-- 2000, ISBN-13 -->
-          <xsl:value-of select="." />
-        </mods:identifier>
-      </xsl:for-each>
-            
+              
       <xsl:for-each select="./p:datafield[@tag='028A' or @tag='028B']"> <!-- 300x -->
         <xsl:call-template name="RAK_PersonalName">
           <xsl:with-param name="marcrelatorCode">aut</xsl:with-param>

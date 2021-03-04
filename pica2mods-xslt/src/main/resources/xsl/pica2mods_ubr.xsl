@@ -12,6 +12,7 @@
     <xsl:import href="ubr/pica2mods-ubr-recordInfo.xsl"/>    
     <xsl:import href="default/pica2mods-default-titleInfo.xsl"/>
     <xsl:import href="default/pica2mods-default-name.xsl"/>
+    <xsl:import href="ubr/pica2mods-ubr-identifier.xsl"/>
     <xsl:import href="default/pica2mods-default-identifier.xsl"/>
     <xsl:import href="ubr/pica2mods-ubr-classification.xsl"/>    
     <xsl:import href="default/pica2mods-default-language.xsl"/>
@@ -35,6 +36,7 @@
             <xsl:call-template name="modsTitleInfo"/>
             <xsl:call-template name="modsAbstract"/>
             <xsl:call-template name="modsName"/>
+            <xsl:call-template name="UBR_modsIdentifier"/>
             <xsl:call-template name="modsIdentifier"/>
             <xsl:call-template name="modsClassification"/>
             <xsl:call-template name="modsLanguage"/>

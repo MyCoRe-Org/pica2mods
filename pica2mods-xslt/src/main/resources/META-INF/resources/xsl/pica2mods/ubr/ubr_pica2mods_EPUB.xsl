@@ -6,12 +6,7 @@
   <xsl:template match="/p:record" mode="EPUB">
 
    <xsl:call-template name="COMMON_Identifier" />
-    <xsl:for-each select="./p:datafield[@tag='209O']/p:subfield[@code='a' and starts-with(., 'ROSDOK_MD:openaire:')]"> <!-- ISBN einer anderen Ausgabe (z.B. printISBN) -->
-      <mods:identifier type="openaire"> <!-- 2000, ISBN-13 -->
-        <xsl:value-of select="substring(., 20)" />
-      </mods:identifier>
-    </xsl:for-each>
-    
+
     <xsl:call-template name="COMMON_PersonalName" />
     <xsl:call-template name="COMMON_CorporateName" />
 
