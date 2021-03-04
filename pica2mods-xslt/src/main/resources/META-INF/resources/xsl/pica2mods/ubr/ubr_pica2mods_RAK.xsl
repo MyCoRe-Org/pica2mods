@@ -54,12 +54,7 @@
       
       <xsl:call-template name="COMMON_Alt_Uniform_Title" />
       
-      <!--  Titel fingiert, wenn kein Titel in 4000 --> 
-      
-      <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241  übergeordnetes Werk-->
-        <xsl:call-template name="COMMON_AppearsIn" />
-      </xsl:for-each>
-    
+     
       <xsl:for-each select="./p:datafield[@tag='036D']"> <!-- 4160  übergeordnetes Werk-->
         <xsl:call-template name="RAK_HostOrSeries">
            <xsl:with-param name="type">host</xsl:with-param>

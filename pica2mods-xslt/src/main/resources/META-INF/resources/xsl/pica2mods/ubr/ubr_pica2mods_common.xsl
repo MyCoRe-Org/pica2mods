@@ -154,55 +154,7 @@
       </mods:part>
     </mods:relatedItem>
   </xsl:template>
-  
-  <xsl:template name="COMMON_AppearsIn">
-    <mods:relatedItem>
-      <xsl:attribute name="type">host</xsl:attribute>
-      <xsl:attribute name="displayLabel">appears_in</xsl:attribute>
-      <xsl:if test="./p:subfield[@code='l']">
-    <mods:name>
-      <mods:displayForm>
-        <xsl:value-of select="./p:subfield[@code='l']" />
-      </mods:displayForm>
-    </mods:name>
-    </xsl:if>
-    <xsl:if test="./p:subfield[@code='t']">
-    <mods:titleInfo>
-        <mods:title>
-        <xsl:value-of select="./p:subfield[@code='t']" />
-            </mods:title>
-    </mods:titleInfo>
-    </xsl:if>
-    <xsl:if test="./p:subfield[@code='p']">
-    <mods:part>
-      <mods:text>
-        <xsl:value-of select="./p:subfield[@code='p']" />
-      </mods:text>
-    </mods:part>
-    </xsl:if>
-    <xsl:if test="./p:subfield[@code='C' and text()='DOI']">
-        <mods:identifier type="doi">
-          <xsl:value-of select="./p:subfield[@code='C' and text()='DOI']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
-        </mods:identifier>
-      </xsl:if>
-    <xsl:if test="./p:subfield[@code='C' and text()='ISBN']">
-        <mods:identifier type="isbn">
-          <xsl:value-of select="./p:subfield[@code='C' and text()='ISBN']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
-        </mods:identifier>
-      </xsl:if>
-    <xsl:if test="./p:subfield[@code='C' and text()='ISSN']">
-        <mods:identifier type="issn">
-          <xsl:value-of select="./p:subfield[@code='C' and text()='ISSN']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
-        </mods:identifier>
-      </xsl:if>
-    <xsl:if test="./p:subfield[@code='C' and text()='ZDB']">
-        <mods:identifier type="zdb">
-          <xsl:value-of select="./p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
-        </mods:identifier>
-      </xsl:if>
-    </mods:relatedItem>
-  </xsl:template>
-
+ 
   <xsl:template name="COMMON_Review">
     <mods:relatedItem type="reviewOf">
       <mods:titleInfo>
