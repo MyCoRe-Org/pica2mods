@@ -27,7 +27,9 @@
                     <xsl:call-template name="common_publisher_place"/>
                     <xsl:call-template name="epubEdition"/>
                     <xsl:call-template name="epubDate"/>
-                    <xsl:call-template name="epubIssuance"/>
+                    <xsl:call-template name="common_issuance">
+                        <xsl:with-param name="pica0500_2" select="$pica0500_2"/>
+                    </xsl:call-template>
                 </mods:originInfo>
                 <xsl:call-template name="epubOnlinePublication"/>
             </xsl:when>
@@ -38,7 +40,7 @@
                     <xsl:call-template name="kxpPlace"/>
                     <xsl:call-template name="kxpDate"/>
                     <xsl:call-template name="kxpEdition"/>
-                    <xsl:call-template name="kxpIssuance">
+                    <xsl:call-template name="common_issuance">
                         <xsl:with-param name="pica0500_2" select="$pica0500_2"/>
                     </xsl:call-template>
                 </mods:originInfo>
@@ -165,37 +167,9 @@
                                     </xsl:choose>
                                 </xsl:for-each>
 
-                                <xsl:for-each select="$picaA/p:datafield[@tag='002@']">
-                                    <xsl:choose>
-                                        <xsl:when test="substring(./p:subfield[@code='0'],2,1)='a'">
-                                            <mods:issuance>monographic</mods:issuance>
-                                        </xsl:when>
-                                        <xsl:when test="substring(./p:subfield[@code='0'],2,1)='b'">
-                                            <mods:issuance>serial</mods:issuance>
-                                        </xsl:when>
-                                        <xsl:when test="substring(./p:subfield[@code='0'],2,1)='c'">
-                                            <mods:issuance>multipart monograph</mods:issuance>
-                                        </xsl:when>
-                                        <xsl:when test="substring(./p:subfield[@code='0'],2,1)='d'">
-                                            <mods:issuance>serial</mods:issuance>
-                                        </xsl:when>
-                                        <xsl:when test="substring(./p:subfield[@code='0'],2,1)='f'">
-                                            <mods:issuance>monographic</mods:issuance>
-                                        </xsl:when>
-                                        <xsl:when test="substring(./p:subfield[@code='0'],2,1)='F'">
-                                            <mods:issuance>monographic</mods:issuance>
-                                        </xsl:when>
-                                        <xsl:when test="substring(./p:subfield[@code='0'],2,1)='j'">
-                                            <mods:issuance>single unit</mods:issuance>
-                                        </xsl:when>
-                                        <xsl:when test="substring(./p:subfield[@code='0'],2,1)='s'">
-                                            <mods:issuance>single unit</mods:issuance>
-                                        </xsl:when>
-                                        <xsl:when test="substring(./p:subfield[@code='0'],2,1)='v'">
-                                            <mods:issuance>serial</mods:issuance>
-                                        </xsl:when>
-                                    </xsl:choose>
-                                </xsl:for-each>
+                                <xsl:call-template name="common_issuance">
+                                    <xsl:with-param name="pica0500_2" select="$picaA/p:datafield[@tag='002@']/p:subfield[@code='0']"/>
+                                </xsl:call-template>
                             </mods:originInfo>
                         </xsl:if>
                     </xsl:otherwise>
@@ -305,7 +279,8 @@
             </mods:originInfo>
         </xsl:if>
     </xsl:template>
-    <xsl:template name="kxpIssuance">
+    
+    <xsl:template name="common_issuance">
         <xsl:param name="pica0500_2"/>
         <xsl:choose>
             <xsl:when test="$pica0500_2='a'">
@@ -337,6 +312,7 @@
             </xsl:when>
         </xsl:choose>
     </xsl:template>
+    
     <xsl:template name="kxpEdition">
         <xsl:for-each select="./p:datafield[@tag='032@']"> <!-- 4020 Ausgabe-->
             <xsl:choose>
@@ -426,40 +402,7 @@
             </xsl:for-each>
         </xsl:for-each>
     </xsl:template>
-    <xsl:template name="epubIssuance">
-        <xsl:for-each select="./p:datafield[@tag='002@']">
-            <xsl:choose>
-                <xsl:when test="substring(./p:subfield[@code='0'],2,1)='a'">
-                    <mods:issuance>monographic</mods:issuance>
-                </xsl:when>
-                <xsl:when test="substring(./p:subfield[@code='0'],2,1)='b'">
-                    <mods:issuance>serial</mods:issuance>
-                </xsl:when>
-                <xsl:when test="substring(./p:subfield[@code='0'],2,1)='c'">
-                    <mods:issuance>multipart monograph</mods:issuance>
-                </xsl:when>
-                <xsl:when test="substring(./p:subfield[@code='0'],2,1)='d'">
-                    <mods:issuance>serial</mods:issuance>
-                </xsl:when>
-                <xsl:when test="substring(./p:subfield[@code='0'],2,1)='f'">
-                    <mods:issuance>monographic</mods:issuance>
-                </xsl:when>
-                <xsl:when test="substring(./p:subfield[@code='0'],2,1)='F'">
-                    <mods:issuance>monographic</mods:issuance>
-                </xsl:when>
-                <xsl:when test="substring(./p:subfield[@code='0'],2,1)='j'">
-                    <mods:issuance>single unit</mods:issuance>
-                </xsl:when>
-                <xsl:when test="substring(./p:subfield[@code='0'],2,1)='s'">
-                    <mods:issuance>single unit</mods:issuance>
-                </xsl:when>
-                <xsl:when test="substring(./p:subfield[@code='0'],2,1)='v'">
-                    <mods:issuance>monographic</mods:issuance>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:for-each>
-    </xsl:template>
-
+    
     <xsl:template name="epubDate">
         <xsl:for-each select="./p:datafield[@tag='011@']">   <!-- 1100 -->
             <xsl:choose>
