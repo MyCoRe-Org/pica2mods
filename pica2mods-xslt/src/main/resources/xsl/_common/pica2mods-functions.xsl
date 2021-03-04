@@ -121,9 +121,9 @@
   <xsl:function name="pica2mods:sortableSortstring" as="xs:string">
     <xsl:param name="input" as="xs:string" />
     <xsl:variable name="output">
-      <!-- Trenne die Zeichenkette an Punkt oder Comma -->
+      <!-- Trenne die Zeichenkette an Punkt oder Komma -->
       <xsl:for-each select="tokenize($input, '\.|,')">
-        <!-- normiere den Teilstring (Kleinbuchstaben, ohne Klammern -->
+        <!-- normiere den Teilstring (Kleinbuchstaben, ohne Klammern) -->
         <xsl:variable name="normal" select="translate(lower-case(.),'()[]{}','')" />
         <!-- wenn der String mit einer Zahl beginnt (oder eine Zahl ist)
              wird die Zahl 4-stellig ausgegeben, der Rest ignoriert -->
