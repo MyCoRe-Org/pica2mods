@@ -145,13 +145,7 @@
       </mods:physicalDescription>
     </xsl:for-each>
     
-    <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->
-      <mods:subject>
-      	<xsl:call-template name="tokenizeTopics">
-      		<xsl:with-param name="list" select="./p:subfield[@code='a']/text()" />
-    	</xsl:call-template>
-      </mods:subject>
-    </xsl:for-each>
+   
     
 
     <xsl:for-each select="./p:datafield[@tag='037A']"><!-- Gutachter in Anmerkungen -->
