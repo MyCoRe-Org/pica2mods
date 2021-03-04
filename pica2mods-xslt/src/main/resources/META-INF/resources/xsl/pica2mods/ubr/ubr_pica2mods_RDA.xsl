@@ -15,13 +15,8 @@
       </mods:note>
     </xsl:if>
 
-      <xsl:for-each select="$picaA/p:record/p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD, RDA aus A-Aufnahme -->
-        <mods:genre type="aadgenre">
-          <xsl:value-of select="./p:subfield[@code='a']" />
-        </mods:genre>
-        <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
-      </xsl:for-each>
-    </xsl:if> <!-- ENDE A-record -->
+
+
   </xsl:if>
     <!-- Wenn 0500 2. Pos ='v', 
        dann originInfo[@eventtype='creation'] aus O-Aufnahmen-Feldern:

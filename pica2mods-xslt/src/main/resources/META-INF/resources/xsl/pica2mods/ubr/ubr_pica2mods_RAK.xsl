@@ -78,11 +78,6 @@
           <xsl:call-template name="RAK_Review" />
       </xsl:for-each>
 
-
-         <xsl:for-each select="./p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD -->
-          <mods:genre type="aadgenre"><xsl:value-of select="./p:subfield[@code='a']"/></mods:genre>
-          <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
-         </xsl:for-each>     
          
         <xsl:for-each select="./p:datafield[@tag='017H']">
           <mods:note>
