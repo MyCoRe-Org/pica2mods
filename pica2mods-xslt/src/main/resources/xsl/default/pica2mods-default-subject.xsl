@@ -16,51 +16,36 @@
     </mods:mods>
   </xsl:template>
 
-  <xsl:template name="modsSubject">
-  <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
-  <xsl:choose>
-    <xsl:when test="$picaMode = 'EPUB'">
-      <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->
-        <mods:subject>
-          <xsl:call-template name="tokenizeTopics">
-            <xsl:with-param name="list" select="./p:subfield[@code='a']/text()" />
-          </xsl:call-template>
-        </mods:subject>
-      </xsl:for-each>
-    </xsl:when>
-  </xsl:choose>
-</xsl:template>
+  <!-- TODO Wenn wir gegen den K10plus gehen bekommen wir hier die Schlagworte aller Bibliotheken ggf. auch mehrfach 
+       Sollte man hier Filtern, dass nur die Schlagworte der "eigenen" Bibliothek ermittelt werden 
+       Problem dabei: Fehlende Struktur man muss die relevanten Knoten über Nachfolger (Einstieg eigene Bibliothek 101@)
+       und Vorgänger (nächster Bibliothekseinstieg wieder 101@) ermitteln -->
   
-  <!-- TODO XSLT3-Function -->
-  <xsl:template name="tokenizeTopics">
-    <!--passed template parameter -->
-        <xsl:param name="list"/>
-        <xsl:param name="delimiter" select="' / '"/>
-        <xsl:choose>
-            <xsl:when test="contains($list, $delimiter)">                
-                <mods:topic>
-                    <!-- get everything in front of the first delimiter -->
-                    <xsl:value-of select="substring-before($list,$delimiter)"/>
-                </mods:topic>
-                <xsl:call-template name="tokenizeTopics">
-                    <!-- store anything left in another variable -->
-                    <xsl:with-param name="list" select="substring-after($list,$delimiter)"/>
-                    <xsl:with-param name="delimiter" select="$delimiter"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:choose>
-                    <xsl:when test="$list = ''">
-                        <xsl:text/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <mods:topic>
-                            <xsl:value-of select="$list"/>
-                        </mods:topic>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
+  <xsl:template name="modsSubject">
+    <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
+    <!-- <xsl:choose>
+       <xsl:when test="$picaMode = 'EPUB'"> -->
+        <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->
+          <mods:subject>
+          <!-- Subfield x ist nicht in der Format-Dokumentation (PPN 898955750)  -->
+          <xsl:variable name="sf_x" select="./p:subfield[@code='x']" />
+            <!-- TODO Schlagwortketten mit " / " habe ich in Rostock nicht gefunden -->
+            <xsl:for-each select="tokenize(./p:subfield[@code='a']/text(), ' / ')">
+              <mods:topic>
+                  <xsl:choose>
+                      <xsl:when test="$sf_x">
+                        <xsl:value-of select="concat(., ' / ', $sf_x)" />      
+                      </xsl:when>
+                      <xsl:otherwise>
+                         <xsl:value-of select="." />      
+                      </xsl:otherwise>
+                  </xsl:choose>
+              </mods:topic>
+            </xsl:for-each>
+          </mods:subject>
+        </xsl:for-each>
+      <!-- </xsl:when>
+    </xsl:choose> -->
+  </xsl:template>
 
 </xsl:stylesheet>
