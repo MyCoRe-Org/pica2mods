@@ -11,12 +11,7 @@
   <xsl:if test="$ppnA">
     	<mods:note type="PPN-A"><xsl:value-of select="$ppnA" /></mods:note>
     </xsl:if> 
-      <mods:recordInfo>
-           <mods:recordIdentifier source="DE-28"><xsl:value-of select="concat('rosdok/ppn', ./p:datafield[@tag='003@']/p:subfield[@code='0'])" /></mods:recordIdentifier>
-           <mods:descriptionStandard>rakwb</mods:descriptionStandard>
-           <mods:recordOrigin><xsl:value-of select="normalize-space(concat('Converted from PICA to MODS using ',$XSL_VERSION_RAK))" /></mods:recordOrigin>
-      </mods:recordInfo>
-            <xsl:for-each select="./p:datafield[@tag='017C']"> <!-- 4950 (kein eigenes Feld) -->
+          <xsl:for-each select="./p:datafield[@tag='017C']"> <!-- 4950 (kein eigenes Feld) -->
           <xsl:if test="contains(./p:subfield[@code='u'], '//purl.uni-rostock.de')">
             <mods:identifier type="purl"><xsl:value-of select="./p:subfield[@code='u']" /></mods:identifier>
           </xsl:if>          

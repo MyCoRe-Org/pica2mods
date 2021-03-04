@@ -14,15 +14,6 @@
         <xsl:value-of select="$ppnA" />
       </mods:note>
     </xsl:if>
-    <mods:recordInfo>
-      <mods:recordIdentifier source="DE-28">
-          <xsl:value-of select="concat('rosdok/ppn',./p:datafield[@tag='003@']/p:subfield[@code='0'])" />
-      </mods:recordIdentifier>
-      <mods:descriptionStandard>rda</mods:descriptionStandard>
-      <mods:recordOrigin><xsl:value-of select="normalize-space(concat('Converted from PICA to MODS using ',$XSL_VERSION_RDA))" /></mods:recordOrigin>
-    </mods:recordInfo>
-    
-    
     
     <xsl:call-template name="COMMON_Identifier" />
     <xsl:call-template name="COMMON_PersonalName" />

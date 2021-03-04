@@ -4,28 +4,6 @@
   <xsl:import href="cp:ubr/ubr_pica2mods_common.xsl" />
   <xsl:variable name="XSL_VERSION_EPUB" select="concat('ubr_pica2mods_EPUB.xsl from ',$XSL_VERSION_PICA2MODS)" />
   <xsl:template match="/p:record" mode="EPUB">
-    <mods:recordInfo>
-      <xsl:for-each select="./p:datafield[@tag='017C']/p:subfield[@code='u']"> <!-- 4950 (kein eigenes Feld) -->
-        <xsl:if test="contains(., '//purl.')">
-          <mods:recordIdentifier source="DE-28">
-            <xsl:value-of select="substring-after(substring(.,9), '/')" />
-          </mods:recordIdentifier>
-        </xsl:if>
-      </xsl:for-each>
-      <xsl:for-each select="./p:datafield[@tag='004U']/p:subfield[@code='0']"> <!-- 4950 (kein eigenes Feld) -->
-        <xsl:if test="contains(., 'gbv:519')">
-          <mods:recordIdentifier source="DE-519">
-            dbhsnb/<xsl:value-of select="substring(.,20,string-length(.)-19-2)" />
-          </mods:recordIdentifier>
-        </xsl:if>
-      </xsl:for-each>
-      <xsl:if test="./p:datafield[@tag='010E']/p:subfield[@code='e']/text()='rda'">
-        <mods:descriptionStandard>rda</mods:descriptionStandard>
-      </xsl:if>
-      <mods:recordOrigin>
-        <xsl:value-of select="normalize-space(concat('Converted from PICA to MODS using ',$XSL_VERSION_EPUB))" />
-      </mods:recordOrigin>
-    </mods:recordInfo>
 
    <xsl:call-template name="COMMON_Identifier" />
     <xsl:for-each select="./p:datafield[@tag='209O']/p:subfield[@code='a' and starts-with(., 'ROSDOK_MD:openaire:')]"> <!-- ISBN einer anderen Ausgabe (z.B. printISBN) -->
