@@ -15,28 +15,6 @@
       </mods:note>
     </xsl:if>
     
-    <!-- Titel fingiert, wenn kein Titel in 4000 -->
-    <xsl:choose>
-      <xsl:when test="$pica0500_2='f' or $pica0500_2='F' ">
-        <xsl:for-each select="./p:datafield[@tag='036C']"><!-- 4150 -->
-          <xsl:call-template name="COMMON_Title" />
-        </xsl:for-each>
-      </xsl:when>
-      <xsl:when test="$pica0500_2='v' and ./p:datafield[@tag='036F']">
-        <xsl:for-each select="./p:datafield[@tag='036F']"><!-- 4180 -->
-          <xsl:call-template name="COMMON_Title" />
-        </xsl:for-each>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:for-each select="./p:datafield[@tag='021A']"> <!-- 4000 -->
-          <xsl:call-template name="COMMON_Title" />
-        </xsl:for-each>
-      </xsl:otherwise>
-    </xsl:choose>
-    
-    <xsl:call-template name="COMMON_Alt_Uniform_Title" />
-
-    
     <xsl:for-each select="./p:datafield[@tag='010@']"> <!-- 1500 Language -->
       <!-- weiter Unterfelder für Orginaltext / Zwischenübersetzung nicht abbildbar -->
       <xsl:for-each select="./p:subfield[@code='a']">

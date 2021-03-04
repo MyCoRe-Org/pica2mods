@@ -42,6 +42,7 @@
             </xsl:when>
             <xsl:when test="$picaMode = 'KXP' or $picaMode = 'RDA'">
                 <!-- code from ubr_pica2mods_KXP.xsl and ubr_pica2mods_RDA-->
+                    <!-- TODO Titel fingiert, wenn kein Titel in 4000 -->
                 <xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
                 <xsl:choose>
                     <xsl:when test="$pica0500_2='f' or $pica0500_2='F' ">

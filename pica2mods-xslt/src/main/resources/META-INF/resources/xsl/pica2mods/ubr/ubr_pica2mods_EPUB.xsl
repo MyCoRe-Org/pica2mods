@@ -5,27 +5,7 @@
   <xsl:variable name="XSL_VERSION_EPUB" select="concat('ubr_pica2mods_EPUB.xsl from ',$XSL_VERSION_PICA2MODS)" />
   <xsl:template match="/p:record" mode="EPUB">
 
-    <xsl:choose>
-      <xsl:when test="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='f' or substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='F' ">
-        <xsl:for-each select="./p:datafield[@tag='036C']">
-          <xsl:call-template name="COMMON_Title" />
-        </xsl:for-each>
-      </xsl:when>
-      <xsl:when test="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='v' and ./p:datafield[@tag='036F']">
-        <xsl:for-each select="./p:datafield[@tag='036F']">
-          <xsl:call-template name="COMMON_Title" />
-        </xsl:for-each>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:for-each select="./p:datafield[@tag='021A']">
-          <xsl:call-template name="COMMON_Title" />
-        </xsl:for-each>
-      </xsl:otherwise>
-    </xsl:choose>
-
-    <!-- ToDo: Titel fingiert, wenn kein Titel in 4000 -->
-
-    <xsl:for-each select="./p:datafield[@tag='010@']"> <!-- 1500 Language -->
+   <xsl:for-each select="./p:datafield[@tag='010@']"> <!-- 1500 Language -->
       <!-- weiter Unterfelder für Orginaltext / Zwischenübersetzung nicht abbildbar -->
       <xsl:for-each select="./p:subfield[@code='a']">
         <mods:language>
