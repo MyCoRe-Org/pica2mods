@@ -78,23 +78,6 @@
           <xsl:call-template name="RAK_Review" />
       </xsl:for-each>
 
-         <xsl:for-each select="./p:datafield[@tag='009A']"> <!-- 4065 Besitznachweis der Vorlage-->
-           <mods:location>
-              <xsl:if test="./p:subfield[@code='c']">
-                <xsl:choose>
-                 <xsl:when test="./p:subfield[@code='c']='UB Rostock'">
-                   <mods:physicalLocation type="current" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
-                  </xsl:when>
-                  <xsl:otherwise>
-                      <mods:physicalLocation type="current"><xsl:value-of select="./p:subfield[@code='c']" /></mods:physicalLocation>
-                  </xsl:otherwise>   
-                </xsl:choose>
-             </xsl:if>
-             <xsl:if test="./p:subfield[@code='a']">
-                <mods:shelfLocator><xsl:value-of select="./p:subfield[@code='a']" /></mods:shelfLocator>
-             </xsl:if>
-           </mods:location>
-        </xsl:for-each>
 
          <xsl:variable name="digitalOrigin">
             <xsl:for-each select="./p:datafield[@tag='037H']/p:subfield[@code='a']">   <!-- 4238 Technische Angaben zum elektr. Dokument  -->
@@ -127,16 +110,6 @@
         </mods:physicalDescription>
         </xsl:if>
         
-                     
-        <xsl:for-each select="./p:datafield[@tag='017C' and contains(./p:subfield[@code='u'], '//purl.uni-rostock.de')][1]">
-          <mods:location>
-                <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
-                <mods:url usage="primary" access="object in context"><xsl:value-of select="./p:subfield[@code='u']" /></mods:url>
-         </mods:location>              
-        </xsl:for-each>
-        
-        
-         
          <xsl:for-each select="./p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD -->
           <mods:genre type="aadgenre"><xsl:value-of select="./p:subfield[@code='a']"/></mods:genre>
           <xsl:call-template name="COMMON_UBR_Class_AADGenres" />

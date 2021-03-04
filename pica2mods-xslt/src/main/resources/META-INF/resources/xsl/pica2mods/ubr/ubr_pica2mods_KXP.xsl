@@ -10,24 +10,6 @@
   <xsl:if test="$ppnA">
     	<mods:note type="PPN-A"><xsl:value-of select="$ppnA" /></mods:note>
     </xsl:if> 
-         <xsl:for-each select="./p:datafield[@tag='009A']"> <!-- 4065 Besitznachweis der Vorlage-->
-           <mods:location>
-              <xsl:if test="./p:subfield[@code='c']">
-                <xsl:choose>
-                 <xsl:when test="./p:subfield[@code='c']='UB Rostock'">
-                   <mods:physicalLocation type="current" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
-                  </xsl:when>
-                  <xsl:otherwise>
-                      <mods:physicalLocation type="current"><xsl:value-of select="./p:subfield[@code='c']" /></mods:physicalLocation>
-                  </xsl:otherwise>   
-                </xsl:choose>
-             </xsl:if>
-             <xsl:if test="./p:subfield[@code='a']">
-                <mods:shelfLocator><xsl:value-of select="./p:subfield[@code='a']" /></mods:shelfLocator>
-             </xsl:if>
-           </mods:location>
-        </xsl:for-each>
-
         <mods:physicalDescription>
           <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a']">   <!--  4060 Umfang, Seiten -->
             <mods:extent><xsl:value-of select="." /></mods:extent>
@@ -58,13 +40,6 @@
 		  </xsl:choose>
           
         </mods:physicalDescription>
-        
-               <xsl:for-each select="./p:datafield[@tag='017C' and contains(./p:subfield[@code='u'], '//purl.uni-rostock.de')][1]">
-          <mods:location>
-                <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
-                <mods:url usage="primary" access="object in context"><xsl:value-of select="./p:subfield[@code='u']" /></mods:url>
-         </mods:location>              
-        </xsl:for-each>
         
          <xsl:for-each select="./p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD -->
           <mods:genre type="aadgenre"><xsl:value-of select="./p:subfield[@code='a']"/></mods:genre>

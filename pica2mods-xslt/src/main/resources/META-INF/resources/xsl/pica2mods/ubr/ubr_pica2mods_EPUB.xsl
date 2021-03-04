@@ -4,23 +4,6 @@
   <xsl:import href="cp:ubr/ubr_pica2mods_common.xsl" />
   <xsl:variable name="XSL_VERSION_EPUB" select="concat('ubr_pica2mods_EPUB.xsl from ',$XSL_VERSION_PICA2MODS)" />
   <xsl:template match="/p:record" mode="EPUB">
-
-    <xsl:for-each select="./p:datafield[@tag='017C' and contains(./p:subfield[@code='u'], 'rosdok')][1]">
-      <mods:location>
-        <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
-        <mods:url usage="primary" access="object in context">
-          <xsl:value-of select="./p:subfield[@code='u']" />
-        </mods:url>
-      </mods:location>
-    </xsl:for-each>
-    <xsl:for-each select="./p:datafield[@tag='017C' and contains(./p:subfield[@code='u'], 'digibib.hs-nb.de/resolve/id')][1]">
-      <mods:location>
-        <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/1162078316">Hochschulbibliothek Neubrandenburg</mods:physicalLocation>
-        <mods:url usage="primary" access="object in context">
-          <xsl:value-of select="./p:subfield[@code='u']" />
-        </mods:url>
-      </mods:location>
-    </xsl:for-each>
     
     <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a' and contains(., 'Seite')]">
       <mods:physicalDescription>
