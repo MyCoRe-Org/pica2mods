@@ -30,45 +30,7 @@
     </mods:titleInfo>
   </xsl:for-each>
 </xsl:template>
- 
-  <xsl:template name="COMMON_Review">
-    <mods:relatedItem type="reviewOf">
-      <mods:titleInfo>
-        <xsl:if test="./p:subfield[@code='a']">
-          <xsl:variable name="mainTitle" select="./p:subfield[@code='a']" />
-          <xsl:choose>
-            <xsl:when test="contains($mainTitle, '@')">
-              <xsl:variable name="nonSort" select="normalize-space(substring-before($mainTitle, '@'))" />
-              <xsl:choose>
-                <xsl:when test="string-length(nonSort) &lt; 9">
-                  <mods:nonSort>
-                    <xsl:value-of select="$nonSort" />
-                  </mods:nonSort>
-                  <mods:title>
-                    <xsl:value-of select="substring-after($mainTitle, '@')" />
-                  </mods:title>
-                </xsl:when>
-                <xsl:otherwise>
-                  <mods:title>
-                    <xsl:value-of select="$mainTitle" />
-                  </mods:title>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:when>
-            <xsl:otherwise>
-              <mods:title>
-                <xsl:value-of select="$mainTitle" />
-              </mods:title>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:if>
-      </mods:titleInfo>
-      <mods:identifier type="PPN">
-        <xsl:value-of select="./p:subfield[@code='9']" />
-      </mods:identifier>
-    </mods:relatedItem>
-  </xsl:template>
-
+  
   <xsl:template name="COMMON_ABSTRACT">
     <!--mods:abstract aus 047I mappen und lang-Attribut aus spitzen Klammern am Ende -->
     <xsl:for-each select="./p:datafield[@tag='047I']/p:subfield[@code='a']">

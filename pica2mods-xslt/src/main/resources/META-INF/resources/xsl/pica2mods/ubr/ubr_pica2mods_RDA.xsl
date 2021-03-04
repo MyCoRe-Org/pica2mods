@@ -15,10 +15,6 @@
       </mods:note>
     </xsl:if>
 
-    <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261 RezensiertesWerk -->
-      <xsl:call-template name="COMMON_Review" />
-    </xsl:for-each>
-"src/main/resources/META-INF/resources/xsl/pica2mods/ubr/ubr_pica2mods_KXP.xsl"
 	<!-- ToDo: 2. If für Ob-Stufen: Wenn keine ppnA und 0500 2. Pos ='b', 
 			dann originInfo[@eventtype='creation'] aus O-Aufnahmen-Feldern:
       bei RDA-Aufnahmen keine A-PPN im Pica vorhanden -> Daten aus Expansion nehmen

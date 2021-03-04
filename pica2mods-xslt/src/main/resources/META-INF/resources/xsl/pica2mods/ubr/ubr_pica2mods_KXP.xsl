@@ -10,11 +10,7 @@
   <xsl:if test="$ppnA">
     	<mods:note type="PPN-A"><xsl:value-of select="$ppnA" /></mods:note>
     </xsl:if> 
-      
-      <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261  RezensiertesWerk-->
-          <xsl:call-template name="COMMON_Review" />
-      </xsl:for-each>
-
+   
       <!-- check use of eventtype attribute -->
           <mods:originInfo eventType="creation">
             <xsl:for-each select="./p:datafield[@tag='033A']">
