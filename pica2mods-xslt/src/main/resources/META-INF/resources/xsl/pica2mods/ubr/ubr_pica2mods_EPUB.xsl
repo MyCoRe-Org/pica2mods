@@ -5,14 +5,6 @@
   <xsl:variable name="XSL_VERSION_EPUB" select="concat('ubr_pica2mods_EPUB.xsl from ',$XSL_VERSION_PICA2MODS)" />
   <xsl:template match="/p:record" mode="EPUB">
 
-    <xsl:for-each select="./p:datafield[@tag='036D']"> <!-- 4160 übergeordnetes Werk -->
-      <xsl:call-template name="COMMON_HostOrSeries" />
-    </xsl:for-each>
-
-    <xsl:for-each select="./p:datafield[@tag='036F']"> <!-- 4180 Schriftenreihe -->
-      <xsl:call-template name="COMMON_HostOrSeries" />
-    </xsl:for-each>
-
     <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261 RezensiertesWerk -->
       <xsl:call-template name="COMMON_Review" />
     </xsl:for-each>

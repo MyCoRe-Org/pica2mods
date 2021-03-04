@@ -10,15 +10,6 @@
   <xsl:if test="$ppnA">
     	<mods:note type="PPN-A"><xsl:value-of select="$ppnA" /></mods:note>
     </xsl:if> 
-   
-      <xsl:for-each select="./p:datafield[@tag='036D']"> <!-- 4160  übergeordnetes Werk-->
-        <xsl:call-template name="COMMON_HostOrSeries" />
-      </xsl:for-each>
-
-      <!--TODO: Unterscheidung nach 0500 2. Pos: wenn 'v' dann type->host, sonst type->series -->
-      <xsl:for-each select="./p:datafield[@tag='036F']"> <!-- 4180  Schriftenreihe, Zeitschrift-->
-        <xsl:call-template name="COMMON_HostOrSeries" />
-      </xsl:for-each>
       
       <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261  RezensiertesWerk-->
           <xsl:call-template name="COMMON_Review" />
