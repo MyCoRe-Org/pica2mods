@@ -211,20 +211,7 @@
                     </mods:detail>
                 </xsl:if>
                 <xsl:if test="(@tag='036D' or @tag='036F') and ./p:subfield[@code='X']"> <!-- 4160, 4180 -->
-                    <mods:text type="sortstring">
-                        <xsl:choose>
-                            <!-- https://stackoverflow.com/a/3857478 -->
-                            <xsl:when
-                                    test="(number(./p:subfield[@code='X']) = number(./p:subfield[@code='X'])) and (string-length(./p:subfield[@code='X']) &lt;= 4)">
-                                <!-- https://stackoverflow.com/a/25662547 -->
-                                <xsl:value-of
-                                        select="substring(concat('0000', ./p:subfield[@code='X']), string-length(./p:subfield[@code='X']) + 1, 4)"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="./p:subfield[@code='X']"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </mods:text>
+                    <mods:text type="sortstring"><xsL:value-of select="pica2mods:sortableSortstring(./p:subfield[@code='X'])" /></mods:text>
                 </xsl:if>
             </mods:part>
         </mods:relatedItem>
