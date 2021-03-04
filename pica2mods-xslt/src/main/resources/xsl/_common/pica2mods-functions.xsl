@@ -118,6 +118,33 @@
     </xsl:choose>
   </xsl:function>
   
-
+  <xsl:function name="pica2mods:sortableSortstring" as="xs:string">
+    <xsl:param name="input" as="xs:string" />
+    <xsl:variable name="output">
+      <!-- Trenne die Zeichenkette an Punkt oder Comma -->
+      <xsl:for-each select="tokenize($input, '\.|,')">
+        <!-- normiere den Teilstring (Kleinbuchstaben, ohne Klammern -->
+        <xsl:variable name="normal" select="translate(lower-case(.),'()[]{}','')" />
+        <!-- wenn der String mit einer Zahl beginnt (oder eine Zahl ist)
+             wird die Zahl 4-stellig ausgegeben, der Rest ignoriert -->
+        <xsl:analyze-string regex="^(\d+).*$" select="$normal">
+          <xsl:matching-substring>
+            <part>
+              <xsl:value-of
+                select="concat(string-join(for $i in (string-length(regex-group(1))+1 to 4) return '0') , regex-group(1))" />
+            </part>
+          </xsl:matching-substring>
+          <!-- alle anderen Werte werden als String übernommen und mit '_' auf 12 Stellen aufgefüllt -->
+          <xsl:non-matching-substring>
+            <part>
+              <xsl:value-of
+                select="concat($normal, string-join(for $i in (string-length($normal)+1 to 12) return '_'))" />
+            </part>
+          </xsl:non-matching-substring>
+        </xsl:analyze-string>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:value-of select="string-join($output/part, '-')" />
+  </xsl:function>
+  
 </xsl:stylesheet>
-     
