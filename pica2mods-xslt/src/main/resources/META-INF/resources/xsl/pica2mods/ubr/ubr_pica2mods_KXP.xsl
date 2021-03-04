@@ -7,40 +7,7 @@
   <xsl:template match="/p:record" mode="KXP">
   	<xsl:variable name="ppnA" select="./p:datafield[@tag='039D'][./p:subfield[@code='C']='GBV']/p:subfield[@code='6']/text()" />
 	<xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
-  <xsl:if test="$ppnA">
-    	<mods:note type="PPN-A"><xsl:value-of select="$ppnA" /></mods:note>
-    </xsl:if> 
-        <mods:physicalDescription>
-          <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a']">   <!--  4060 Umfang, Seiten -->
-            <mods:extent><xsl:value-of select="." /></mods:extent>
-          </xsl:for-each>
-          <xsl:for-each select="./p:datafield[@tag='034M']/p:subfield[@code='a']">   <!--  4061 Illustrationen -->
-              <mods:extent><xsl:value-of select="." /></mods:extent>
-          </xsl:for-each>
-          <xsl:for-each select="./p:datafield[@tag='034I']/p:subfield[@code='a']">   <!-- 4062 Format, Größe  -->
-              <mods:extent><xsl:value-of select="." /></mods:extent>
-          </xsl:for-each>
-          <xsl:for-each select="./p:datafield[@tag='034K']/p:subfield[@code='a']">   <!-- 4063 Begleitmaterial  -->
-              <mods:extent><xsl:value-of select="." /></mods:extent>
-          </xsl:for-each>
-          
-          <xsl:choose> <!-- 4238 Technische Angaben zum elektr. Dokument  -->
-            <xsl:when test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Original')"> <!-- alt -->
-                <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-            </xsl:when>
-            <xsl:when test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Primärausgabe')">
-                <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-            </xsl:when>
-            <xsl:when test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Mikrofilm')">
-                <mods:digitalOrigin>digitized microfilm</mods:digitalOrigin>
-            </xsl:when>
-            <xsl:otherwise>
-             	<mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-          	</xsl:otherwise>
-		  </xsl:choose>
-          
-        </mods:physicalDescription>
-        
+  
          <xsl:for-each select="./p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD -->
           <mods:genre type="aadgenre"><xsl:value-of select="./p:subfield[@code='a']"/></mods:genre>
           <xsl:call-template name="COMMON_UBR_Class_AADGenres" />

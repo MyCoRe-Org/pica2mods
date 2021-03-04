@@ -79,37 +79,6 @@
       </xsl:for-each>
 
 
-         <xsl:variable name="digitalOrigin">
-            <xsl:for-each select="./p:datafield[@tag='037H']/p:subfield[@code='a']">   <!-- 4238 Technische Angaben zum elektr. Dokument  -->
-               <xsl:if test="contains(., 'Digitalisierungsvorlage: Original')"> <!-- alt -->
-                  <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-               </xsl:if>
-               <xsl:if test="contains(., 'Digitalisierungsvorlage: Primärausgabe')">
-                  <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-               </xsl:if>
-               <xsl:if test="contains(., 'Digitalisierungsvorlage: Mikrofilm')">
-                  <mods:digitalOrigin>digitized microfilm</mods:digitalOrigin>
-               </xsl:if>
-          </xsl:for-each>
-         </xsl:variable>
-        <xsl:if test="$digitalOrigin or ./p:datafield[@tag='034D'  or @tag='034M' or @tag='034I' or @tag='034K']">        
-        <mods:physicalDescription>
-           <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a']">   <!--  4060 Umfang, Seiten -->
-            <mods:extent><xsl:value-of select="." /></mods:extent>
-          </xsl:for-each>
-          <xsl:for-each select="./p:datafield[@tag='034M']/p:subfield[@code='a']">   <!--  4061 Illustrationen -->
-              <mods:extent><xsl:value-of select="." /></mods:extent>
-          </xsl:for-each>
-          <xsl:for-each select="./p:datafield[@tag='034I']/p:subfield[@code='a']">   <!-- 4062 Format, Größe  -->
-              <mods:extent><xsl:value-of select="." /></mods:extent>
-          </xsl:for-each>
-          <xsl:for-each select="./p:datafield[@tag='034K']/p:subfield[@code='a']">   <!-- 4063 Begleitmaterial  -->
-              <mods:extent><xsl:value-of select="." /></mods:extent>
-          </xsl:for-each>
-          <xsl:copy-of select="$digitalOrigin" />
-        </mods:physicalDescription>
-        </xsl:if>
-        
          <xsl:for-each select="./p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD -->
           <mods:genre type="aadgenre"><xsl:value-of select="./p:subfield[@code='a']"/></mods:genre>
           <xsl:call-template name="COMMON_UBR_Class_AADGenres" />

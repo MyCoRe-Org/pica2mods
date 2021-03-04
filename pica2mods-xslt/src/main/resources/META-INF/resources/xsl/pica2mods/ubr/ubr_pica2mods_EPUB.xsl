@@ -5,15 +5,6 @@
   <xsl:variable name="XSL_VERSION_EPUB" select="concat('ubr_pica2mods_EPUB.xsl from ',$XSL_VERSION_PICA2MODS)" />
   <xsl:template match="/p:record" mode="EPUB">
     
-    <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a' and contains(., 'Seite')]">
-      <mods:physicalDescription>
-        <mods:extent unit="pages"><xsl:value-of select="normalize-space(substring-before(substring-after(.,'('),'Seite'))" /></mods:extent>
-      </mods:physicalDescription>
-    </xsl:for-each>
-    
-   
-    
-
     <xsl:for-each select="./p:datafield[@tag='037A']"><!-- Gutachter in Anmerkungen -->
       <xsl:choose>
         <xsl:when test="starts-with(./p:subfield[@code='a'], 'GutachterInnen:')">

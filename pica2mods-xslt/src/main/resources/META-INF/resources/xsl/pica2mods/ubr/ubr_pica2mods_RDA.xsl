@@ -15,102 +15,6 @@
       </mods:note>
     </xsl:if>
 
-	<!-- ToDo: 2. If für Ob-Stufen: Wenn keine ppnA und 0500 2. Pos ='b', 
-			dann originInfo[@eventtype='creation'] aus O-Aufnahmen-Feldern:
-      bei RDA-Aufnahmen keine A-PPN im Pica vorhanden -> Daten aus Expansion nehmen
-      ggf. per ZDB-ID die SRU-Schnittstelle anfragen 
-    		- publisher aus 039I $e
-			- placeTerm aus 039I $d
-			- datesissued aus 039I $f
-			- issuance -> Konstante "serial"
-			- physicalDescription -> wie unten (variable nicht vergessen!) 	-->
-
- <xsl:if test="not($pica0500_2='v')">
- 
-      <xsl:variable name="query">
-        <xsl:choose>
-          <xsl:when test="$ppnA"><xsl:value-of select="concat('sru-k10plus:pica.ppn=', $ppnA)" /></xsl:when>
-          <xsl:when test="$zdbA"><xsl:value-of select="concat('sru-k10plus:pica.zdb=', $zdbA)" /></xsl:when>
-        </xsl:choose>
-      </xsl:variable>
-      
-      <xsl:variable name="picaA" select="document($query)"/>
-   
-      <xsl:if test="$picaA">
-
-      
-      <xsl:variable name="digitalOrigin">
-        <xsl:choose>  <!-- 4238 Technische Angaben zum elektr. Dokument, RDA ok -->
-          <xsl:when test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Original')"> <!-- alt -->
-            <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-          </xsl:when>
-          <xsl:when test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Primärausgabe')">
-            <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-          </xsl:when>
-          <xsl:when test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Mikrofilm')">
-            <mods:digitalOrigin>digitized microfilm</mods:digitalOrigin>
-          </xsl:when>
-          <xsl:otherwise>
-            <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <!-- pysicalDescription RDA vorangig aus A-Aufnahme -->
-      <xsl:choose>
-        <xsl:when test="$picaA/p:record/p:datafield[@tag='034D' or @tag='034M' or @tag='034I' or @tag='034K']">
-          <mods:physicalDescription>
-            <xsl:for-each select="$picaA/p:record/p:datafield[@tag='034D']/p:subfield[@code='a']">   <!-- 4060 Umfang, Seiten -->
-              <mods:extent>
-                <xsl:value-of select="." />
-              </mods:extent>
-            </xsl:for-each>
-            <xsl:for-each select="$picaA/p:record/p:datafield[@tag='034M']/p:subfield[@code='a']">   <!-- 4061 Illustrationen -->
-              <mods:extent>
-                <xsl:value-of select="." />
-              </mods:extent>
-            </xsl:for-each>
-            <xsl:for-each select="$picaA/p:record/p:datafield[@tag='034I']/p:subfield[@code='a']">   <!-- 4062 Format, Größe -->
-              <mods:extent>
-                <xsl:value-of select="." />
-              </mods:extent>
-            </xsl:for-each>
-            <xsl:for-each select="$picaA/p:record/p:datafield[@tag='034K']/p:subfield[@code='a']">   <!-- 4063 Begleitmaterial -->
-              <mods:extent>
-                <xsl:value-of select="." />
-              </mods:extent>
-            </xsl:for-each>
-            <xsl:copy-of select="$digitalOrigin" />
-          </mods:physicalDescription>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:if test="./p:datafield[@tag='034D' or @tag='034M' or @tag='034I' or @tag='034K']">
-            <mods:physicalDescription>
-              <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a']">   <!-- 4060 Umfang, Seiten -->
-                <mods:extent>
-                  <xsl:value-of select="." />
-                </mods:extent>
-              </xsl:for-each>
-              <xsl:for-each select="./p:datafield[@tag='034M']/p:subfield[@code='a']">   <!-- 4061 Illustrationen -->
-                <mods:extent>
-                  <xsl:value-of select="." />
-                </mods:extent>
-              </xsl:for-each>
-              <xsl:for-each select="./p:datafield[@tag='034I']/p:subfield[@code='a']">   <!-- 4062 Format, Größe -->
-                <mods:extent>
-                  <xsl:value-of select="." />
-                </mods:extent>
-              </xsl:for-each>
-              <xsl:for-each select="./p:datafield[@tag='034K']/p:subfield[@code='a']">   <!-- 4063 Begleitmaterial -->
-                <mods:extent>
-                  <xsl:value-of select="." />
-                </mods:extent>
-              </xsl:for-each>
-              <xsl:copy-of select="$digitalOrigin" />
-            </mods:physicalDescription>
-          </xsl:if>
-        </xsl:otherwise>
-      </xsl:choose>
-      
       <xsl:for-each select="$picaA/p:record/p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD, RDA aus A-Aufnahme -->
         <mods:genre type="aadgenre">
           <xsl:value-of select="./p:subfield[@code='a']" />
@@ -123,29 +27,10 @@
        dann originInfo[@eventtype='creation'] aus O-Aufnahmen-Feldern:
         - publisher und placeTerm nicht vorhanden (keine Av-Stufe vorhanden)
         - datesissued aus 011@ $r
-        - issuance -> Konstante "serial"
-        - physicalDescription -->
+        - issuance -> Konstante "serial" -->
+    
   <xsl:if test="($pica0500_2='v')">
     
-     
-      <mods:physicalDescription>
-         <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a']">   <!-- 4060 Umfang, Seiten aus O-Aufnahme, Problem: "1 Online-Ressource (...)"-->
-              <mods:extent><xsl:value-of select="." /></mods:extent>
-         </xsl:for-each>
-         <xsl:for-each select="./p:datafield[@tag='037H']/p:subfield[@code='a']">   <!-- 4238 Technische Angaben zum elektr. Dokument, RDA ok -->
-          <xsl:if test="contains(., 'Digitalisierungsvorlage: Original')"> <!-- alt -->
-            <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-          </xsl:if>
-          <xsl:if test="contains(., 'Digitalisierungsvorlage: Primärausgabe')">
-            <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-          </xsl:if>
-          <xsl:if test="contains(., 'Digitalisierungsvorlage: Mikrofilm')">
-            <mods:digitalOrigin>digitized microfilm</mods:digitalOrigin>
-          </xsl:if>
-        </xsl:for-each>
-      </mods:physicalDescription> 
-  </xsl:if>
-  
     <xsl:for-each select="./p:datafield[@tag='017H']"> <!-- 4961 URL für sonstige Angaben zur Resource -->
       <mods:note type="source note">
         <xsl:attribute name="xlink:href"><xsl:value-of select="./p:subfield[@code='u']" /></xsl:attribute>
