@@ -183,12 +183,7 @@
           <mods:genre type="aadgenre"><xsl:value-of select="./p:subfield[@code='a']"/></mods:genre>
           <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
          </xsl:for-each>     
-         
-         <xsl:call-template name="COMMON_UBR_Class_Collection" />
-         <xsl:call-template name="COMMON_UBR_Class_Provider" />
-         <xsl:call-template name="COMMON_UBR_Class_Doctype" />
-         <xsl:call-template name="COMMON_CLASS" />
-
+  
         <xsl:for-each select="./p:datafield[@tag='017H']"> <!-- 4961 URL für sonstige Angaben zur Resource -->
           <mods:note type="source note">
             <xsl:attribute name="xlink:href"><xsl:value-of select="./p:subfield[@code='u']" /></xsl:attribute>
