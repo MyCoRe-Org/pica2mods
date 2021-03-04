@@ -22,11 +22,13 @@
                 <xsl:call-template name="common_source_note"/>
                 <xsl:call-template name="common_reproduction_note"/>
                 <xsl:call-template name="common_titleword_index"/>
+                <xsl:call-template name="common_creator_info"/>
             </xsl:when>
             <xsl:when test="$picaMode = 'KXP'">
                 <xsl:call-template name="common_source_note"/>
                 <xsl:call-template name="common_reproduction_note"/>
                 <xsl:call-template name="common_titleword_index"/>
+                <xsl:call-template name="common_creator_info"/>
             </xsl:when>
             <xsl:when test="$picaMode = 'EPUB'">
                 <xsl:for-each select="./p:datafield[@tag='037A']"><!-- Gutachter in Anmerkungen -->
@@ -56,6 +58,8 @@
                         <xsl:value-of select="./p:subfield[@code='a']" />
                     </mods:note>
                 </xsl:for-each>
+                <xsl:call-template name="common_creator_info"/>
+                
             </xsl:when>
         </xsl:choose>
 
@@ -99,4 +103,13 @@
             <mods:note type="source note"><xsl:value-of select="./p:subfield[@code='a']" /></mods:note>
         </xsl:for-each>
     </xsl:template>
+    
+    <xsl:template name="common_creator_info">
+        <xsl:for-each select="./../p:datafield[@tag='021A' or @tag='027D' or @tag='036C']/p:subfield[@code='h']">
+      <mods:note type="creator_info">
+        <xsl:value-of select="./text()" />
+      </mods:note>
+    </xsl:for-each>
+    </xsl:template>
+    
 </xsl:stylesheet>

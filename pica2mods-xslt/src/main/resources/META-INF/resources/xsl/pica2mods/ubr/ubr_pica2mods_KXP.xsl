@@ -8,29 +8,6 @@
   	<xsl:variable name="ppnA" select="./p:datafield[@tag='039D'][./p:subfield[@code='C']='GBV']/p:subfield[@code='6']/text()" />
 	<xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
   
-  
-        <xsl:for-each select="./p:datafield[@tag='017H']"> <!-- 4961 URL für sonstige Angaben zur Resource -->
-          <mods:note type="source note">
-            <xsl:attribute name="xlink:href"><xsl:value-of select="./p:subfield[@code='u']" /></xsl:attribute>
-            <xsl:value-of select="./p:subfield[@code='y']" />
-          </mods:note>
-        </xsl:for-each>
-    
-
-      <xsl:for-each select="./p:datafield[@tag='037G']"> <!-- 4237 Anmerkungen zur Reproduktion -->
-        <mods:note type="reproduction">
-          <xsl:value-of select="./p:subfield[@code='a']" />
-        </mods:note>
-      </xsl:for-each>
-      
-      <xsl:for-each select="./p:datafield[@tag='037A' or @tag='037B' or @tag='046L' or @tag='046F' or @tag='046G' or @tag='046H' or @tag='046I' or @tag='046P']"><!-- 4201, 4202, 4221, 4215, 4216, 4217, 4218 RDA raus 4202, 4215, 4216 neu 4210, 4212, 4221, 4223, 4225, 4226 (einfach den ganzen Anmerkungskrams mitnehmen)" -->
-          <mods:note type="source note"><xsl:value-of select="./p:subfield[@code='a']" /></mods:note>
-      </xsl:for-each>
-      
-      <xsl:for-each select="./p:datafield[@tag='047C']"><!-- 4200 -->
-          <mods:note type="titlewordindex"><xsl:value-of select="./p:subfield[@code='a']" /></mods:note>
-      </xsl:for-each>
-      
       <!-- Vorgänger, Nachfolger Verknüpfung ZDB -->
       <xsl:if test="$pica0500_2='b'">
         <xsl:for-each select="./p:datafield[@tag='039E' and (./p:subfield[@code='b' and text()='f'] or ./p:subfield[@code='b'and text()='s'])]"><!-- 4244 -->

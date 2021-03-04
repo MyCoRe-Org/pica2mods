@@ -8,9 +8,7 @@
   <xsl:template match="/p:record" mode="RAK">
   	<xsl:variable name="ppnA" select="./p:datafield[@tag='039D'][./p:subfield[@code='C']='GBV']/p:subfield[@code='6']/text()" />
 	<xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
-  <xsl:if test="$ppnA">
-    	<mods:note type="PPN-A"><xsl:value-of select="$ppnA" /></mods:note>
-    </xsl:if> 
+  
           <xsl:for-each select="./p:datafield[@tag='017C']"> <!-- 4950 (kein eigenes Feld) -->
           <xsl:if test="contains(./p:subfield[@code='u'], '//purl.uni-rostock.de')">
             <mods:identifier type="purl"><xsl:value-of select="./p:subfield[@code='u']" /></mods:identifier>
@@ -79,32 +77,6 @@
       </xsl:for-each>
 
          
-        <xsl:for-each select="./p:datafield[@tag='017H']">
-          <mods:note>
-            <xsl:attribute name="xlink:href"><xsl:value-of select="./p:subfield[@code='u']" /></xsl:attribute>
-            <xsl:value-of select="./p:subfield[@code='y']" />
-          </mods:note>
-        </xsl:for-each>
-    
-        <xsl:for-each select="./p:datafield[@tag='007S']"><!-- 2277 -->
-        <xsl:if test="not(starts-with(./p:subfield[@code='0'], 'VD 16')) and not(starts-with(./p:subfield[@code='0'], 'VD17')) and not(starts-with(./p:subfield[@code='0'], 'VD18')) and not(starts-with(./p:subfield[@code='0'], 'RISM')) and not(starts-with(./p:subfield[@code='0'], 'Kalliope')) and not(./p:subfield[@code='S']='e')">
-          <mods:note type="bibliographic_reference"><xsl:value-of select="./p:subfield[@code='0']" /></mods:note>
-        </xsl:if>
-      </xsl:for-each>
-      
-      <xsl:for-each select="./p:datafield[@tag='037G']">
-        <mods:note type="reproduction">
-          <xsl:value-of select="./p:subfield[@code='a']" />
-        </mods:note>
-      </xsl:for-each>
-      
-      <xsl:for-each select="./p:datafield[@tag='037A' or @tag='037B' or @tag='046L' or @tag='046F' or @tag='046G' or @tag='046H' or @tag='046I'  or @tag='046P']"><!-- 4201, 4202, 4221, 4215, 4216, 4217, 4218, 4225 -->
-          <mods:note type="other"><xsl:value-of select="./p:subfield[@code='a']" /></mods:note>
-      </xsl:for-each>
-      
-      <xsl:for-each select="./p:datafield[@tag='047C']"><!-- 4200 -->
-          <mods:note type="titlewordindex"><xsl:value-of select="./p:subfield[@code='a']" /></mods:note>
-      </xsl:for-each>
       
       <!-- Vorgänger, Nachfolger Verknüpfung ZDB -->
       <xsl:if test="$pica0500_2='b'">
@@ -309,11 +281,7 @@
        </xsl:if>
     </mods:titleInfo>
 
-    <xsl:for-each select="./../p:datafield[@tag='021A' or @tag='027D' or @tag='036C']/p:subfield[@code='h']">
-      <mods:note type="creator_info">
-        <xsl:value-of select="./text()" />
-      </mods:note>
-    </xsl:for-each>
+
   </xsl:template>
 
   
