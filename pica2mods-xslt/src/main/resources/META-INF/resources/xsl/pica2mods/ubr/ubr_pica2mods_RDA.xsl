@@ -14,17 +14,6 @@
         <xsl:value-of select="$ppnA" />
       </mods:note>
     </xsl:if>
-    
-    <xsl:for-each select="./p:datafield[@tag='010@']"> <!-- 1500 Language -->
-      <!-- weiter Unterfelder für Orginaltext / Zwischenübersetzung nicht abbildbar -->
-      <xsl:for-each select="./p:subfield[@code='a']">
-        <mods:language>
-          <mods:languageTerm type="code" authority="iso639-2b">
-            <xsl:value-of select="." />
-          </mods:languageTerm>
-        </mods:language>
-      </xsl:for-each>
-    </xsl:for-each>
 
     <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241 übergeordnetes Werk -->
       <xsl:call-template name="COMMON_AppearsIn" />
