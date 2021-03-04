@@ -21,6 +21,7 @@
 
     <xsl:template name="COMMON_PersonalName">
         <!-- Lb: RDA, jetzt marcrelatorcode gemäß $4 bzw. ausgeschrieben $B -->
+        <!-- 033J RAK: Drucker, Verleger bei Alten Drucken, in RDA nicht zugelassen -->
         <xsl:for-each select="./p:datafield[starts-with(@tag, '028') or @tag='033J']">
             <xsl:choose>
                 <xsl:when test="./p:subfield[@code='9']">
