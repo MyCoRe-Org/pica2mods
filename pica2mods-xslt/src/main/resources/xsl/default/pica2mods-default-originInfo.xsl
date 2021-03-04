@@ -66,6 +66,8 @@
                         </mods:originInfo>
                     </xsl:when>
                     <xsl:otherwise>
+                    <!-- check use of eventtype attribute -->
+                    <!-- RDA: from A-Aufnahme -->
                         <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
                         <xsl:if test="$picaA/*">
                             <mods:originInfo eventType="creation">

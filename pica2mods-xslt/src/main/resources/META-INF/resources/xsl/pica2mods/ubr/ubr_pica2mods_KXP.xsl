@@ -10,92 +10,6 @@
   <xsl:if test="$ppnA">
     	<mods:note type="PPN-A"><xsl:value-of select="$ppnA" /></mods:note>
     </xsl:if> 
-   
-      <!-- check use of eventtype attribute -->
-          <mods:originInfo eventType="creation">
-            <xsl:for-each select="./p:datafield[@tag='033A']">
-              <xsl:if test="./p:subfield[@code='n']">  <!-- 4030 Ort, Verlag -->
-                 <mods:publisher><xsl:value-of select="./p:subfield[@code='n']" /></mods:publisher>
-              </xsl:if>
-              <xsl:for-each select="./p:subfield[@code='p']">
-                <mods:place><mods:placeTerm type="text"><xsl:value-of select="." /></mods:placeTerm></mods:place>
-              </xsl:for-each>
-            </xsl:for-each>
-            <!-- normierte Orte 4040, außer Hochschulort $4=uvp -->
-            <xsl:for-each select="./p:datafield[@tag='033D' and not(./p:subfield[@code='4']='uvp')]">
-              <mods:place supplied="yes">
-               <mods:placeTerm lang="ger" type="text">
-               <xsl:choose>
-                <xsl:when test="./p:subfield[@code='8']">
-                    <xsl:value-of select="./p:subfield[@code='8']" />
-                </xsl:when>
-                <xsl:otherwise> 
-                    <xsl:value-of select="./p:subfield[@code='p']" />
-                </xsl:otherwise>
-               </xsl:choose>
-               </mods:placeTerm>
-             </mods:place>
-        </xsl:for-each>
-        
-        <xsl:for-each select="./p:datafield[@tag='011@']">
-          <xsl:choose>
-            <xsl:when test="./p:subfield[@code='b']">
-              <mods:dateIssued keyDate="yes" encoding="iso8601" point="start">
-                <xsl:value-of select="./p:subfield[@code='a']" />
-              </mods:dateIssued>
-              <mods:dateIssued encoding="iso8601" point="end">
-                <xsl:value-of select="./p:subfield[@code='b']" />
-              </mods:dateIssued>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:choose>
-                <xsl:when test="contains(./p:subfield[@code='a'], 'X')">
-                  <mods:dateIssued keyDate="yes" encoding="iso8601" point="start">
-                    <xsl:value-of select="translate(./p:subfield[@code='a'], 'X','0')" />
-                  </mods:dateIssued>
-                  <mods:dateIssued encoding="iso8601" point="end">
-                    <xsl:value-of select="translate(./p:subfield[@code='a'], 'X', '9')" />
-                  </mods:dateIssued>
-                </xsl:when>
-                <xsl:otherwise>
-                  <mods:dateIssued keyDate="yes" encoding="iso8601">
-                    <xsl:value-of select="./p:subfield[@code='a']" />
-                  </mods:dateIssued>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:if test="./p:subfield[@code='n']">
-            <mods:dateIssued qualifier="approximate">
-              <xsl:value-of select="./p:subfield[@code='n']" />
-            </mods:dateIssued>
-        </xsl:if>
-        </xsl:for-each>              
-
-            <xsl:for-each select="./p:datafield[@tag='032@']"> <!-- 4020 Ausgabe-->
-              <xsl:choose>
-                 <xsl:when test="./p:subfield[@code='h']">
-                   <mods:edition><xsl:value-of select="./p:subfield[@code='a']" /> / <xsl:value-of select="./p:subfield[@code='h']" /></mods:edition>
-                  </xsl:when>
-                  <xsl:otherwise>
-                      <mods:edition><xsl:value-of select="./p:subfield[@code='a']" /></mods:edition>
-                  </xsl:otherwise>   
-              </xsl:choose>
-            </xsl:for-each>
-
-              <xsl:choose>
-                 <xsl:when test="$pica0500_2='a'"><mods:issuance>monographic</mods:issuance></xsl:when>
-                 <xsl:when test="$pica0500_2='b'"><mods:issuance>serial</mods:issuance></xsl:when>
-                 <xsl:when test="$pica0500_2='c'"><mods:issuance>multipart monograph</mods:issuance></xsl:when>
-                 <xsl:when test="$pica0500_2='d'"><mods:issuance>serial</mods:issuance></xsl:when>
-                 <xsl:when test="$pica0500_2='f'"><mods:issuance>monographic</mods:issuance></xsl:when>
-                 <xsl:when test="$pica0500_2='F'"><mods:issuance>monographic</mods:issuance></xsl:when>
-                 <xsl:when test="$pica0500_2='j'"><mods:issuance>single unit</mods:issuance></xsl:when>
-                 <xsl:when test="$pica0500_2='s'"><mods:issuance>single unit</mods:issuance></xsl:when>
-                 <xsl:when test="$pica0500_2='v'"><mods:issuance>serial</mods:issuance></xsl:when>                     
-              </xsl:choose>              
-          </mods:originInfo>
-
          <xsl:for-each select="./p:datafield[@tag='009A']"> <!-- 4065 Besitznachweis der Vorlage-->
            <mods:location>
               <xsl:if test="./p:subfield[@code='c']">
@@ -145,34 +59,7 @@
           
         </mods:physicalDescription>
         
-       <mods:originInfo eventType="online_publication">
-         <!--wenn keine 4031, dann aus 4048/033N -->
-         <!--hier mehrere digitalisierende Einrichtungen for each-->
-         <xsl:for-each select="./p:datafield[@tag='033B' or @tag='033N']"> <!-- 4031 Ort, Verlag -->
-             <xsl:if test="./p:subfield[@code='n']">
-                 <mods:publisher><xsl:value-of select="./p:subfield[@code='n']" /></mods:publisher>
-             </xsl:if>
-             <xsl:if test="./p:subfield[@code='p']">
-                <mods:place><mods:placeTerm type="text"><xsl:value-of select="./p:subfield[@code='p']" /></mods:placeTerm></mods:place>
-             </xsl:if>
-           </xsl:for-each>
-           <mods:edition>[Electronic edition]</mods:edition>
-         
-           <xsl:for-each select="./p:datafield[@tag='011B']">   <!-- 1109 -->
-              <xsl:choose>
-                <xsl:when test="./p:subfield[@code='b']">
-                  <mods:dateCaptured encoding="iso8601" point="start" keyDate="yes"><xsl:value-of select="./p:subfield[@code='a']" /></mods:dateCaptured>
-                  <mods:dateCaptured encoding="iso8601" point="end"><xsl:value-of select="./p:subfield[@code='b']" /></mods:dateCaptured>
-                </xsl:when>
-                <xsl:otherwise>
-                  <mods:dateCaptured encoding="iso8601" keyDate="yes"><xsl:value-of select="./p:subfield[@code='a']" /></mods:dateCaptured>
-              </xsl:otherwise>
-             </xsl:choose> 
-           </xsl:for-each>
-         </mods:originInfo>
-
-        
-        <xsl:for-each select="./p:datafield[@tag='017C' and contains(./p:subfield[@code='u'], '//purl.uni-rostock.de')][1]">
+               <xsl:for-each select="./p:datafield[@tag='017C' and contains(./p:subfield[@code='u'], '//purl.uni-rostock.de')][1]">
           <mods:location>
                 <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/" valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
                 <mods:url usage="primary" access="object in context"><xsl:value-of select="./p:subfield[@code='u']" /></mods:url>
