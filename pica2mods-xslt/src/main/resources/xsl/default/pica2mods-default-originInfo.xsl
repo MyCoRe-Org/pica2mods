@@ -22,9 +22,9 @@
         <xsl:choose>
             <xsl:when test="$picaMode = 'EPUB'">
                 <mods:originInfo eventType="publication"> <!-- 4030 033A -->
-                    <!--  <xsl:call-template name="epubPublisher"/>
-                    <xsl:call-template name="epubPlace"/>-->
-                    <xsl:call-template name="common_publisher_place"/>
+                    <xsl:call-template name="common_publisher_place">
+                      <xsl:with-param name="record" select="." />
+                    </xsl:call-template>
                     <xsl:call-template name="epubEdition"/>
                     <xsl:call-template name="epubDate"/>
                     <xsl:call-template name="common_issuance">
@@ -36,7 +36,9 @@
             <xsl:when test="$picaMode = 'KXP'">
                 <!-- check use of eventtype attribute -->
                 <mods:originInfo eventType="creation">
-                    <xsl:call-template name="common_publisher_place"/>
+                    <xsl:call-template name="common_publisher_place">
+                      <xsL:with-param name="record" select="." />
+                    </xsl:call-template>
                     <xsl:call-template name="kxpPlace"/>
                     <xsl:call-template name="kxpDate"/>
                     <xsl:call-template name="kxpEdition"/>
@@ -73,20 +75,9 @@
                         <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
                         <xsl:if test="$picaA/*">
                             <mods:originInfo eventType="creation">
-                                <xsl:for-each select="$picaA/p:datafield[@tag='033A']">
-                                    <xsl:if test="./p:subfield[@code='n']">  <!-- 4030 Ort, Verlag -->
-                                        <mods:publisher>
-                                            <xsl:value-of select="./p:subfield[@code='n']"/>
-                                        </mods:publisher>
-                                    </xsl:if>
-                                    <xsl:for-each select="./p:subfield[@code='p']">
-                                        <mods:place>
-                                            <mods:placeTerm type="text">
-                                                <xsl:value-of select="."/>
-                                            </mods:placeTerm>
-                                        </mods:place>
-                                    </xsl:for-each>
-                                </xsl:for-each>
+                                <xsL:call-template name="common_publisher_place">
+                                   <xsL:with-param name="record" select="$picaA" />
+                                </xsL:call-template>
                                 <!-- normierte Orte 4040, außer Hochschulort $4=uvp -->
                                 <xsl:for-each
                                         select="./p:datafield[@tag='033D' and not(./p:subfield[@code='4']='uvp')]">
@@ -179,20 +170,10 @@
                 <!-- RS: mods:originInfo wiederholen oder wie jetzt mehrere Publisher/Orte aufsammeln?
                     - Wir verlieren so die Beziehung publisher-ort -->
                 <mods:originInfo eventType="online_publication"> <!-- 4030 -->
-                    <xsl:for-each select="./p:datafield[@tag='033A']">
-                        <xsl:if test="./p:subfield[@code='n']">  <!-- 4030 Ort, Verlag -->
-                            <mods:publisher>
-                                <xsl:value-of select="./p:subfield[@code='n']"/>
-                            </mods:publisher>
-                        </xsl:if>
-                        <xsl:if test="./p:subfield[@code='p']">  <!-- 4030 Ort, Verlag -->
-                            <mods:place>
-                                <mods:placeTerm type="text">
-                                    <xsl:value-of select="./p:subfield[@code='p']"/>
-                                </mods:placeTerm>
-                            </mods:place>
-                        </xsl:if>
-                    </xsl:for-each>
+                    <xsL:call-template name="common_publisher_place">
+                       <xsL:with-param name="record" select="." />
+                    </xsL:call-template>
+                    
                     <mods:edition>[Electronic edition]</mods:edition>
                     <xsl:for-each select="./p:datafield[@tag='011@']">   <!-- 1109, RDA 1100 011@ -->
                         <xsl:choose>
@@ -386,8 +367,10 @@
             </mods:place>
         </xsl:for-each>
     </xsl:template>
+    
     <xsl:template name="common_publisher_place">
-        <xsl:for-each select="./p:datafield[@tag='033A']">
+        <xsl:param name="record" />
+        <xsl:for-each select="record/p:datafield[@tag='033A']">
             <xsl:if test="./p:subfield[@code='n']">  <!-- 4030 Ort, Verlag -->
                 <mods:publisher>
                     <xsl:value-of select="./p:subfield[@code='n']"/>
@@ -453,25 +436,5 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
-    </xsl:template>
-
-    <!-- TODO: check remove -->
-    <xsl:template name="epubPlace">
-        <xsl:if test="./p:datafield[@tag='033A']/p:subfield[@code='p']">  <!-- 4030 Ort, Verlag -->
-            <mods:place>
-            <mods:placeTerm type="text">
-                    <xsl:value-of select="./p:datafield[@tag='033A']/p:subfield[@code='p']"/>
-                </mods:placeTerm>
-            </mods:place>
-        </xsl:if>
-    </xsl:template>
-
-    <!-- TODO: check remove -->
-    <xsl:template name="epubPublisher">
-        <xsl:if test="./p:datafield[@tag='033A']/p:subfield[@code='n']">  <!-- 4030 Ort, Verlag -->
-            <mods:publisher>
-                <xsl:value-of select="./p:datafield[@tag='033A']/p:subfield[@code='n']"/>
-            </mods:publisher>
-        </xsl:if>
     </xsl:template>
 </xsl:stylesheet>
