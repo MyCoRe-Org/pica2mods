@@ -269,18 +269,4 @@
 
   </xsl:template>
 
-  <xsl:template name="EPUB_SDNB">
-    <xsl:param name="pica" />
-    <xsl:for-each select="document('classification:SDNB')//category">
-      <xsl:if test="$pica/p:datafield[@tag='045F']/p:subfield[@code='a'] = ./@ID">
-        <xsl:element name="mods:classification">
-          <xsl:attribute name="authorityURI"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/SDNB')" /></xsl:attribute>
-          <xsl:attribute name="valueURI"><xsl:value-of select="concat($WebApplicationBaseURL,'classifications/SDNB#', ./@ID)" /></xsl:attribute>
-          <xsl:attribute name="displayLabel">sdnb</xsl:attribute>
-          <xsl:value-of select="./label[@xml:lang='de']/@text" />
-        </xsl:element>
-      </xsl:if>
-    </xsl:for-each>
-  </xsl:template>
-
 </xsl:stylesheet> 
