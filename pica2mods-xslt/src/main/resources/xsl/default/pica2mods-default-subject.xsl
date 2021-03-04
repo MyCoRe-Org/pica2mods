@@ -17,18 +17,19 @@
   </xsl:template>
 
   <xsl:template name="modsSubject">
-    <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
-     <xsl:when test="$picaMode = 'EPUB'">
+  <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
+  <xsl:choose>
+    <xsl:when test="$picaMode = 'EPUB'">
       <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->
-      <mods:subject>
-        <xsl:call-template name="tokenizeTopics">
-          <xsl:with-param name="list" select="./p:subfield[@code='a']/text()" />
-      </xsl:call-template>
-      </mods:subject>
-    </xsl:for-each>
-     </xsl:when>
-    
-  </xsl:template>
+        <mods:subject>
+          <xsl:call-template name="tokenizeTopics">
+            <xsl:with-param name="list" select="./p:subfield[@code='a']/text()" />
+          </xsl:call-template>
+        </mods:subject>
+      </xsl:for-each>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
   
   <!-- TODO XSLT3-Function -->
   <xsl:template name="tokenizeTopics">
