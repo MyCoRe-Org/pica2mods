@@ -145,12 +145,6 @@
       </mods:physicalDescription>
     </xsl:for-each>
     
-    <xsl:call-template name="EPUB_SDNB">
-      <xsl:with-param name="pica" select="." />
-    </xsl:call-template>
-    <xsl:call-template name="COMMON_CLASS" />
-    <xsl:call-template name="COMMON_ABSTRACT" />
-    
     <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->
       <mods:subject>
       	<xsl:call-template name="tokenizeTopics">
