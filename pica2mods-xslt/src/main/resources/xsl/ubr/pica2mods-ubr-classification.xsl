@@ -25,16 +25,10 @@
         <!-- TODO: Gattungsbegriffe AAD aus A- und O-Aufnahme? ggf. Deduplizieren -->
         <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
         <xsl:for-each select="$picaA/p:record/p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD, RDA aus A-Aufnahme -->
-          <mods:genre type="aadgenre">
-            <xsl:value-of select="./p:subfield[@code='a']" />
-          </mods:genre>
           <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
         </xsl:for-each>
 
         <xsl:for-each select="./p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD -->
-          <mods:genre type="aadgenre">
-            <xsl:value-of select="./p:subfield[@code='a']" />
-          </mods:genre>
           <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
         </xsl:for-each>
 
@@ -45,9 +39,6 @@
       
       <xsl:when test="$picaMode = 'KXP'">
         <xsl:for-each select="./p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD -->
-          <mods:genre type="aadgenre">
-            <xsl:value-of select="./p:subfield[@code='a']" />
-          </mods:genre>
           <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
         </xsl:for-each>
 
