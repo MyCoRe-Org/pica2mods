@@ -5,8 +5,6 @@
   <xsl:variable name="XSL_VERSION_EPUB" select="concat('ubr_pica2mods_EPUB.xsl from ',$XSL_VERSION_PICA2MODS)" />
   <xsl:template match="/p:record" mode="EPUB">
 
-   <xsl:call-template name="COMMON_Identifier" />
-
     <xsl:call-template name="COMMON_PersonalName" />
     <xsl:call-template name="COMMON_CorporateName" />
 

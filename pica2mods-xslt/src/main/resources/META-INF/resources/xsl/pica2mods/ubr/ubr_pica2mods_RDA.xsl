@@ -14,8 +14,6 @@
         <xsl:value-of select="$ppnA" />
       </mods:note>
     </xsl:if>
-    
-    <xsl:call-template name="COMMON_Identifier" />
     <xsl:call-template name="COMMON_PersonalName" />
     <xsl:call-template name="COMMON_CorporateName" />
     
