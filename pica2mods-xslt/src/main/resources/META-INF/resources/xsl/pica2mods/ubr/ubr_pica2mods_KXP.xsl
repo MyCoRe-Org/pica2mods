@@ -10,8 +10,6 @@
   <xsl:if test="$ppnA">
     	<mods:note type="PPN-A"><xsl:value-of select="$ppnA" /></mods:note>
     </xsl:if> 
-      <xsl:call-template name="COMMON_PersonalName" />
-      <xsl:call-template name="COMMON_CorporateName" />
 
     <!-- Titel fingiert, wenn kein Titel in 4000 -->
     <xsl:choose>

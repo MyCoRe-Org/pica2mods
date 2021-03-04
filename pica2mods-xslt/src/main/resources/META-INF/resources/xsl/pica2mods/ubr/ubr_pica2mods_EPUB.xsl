@@ -5,9 +5,6 @@
   <xsl:variable name="XSL_VERSION_EPUB" select="concat('ubr_pica2mods_EPUB.xsl from ',$XSL_VERSION_PICA2MODS)" />
   <xsl:template match="/p:record" mode="EPUB">
 
-    <xsl:call-template name="COMMON_PersonalName" />
-    <xsl:call-template name="COMMON_CorporateName" />
-
     <xsl:choose>
       <xsl:when test="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='f' or substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='F' ">
         <xsl:for-each select="./p:datafield[@tag='036C']">
