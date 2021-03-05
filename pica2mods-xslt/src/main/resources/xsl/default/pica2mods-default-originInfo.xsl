@@ -32,7 +32,16 @@
                     <xsl:call-template name="common_edition">
                        <xsL:with-param name="record" select="." />
                     </xsl:call-template>
-                    <xsl:call-template name="epubDate"/>
+                    <xsl:call-template name="common_date_issued">
+                      <xsL:with-param name="datafield" select="./p:datafield[@tag='011@']"/>
+                    </xsl:call-template>
+                    
+                    <!-- PPN 1726228770 an 2 Hochschulen eingereicht -->
+                    <xsl:if test="./p:datafield[@tag='037C']/p:subfield[@code='f']">  <!-- 4204 Hochschulschriftenvermerk, Jahr der Verteidigung -->
+                      <mods:dateOther type="defence" encoding="w3cdtf">
+                        <xsl:value-of select="./p:datafield[@tag='037C']/p:subfield[@code='f'][1]"/>
+                      </mods:dateOther>
+                    </xsl:if>
                     <xsl:call-template name="common_issuance">
                         <xsl:with-param name="pica0500_2" select="$pica0500_2"/>
                     </xsl:call-template>
@@ -49,7 +58,9 @@
                     <xsl:call-template name="common_norm_place">
                       <xsl:with-param name="record" select="." />
                     </xsl:call-template>
-                    <xsl:call-template name="kxpDate"/>
+                    <xsl:call-template name="common_date_issued">
+                      <xsL:with-param name="datafield" select="./p:datafield[@tag='011@']"/>
+                    </xsl:call-template>
                     <xsl:call-template name="common_edition">
                        <xsL:with-param name="record" select="." />
                     </xsl:call-template>
@@ -87,53 +98,10 @@
                                    <xsL:with-param name="record" select="$picaA" />
                                 </xsL:call-template>
                                 
-                                <xsl:for-each select="$picaA/p:datafield[@tag='011@']">
-                                    <xsl:choose>
-                                        <xsl:when test="./p:subfield[@code='b']">
-                                            <mods:dateIssued keyDate="yes" encoding="w3cdtf" point="start">
-                                                <xsl:value-of select="./p:subfield[@code='a']"/>
-                                            </mods:dateIssued>
-                                            <mods:dateIssued encoding="w3cdtf" point="end">
-                                                <xsl:value-of select="./p:subfield[@code='b']"/>
-                                            </mods:dateIssued>
-                                            <xsl:if test="./p:subfield[@code='n']">
-                                                <mods:dateIssued qualifier="approximate">
-                                                    <xsl:value-of select="./p:subfield[@code='n']"/>
-                                                </mods:dateIssued>
-                                            </xsl:if>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:choose>
-                                                <xsl:when test="contains(./p:subfield[@code='a'], 'X')">
-                                                    <mods:dateIssued keyDate="yes" encoding="w3cdtf" point="start">
-                                                        <xsl:value-of
-                                                                select="translate(./p:subfield[@code='a'], 'X','0')"/>
-                                                    </mods:dateIssued>
-                                                    <mods:dateIssued encoding="w3cdtf" point="end">
-                                                        <xsl:value-of
-                                                                select="translate(./p:subfield[@code='a'], 'X', '9')"/>
-                                                    </mods:dateIssued>
-                                                    <xsl:if test="./p:subfield[@code='n']">
-                                                        <mods:dateIssued qualifier="approximate">
-                                                            <xsl:value-of select="./p:subfield[@code='n']"/>
-                                                        </mods:dateIssued>
-                                                    </xsl:if>
-                                                </xsl:when>
-                                                <xsl:otherwise>
-                                                    <mods:dateIssued keyDate="yes" encoding="w3cdtf">
-                                                        <xsl:value-of select="./p:subfield[@code='a']"/>
-                                                    </mods:dateIssued>
-                                                    <xsl:if test="./p:subfield[@code='n']">
-                                                        <mods:dateIssued qualifier="approximate">
-                                                            <xsl:value-of select="./p:subfield[@code='n']"/>
-                                                        </mods:dateIssued>
-                                                    </xsl:if>
-                                                </xsl:otherwise>
-                                            </xsl:choose>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:for-each>
-
+                                <xsl:call-template name="common_date_issued">
+                                  <xsL:with-param name="datafield" select="$picaA/p:datafield[@tag='011@']"/>
+                                </xsl:call-template>
+                               
                                 <xsL:call-template name="common_edition">
                                   <xsL:with-param name="record" select="$picaA" />
                                 </xsL:call-template>
@@ -155,23 +123,9 @@
                     </xsL:call-template>
                     
                     <mods:edition>[Electronic edition]</mods:edition>
-                    <xsl:for-each select="./p:datafield[@tag='011@']">   <!-- 1109, RDA 1100 011@ -->
-                        <xsl:choose>
-                            <xsl:when test="./p:subfield[@code='b']">
-                                <mods:dateCaptured encoding="w3cdtf" keyDate="yes" point="start">
-                                    <xsl:value-of select="./p:subfield[@code='a']"/>
-                                </mods:dateCaptured>
-                                <mods:dateCaptured encoding="w3cdtf" point="end">
-                                    <xsl:value-of select="./p:subfield[@code='b']"/>
-                                </mods:dateCaptured>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <mods:dateCaptured encoding="w3cdtf" keyDate="yes">
-                                    <xsl:value-of select="./p:subfield[@code='a']"/>
-                                </mods:dateCaptured>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:for-each>
+                    <xsl:call-template name="common_date_captured">
+                      <xsl:with-param name="datafield" select="./p:datafield[@tag='011@']" />
+                    </xsl:call-template>
                 </mods:originInfo>
             </xsl:when>
         </xsl:choose>
@@ -188,24 +142,9 @@
                </xsl:call-template>
             </xsl:for-each>
             <mods:edition>[Electronic edition]</mods:edition>
-
-            <xsl:for-each select="./p:datafield[@tag='011B']">   <!-- 1109 -->
-                <xsl:choose>
-                    <xsl:when test="./p:subfield[@code='b']">
-                        <mods:dateCaptured encoding="iso8601" point="start" keyDate="yes">
-                            <xsl:value-of select="./p:subfield[@code='a']"/>
-                        </mods:dateCaptured>
-                        <mods:dateCaptured encoding="iso8601" point="end">
-                            <xsl:value-of select="./p:subfield[@code='b']"/>
-                        </mods:dateCaptured>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <mods:dateCaptured encoding="iso8601" keyDate="yes">
-                            <xsl:value-of select="./p:subfield[@code='a']"/>
-                        </mods:dateCaptured>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:for-each>
+            <xsl:call-template name="common_date_captured">
+              <xsl:with-param name="datafield" select="./p:datafield[@tag='011B']" />
+            </xsl:call-template>
         </mods:originInfo>
     </xsl:template>
     
@@ -310,43 +249,64 @@
     </xsl:for-each>
   </xsl:template>
 
-    <xsl:template name="kxpDate">
-        <xsl:for-each select="./p:datafield[@tag='011@']">
+    
+     <xsl:template name="common_date_issued">
+        <xsl:param name="datafield" />
             <xsl:choose>
-                <xsl:when test="./p:subfield[@code='b']">
+                <xsl:when test="$datafield/p:subfield[@code='b']">
                     <mods:dateIssued keyDate="yes" encoding="w3cdtf" point="start">
-                        <xsl:value-of select="./p:subfield[@code='a']"/>
+                        <xsl:value-of select="translate($datafield/p:subfield[@code='a'], 'X','0')"/>
                     </mods:dateIssued>
                     <mods:dateIssued encoding="w3cdtf" point="end">
-                        <xsl:value-of select="./p:subfield[@code='b']"/>
+                        <xsl:value-of select="translate($datafield/p:subfield[@code='b'], 'X', '9')"/>
                     </mods:dateIssued>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:choose>
-                        <!-- TODO: check how different this is to epubDate-->
-                        <xsl:when test="contains(./p:subfield[@code='a'], 'X')">
+                        <xsl:when test="contains($datafield/p:subfield[@code='a'], 'X')">
                             <mods:dateIssued keyDate="yes" encoding="w3cdtf" point="start">
-                                <xsl:value-of select="translate(./p:subfield[@code='a'], 'X','0')"/>
+                                <xsl:value-of select="translate($datafield/p:subfield[@code='a'], 'X','0')"/>
                             </mods:dateIssued>
                             <mods:dateIssued encoding="w3cdtf" point="end">
-                                <xsl:value-of select="translate(./p:subfield[@code='a'], 'X', '9')"/>
+                                <xsl:value-of select="translate($datafield/p:subfield[@code='a'], 'X', '9')"/>
                             </mods:dateIssued>
                         </xsl:when>
                         <xsl:otherwise>
                             <mods:dateIssued keyDate="yes" encoding="w3cdtf">
-                                <xsl:value-of select="./p:subfield[@code='a']"/>
+                                <xsl:value-of select="$datafield/p:subfield[@code='a']"/>
                             </mods:dateIssued>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:if test="./p:subfield[@code='n']">
+            <xsl:if test="$datafield/p:subfield[@code='n']">
                 <mods:dateIssued qualifier="approximate">
-                    <xsl:value-of select="./p:subfield[@code='n']"/>
+                    <xsl:value-of select="$datafield/p:subfield[@code='n']"/>
                 </mods:dateIssued>
             </xsl:if>
-        </xsl:for-each>
     </xsl:template>
+    
+    
+    <!-- ähnlich zu common_date_issued,
+         ohne Behandlung der XX-Fälle -->
+    <xsl:template name="common_date_captured">
+      <xsl:param name="datafield" />
+      <xsl:choose>
+        <xsl:when test="$datafield/p:subfield[@code='b']">
+          <mods:dateCaptured encoding="w3cdtf" keyDate="yes" point="start">
+            <xsl:value-of select="$datafield/p:subfield[@code='a']" />
+          </mods:dateCaptured>
+          <mods:dateCaptured encoding="w3cdtf" point="end">
+            <xsl:value-of select="$datafield/p:subfield[@code='b']" />
+          </mods:dateCaptured>
+        </xsl:when>
+        <xsl:otherwise>
+          <mods:dateCaptured encoding="w3cdtf" keyDate="yes">
+            <xsl:value-of select="$datafield/p:subfield[@code='a']" />
+          </mods:dateCaptured>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>      
 
     <!-- normierte Orte 4040, außer Hochschulort $4=uvp -->
     <!-- PPN: 896299511 Petropoli -> Sankt Petersburg -->
@@ -365,40 +325,5 @@
                 </mods:placeTerm>
             </mods:place>
         </xsl:for-each>
-    </xsl:template>
-
-    <xsl:template name="epubDate">
-        <xsl:for-each select="./p:datafield[@tag='011@']">   <!-- 1100 -->
-            <xsl:choose>
-                <xsl:when test="./p:subfield[@code='b']">
-                    <mods:dateIssued keyDate="yes" encoding="w3cdtf" point="start">
-                        <xsl:value-of select="./p:subfield[@code='a']"/>
-                    </mods:dateIssued>
-                    <mods:dateIssued encoding="w3cdtf" point="end">
-                        <xsl:value-of select="./p:subfield[@code='b']"/>
-                    </mods:dateIssued>
-                </xsl:when>
-                <xsl:otherwise>
-                    <mods:dateIssued keyDate="yes" encoding="w3cdtf">
-                        <xsl:if test="substring(../p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='b' or substring(../p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='d'">
-                            <xsl:attribute name="point">start</xsl:attribute>
-                        </xsl:if>
-                        <xsl:value-of select="./p:subfield[@code='a']"/>
-                    </mods:dateIssued>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:if test="./p:subfield[@code='n']">
-                <mods:dateIssued qualifier="approximate">
-                    <xsl:value-of select="./p:subfield[@code='n']"/>
-                </mods:dateIssued>
-            </xsl:if>
-        </xsl:for-each>
-
-        <!-- PPN 1726228770 an 2 Hochschulen eingereicht -->
-        <xsl:if test="./p:datafield[@tag='037C']/p:subfield[@code='f']">  <!-- 4204 Hochschulschriftenvermerk, Jahr der Verteidigung -->
-            <mods:dateOther type="defence" encoding="w3cdtf">
-                <xsl:value-of select="./p:datafield[@tag='037C']/p:subfield[@code='f'][1]"/>
-            </mods:dateOther>
-        </xsl:if>
     </xsl:template>
 </xsl:stylesheet>
