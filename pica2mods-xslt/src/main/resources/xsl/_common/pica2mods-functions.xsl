@@ -7,6 +7,9 @@
   xmlns:err="http://www.w3.org/2005/xqt-errors"
   exclude-result-prefixes="mods fn xs">
 
+
+  <xsl:import href="_common/functions/detect-language.xsl" />
+
   <xsl:param name="MCR.PICA2MODS.SRU.URL" select="'https://sru.k10plus.de'" />
   <xsl:param name="MCR.PICA2MODS.UNAPI.URL" select="'https://unapi.k10plus.de'" />
 
