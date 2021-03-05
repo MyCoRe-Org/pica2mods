@@ -21,9 +21,10 @@
         <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
         <xsl:choose>
             <xsl:when test="$picaMode = 'EPUB'">
+              <xsl:for-each select="./p:datafield[@tag='033A']">
                 <mods:originInfo eventType="publication"> <!-- 4030 033A -->
-                    <xsl:call-template name="common_publisher_place">
-                      <xsl:with-param name="record" select="." />
+                    <xsl:call-template name="publisher_name_place_with_university_place_expansion">
+                      <xsl:with-param name="datafield" select="." />
                     </xsl:call-template>
                     <xsl:call-template name="common_norm_place">
                       <xsL:with-param name="record" select="." />
@@ -37,15 +38,16 @@
                     </xsl:call-template>
                 </mods:originInfo>
                 <xsl:call-template name="epubOnlinePublication"/>
+                </xsl:for-each>
             </xsl:when>
             <xsl:when test="$picaMode = 'KXP'">
                 <!-- check use of eventtype attribute -->
                 <mods:originInfo eventType="creation">
-                    <xsl:call-template name="common_publisher_place">
-                      <xsL:with-param name="record" select="." />
+                    <xsl:call-template name="publisher_name_place_with_university_place_expansion">
+                      <xsL:with-param name="datafield" select="./p:datafield[@tag='033A']" />
                     </xsl:call-template>
                     <xsl:call-template name="common_norm_place">
-                      <xsL:with-param name="record" select="." />
+                      <xsl:with-param name="record" select="." />
                     </xsl:call-template>
                     <xsl:call-template name="kxpDate"/>
                     <xsl:call-template name="common_edition">
@@ -78,8 +80,8 @@
                         <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
                         <xsl:if test="$picaA/*">
                             <mods:originInfo eventType="creation">
-                                <xsL:call-template name="common_publisher_place">
-                                   <xsL:with-param name="record" select="$picaA" />
+                                <xsL:call-template name="publisher_name_place_with_university_place_expansion">
+                                   <xsL:with-param name="datafield" select="$picaA/p:datafield[@tag='033A']" />
                                 </xsL:call-template>
                                 <xsL:call-template name="common_norm_place">
                                    <xsL:with-param name="record" select="$picaA" />
@@ -148,8 +150,8 @@
                 <!-- RS: mods:originInfo wiederholen oder wie jetzt mehrere Publisher/Orte aufsammeln?
                     - Wir verlieren so die Beziehung publisher-ort -->
                 <mods:originInfo eventType="online_publication"> <!-- 4030 -->
-                    <xsL:call-template name="common_publisher_place">
-                       <xsL:with-param name="record" select="." />
+                    <xsL:call-template name="publisher_name_place_with_university_place_expansion">
+                       <xsL:with-param name="datafield" select="./p:datafield[@tag='033A']" />
                     </xsL:call-template>
                     
                     <mods:edition>[Electronic edition]</mods:edition>
@@ -181,18 +183,9 @@
             <!--wenn keine 4031, dann aus 4048/033N -->
             <!--hier mehrere digitalisierende Einrichtungen for each-->
             <xsl:for-each select="./p:datafield[@tag='033B' or @tag='033N']"> <!-- 4031 Ort, Verlag -->
-                <xsl:if test="./p:subfield[@code='n']">
-                    <mods:publisher>
-                        <xsl:value-of select="./p:subfield[@code='n']"/>
-                    </mods:publisher>
-                </xsl:if>
-                <xsl:if test="./p:subfield[@code='p']">
-                    <mods:place>
-                        <mods:placeTerm type="text">
-                            <xsl:value-of select="./p:subfield[@code='p']"/>
-                        </mods:placeTerm>
-                    </mods:place>
-                </xsl:if>
+               <xsl:call-template name="publisher_name_place_with_university_place_expansion">
+                  <xsl:with-param name="datafield" select="." />
+               </xsl:call-template>
             </xsl:for-each>
             <mods:edition>[Electronic edition]</mods:edition>
 
@@ -215,21 +208,48 @@
             </xsl:for-each>
         </mods:originInfo>
     </xsl:template>
+    
+    <xsl:template name="publisher_name_place_with_university_place_expansion">
+      <xsl:param name="datafield" />
+      <xsl:choose>
+        <!-- Wenn es einen Namen gibt und dieser mit Universität, Universitätsbibliothek beginnt 
+             und es einen oder mehrere Ortsnamen gibt, die nicht im Namen der Institution enthalten sind,
+             dann ergänze den Ortsnamen hinter den Insitutionsnamen 
+             
+             Beachte: ($sequence = $item) prüft, ob das Item bestandteil der Liste ist
+             -->
+        <xsl:when test="$datafield/p:subfield[@code='n' 
+                 and (tokenize('universität,universitätsbibliothek,hochschule,hochschulbibliothek,universitätsverlag',',') = tokenize(lower-case(.),' ')[1]) 
+                 and $datafield/p:subfield[@code='p' and not(contains($datafield/p:subfield[@code='n'][1], . ))]] ">
+            <mods:publisher>
+              <xsl:value-of select="concat($datafield/p:subfield[@code='n'][1], ' ', $datafield/p:subfield[@code='p'][1])"/>
+            </mods:publisher>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:for-each select="$datafield/p:subfield[@code='n']">
+            <mods:publisher>
+              <xsl:value-of select="."/>
+            </mods:publisher>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:for-each select="$datafield/p:subfield[@code='p']">
+        <mods:place>
+          <mods:placeTerm type="text">
+            <xsl:value-of select="."/>
+          </mods:placeTerm>
+        </mods:place>
+      </xsl:for-each>
+    </xsl:template>
+    
+    
     <xsl:template name="epubOnlinePublication">
         <xsl:if test="./p:datafield[@tag='033E']">
             <mods:originInfo eventType="online_publication"> <!-- 4034 -->
-                <xsl:if test="./p:datafield[@tag='033E']/p:subfield[@code='n']">  <!-- 4034 $n Verlag -->
-                    <mods:publisher>
-                        <xsl:value-of select="./p:datafield[@tag='033E']/p:subfield[@code='n']"/>
-                    </mods:publisher>
-                </xsl:if>
-                <xsl:if test="./p:datafield[@tag='033E']/p:subfield[@code='p']">  <!-- 4034 $p Ort -->
-                    <mods:place>
-                        <mods:placeTerm type="text">
-                            <xsl:value-of select="./p:datafield[@tag='033E']/p:subfield[@code='p']"/>
-                        </mods:placeTerm>
-                    </mods:place>
-                </xsl:if>
+                <xsl:call-template name="publisher_name_place_with_university_place_expansion">
+                  <xsl:with-param name="datafield" select="./p:datafield[@tag='033E']" />
+                </xsl:call-template>
+                
                 <xsl:if test="./p:datafield[@tag='033E']/p:subfield[@code='h']">  <!-- 4034 $h Jahr -->
                     <mods:dateCaptured encoding="iso8601">
                         <xsl:value-of select="./p:datafield[@tag='033E']/p:subfield[@code='h']"/>
@@ -346,25 +366,7 @@
             </mods:place>
         </xsl:for-each>
     </xsl:template>
-    
-    <xsl:template name="common_publisher_place">
-        <xsl:param name="record" />
-        <xsl:for-each select="$record/p:datafield[@tag='033A']">
-            <xsl:if test="./p:subfield[@code='n']">  <!-- 4030 Ort, Verlag -->
-                <mods:publisher>
-                    <xsl:value-of select="./p:subfield[@code='n']"/>
-                </mods:publisher>
-            </xsl:if>
-            <xsl:for-each select="./p:subfield[@code='p']">
-                <mods:place>
-                    <mods:placeTerm type="text">
-                        <xsl:value-of select="."/>
-                    </mods:placeTerm>
-                </mods:place>
-            </xsl:for-each>
-        </xsl:for-each>
-    </xsl:template>
-    
+
     <xsl:template name="epubDate">
         <xsl:for-each select="./p:datafield[@tag='011@']">   <!-- 1100 -->
             <xsl:choose>
