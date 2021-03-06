@@ -7,100 +7,27 @@
 
     <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl"/>
 
-    <!-- not sure if we can test this easy -->
     <xsl:template name="modsRelatedItem">
-        <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
-        <xsl:choose>
-            <xsl:when test="$picaMode = 'EPUB'">
-                <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241 übergeordnetes Werk -->
-                    <xsl:call-template name="COMMON_AppearsIn"/>
-                </xsl:for-each>
+      <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241  übergeordnetes Werk-->
+        <xsl:call-template name="COMMON_AppearsIn"/>
+      </xsl:for-each>
 
-                <xsl:for-each select="./p:datafield[@tag='036D']"> <!-- 4160 übergeordnetes Werk -->
-                    <xsl:call-template name="COMMON_HostOrSeries"/>
-                </xsl:for-each>
+      <xsl:for-each select="./p:datafield[@tag='036D']"> <!-- 4160  übergeordnetes Werk-->
+        <xsl:call-template name="COMMON_HostOrSeries"/>
+      </xsl:for-each>
 
-                <xsl:for-each select="./p:datafield[@tag='036F']"> <!-- 4180 Schriftenreihe -->
-                    <xsl:call-template name="COMMON_HostOrSeries"/>
-                </xsl:for-each>
+      <!--TODO: Unterscheidung nach 0500 2. Pos: wenn 'v' dann type->host, sonst type->series -->
+      <xsl:for-each select="./p:datafield[@tag='036F']"> <!-- 4180  Schriftenreihe, Zeitschrift-->
+        <xsl:call-template name="COMMON_HostOrSeries"/>
+      </xsl:for-each>
 
-                <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261 RezensiertesWerk -->
-                    <xsl:call-template name="COMMON_Review"/>
-                </xsl:for-each>
-            </xsl:when>
-            <xsl:when test="$picaMode = 'RDA'">
-                <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241 übergeordnetes Werk -->
-                    <xsl:call-template name="COMMON_AppearsIn" />
-                </xsl:for-each>
+      <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261  RezensiertesWerk-->
+        <xsl:call-template name="COMMON_Review"/>
+      </xsl:for-each>
 
-                <xsl:for-each select="./p:datafield[@tag='036D']"> <!-- 4160 übergeordnetes Werk -->
-                    <xsl:call-template name="COMMON_HostOrSeries" />
-                </xsl:for-each>
-
-                <!--Unterscheidung nach 0500 2. Pos: wenn 'v' dann type->host, sonst type->series -->
-                <xsl:for-each select="./p:datafield[@tag='036F']"> <!-- 4180 Schriftenreihe + Zeitschrift -->
-                    <xsl:call-template name="COMMON_HostOrSeries" />
-                </xsl:for-each>
-
-                <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261 RezensiertesWerk -->
-                    <xsl:call-template name="COMMON_Review" />
-                </xsl:for-each>
-                <xsl:call-template name="common_relatedItemPreceding"/>
-            </xsl:when>
-            <xsl:when test="$picaMode = 'KXP'">
-                <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241  übergeordnetes Werk-->
-                    <xsl:call-template name="COMMON_AppearsIn"/>
-                </xsl:for-each>
-
-                <xsl:for-each select="./p:datafield[@tag='036D']"> <!-- 4160  übergeordnetes Werk-->
-                    <xsl:call-template name="COMMON_HostOrSeries"/>
-                </xsl:for-each>
-
-                <!--TODO: Unterscheidung nach 0500 2. Pos: wenn 'v' dann type->host, sonst type->series -->
-                <xsl:for-each select="./p:datafield[@tag='036F']"> <!-- 4180  Schriftenreihe, Zeitschrift-->
-                    <xsl:call-template name="COMMON_HostOrSeries"/>
-                </xsl:for-each>
-
-                <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261  RezensiertesWerk-->
-                    <xsl:call-template name="COMMON_Review"/>
-                </xsl:for-each>
-
-                <xsl:call-template name="common_relatedItemPreceding"/>
-            </xsl:when>
-        </xsl:choose>
-
+      <xsl:call-template name="common_relatedItemPreceding"/>
     </xsl:template>
 
-    <!-- Vorgänger, Nachfolger Verknüpfung ZDB -->
-    <xsl:template name="common_relatedItemPreceding">
-        <xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)"/>
-        <xsl:if test="$pica0500_2='b'">
-            <xsl:for-each
-                    select="./p:datafield[@tag='039E' and (./p:subfield[@code='b' and text()='f'] or ./p:subfield[@code='b'and text()='s'])]"><!-- 4244 -->
-                <mods:relatedItem>
-                    <xsl:if test="./p:subfield[@code='b' and text()='f']">
-                        <xsl:attribute name="type">preceding</xsl:attribute>
-                    </xsl:if>
-                    <xsl:if test="./p:subfield[@code='b' and text()='s']">
-                        <xsl:attribute name="type">succeeding</xsl:attribute>
-                    </xsl:if>
-                    <xsl:if test="./p:subfield[@code='t']">
-                        <mods:titleInfo>
-                            <mods:title>
-                                <xsl:value-of select="./p:subfield[@code='t']"/>
-                            </mods:title>
-                        </mods:titleInfo>
-                    </xsl:if>
-                    <xsl:if test="./p:subfield[@code='C' and text()='ZDB']">
-                        <mods:identifier type="zdb">
-                            <xsl:value-of
-                                    select="./p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
-                        </mods:identifier>
-                    </xsl:if>
-                </mods:relatedItem>
-            </xsl:for-each>
-        </xsl:if>
-    </xsl:template>
     <xsl:template name="COMMON_HostOrSeries">
         <mods:relatedItem>
             <xsl:if test="./p:subfield[@code='9']">
@@ -305,6 +232,37 @@
                 <xsl:value-of select="./p:subfield[@code='9']"/>
             </mods:identifier>
         </mods:relatedItem>
+    </xsl:template>
+    
+    <!-- Vorgänger, Nachfolger Verknüpfung ZDB -->
+    <xsl:template name="common_relatedItemPreceding">
+        <xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)"/>
+        <xsl:if test="$pica0500_2='b'">
+            <xsl:for-each
+                    select="./p:datafield[@tag='039E' and (./p:subfield[@code='b' and text()='f'] or ./p:subfield[@code='b'and text()='s'])]"><!-- 4244 -->
+                <mods:relatedItem>
+                    <xsl:if test="./p:subfield[@code='b' and text()='f']">
+                        <xsl:attribute name="type">preceding</xsl:attribute>
+                    </xsl:if>
+                    <xsl:if test="./p:subfield[@code='b' and text()='s']">
+                        <xsl:attribute name="type">succeeding</xsl:attribute>
+                    </xsl:if>
+                    <xsl:if test="./p:subfield[@code='t']">
+                        <mods:titleInfo>
+                            <mods:title>
+                                <xsl:value-of select="./p:subfield[@code='t']"/>
+                            </mods:title>
+                        </mods:titleInfo>
+                    </xsl:if>
+                    <xsl:if test="./p:subfield[@code='C' and text()='ZDB']">
+                        <mods:identifier type="zdb">
+                            <xsl:value-of
+                                    select="./p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
+                        </mods:identifier>
+                    </xsl:if>
+                </mods:relatedItem>
+            </xsl:for-each>
+        </xsl:if>
     </xsl:template>
 
 </xsl:stylesheet>
