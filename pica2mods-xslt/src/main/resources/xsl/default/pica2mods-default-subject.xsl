@@ -20,32 +20,27 @@
        Sollte man hier Filtern, dass nur die Schlagworte der "eigenen" Bibliothek ermittelt werden 
        Problem dabei: Fehlende Struktur man muss die relevanten Knoten über Nachfolger (Einstieg eigene Bibliothek 101@)
        und Vorgänger (nächster Bibliothekseinstieg wieder 101@) ermitteln -->
-  
+
   <xsl:template name="modsSubject">
-    <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
-    <!-- <xsl:choose>
-       <xsl:when test="$picaMode = 'EPUB'"> -->
-        <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->
-          <mods:subject>
-          <!-- Subfield x ist nicht in der Format-Dokumentation (PPN 898955750)  -->
-          <xsl:variable name="sf_x" select="./p:subfield[@code='x']" />
-            <!-- TODO Schlagwortketten mit " / " habe ich in Rostock nicht gefunden -->
-            <xsl:for-each select="tokenize(./p:subfield[@code='a']/text(), ' / ')">
-              <mods:topic>
-                  <xsl:choose>
-                      <xsl:when test="$sf_x">
-                        <xsl:value-of select="concat(., ' / ', $sf_x)" />      
-                      </xsl:when>
-                      <xsl:otherwise>
-                         <xsl:value-of select="." />      
-                      </xsl:otherwise>
-                  </xsl:choose>
-              </mods:topic>
-            </xsl:for-each>
-          </mods:subject>
+    <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->
+      <mods:subject>
+        <!-- Subfield x ist nicht in der Format-Dokumentation (PPN 898955750) -->
+        <xsl:variable name="sf_x" select="./p:subfield[@code='x']" />
+        <!-- TODO Schlagwortketten mit " / " habe ich in Rostock nicht gefunden -->
+        <xsl:for-each select="tokenize(./p:subfield[@code='a']/text(), ' / ')">
+          <mods:topic>
+            <xsl:choose>
+              <xsl:when test="$sf_x">
+                <xsl:value-of select="concat(., ' / ', $sf_x)" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="." />
+              </xsl:otherwise>
+            </xsl:choose>
+          </mods:topic>
         </xsl:for-each>
-      <!-- </xsl:when>
-    </xsl:choose> -->
+      </mods:subject>
+    </xsl:for-each>
   </xsl:template>
 
 </xsl:stylesheet>
