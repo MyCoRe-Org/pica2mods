@@ -14,56 +14,35 @@
         </mods:mods>
     </xsl:template>
 
-
-
     <xsl:template name="modsTitleInfo">
-        <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
-        <xsl:choose>
-            <xsl:when test="$picaMode = 'EPUB'">
-                <xsl:choose>
-                    <!-- code from ubr_pica2mods_EPUB.xsl -->
-                    <xsl:when test="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='f' or substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='F' ">
-                        <xsl:for-each select="./p:datafield[@tag='036C']">
-                            <xsl:call-template name="COMMON_Title" />
-                        </xsl:for-each>
-                    </xsl:when>
-                    <xsl:when
-                            test="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)='v' and ./p:datafield[@tag='027D']">
-                        <xsl:for-each select="./p:datafield[@tag='027D']">
-                            <xsl:call-template name="COMMON_Title"/>
-                        </xsl:for-each>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:for-each select="./p:datafield[@tag='021A']">
-                            <xsl:call-template name="COMMON_Title"/>
-                        </xsl:for-each>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <xsl:when test="$picaMode = 'KXP' or $picaMode = 'RDA'">
-                <!-- code from ubr_pica2mods_KXP.xsl and ubr_pica2mods_RDA-->
-                    <!-- TODO Titel fingiert, wenn kein Titel in 4000 -->
-                <xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
-                <xsl:choose>
-                    <xsl:when test="$pica0500_2='f' or $pica0500_2='F' ">
-                        <xsl:for-each select="./p:datafield[@tag='036C']"><!-- 4150 -->
-                            <xsl:call-template name="COMMON_Title" />
-                        </xsl:for-each>
-                    </xsl:when>
-                    <xsl:when test="$pica0500_2='v' and ./p:datafield[@tag='036F']">
-                        <xsl:for-each select="./p:datafield[@tag='036F']"><!-- 4180 -->
-                            <xsl:call-template name="COMMON_Title" />
-                        </xsl:for-each>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:for-each select="./p:datafield[@tag='021A']"> <!-- 4000 -->
-                            <xsl:call-template name="COMMON_Title" />
-                        </xsl:for-each>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <xsl:call-template name="COMMON_Alt_Uniform_Title" />
-            </xsl:when>
-        </xsl:choose>
+      <xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
+      
+      <!-- code from ubr_pica2mods_KXP.xsl and ubr_pica2mods_RDA-->
+      <!-- TODO Titel fingiert, wenn kein Titel in 4000 -->
+      <xsl:choose>
+        <xsl:when test="$pica0500_2='f' or $pica0500_2='F' ">
+          <xsl:for-each select="./p:datafield[@tag='036C']"><!-- 4150 -->
+            <xsl:call-template name="COMMON_Title" />
+          </xsl:for-each>
+        </xsl:when>
+        <xsl:when test="$pica0500_2='v' and ./p:datafield[@tag='036F']">
+          <xsl:for-each select="./p:datafield[@tag='036F']"><!-- 4180 -->
+            <xsl:call-template name="COMMON_Title" />
+          </xsl:for-each>
+        </xsl:when>
+        <!-- ??? nicht mehr in der Format-Dokumentation ??? -->
+        <xsl:when test="$pica0500_2='v' and ./p:datafield[@tag='027D']">
+          <xsl:for-each select="./p:datafield[@tag='027D']">
+            <xsl:call-template name="COMMON_Title"/>
+          </xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:for-each select="./p:datafield[@tag='021A']"> <!-- 4000 -->
+            <xsl:call-template name="COMMON_Title" />
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:call-template name="COMMON_Alt_Uniform_Title" />
     </xsl:template>
 
 
