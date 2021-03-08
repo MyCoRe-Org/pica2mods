@@ -272,7 +272,7 @@
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:if test="$datafield/p:subfield[@code='n']">
-                <mods:dateIssued qualifier="approximate">
+                <mods:dateIssued>
                     <xsl:value-of select="$datafield/p:subfield[@code='n']"/>
                 </mods:dateIssued>
             </xsl:if>
@@ -298,6 +298,11 @@
           </mods:dateCaptured>
         </xsl:otherwise>
       </xsl:choose>
+      <xsl:if test="$datafield/p:subfield[@code='n']">
+        <mods:dateCaptured>
+          <xsl:value-of select="$datafield/p:subfield[@code='n']"/>
+        </mods:dateCaptured>
+      </xsl:if>
     </xsl:template>      
 
     <!-- normierte Orte 4040, außer Hochschulort $4=uvp -->
