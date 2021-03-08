@@ -24,6 +24,8 @@
     <xsl:import href="default/pica2mods-default-abstract.xsl"/>
     <xsl:import href="default/pica2mods-default-subject.xsl"/>
     <xsl:import href="default/pica2mods-default-relatedItem.xsl"/>
+    
+    <xsl:import href="ubr/pica2mods-ubr-POSTPROCESSING.xsl"/>
 
     <xsl:import href="_common/pica2mods-functions.xsl"/>
     <xsl:param name="MCR.PICA2MODS.CONVERTER_VERSION" select="'Pica2Mods 2.0'"/>
@@ -32,6 +34,7 @@
     
 
     <xsl:template match="p:record">
+      <xsl:variable name="mods_orig">
         <mods:mods>
             <xsl:call-template name="modsRecordInfo"/>
             <xsl:call-template name="modsTitleInfo"/>
@@ -49,6 +52,9 @@
             <xsl:call-template name="modsRelatedItem"/>
             <xsl:call-template name="modsSubject"/>
         </mods:mods>
+      </xsl:variable>
+      <xsl:apply-templates select="$mods_orig" mode="ubrPostProcessing" />
+        
     </xsl:template>
 
 </xsl:stylesheet>
