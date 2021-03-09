@@ -27,7 +27,7 @@
   </xsl:template>
 
   <xsl:template name="modsPhysicalDescriptionEpub">
-    <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a' and contains(., 'Seite')]">
+    <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a']">
       <mods:physicalDescription>
             <mods:extent>
               <xsl:value-of select="." />
