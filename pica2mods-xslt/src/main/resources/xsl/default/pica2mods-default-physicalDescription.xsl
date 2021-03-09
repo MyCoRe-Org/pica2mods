@@ -20,44 +20,23 @@
       <xsl:when test="$picaMode = 'EPUB'">
         <xsl:call-template name="modsPhysicalDescriptionEpub" />
       </xsl:when>
-      <xsl:when test="$picaMode = 'KXP'">
-        <xsl:call-template name="modsPhysicalDescriptionKXP" />
-      </xsl:when>
-      <xsl:when test="$picaMode = 'RDA'">
-        <xsl:call-template name="modsPhysicalDescriptionRDA" />
-      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="modsPhysicalDescriptionOther" />
+      </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
   <xsl:template name="modsPhysicalDescriptionEpub">
-    <!-- TODO Das ist mir zu ungenau, bei dem was hier in den Feldern ankommt
-         Die Ermittlung der Zahl ist nur in wenigen "trivialen" Fällen möglich 
-         -> Ausgabe als String <mods:extent>...</mods:extent>, wie bei anderen Modi -->
     <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a' and contains(., 'Seite')]">
       <mods:physicalDescription>
-        <mods:extent unit="pages">
-          <xsl:value-of select="normalize-space(substring-before(substring-after(.,'('),'Seite'))" />
-        </mods:extent>
+            <mods:extent>
+              <xsl:value-of select="." />
+            </mods:extent>
       </mods:physicalDescription>
     </xsl:for-each>
   </xsl:template>
 
-
-  <xsl:template name="modsPhysicalDescriptionKXP">
-    <mods:physicalDescription>
-
-      <xsl:call-template name="physicalDescriptionContent">
-        <xsl:with-param name="record" select="." />
-      </xsl:call-template>
-
-      <!-- 4238 Technische Angaben zum elektr. Dokument -->
-      <xsl:call-template name="physicalDescriptionDigitalOrigin">
-        <xsl:with-param name="record" select="." />
-      </xsl:call-template>
-    </mods:physicalDescription>
-  </xsl:template>
-
-  <xsl:template name="modsPhysicalDescriptionRDA">
+  <xsl:template name="modsPhysicalDescriptionOther">
     <xsl:variable name="pica0500_2"
       select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
 
@@ -133,23 +112,26 @@
 
   <xsl:template name="physicalDescriptionDigitalOrigin">
     <xsl:param name="record" />
-    <xsl:choose>  <!-- 4238 Technische Angaben zum elektr. Dokument, RDA ok -->
-      <xsl:when
-        test="contains($record/p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Original')"> <!-- alt -->
-        <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-      </xsl:when>
-      <xsl:when
-        test="contains($record/p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Primärausgabe')">
-        <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-      </xsl:when>
-      <xsl:when
-        test="contains($record/p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Mikrofilm')">
-        <mods:digitalOrigin>digitized microfilm</mods:digitalOrigin>
-      </xsl:when>
-      <xsl:otherwise>
-        <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:variable name="pica0500" select="$record/p:datafield[@tag='002@']/p:subfield[@code='0']" />
+    <xsl:if test="starts-with($pica0500, 'O')">
+      <xsl:choose>  <!-- 4238 Technische Angaben zum elektr. Dokument, RDA ok -->
+        <xsl:when
+          test="contains($record/p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Original')"> <!-- alt -->
+          <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+        </xsl:when>
+        <xsl:when
+          test="contains($record/p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Primärausgabe')">
+          <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+        </xsl:when>
+        <xsl:when
+          test="contains($record/p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Mikrofilm')">
+          <mods:digitalOrigin>digitized microfilm</mods:digitalOrigin>
+        </xsl:when>
+        <xsl:otherwise>
+          <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
