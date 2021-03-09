@@ -5,218 +5,151 @@
                 version="3.0"
                 exclude-result-prefixes="mods pica2mods">
 
+  <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
 
-    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl"/>
+  <!-- This template is for testing purposes -->
+  <xsl:template match="p:record">
+    <mods:mods>
+      <xsl:call-template name="modsPhysicalDescription" />
+    </mods:mods>
+  </xsl:template>
 
-    <!-- This template is for testing purposes-->
-    <xsl:template match="p:record">
-        <mods:mods>
-            <xsl:call-template name="modsPhysicalDescription" />
-        </mods:mods>
-    </xsl:template>
+  <xsl:template name="modsPhysicalDescription">
+    <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
+    <xsl:choose>
+      <xsl:when test="$picaMode = 'EPUB'">
+        <xsl:call-template name="modsPhysicalDescriptionEpub" />
+      </xsl:when>
+      <xsl:when test="$picaMode = 'KXP'">
+        <xsl:call-template name="modsPhysicalDescriptionKXP" />
+      </xsl:when>
+      <xsl:when test="$picaMode = 'RDA'">
+        <xsl:call-template name="modsPhysicalDescriptionRDA" />
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
 
-    <xsl:template name="modsPhysicalDescription">
-        <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
+  <xsl:template name="modsPhysicalDescriptionEpub">
+    <!-- TODO Das ist mir zu ungenau, bei dem was hier in den Feldern ankommt
+         Die Ermittlung der Zahl ist nur in wenigen "trivialen" Fällen möglich 
+         -> Ausgabe als String <mods:extent>...</mods:extent>, wie bei anderen Modi -->
+    <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a' and contains(., 'Seite')]">
+      <mods:physicalDescription>
+        <mods:extent unit="pages">
+          <xsl:value-of select="normalize-space(substring-before(substring-after(.,'('),'Seite'))" />
+        </mods:extent>
+      </mods:physicalDescription>
+    </xsl:for-each>
+  </xsl:template>
+
+
+  <xsl:template name="modsPhysicalDescriptionKXP">
+    <mods:physicalDescription>
+
+      <xsl:call-template name="physicalDescriptionContent">
+        <xsl:with-param name="record" select="." />
+      </xsl:call-template>
+
+      <!-- 4238 Technische Angaben zum elektr. Dokument -->
+      <xsl:call-template name="physicalDescriptionDigitalOrigin">
+        <xsl:with-param name="record" select="." />
+      </xsl:call-template>
+    </mods:physicalDescription>
+  </xsl:template>
+
+  <xsl:template name="modsPhysicalDescriptionRDA">
+    <xsl:variable name="pica0500_2"
+      select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
+
+    <xsl:choose>
+      <xsl:when test="not($pica0500_2='v')">
+        <xsl:variable name="digitalOrigin">
+          <xsl:call-template name="physicalDescriptionDigitalOrigin">
+            <xsl:with-param name="record" select="." />
+          </xsl:call-template>
+        </xsl:variable>
+
+        <!-- RDA -->
+        <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
         <xsl:choose>
-            <xsl:when test="$picaMode = 'EPUB'">
-                <xsl:call-template name="modsPhysicalDescriptionEpub"/>
-            </xsl:when>
-            <xsl:when test="$picaMode = 'KXP'">
-                <xsl:call-template name="modsPhysicalDescriptionKXP"/>
-            </xsl:when>
-            <xsl:when test="$picaMode = 'RDA'">
-                <xsl:call-template name="modsPhysicalDescriptionRDA"/>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:template>
-
-    <xsl:template name="modsPhysicalDescriptionEpub">
-        <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a' and contains(., 'Seite')]">
+          <xsl:when test="$picaA/p:datafield[@tag='034D' or @tag='034M' or @tag='034I' or @tag='034K']">
             <mods:physicalDescription>
-                <mods:extent unit="pages">
-                    <xsl:value-of select="normalize-space(substring-before(substring-after(.,'('),'Seite'))"/>
-                </mods:extent>
+              <xsl:call-template name="physicalDescriptionContent">
+                <xsl:with-param name="record" select="$picaA" />
+              </xsl:call-template>
+              <xsl:copy-of select="$digitalOrigin" />
             </mods:physicalDescription>
-        </xsl:for-each>
-    </xsl:template>
-
-
-    <xsl:template name="modsPhysicalDescriptionKXP">
-        <mods:physicalDescription>
-            <xsl:for-each
-                    select="./p:datafield[@tag='034D']/p:subfield[@code='a']">   <!--  4060 Umfang, Seiten -->
-                <mods:extent>
-                    <xsl:value-of select="."/>
-                </mods:extent>
-            </xsl:for-each>
-            <xsl:for-each
-                    select="./p:datafield[@tag='034M']/p:subfield[@code='a']">   <!--  4061 Illustrationen -->
-                <mods:extent>
-                    <xsl:value-of select="."/>
-                </mods:extent>
-            </xsl:for-each>
-            <xsl:for-each
-                    select="./p:datafield[@tag='034I']/p:subfield[@code='a']">   <!-- 4062 Format, Größe  -->
-                <mods:extent>
-                    <xsl:value-of select="."/>
-                </mods:extent>
-            </xsl:for-each>
-            <xsl:for-each
-                    select="./p:datafield[@tag='034K']/p:subfield[@code='a']">   <!-- 4063 Begleitmaterial  -->
-                <mods:extent>
-                    <xsl:value-of select="."/>
-                </mods:extent>
-            </xsl:for-each>
-
-            <xsl:choose> <!-- 4238 Technische Angaben zum elektr. Dokument  -->
-                <xsl:when
-                        test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Original')"> <!-- alt -->
-                    <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-                </xsl:when>
-                <xsl:when
-                        test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Primärausgabe')">
-                    <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-                </xsl:when>
-                <xsl:when
-                        test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Mikrofilm')">
-                    <mods:digitalOrigin>digitized microfilm</mods:digitalOrigin>
-                </xsl:when>
-                <xsl:otherwise>
-                    <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-                </xsl:otherwise>
-            </xsl:choose>
-        </mods:physicalDescription>
-    </xsl:template>
-
-    <xsl:template name="modsPhysicalDescriptionRDA">
-        <xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)"/>
-
-        <xsl:choose>
-            <!-- ToDo: 2. If für Ob-Stufen: Wenn keine ppnA und 0500 2. Pos ='b',
-        dann originInfo[@eventtype='creation'] aus O-Aufnahmen-Feldern:
-  bei RDA-Aufnahmen keine A-PPN im Pica vorhanden -> Daten aus Expansion nehmen
-  ggf. per ZDB-ID die SRU-Schnittstelle anfragen
-        - publisher aus 039I $e
-        - placeTerm aus 039I $d
-        - datesissued aus 039I $f
-        - issuance -> Konstante "serial"
-        - physicalDescription -> wie unten (variable nicht vergessen!) 	-->
-            <xsl:when test="not($pica0500_2='v')">
-                <xsl:variable name="digitalOrigin">
-                    <xsl:choose>  <!-- 4238 Technische Angaben zum elektr. Dokument, RDA ok -->
-                        <xsl:when
-                                test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Original')"> <!-- alt -->
-                            <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-                        </xsl:when>
-                        <xsl:when
-                                test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Primärausgabe')">
-                            <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-                        </xsl:when>
-                        <xsl:when
-                                test="contains(./p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Mikrofilm')">
-                            <mods:digitalOrigin>digitized microfilm</mods:digitalOrigin>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-
-                <!-- RDA -->
-                <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
-                <xsl:choose>
-                    <xsl:when test="$picaA/p:datafield[@tag='034D' or @tag='034M' or @tag='034I' or @tag='034K']">
-                        <mods:physicalDescription>
-                            <xsl:for-each
-                                    select="$picaA/p:datafield[@tag='034D']/p:subfield[@code='a']">   <!-- 4060 Umfang, Seiten -->
-                                <mods:extent>
-                                    <xsl:value-of select="."/>
-                                </mods:extent>
-                            </xsl:for-each>
-                            <xsl:for-each
-                                select="$picaA/p:datafield[@tag='034M']/p:subfield[@code='a']">   <!-- 4061 Illustrationen -->
-                                <mods:extent>
-                                    <xsl:value-of select="."/>
-                                </mods:extent>
-                            </xsl:for-each>
-                            <xsl:for-each
-                                    select="$picaA/p:datafield[@tag='034I']/p:subfield[@code='a']">   <!-- 4062 Format, Größe -->
-                                <mods:extent>
-                                    <xsl:value-of select="."/>
-                                </mods:extent>
-                            </xsl:for-each>
-                            <xsl:for-each
-                                    select="$picaA/p:datafield[@tag='034K']/p:subfield[@code='a']">   <!-- 4063 Begleitmaterial -->
-                                <mods:extent>
-                                    <xsl:value-of select="."/>
-                                </mods:extent>
-                            </xsl:for-each>
-                            <xsl:copy-of select="$digitalOrigin"/>
-                        </mods:physicalDescription>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:if test="./p:datafield[@tag='034D' or @tag='034M' or @tag='034I' or @tag='034K']">
-                            <mods:physicalDescription>
-                                <xsl:for-each
-                                        select="./p:datafield[@tag='034D']/p:subfield[@code='a']">   <!-- 4060 Umfang, Seiten -->
-                                    <mods:extent>
-                                        <xsl:value-of select="."/>
-                                    </mods:extent>
-                                </xsl:for-each>
-                                <xsl:for-each
-                                        select="./p:datafield[@tag='034M']/p:subfield[@code='a']">   <!-- 4061 Illustrationen -->
-                                    <mods:extent>
-                                        <xsl:value-of select="."/>
-                                    </mods:extent>
-                                </xsl:for-each>
-                                <xsl:for-each
-                                        select="./p:datafield[@tag='034I']/p:subfield[@code='a']">   <!-- 4062 Format, Größe -->
-                                    <mods:extent>
-                                        <xsl:value-of select="."/>
-                                    </mods:extent>
-                                </xsl:for-each>
-                                <xsl:for-each
-                                        select="./p:datafield[@tag='034K']/p:subfield[@code='a']">   <!-- 4063 Begleitmaterial -->
-                                    <mods:extent>
-                                        <xsl:value-of select="."/>
-                                    </mods:extent>
-                                </xsl:for-each>
-                                <xsl:copy-of select="$digitalOrigin"/>
-                            </mods:physicalDescription>
-                        </xsl:if>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <!-- Wenn 0500 2. Pos ='v',
-   dann originInfo[@eventtype='creation'] aus O-Aufnahmen-Feldern:
-    - publisher und placeTerm nicht vorhanden (keine Av-Stufe vorhanden)
-    - datesissued aus 011@ $r
-    - issuance -> Konstante "serial"
-    - physicalDescription -->
-            <xsl:otherwise>
-                <mods:physicalDescription>
-                    <xsl:for-each
-                            select="./p:datafield[@tag='034D']/p:subfield[@code='a']">   <!-- 4060 Umfang, Seiten aus O-Aufnahme, Problem: "1 Online-Ressource (...)"-->
-                        <mods:extent>
-                            <xsl:value-of select="."/>
-                        </mods:extent>
-                    </xsl:for-each>
-                    <xsl:for-each
-                            select="./p:datafield[@tag='037H']/p:subfield[@code='a']">   <!-- 4238 Technische Angaben zum elektr. Dokument, RDA ok -->
-                        <xsl:if test="contains(., 'Digitalisierungsvorlage: Original')"> <!-- alt -->
-                            <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-                        </xsl:if>
-                        <xsl:if test="contains(., 'Digitalisierungsvorlage: Primärausgabe')">
-                            <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-                        </xsl:if>
-                        <xsl:if test="contains(., 'Digitalisierungsvorlage: Mikrofilm')">
-                            <mods:digitalOrigin>digitized microfilm</mods:digitalOrigin>
-                        </xsl:if>
-                    </xsl:for-each>
-                </mods:physicalDescription>
-            </xsl:otherwise>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:if test="./p:datafield[@tag='034D' or @tag='034M' or @tag='034I' or @tag='034K']">
+              <mods:physicalDescription>
+                <xsl:call-template name="physicalDescriptionContent">
+                  <xsl:with-param name="record" select="." />
+                </xsl:call-template>
+                <xsl:copy-of select="$digitalOrigin" />
+              </mods:physicalDescription>
+            </xsl:if>
+          </xsl:otherwise>
         </xsl:choose>
-    </xsl:template>
+      </xsl:when>
+      <xsl:otherwise>
+        <mods:physicalDescription>
+          <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a']">   <!-- 4060 Umfang, Seiten aus O-Aufnahme, Problem: "1 Online-Ressource (...)" -->
+            <mods:extent>
+              <xsl:value-of select="." />
+            </mods:extent>
+          </xsl:for-each>
+          <xsl:call-template name="physicalDescriptionDigitalOrigin">
+            <xsl:with-param name="record" select="." />
+          </xsl:call-template>
+        </mods:physicalDescription>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
+  <xsl:template name="physicalDescriptionContent">
+    <xsl:param name="record" />
+    <xsl:for-each select="$record/p:datafield[@tag='034D']/p:subfield[@code='a']">   <!-- 4060 Umfang, Seiten -->
+      <mods:extent>
+        <xsl:value-of select="." />
+      </mods:extent>
+    </xsl:for-each>
+    <xsl:for-each select="$record/p:datafield[@tag='034M']/p:subfield[@code='a']">   <!-- 4061 Illustrationen -->
+      <mods:note type="content">
+        <xsl:value-of select="." />
+      </mods:note>
+    </xsl:for-each>
+    <xsl:for-each select="$record/p:datafield[@tag='034I']/p:subfield[@code='a']">   <!-- 4062 Format, Größe -->
+      <mods:note type="source_dimensions">
+        <xsl:value-of select="." />
+      </mods:note>
+    </xsl:for-each>
+    <xsl:for-each select="$record/p:datafield[@tag='034K']/p:subfield[@code='a']">   <!-- 4063 Begleitmaterial -->
+      <mods:note type='content'>
+        <xsl:value-of select="." />
+      </mods:note>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="physicalDescriptionDigitalOrigin">
+    <xsl:param name="record" />
+    <xsl:choose>  <!-- 4238 Technische Angaben zum elektr. Dokument, RDA ok -->
+      <xsl:when
+        test="contains($record/p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Original')"> <!-- alt -->
+        <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+      </xsl:when>
+      <xsl:when
+        test="contains($record/p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Primärausgabe')">
+        <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+      </xsl:when>
+      <xsl:when
+        test="contains($record/p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Mikrofilm')">
+        <mods:digitalOrigin>digitized microfilm</mods:digitalOrigin>
+      </xsl:when>
+      <xsl:otherwise>
+        <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 </xsl:stylesheet>

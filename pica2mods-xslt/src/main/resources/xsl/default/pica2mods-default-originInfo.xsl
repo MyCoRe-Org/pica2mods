@@ -14,6 +14,16 @@
             <xsl:call-template name="modsOriginInfo" />
         </mods:mods>
     </xsl:template>
+    
+       <!-- ToDo: 2. If für Ob-Stufen: Wenn keine ppnA und 0500 2. Pos ='b',
+        dann originInfo[@eventtype='creation'] aus O-Aufnahmen-Feldern:
+  bei RDA-Aufnahmen keine A-PPN im Pica vorhanden -> Daten aus Expansion nehmen
+  ggf. per ZDB-ID die SRU-Schnittstelle anfragen
+        - publisher aus 039I $e
+        - placeTerm aus 039I $d
+        - datesissued aus 039I $f
+        - issuance -> Konstante "serial"
+     -->
 
     <xsl:template name="modsOriginInfo">
         <xsl:variable name="pica0500_2"
