@@ -32,27 +32,23 @@
             <mods:abstract type="summary">
                 <xsl:choose>
                     <xsl:when test="ends-with(.,'&lt;ger&gt;')">
-                        <xsl:attribute name="lang">ger</xsl:attribute>
                         <xsl:attribute name="xml:lang">de</xsl:attribute>
                         <xsl:value-of select="normalize-space(substring(., 1, string-length(.)-5))" />
                     </xsl:when>
                     <xsl:when test="ends-with(.,'&lt;eng&gt;')">
-                        <xsl:attribute name="lang">eng</xsl:attribute>
                         <xsl:attribute name="xml:lang">en</xsl:attribute>
                         <xsl:value-of select="normalize-space(substring(., 1, string-length(.)-5))" />
                     </xsl:when>
                     <xsl:when test="ends-with(.,'&lt;spa&gt;')">
-                        <xsl:attribute name="lang">spa</xsl:attribute>
                         <xsl:attribute name="xml:lang">es</xsl:attribute>
                         <xsl:value-of select="normalize-space(substring(., 1, string-length(.)-5))" />
                     </xsl:when>
                     <xsl:when test="ends-with(.,'&lt;fra&gt;')">
-                        <xsl:attribute name="lang">fra</xsl:attribute>
                         <xsl:attribute name="xml:lang">fr</xsl:attribute>
                         <xsl:value-of select="normalize-space(substring(., 1, string-length(.)-5))" />
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="lang"><xsl:value-of select="pica2mods:detectLanguage(.)" /></xsl:attribute>
+                        <xsl:attribute name="xml:lang"><xsl:value-of select="pica2mods:detectLanguage(.)" /></xsl:attribute>
                         <xsl:value-of select="." />
                     </xsl:otherwise>
                 </xsl:choose>

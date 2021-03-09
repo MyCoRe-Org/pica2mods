@@ -15,22 +15,22 @@
   
     <xsl:variable name="words" as="map(xs:string, array(xs:string))">
       <xsl:map>
-        <xsl:map-entry key="'ger'"
+        <xsl:map-entry key="'de'"
           select="['als', 'am', 'auch', 'auf', 'aus', 'bei', 'bis', 'das', 'dem', 'den', 'der', 'deren', 'derer', 'des', 'dessen', 'die', 'dies', 'diese', 'dieser', 'dieses', 'ein', 'eine', 'einer', 'eines', 'einem', 'für', 'hat', 'im', 'ist', 'mit', 'sich', 'sie', 'über', 'und', 'vom', 'von', 'vor', 'wie', 'zu', 'zum', 'zur']" />
-        <xsl:map-entry key="'eng'"
+        <xsl:map-entry key="'en'"
           select="['a', 'and', 'are', 'as', 'at', 'do', 'for', 'from', 'has', 'have', 'how', 'its', 'like', 'new', 'of', 'on', 'or', 'the', 'their', 'through', 'to', 'with', 'you', 'your']" />
-        <xsl:map-entry key="'fre'"
+        <xsl:map-entry key="'fr'"
           select="['la', 'le', 'les', 'un', 'une', 'des,', 'à', 'aux', 'de', 'pour', 'par', 'sur', 'comme', 'aussi', 'quel', 'quels', 'quelles', 'laquelle', 'lequel', 'lesquelles', 'lesquelles', 'auxquels', 'auxquelles', 'avec', 'sans', 'ont', 'sont', 'duquel', 'desquels', 'desquelles', 'quand']" />
       </xsl:map>
     </xsl:variable>
   
     <xsl:variable name="endings" as="map(xs:string, array(xs:string))">
       <xsl:map>
-        <xsl:map-entry key="'ger'"
+        <xsl:map-entry key="'de'"
           select="['ag', 'chen', 'gen', 'ger', 'iche', 'icht', 'ig', 'ige', 'isch', 'ische', 'ischen', 'kar', 'ker', 'keit', 'ler', 'mus', 'nen', 'ner', 'rie', 'rer', 'ter', 'ten', 'trie', 'tz', 'ung', 'yse']" />
-        <xsl:map-entry key="'eng'"
+        <xsl:map-entry key="'en'"
           select="['ar', 'ble', 'cal', 'ce', 'ced', 'ed', 'ent', 'ic', 'ies', 'ing', 'ive', 'ness', 'our', 'ous', 'ons', 'ral', 'th', 'ure', 'y']" />
-        <xsl:map-entry key="'fre'"
+        <xsl:map-entry key="'fr'"
           select="['é', 'és', 'ée', 'ées', 'euse', 'euses', 'ème', 'euil', 'asme', 'isme', 'aux']" />
       </xsl:map>
     </xsl:variable>
