@@ -3,7 +3,8 @@
   xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions" exclude-result-prefixes="mods pica2mods"
   expand-text="yes"> 
   
-    <xsl:template match=".[mods:dateIssued[@encoding] and not(mods:dateIssued[not(@encoding)])]"
+  <!-- add a default dateIssued for display (without @encoding attribute) -->
+  <xsl:template match=".[mods:dateIssued[@encoding] and not(mods:dateIssued[not(@encoding)])]"
     mode="ubrPostProcessing">
     <xsl:copy>
       <xsl:copy-of select="*" />
@@ -26,6 +27,7 @@
     </xsl:copy>
   </xsl:template>
   
+  <!-- add a default dateCaptured for display (without @encoding attribute) -->
   <xsl:template match=".[mods:dateCaptured[@encoding] and not(mods:dateCaptured[not(@encoding)])]"
     mode="ubrPostProcessing">
     <xsl:copy>
@@ -48,7 +50,10 @@
       </mods:dateCaptured>
     </xsl:copy>
   </xsl:template>
-
+  
+  <!-- delete all urls which look like our purls / do nothing-->
+  <xsl:template match="mods:identifier[@type='url' and text()= ./../mods:identifier[@type='purl']/text()]" mode="ubrPostProcessing" />
+    
   <xsl:template match="*|@*|processing-instruction()|comment()" mode="ubrPostProcessing">
     <xsl:copy>
       <xsl:apply-templates select="*|@*|text()|processing-instruction()|comment()" mode="ubrPostProcessing" />
