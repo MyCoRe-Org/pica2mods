@@ -15,7 +15,7 @@
   </xsl:template>
 
   <xsl:template name="modsLanguage">
-    <xsl:variable name="rfc5646" select="document('_common/rfc5646.xml')" />
+    <xsl:variable name="rfc5646" select="document('../_common/rfc5646.xml')" />
     <xsl:for-each select="./p:datafield[@tag='010@']"> <!-- 1500 Language -->
       <!-- weiter Unterfelder für Orginaltext / Zwischenübersetzung nicht abbildbar -->
       <xsl:for-each select="./p:subfield[@code='a']">
