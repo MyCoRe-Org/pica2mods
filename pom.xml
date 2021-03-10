@@ -133,26 +133,4 @@
         </executions>
       </plugin>
     </plugins>
-      <!--DO NOT COMMIT CHANGES BELOW (local settings for local build) -->
-      <extensions>
-      <!-- for deployment to UBR, cannot be stored in profile or settings.xml-->
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-webdav-jackrabbit</artifactId>
-        <version>3.2.0</version>
-      </extension>
-    </extensions>
-  </build>
-  <profiles>
-    <profile>
-      <id>deploy-to-ubr</id>
-      <distributionManagement>
-        <repository>
-          <id>ubr-releases</id>
-          <url>${distributionRepositoryURL}</url>
-        </repository>
-      </distributionManagement>
-    </profile>
-  </profiles>
-
-</project>
+ </project>
