@@ -31,7 +31,7 @@
   <xsl:template match=".[mods:dateCaptured[@encoding] and not(mods:dateCaptured[not(@encoding)])]"
     mode="ubrPostProcessing">
     <xsl:copy>
-      <xsl:copy-of select="*" />
+      <xsl:copy-of select="*|@*|processing-instruction()|comment()" />
       <xsl:comment>UBR-Post-Processing: </xsl:comment>
       <mods:dateCaptured>
       <xsl:choose>
