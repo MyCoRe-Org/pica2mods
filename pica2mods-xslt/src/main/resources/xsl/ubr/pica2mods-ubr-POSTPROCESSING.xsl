@@ -7,7 +7,7 @@
   <xsl:template match=".[mods:dateIssued[@encoding] and not(mods:dateIssued[not(@encoding)])]"
     mode="ubrPostProcessing">
     <xsl:copy>
-      <xsl:copy-of select="*" />
+      <xsl:copy-of select="*|@*|processing-instruction()|comment()" />
       <xsl:comment>UBR-Post-Processing: </xsl:comment>
       <mods:dateIssued>
       <xsl:choose>
