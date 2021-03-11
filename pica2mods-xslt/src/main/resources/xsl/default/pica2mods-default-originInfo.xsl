@@ -136,6 +136,13 @@
                 </xsl:call-template>
               </xsl:for-each>
             </xsl:when>
+            <xsl:when test="./p:datafield[@tag='033P']"> <!-- 4067 (nicht RDA) -->
+              <xsl:for-each select="./p:datafield[@tag='033P']">
+                <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
+                  <xsl:with-param name="datafield" select="." />
+                </xsl:call-template>
+              </xsl:for-each>
+            </xsl:when>
             <xsl:otherwise> <!-- 4030 / 033A -->
               <xsl:for-each select="./p:datafield[@tag='033A']">
                 <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
