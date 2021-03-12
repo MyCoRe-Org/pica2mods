@@ -96,18 +96,27 @@
     </xsl:choose>
   </xsl:function>
   
+  <!-- RS: Ziel ist es die Modes auf REPRO(= RDA + KXP) und EPUB zusammenzukürzen -->
   <xsl:function name="pica2mods:detectPicaMode" as="xs:string">
     <xsl:param name="record" as="element()" />
     <xsl:choose>
-      <!-- wenn keine PURL UB Rostock -->
+      <!-- wenn keine PURL UB Rostock - später weg -->
       <xsl:when test="not($record/p:datafield[@tag='017C']/p:subfield[@code='u' and starts-with(.,'http://purl.uni-rostock.de')])">
         <!-- dann EPUB für alle anderen (auch HSNB!) -->
         <xsl:value-of select="'EPUB'" />
       </xsl:when>
+      <!-- Wenn RDA und KXP zusammengelegt sind, dann Bedingung (not()) entfernen und Reihenfolge tauschen -->
+      <!--  Erscheinungsjahr-Repro 1109$a / 011B$a ODER Datum_original 1100$r / 011@$r ODER Beziehung zur Reproduktion_4256$i / 039I$i -->
+       <xsl:when test="not($record/p:datafield[@tag='011B']/p:subfield[@code='a'] or $record/p:datafield[@tag='011@']/p:subfield[@code='r'] or $record/p:datafield[@tag='039I']/p:subfield[@code='i' and text()='Elektronische Reproduktion von'])">
+        <xsl:value-of select="'EPUB'" />
+      </xsl:when>
 
+      <!-- Fallback, ggf. nach dem Testen / Bereinigen wieder rein -->
+      <!-- 
       <xsl:when test="$record/p:datafield[@tag='209O']/p:subfield[@code='a' and contains(.,':doctype:epub')]">
         <xsl:value-of select="'EPUB'" />
       </xsl:when>
+      -->
       <xsl:when test="$record/p:datafield[@tag='007G']/p:subfield[@code='i']/text()='KXP'">
         <xsl:value-of select="'KXP'" />
       </xsl:when>
