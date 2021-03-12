@@ -1,8 +1,10 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:p="info:srw/schema/5/picaXML-v1.0"
+<?xml version="1.0"?>
+<xsl:stylesheet version="3.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions"
+                xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
-                xmlns:xsL="http://www.w3.org/1999/XSL/Transform" version="3.0"
-                xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions"
                 exclude-result-prefixes="mods pica2mods">
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
@@ -140,7 +142,7 @@
         </xsl:if>
         <xsl:if test="(@tag='036D' or @tag='036F') and ./p:subfield[@code='X']"> <!-- 4160, 4180 -->
           <mods:text type="sortstring">
-            <xsL:value-of select="pica2mods:sortableSortstring(./p:subfield[@code='X'])" />
+            <xsl:value-of select="pica2mods:sortableSortstring(./p:subfield[@code='X'])" />
           </mods:text>
         </xsl:if>
       </mods:part>
