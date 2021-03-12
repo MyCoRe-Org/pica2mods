@@ -20,7 +20,7 @@
 
   <!-- TODO URIResolver classification: ersetzen mit Funktion -->
   <xsl:template name="modsClassification">
-    <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
+    <xsl:variable name="picaMode" select="pica2mods:detectMode(.)" />
 
     <xsl:choose>
       <xsl:when test="$picaMode = 'REPRO'">

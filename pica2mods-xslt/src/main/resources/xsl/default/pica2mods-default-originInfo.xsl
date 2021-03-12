@@ -18,7 +18,7 @@
   <xsl:template name="modsOriginInfo">
     <xsl:variable name="pica0500_2"
       select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
-    <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
+    <xsl:variable name="picaMode" select="pica2mods:detectMode(.)" />
     <xsl:choose>
       <xsl:when test="$picaMode = 'REPRO'">
         <mods:originInfo eventType="publication">

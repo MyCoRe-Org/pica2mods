@@ -20,7 +20,7 @@
   <!-- TODO Die RecordID aus der PURL zu übernehmen ist nicht schön und tendenziell fehleranfällig, kann man dafür nicht 
     ein "unsichtbares" Sigel im Exemplarsatz belegen -->
   <xsl:template name="modsRecordInfo">
-    <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
+    <xsl:variable name="picaMode" select="pica2mods:detectMode(.)" />
     <mods:recordInfo>
       <xsl:for-each
         select="./p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '//purl.uni-rostock.de')][1]"> <!-- 4950 URL (kein eigenes Feld) -->

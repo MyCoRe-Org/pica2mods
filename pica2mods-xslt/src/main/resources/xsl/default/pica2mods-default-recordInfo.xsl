@@ -18,7 +18,7 @@
   </xsl:template>
 
   <xsl:template name="modsRecordInfo">
-    <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
+    <xsl:variable name="picaMode" select="pica2mods:detectMode(.)" />
     <mods:recordInfo>
       <mods:recordIdentifier source="k10plus">{./p:datafield[@tag='003@']/p:subfield[@code='0']}
       </mods:recordIdentifier>
