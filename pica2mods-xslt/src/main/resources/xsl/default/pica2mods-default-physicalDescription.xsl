@@ -17,16 +17,16 @@
   <xsl:template name="modsPhysicalDescription">
     <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
     <xsl:choose>
-      <xsl:when test="$picaMode = 'EPUB'">
-        <xsl:call-template name="modsPhysicalDescriptionEpub" />
+      <xsl:when test="$picaMode = 'REPRO'">
+        <xsl:call-template name="modsPhysicalDescriptionRepro" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="modsPhysicalDescriptionOther" />
+         <xsl:call-template name="modsPhysicalDescriptionDefault" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template name="modsPhysicalDescriptionEpub">
+  <xsl:template name="modsPhysicalDescriptionDefault">
     <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a']">
       <mods:physicalDescription>
             <mods:extent>
@@ -36,7 +36,7 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template name="modsPhysicalDescriptionOther">
+  <xsl:template name="modsPhysicalDescriptionRepro">
     <xsl:variable name="pica0500_2"
       select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
 

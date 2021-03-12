@@ -21,17 +21,17 @@
     <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
 
     <xsl:choose>
-      <xsl:when test="$picaMode = 'RDA' or $picaMode = 'KXP'">
+      <xsl:when test="$picaMode = 'REPRO'">
           <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
         <xsl:call-template name="COMMON_UBR_Class_Collection" />
         <xsl:call-template name="COMMON_UBR_Class_Provider" />
         <xsl:call-template name="COMMON_UBR_Class_Doctype" />
       </xsl:when>
-      <xsl:when test="$picaMode = 'EPUB'">
+      <xsl:otherwise>
         <xsl:call-template name="EPUB_SDNB">
           <xsl:with-param name="pica" select="." />
         </xsl:call-template>
-      </xsl:when>
+      </xsl:otherwise>
     </xsl:choose>
     <xsl:call-template name="COMMON_CLASS" />    
   </xsl:template>

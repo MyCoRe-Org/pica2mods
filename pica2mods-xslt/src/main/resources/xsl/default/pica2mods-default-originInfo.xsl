@@ -17,7 +17,7 @@
       select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
     <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
     <xsl:choose>
-      <xsl:when test="$picaMode = 'KXP' or $picaMode = 'RDA'">
+      <xsl:when test="$picaMode = 'REPRO'">
         <mods:originInfo eventType="publication">
           <xsl:choose>
             <xsl:when test="./p:datafield[@tag='011@']/p:subfield[@code='r']"> <!-- 1100$r -->
