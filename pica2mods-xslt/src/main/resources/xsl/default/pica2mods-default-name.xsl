@@ -160,86 +160,86 @@
             <xsl:choose>
               <!-- RAK WB §185, 2 -->
               <xsl:when test="$datafield/p:subfield[@code='B']='Bearb.'">
-                ctb
+                <xsl:text>ctb</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Begr.'">
-                org
+                <xsl:text>org</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Hrsg.'">
-                edt
+                <xsl:text>edt</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Ill.'">
-                ill
+                <xsl:text>ill</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Komp.'">
-                cmp
+                <xsl:text>cmp</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Mitarb.'">
-                ctb
+                <xsl:text>ctb</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Red.'">
-                red
+                <xsl:text>red</xsl:text>
               </xsl:when>
               <!-- GBV Katalogisierungsrichtlinie -->
               <xsl:when test="$datafield/p:subfield[@code='B']='Adressat'">
-                rcp
+                <xsl:text>rcp</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='angebl. Hrsg.'">
-                edt
+                <xsl:text>edt</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='mutmaßl. Hrsg.'">
-                edt
+                <xsl:text>edt</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Komm.'">
-                ann
+                <xsl:text>ann</xsl:text>
               </xsl:when><!-- Kommentator = annotator -->
               <xsl:when test="$datafield/p:subfield[@code='B']='Stecher'">
-                egr
+                <xsl:text>egr</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='angebl. Übers.'">
-                trl
+                <xsl:text>trl</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='mutmaßl. Übers.'">
-                trl
+                <xsl:text>trl</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='angebl. Verf.'">
-                dub
+                <xsl:text>dub</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='mutmaßl. Verf.'">
-                dub
+                <xsl:text>dub</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Verstorb.'">
-                oth
+                <xsl:text>oth</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Zeichner'">
-                drm
+                <xsl:text>drm</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Präses'">
-                pra
+                <xsl:text>pra</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Resp.'">
-                rsp
+                <xsl:text>rsp</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Widmungsempfänger'">
-                dto
+                <xsl:text>dto</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Zensor'">
-                cns
+                <xsl:text>cns</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Beiträger'">
-                ctb
+                <xsl:text>ctb</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Beiträger k.'">
-                ctb
+                <xsl:text>ctb</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Beiträger m.'">
-                ctb
+                <xsl:text>ctb</xsl:text>
               </xsl:when>
               <xsl:when test="$datafield/p:subfield[@code='B']='Interpr.'">
-                prf
+                <xsl:text>prf</xsl:text>
               </xsl:when> <!-- Interpret = Performer -->
               <xsl:otherwise>
-                oth
+                <xsl:text>oth</xsl:text>
               </xsl:otherwise>
             </xsl:choose>
           </mods:roleTerm>
