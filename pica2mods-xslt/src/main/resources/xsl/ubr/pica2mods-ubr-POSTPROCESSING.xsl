@@ -1,5 +1,5 @@
- <?xml version="1.0"?>
- <xsl:stylesheet version="3.0"
+<?xml version="1.0"?>
+<xsl:stylesheet version="3.0"
                  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                  xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions"
                  xmlns:p="info:srw/schema/5/picaXML-v1.0"
