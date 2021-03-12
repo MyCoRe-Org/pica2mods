@@ -34,11 +34,11 @@ public class Pica2ModsXSLTransformerService {
      */
     public static String CLASSPATH_PREFIX = "xsl/";
 
-   // public static String XPATH_PARALLEL = "concat(//p:datafield[@tag='039D']/p:subfield[@code='n'], //p:datafield[@tag='039D']/p:subfield[@code='i' and not(./../p:subfield[@code='n'])], '|',//p:datafield[@tag='039D']/p:subfield[@code='C' and text()='KXP']/following-sibling::p:subfield[@code='6'][1])";
+    public static String XPATH_PARALLEL = "concat(//p:datafield[@tag='039D']/p:subfield[@code='n'], //p:datafield[@tag='039D']/p:subfield[@code='i' and not(./../p:subfield[@code='n'])], '|',//p:datafield[@tag='039D']/p:subfield[@code='C' and text()='KXP']/following-sibling::p:subfield[@code='6'][1])";
 
-   // public static String XPATH_PPN_MBW = "//p:datafield[@tag='036D']/p:subfield[@code='9']";
+    public static String XPATH_PPN_MBW = "//p:datafield[@tag='036D']/p:subfield[@code='9']";
 
-  //  public static String XPATH_PPN_SERIES = "//p:datafield[@tag='036F']/p:subfield[@code='9']";
+    public static String XPATH_PPN_SERIES = "//p:datafield[@tag='036F']/p:subfield[@code='9']";
 
     @Value("${pica2mods.sru.url}")
     private String sruURL;
