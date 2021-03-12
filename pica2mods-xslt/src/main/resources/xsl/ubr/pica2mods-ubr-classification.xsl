@@ -21,27 +21,8 @@
     <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
 
     <xsl:choose>
-      <xsl:when test="$picaMode = 'RDA'">
-        <!-- TODO: Gattungsbegriffe AAD aus A- und O-Aufnahme? ggf. Deduplizieren -->
-        <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
-        <xsl:for-each select="$picaA/p:record/p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD, RDA aus A-Aufnahme -->
+      <xsl:when test="$picaMode = 'RDA' or $picaMode = 'KXP'">
           <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
-        </xsl:for-each>
-
-        <xsl:for-each select="./p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD -->
-          <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
-        </xsl:for-each>
-
-        <xsl:call-template name="COMMON_UBR_Class_Collection" />
-        <xsl:call-template name="COMMON_UBR_Class_Provider" />
-        <xsl:call-template name="COMMON_UBR_Class_Doctype" />
-      </xsl:when>
-      
-      <xsl:when test="$picaMode = 'KXP'">
-        <xsl:for-each select="./p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD -->
-          <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
-        </xsl:for-each>
-
         <xsl:call-template name="COMMON_UBR_Class_Collection" />
         <xsl:call-template name="COMMON_UBR_Class_Provider" />
         <xsl:call-template name="COMMON_UBR_Class_Doctype" />
@@ -50,12 +31,9 @@
         <xsl:call-template name="EPUB_SDNB">
           <xsl:with-param name="pica" select="." />
         </xsl:call-template>
-
       </xsl:when>
     </xsl:choose>
-    
     <xsl:call-template name="COMMON_CLASS" />    
-    
   </xsl:template>
 
   <xsl:template name="COMMON_CLASS">
@@ -203,19 +181,20 @@
   </xsl:template>
 
   <xsl:template name="COMMON_UBR_Class_AADGenres">
-    <xsl:for-each select="./p:subfield[@code='9']/text()">
+    <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
+    <xsl:variable name="aadGenres" select="$picaA/p:datafield[@tag='044S'] | ./p:datafield[@tag='044S']" />
+    <xsl:for-each-group select="$aadGenres/p:subfield[@code='9']" group-by=".">
       <xsl:variable name="ppn" select="." />
-      <xsl:for-each select="document('classification:aadgenre')//category/label[@xml:lang='x-ppn']">
-        <xsl:if test="$ppn = ./@text">
-          <xsl:element name="mods:classification">
-            <xsl:attribute name="authorityURI">{$WebApplicationBaseURL}classifications/aadgenre</xsl:attribute>
-            <xsl:attribute name="valueURI">{$WebApplicationBaseURL}classifications/aadgenre#'{./../@ID}" /></xsl:attribute>
-            <xsl:attribute name="displayLabel">aadgenre</xsl:attribute>
-            <xsl:value-of select="./../label[@xml:lang='de']/@text" />
-          </xsl:element>
-        </xsl:if>
+      <xsl:for-each
+        select="document('classification:aadgenre')//category/label[@xml:lang='x-ppn' and @text=$ppn]">
+        <xsl:element name="mods:classification">
+          <xsl:attribute name="authorityURI">{$WebApplicationBaseURL}classifications/aadgenre</xsl:attribute>
+          <xsl:attribute name="valueURI">{$WebApplicationBaseURL}classifications/aadgenre#{./../@ID}</xsl:attribute>
+          <xsl:attribute name="displayLabel">aadgenre</xsl:attribute>
+          <xsl:value-of select="./../label[@xml:lang='de']/@text" />
+        </xsl:element>
       </xsl:for-each>
-    </xsl:for-each>
+    </xsl:for-each-group>
   </xsl:template>
 
   <!-- TODO SDNB - Klassifiation ist ein Fall für default .... -->
