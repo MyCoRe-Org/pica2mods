@@ -24,9 +24,11 @@
               <mods:dateIssued keyDate="yes" encoding="w3cdtf">
                 <xsl:value-of select="./p:datafield[@tag='011@']/p:subfield[@code='r']" />
               </mods:dateIssued>
-              <xsl:call-template name="common_publisher_name_place_with_university_place_expansion"> <!-- 4030 -->
-                <xsl:with-param name="datafield" select="./p:datafield[@tag='033A']" />
-              </xsl:call-template>
+              <xsl:for-each select="./p:datafield[@tag='033A']">
+                <xsl:call-template name="common_publisher_name_place_with_university_place_expansion"> <!-- 4030 -->
+                  <xsl:with-param name="datafield" select="." />
+                </xsl:call-template>
+              </xsl:for-each>
               <xsl:call-template name="common_norm_place"> <!-- 4040 / 033D -->
                 <xsl:with-param name="record" select="." />
               </xsl:call-template>
@@ -36,9 +38,11 @@
               <xsl:call-template name="common_date_issued"> <!-- 1100 der A-Aufnahme -->
                 <xsl:with-param name="datafield" select="$picaA/p:datafield[@tag='011@']" />
               </xsl:call-template>
-              <xsl:call-template name="common_publisher_name_place_with_university_place_expansion"> <!-- 4030 -->
-                <xsl:with-param name="datafield" select="$picaA/p:datafield[@tag='033A']" />
-              </xsl:call-template>
+              <xsl:for-each select="./p:datafield[@tag='033A']">
+                <xsl:call-template name="common_publisher_name_place_with_university_place_expansion"> <!-- 4030 -->
+                  <xsl:with-param name="datafield" select="." />
+                </xsl:call-template>
+              </xsl:for-each>
               <xsl:call-template name="common_norm_place"> <!-- 4040 / 033D -->
                 <xsl:with-param name="record" select="$picaA" />
               </xsl:call-template>
@@ -47,9 +51,11 @@
               <xsl:call-template name="common_date_issued"> <!-- 1100 -->
                 <xsl:with-param name="datafield" select="./p:datafield[@tag='011@']" />
               </xsl:call-template>
-              <xsl:call-template name="common_publisher_name_place_with_university_place_expansion"> <!-- 4030 -->
-                <xsl:with-param name="datafield" select="./p:datafield[@tag='033A']" />
-              </xsl:call-template>
+              <xsl:for-each select="./p:datafield[@tag='033A']">
+                <xsl:call-template name="common_publisher_name_place_with_university_place_expansion"> <!-- 4030 -->
+                  <xsl:with-param name="datafield" select="." />
+                </xsl:call-template>
+              </xsl:for-each>
               <xsl:call-template name="common_norm_place"> <!-- 4040 / 033D -->
                 <xsl:with-param name="record" select="." />
               </xsl:call-template>

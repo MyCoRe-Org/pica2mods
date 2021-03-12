@@ -198,7 +198,7 @@
     </xsl:template>
 
     <xsl:template name="COMMON_CorporateName">
-        <!--RAK 033J = 4033 Druckernormadaten, aber kein Ort angegeben (müsste aus GND gelesen werden) 
+        <!--RAK 033J = 4033 Druckernormdaten, aber kein Ort angegeben (müsste aus GND gelesen werden) 
                        MODS unterstützt keine authorityURIs für Verlage deshalb 033A verwenden , 
                        RDA: Drucker-/Verlegernormdaten als beteiligte Körperschaft in 3010/3110 mit entspr. Rollenbezeichnung -->
         <!-- Lb: RDA, jetzt marcrelatorcode gemäß $4 bzw. ausgeschrieben $B -->
