@@ -14,7 +14,7 @@
     <xsl:copy>
       <xsl:copy-of select="*|@*|processing-instruction()|comment()" />
       <xsl:comment>
-        UBR-Post-Processing:
+        <xsl:text>UBR-Post-Processing:</xsl:text>
       </xsl:comment>
       <mods:dateIssued>
         <xsl:choose>
@@ -40,7 +40,7 @@
     <xsl:copy>
       <xsl:copy-of select="*|@*|processing-instruction()|comment()" />
       <xsl:comment>
-        UBR-Post-Processing:
+        <xsl:text>UBR-Post-Processing:</xsl:text>
       </xsl:comment>
       <mods:dateCaptured>
         <xsl:choose>
