@@ -16,10 +16,10 @@
     </mods:mods>
   </xsl:template>
 
-  <!-- TODO Wenn wir gegen den K10plus gehen bekommen wir hier die Schlagworte aller Bibliotheken ggf. auch mehrfach 
-       Sollte man hier Filtern, dass nur die Schlagworte der "eigenen" Bibliothek ermittelt werden 
-       Problem dabei: Fehlende Struktur man muss die relevanten Knoten über Nachfolger (Einstieg eigene Bibliothek 101@)
-       und Vorgänger (nächster Bibliothekseinstieg wieder 101@) ermitteln -->
+  <!-- TODO Wenn wir gegen den K10plus gehen bekommen wir hier die Schlagworte aller Bibliotheken ggf. auch mehrfach Sollte 
+    man hier Filtern, dass nur die Schlagworte der "eigenen" Bibliothek ermittelt werden Problem dabei: Fehlende Struktur man 
+    muss die relevanten Knoten über Nachfolger (Einstieg eigene Bibliothek 101@) und Vorgänger (nächster Bibliothekseinstieg 
+    wieder 101@) ermitteln -->
 
   <xsl:template name="modsSubject">
     <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->

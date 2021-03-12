@@ -8,7 +8,7 @@
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
 
-  <xsl:param name="WebApplicationBaseURL" select="'http://rosdok.uni-rostock.de/'"/>
+  <xsl:param name="WebApplicationBaseURL" select="'http://rosdok.uni-rostock.de/'" />
   <!-- This template is for testing purposes -->
   <xsl:template match="p:record">
     <mods:mods>
@@ -16,13 +16,13 @@
     </mods:mods>
   </xsl:template>
 
-<!-- TODO URIResolver classification: ersetzen mit Funktion -->
+  <!-- TODO URIResolver classification: ersetzen mit Funktion -->
   <xsl:template name="modsClassification">
     <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
 
     <xsl:choose>
       <xsl:when test="$picaMode = 'REPRO'">
-          <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
+        <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
         <xsl:call-template name="COMMON_UBR_Class_Collection" />
         <xsl:call-template name="COMMON_UBR_Class_Provider" />
         <xsl:call-template name="COMMON_UBR_Class_Doctype" />
@@ -33,7 +33,7 @@
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:call-template name="COMMON_CLASS" />    
+    <xsl:call-template name="COMMON_CLASS" />
   </xsl:template>
 
   <xsl:template name="COMMON_CLASS">
@@ -55,33 +55,37 @@
         </xsl:element>
       </xsl:if>
     </xsl:for-each>
-    <xsl:if test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:metadata')])">
-            <mods:classification displayLabel="licenseinfo"
-              authorityURI="{$WebApplicationBaseURL}classifications/licenseinfo"
-              valueURI="{$WebApplicationBaseURL}classifications/licenseinfo#metadata.cc0">Lizenz Metadaten: CC0</mods:classification>
+    <xsl:if
+      test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:metadata')])">
+      <mods:classification displayLabel="licenseinfo"
+        authorityURI="{$WebApplicationBaseURL}classifications/licenseinfo"
+        valueURI="{$WebApplicationBaseURL}classifications/licenseinfo#metadata.cc0">Lizenz Metadaten: CC0</mods:classification>
     </xsl:if>
-    
+
     <xsl:choose>
-      <xsl:when test="./p:datafield[@tag='209O']/p:subfield[@code='a' and (ends-with(text(), ':doctype:epub.series') or ends-with(text(), ':doctype:epub.journal'))]">
-        <!-- Schriftenreihe oder Zeitschrift (Bundle)
-             keine Default-Klassifikationen für licenseInfo und acessCondition --> 
+      <xsl:when
+        test="./p:datafield[@tag='209O']/p:subfield[@code='a' and (ends-with(text(), ':doctype:epub.series') or ends-with(text(), ':doctype:epub.journal'))]">
+        <!-- Schriftenreihe oder Zeitschrift (Bundle) keine Default-Klassifikationen für licenseInfo und acessCondition -->
       </xsl:when>
       <xsl:when test="./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':doctype:epub')]">
-          <xsl:if test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:deposit')])">
-            <mods:classification displayLabel="licenseinfo"
-              authorityURI="{$WebApplicationBaseURL}classifications/licenseinfo"
-              valueURI="{$WebApplicationBaseURL}classifications/licenseinfo#deposit.rightsgranted">Nutzungsrechte erteilt</mods:classification>
-          </xsl:if>
-          <xsl:if test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:work')])">
-            <mods:classification displayLabel="licenseinfo"
-              authorityURI="{$WebApplicationBaseURL}classifications/licenseinfo"
-              valueURI="{$WebApplicationBaseURL}classifications/licenseinfo#work.rightsreserved">alle Rechte vorbehalten</mods:classification>
-          </xsl:if>
-          <xsl:if test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':accesscondition:openaccess')])">
-            <mods:classification displayLabel="accesscondition"
-              authorityURI="{$WebApplicationBaseURL}classifications/accesscondition"
-              valueURI="{$WebApplicationBaseURL}classifications/accesscondition#openaccess">frei zugänglich (Open Access)</mods:classification>
-          </xsl:if>
+        <xsl:if
+          test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:deposit')])">
+          <mods:classification displayLabel="licenseinfo"
+            authorityURI="{$WebApplicationBaseURL}classifications/licenseinfo"
+            valueURI="{$WebApplicationBaseURL}classifications/licenseinfo#deposit.rightsgranted">Nutzungsrechte erteilt</mods:classification>
+        </xsl:if>
+        <xsl:if
+          test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:work')])">
+          <mods:classification displayLabel="licenseinfo"
+            authorityURI="{$WebApplicationBaseURL}classifications/licenseinfo"
+            valueURI="{$WebApplicationBaseURL}classifications/licenseinfo#work.rightsreserved">alle Rechte vorbehalten</mods:classification>
+        </xsl:if>
+        <xsl:if
+          test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':accesscondition:openaccess')])">
+          <mods:classification displayLabel="accesscondition"
+            authorityURI="{$WebApplicationBaseURL}classifications/accesscondition"
+            valueURI="{$WebApplicationBaseURL}classifications/accesscondition#openaccess">frei zugänglich (Open Access)</mods:classification>
+        </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <!-- default: ':doctype:histbest' -->
@@ -114,12 +118,14 @@
   </xsl:template>
 
   <xsl:template name="COMMON_UBR_Class_Doctype">
-    <xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
+    <xsl:variable name="pica0500_2"
+      select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
     <xsl:for-each select="./p:datafield[@tag='036E' or @tag='036L']/p:subfield[@code='a']/text()">
       <xsl:variable name="pica4110" select="lower-case(.)" />
       <xsl:for-each
         select="document('classification:doctype')//category[./label[@xml:lang='x-pica-0500-2']]">
-        <xsl:if test="starts-with($pica4110, lower-case(./label[@xml:lang='x-pica-4110']/@text)) and contains(./label[@xml:lang='x-pica-0500-2']/@text, $pica0500_2)">
+        <xsl:if
+          test="starts-with($pica4110, lower-case(./label[@xml:lang='x-pica-4110']/@text)) and contains(./label[@xml:lang='x-pica-0500-2']/@text, $pica0500_2)">
           <xsl:element name="mods:classification">
             <xsl:attribute name="authorityURI">{$WebApplicationBaseURL}classifications/doctype</xsl:attribute>
             <xsl:attribute name="valueURI">{$WebApplicationBaseURL}classifications/doctype#'{./@ID}</xsl:attribute>
@@ -135,8 +141,7 @@
     <xsl:for-each select="./p:datafield[@tag='036E' or @tag='036L']/p:subfield[@code='a']/text()">
       <xsl:variable name="pica4110" select="lower-case(.)" />
       <xsl:for-each select="document('classification:collection')//category/label[@xml:lang='x-pica-4110']">
-        <xsl:if
-          test="starts-with($pica4110, lower-case(./@text))">
+        <xsl:if test="starts-with($pica4110, lower-case(./@text))">
           <xsl:element name="mods:classification">
             <xsl:attribute name="authorityURI">{$WebApplicationBaseURL}classifications/collection</xsl:attribute>
             <xsl:attribute name="valueURI">{$WebApplicationBaseURL}classifications/collection#{./../@ID}</xsl:attribute>
@@ -211,5 +216,6 @@
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
+  
 </xsl:stylesheet>
   

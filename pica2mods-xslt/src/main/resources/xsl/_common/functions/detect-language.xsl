@@ -12,7 +12,7 @@
 
   <xsl:function name="pica2mods:detectLanguage" as="xs:string">
     <xsl:param name="text" as="xs:string" />
-  
+
     <xsl:variable name="words" as="map(xs:string, array(xs:string))">
       <xsl:map>
         <xsl:map-entry key="'de'"
@@ -23,7 +23,7 @@
           select="['la', 'le', 'les', 'un', 'une', 'des,', 'à', 'aux', 'de', 'pour', 'par', 'sur', 'comme', 'aussi', 'quel', 'quels', 'quelles', 'laquelle', 'lequel', 'lesquelles', 'lesquelles', 'auxquels', 'auxquelles', 'avec', 'sans', 'ont', 'sont', 'duquel', 'desquels', 'desquelles', 'quand']" />
       </xsl:map>
     </xsl:variable>
-  
+
     <xsl:variable name="endings" as="map(xs:string, array(xs:string))">
       <xsl:map>
         <xsl:map-entry key="'de'"
@@ -35,7 +35,7 @@
       </xsl:map>
     </xsl:variable>
     <xsl:variable name="data" select="tokenize(lower-case($text))"></xsl:variable>
-  
+
     <xsl:variable name="wordCounts" as="item()*">
       <counts>
         <xsl:for-each select="map:for-each($words, function($k, $v){$k})">
@@ -66,4 +66,3 @@
     <xsl:value-of select="$wordCounts/count[.= max(../count)]/@lang" />
   </xsl:function>
 </xsl:stylesheet>
-

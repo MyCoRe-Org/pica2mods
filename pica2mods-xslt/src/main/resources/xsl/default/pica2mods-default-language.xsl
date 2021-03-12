@@ -5,7 +5,7 @@
                 version="3.0"
                 exclude-result-prefixes="mods pica2mods">
 
-    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl"/>
+  <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
 
   <!-- This template is for testing purposes -->
   <xsl:template match="p:record">
@@ -15,8 +15,7 @@
   </xsl:template>
 
   <xsl:template name="modsLanguage">
-    <!-- relative Pfade funktionieren nicht für Classpath-Resourcen:
-          <xsl:variable name="rfc5646" select="document('../_common/rfc5646.xml')" -->
+    <!-- relative Pfade funktionieren nicht für Classpath-Resourcen: <xsl:variable name="rfc5646" select="document('../_common/rfc5646.xml')" -->
     <xsl:variable name="rfc5646" select="document('resource:_data/rfc5646.xml')" />
     <xsl:for-each select="./p:datafield[@tag='010@']"> <!-- 1500 Language -->
       <!-- weiter Unterfelder für Orginaltext / Zwischenübersetzung nicht abbildbar -->

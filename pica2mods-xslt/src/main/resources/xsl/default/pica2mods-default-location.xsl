@@ -20,7 +20,8 @@
       <mods:location>
         <xsl:if test="./p:subfield[@code='c']">
           <xsl:choose>
-            <xsl:when test="./p:subfield[@code='c']='UB Rostock' or ./p:subfield[@code='c']='Universitätsbibliothek Rostock'">
+            <xsl:when
+              test="./p:subfield[@code='c']='UB Rostock' or ./p:subfield[@code='c']='Universitätsbibliothek Rostock'">
               <mods:physicalLocation type="current" authorityURI="http://d-nb.info/gnd/"
                 valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
             </xsl:when>

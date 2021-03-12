@@ -21,7 +21,7 @@
         <xsl:call-template name="modsPhysicalDescriptionRepro" />
       </xsl:when>
       <xsl:otherwise>
-         <xsl:call-template name="modsPhysicalDescriptionDefault" />
+        <xsl:call-template name="modsPhysicalDescriptionDefault" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -29,9 +29,9 @@
   <xsl:template name="modsPhysicalDescriptionDefault">
     <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a']">
       <mods:physicalDescription>
-            <mods:extent>
-              <xsl:value-of select="." />
-            </mods:extent>
+        <mods:extent>
+          <xsl:value-of select="." />
+        </mods:extent>
       </mods:physicalDescription>
     </xsl:for-each>
   </xsl:template>

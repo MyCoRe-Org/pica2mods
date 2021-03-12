@@ -2,7 +2,6 @@
   xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions" version="3.0" exclude-result-prefixes="mods pica2mods">
 
-
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
 
   <!-- This template is for testing purposes -->
@@ -327,4 +326,5 @@
       </mods:place>
     </xsl:for-each>
   </xsl:template>
+  
 </xsl:stylesheet>

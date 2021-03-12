@@ -5,7 +5,7 @@
                 version="3.0"
                 exclude-result-prefixes="mods pica2mods">
 
-    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl"/>
+  <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
 
   <!-- This template is for testing purposes -->
   <xsl:template match="p:record">
@@ -135,7 +135,8 @@
     </xsl:for-each>
 
     <!-- URLs -->
-    <xsl:for-each select="./p:datafield[@tag='017C' and (./p:subfield[@code='x']='D' or ./p:subfield[@code='x']='H')]/p:subfield[@code='u']">
+    <xsl:for-each
+      select="./p:datafield[@tag='017C' and (./p:subfield[@code='x']='D' or ./p:subfield[@code='x']='H')]/p:subfield[@code='u']">
       <!-- 4950 (kein eigenes Feld) -->
       <mods:identifier type="url">
         <xsl:value-of select="." />

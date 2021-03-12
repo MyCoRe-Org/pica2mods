@@ -7,7 +7,6 @@
   xmlns:err="http://www.w3.org/2005/xqt-errors"
   exclude-result-prefixes="mods fn xs">
 
-
   <xsl:import href="_common/functions/detect-language.xsl" />
 
   <xsl:param name="MCR.PICA2MODS.SRU.URL" select="'https://sru.k10plus.de'" />
@@ -26,9 +25,12 @@
       <xsl:sequence select="document($requestURL)//p:record" />
       <xsl:catch>
         <xsl:message>
-          No result for SRUQuery: <xsl:value-of select="$query" />
-          Error code: <xsl:value-of select="$err:code" />
-          Reason: <xsl:value-of select="$err:description" />
+          No result for SRUQuery:
+          <xsl:value-of select="$query" />
+          Error code:
+          <xsl:value-of select="$err:code" />
+          Reason:
+          <xsl:value-of select="$err:description" />
         </xsl:message>
         <xsl:sequence select="()" />
       </xsl:catch>
@@ -38,11 +40,11 @@
   <xsl:function name="pica2mods:queryPicaFromSRUWithPPN" as="element()?">
     <xsl:param name="database" as="xs:string" />
     <xsl:param name="ppn" as="xs:string" />
-    
+
     <xsl:if test="contains($ppn, 'x')">
-        <xsl:message>
-          PPN {$ppn} ends with small 'x' Please fix it!
-        </xsl:message>
+      <xsl:message>
+        PPN {$ppn} ends with small 'x' Please fix it!
+      </xsl:message>
     </xsl:if>
     <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery($database, concat('ppn=', upper-case($ppn)))" />
   </xsl:function>
@@ -50,11 +52,11 @@
   <xsl:function name="pica2mods:queryPicaFromUnAPIWithPPN" as="element()?">
     <xsl:param name="database" as="xs:string" />
     <xsl:param name="ppn" as="xs:string" />
-    
+
     <xsl:if test="contains($ppn, 'x')">
-        <xsl:message>
-          PPN {$ppn} ends with small 'x' Please fix it!
-        </xsl:message>
+      <xsl:message>
+        PPN {$ppn} ends with small 'x' Please fix it!
+      </xsl:message>
     </xsl:if>
     <xsl:variable name="requestURL"
       select="concat($MCR.PICA2MODS.UNAPI.URL, '?format=picaxml&amp;id=', $database,':ppn:', upper-case($ppn))" />
@@ -62,15 +64,18 @@
       <xsl:sequence select="document($requestURL)//p:record" />
       <xsl:catch>
         <xsl:message>
-          No result for UnAPIQuery: <xsl:value-of select="fn:concat($database,':ppn:',$ppn)" />
-          Error code: <xsl:value-of select="$err:code" />
-          Reason: <xsl:value-of select="$err:description" />
+          No result for UnAPIQuery:
+          <xsl:value-of select="fn:concat($database,':ppn:',$ppn)" />
+          Error code:
+          <xsl:value-of select="$err:code" />
+          Reason:
+          <xsl:value-of select="$err:description" />
         </xsl:message>
         <xsl:sequence select="()" />
       </xsl:catch>
     </xsl:try>
   </xsl:function>
-  
+
   <xsl:function name="pica2mods:queryPicaDruck" as="element()?">
     <xsl:param name="current" as="element()" />
     <xsl:choose>
@@ -78,28 +83,31 @@
       <xsl:when test="not(starts-with($current/p:datafield[@tag='002@']/p:subfield[@code='0'],'O'))">
         <xsl:sequence select="$current" />
       </xsl:when>
-      <!--  4256 Beziehungen zur Reproduktion in anderer physischer Form -->
-      <!--  Verknüpfung über PPN -->
+      <!-- 4256 Beziehungen zur Reproduktion in anderer physischer Form -->
+      <!-- Verknüpfung über PPN -->
       <xsl:when test="$current/p:datafield[@tag='039I']/p:subfield[@code='9']">
-         <xsl:variable name="ppnA" select="$current/p:datafield[@tag='039I']/p:subfield[@code='9'][1]/text()" />
-         <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.ppn=', $ppnA))" />
+        <xsl:variable name="ppnA"
+          select="$current/p:datafield[@tag='039I']/p:subfield[@code='9'][1]/text()" />
+        <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.ppn=', $ppnA))" />
       </xsl:when>
-      <!--  Verknüpfung über ZDB-ID -->
+      <!-- Verknüpfung über ZDB-ID -->
       <xsl:when test="$current/p:datafield[@tag='039I']/p:subfield[@code='C' and text()='ZDB']">
-        <xsl:variable name="zdbA" select="$current/p:datafield[@tag='039I']/p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]/text()" />
-         <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.zdb=', $zdbA))"/>
+        <xsl:variable name="zdbA"
+          select="$current/p:datafield[@tag='039I']/p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]/text()" />
+        <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.zdb=', $zdbA))" />
       </xsl:when>
-      <!-- Fallback: leere Sequence -->  
+      <!-- Fallback: leere Sequence -->
       <xsl:otherwise>
-          <xsl:sequence select="()" />
+        <xsl:sequence select="()" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
-  
+
   <xsl:function name="pica2mods:detectPicaMode" as="xs:string">
     <xsl:param name="record" as="element()" />
     <xsl:choose>
-      <xsl:when test="not($record/p:datafield[@tag='011B']/p:subfield[@code='a'] or $record/p:datafield[@tag='011@']/p:subfield[@code='r'] or $record/p:datafield[@tag='039I']/p:subfield[@code='i' and text()='Elektronische Reproduktion von'])">
+      <xsl:when
+        test="not($record/p:datafield[@tag='011B']/p:subfield[@code='a'] or $record/p:datafield[@tag='011@']/p:subfield[@code='r'] or $record/p:datafield[@tag='039I']/p:subfield[@code='i' and text()='Elektronische Reproduktion von'])">
         <xsl:value-of select="'REPRO'" />
       </xsl:when>
       <xsl:otherwise>
@@ -107,7 +115,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
-  
+
   <xsl:function name="pica2mods:sortableSortstring" as="xs:string">
     <xsl:param name="input" as="xs:string" />
     <xsl:variable name="output">
@@ -115,8 +123,7 @@
       <xsl:for-each select="tokenize($input, '\.|,')">
         <!-- normiere den Teilstring (Kleinbuchstaben, ohne Klammern) -->
         <xsl:variable name="normal" select="translate(lower-case(.),'()[]{}','')" />
-        <!-- wenn der String mit einer Zahl beginnt (oder eine Zahl ist)
-             wird die Zahl 4-stellig ausgegeben, der Rest ignoriert -->
+        <!-- wenn der String mit einer Zahl beginnt (oder eine Zahl ist) wird die Zahl 4-stellig ausgegeben, der Rest ignoriert -->
         <xsl:analyze-string regex="^(\d+).*$" select="$normal">
           <xsl:matching-substring>
             <part>
