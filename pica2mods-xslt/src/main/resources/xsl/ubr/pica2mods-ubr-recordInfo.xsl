@@ -12,31 +12,20 @@
     </mods:mods>
   </xsl:template>
 
-  <!-- TODO Die RecordID aus der PURL zu übernehmen ist nicht schön und tendenziell fehleranfällig,
-       kann man dafür nicht ein "unsichtbares" Sigel im Exemplarsatz belegen -->
+  <!-- TODO Die RecordID aus der PURL zu übernehmen ist nicht schön und tendenziell fehleranfällig, kann man dafür nicht 
+    ein "unsichtbares" Sigel im Exemplarsatz belegen -->
   <xsl:template name="modsRecordInfo">
     <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
     <mods:recordInfo>
-      <xsl:choose>
-        <xsl:when test="$picaMode = 'RDA' or $picaMode = 'KXP'">
-          <mods:recordIdentifier source="DE-28">rosdok/ppn{./p:datafield[@tag='003@']/p:subfield[@code='0']}
-          </mods:recordIdentifier>
-        </xsl:when>
-        <xsl:when test="$picaMode = 'EPUB'">
-          <xsl:for-each select="./p:datafield[@tag='017C']/p:subfield[@code='u']"> <!-- 4950 (kein eigenes Feld) -->
-            <xsl:if test="contains(., '//purl.')">
-              <mods:recordIdentifier source="DE-28">{substring-after(substring(.,9), '/')}
-              </mods:recordIdentifier>
-            </xsl:if>
-          </xsl:for-each>
-          <xsl:for-each select="./p:datafield[@tag='004U']/p:subfield[@code='0']"> <!-- 4950 (kein eigenes Feld) -->
-            <xsl:if test="contains(., 'gbv:519')">
-              <mods:recordIdentifier source="DE-519">dbhsnb/{substring(.,20,string-length(.)-19-2)}
-              </mods:recordIdentifier>
-            </xsl:if>
-          </xsl:for-each>
-        </xsl:when>
-      </xsl:choose>
+      <xsl:for-each
+        select="./p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '//purl.uni-rostock.de')][1]"> <!-- 4950 URL (kein eigenes Feld) -->
+        <mods:recordIdentifier source="DE-28">{substring-after(substring(.,9), '/')}
+        </mods:recordIdentifier>
+      </xsl:for-each>
+      <xsl:for-each select="./p:datafield[@tag='004U']/p:subfield[@code='0' and contains(., 'gbv:519')]"> <!-- 4950 (kein eigenes Feld) -->
+        <mods:recordIdentifier source="DE-519">dbhsnb/{substring(.,20,string-length(.)-19-2)}
+        </mods:recordIdentifier>
+      </xsl:for-each>
       <xsl:if test="./p:datafield[@tag='010E']/p:subfield[@code='e']/text()='rda'">
         <mods:descriptionStandard>rda</mods:descriptionStandard>
       </xsl:if>
