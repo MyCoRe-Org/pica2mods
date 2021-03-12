@@ -4,7 +4,8 @@
                 xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
                 xmlns:xlink="http://www.w3.org/1999/xlink">
-
+  <xsl:mode on-no-match="shallow-copy"/>
+  
   <xsl:import href="default/pica2mods-default-titleInfo.xsl" />
   <xsl:import href="default/pica2mods-default-name.xsl" />
   <xsl:import href="default/pica2mods-default-identifier.xsl" />

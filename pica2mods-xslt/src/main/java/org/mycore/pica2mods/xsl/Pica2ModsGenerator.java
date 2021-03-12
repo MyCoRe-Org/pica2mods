@@ -112,7 +112,9 @@ public class Pica2ModsGenerator {
         } else {
             String msg = "No Record found for: " + url.toString();
             LOGGER.error(msg);
-            return document.createElement("nil");
+            Element err = document.createElement("error");
+            err.appendChild(document.createComment(msg));
+            return err;
         }
     }
 
@@ -153,7 +155,9 @@ public class Pica2ModsGenerator {
         } else {
             String msg = "No Record found for: " + url.toString();
             LOGGER.error(msg);
-            return document.createElement("nil");
+            Element err = document.createElement("error");
+            err.appendChild(document.createComment(msg));
+            return err;
         }
     }
 
