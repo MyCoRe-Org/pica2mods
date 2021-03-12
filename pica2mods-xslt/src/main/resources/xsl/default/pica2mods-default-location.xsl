@@ -39,6 +39,7 @@
       </mods:location>
     </xsl:for-each>
     <!-- 4950 URL zum Volltext -->
+    <!-- Whitelisting für bestimmte URLs auch wegen usage='primary' -->
     <xsl:for-each
       select="./p:datafield[@tag='017C' and contains(./p:subfield[@code='u'], '//purl.uni-rostock.de')][1]">
       <mods:location>
