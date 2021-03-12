@@ -5,44 +5,23 @@
                 xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions"
                 exclude-result-prefixes="mods pica2mods">
 
-    <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl"/>
-    
-    <!-- This template is for testing purposes-->
-    <xsl:template match="p:record">
-        <mods:mods>
-            <xsl:call-template name="modsGenre" />
-        </mods:mods>
-    </xsl:template>
+  <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
 
-    <xsl:template name="modsGenre">
-        <xsl:variable name="picaMode" select="pica2mods:detectPicaMode(.)" />
-        <xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)"/>
+  <!-- This template is for testing purposes -->
+  <xsl:template match="p:record">
+    <mods:mods>
+      <xsl:call-template name="modsGenre" />
+    </mods:mods>
+  </xsl:template>
 
-        <xsl:choose>
-            <xsl:when test="$picaMode = 'RDA'">
-                <xsl:if test="not($pica0500_2='v')">
-                    <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
-                    <xsl:for-each
-                            select="$picaA/p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD, RDA aus A-Aufnahme -->
-                        <mods:genre type="aadgenre">
-                            <xsl:value-of select="./p:subfield[@code='a']"/>
-                        </mods:genre>
-                        <!--  in UBR auch als Klassifikation -->
-                    </xsl:for-each>
-                </xsl:if>
-            </xsl:when>
-            <xsl:when test="$picaMode = 'KXP'">
-                <xsl:for-each select="./p:datafield[@tag='044S']"> <!-- 5570 Gattungsbegriffe AAD -->
-                    <mods:genre type="aadgenre"><xsl:value-of select="./p:subfield[@code='a']"/></mods:genre>
-                     <!--  in UBR auch als Klassifikation -->
-                </xsl:for-each>
-            </xsl:when>
-            <xsl:when test="$picaMode = 'EPUB'">
-                  <!-- ohne AAD genre -->
-            </xsl:when>
-
-        </xsl:choose>
-
-    </xsl:template>
+  <xsl:template name="modsGenre">
+    <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
+    <xsl:variable name="aadGenres" select="$picaA/p:datafield[@tag='044S'] | ./p:datafield[@tag='044S']" />
+    <xsl:for-each-group select="$aadGenres/p:subfield[@code='a']" group-by=".">
+      <mods:genre type="aadgenre">
+        <xsl:value-of select="." />
+      </mods:genre>
+    </xsl:for-each-group>
+  </xsl:template>
 
 </xsl:stylesheet>
