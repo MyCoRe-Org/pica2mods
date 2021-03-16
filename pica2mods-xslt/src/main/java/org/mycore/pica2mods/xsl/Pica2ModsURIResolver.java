@@ -52,7 +52,7 @@ public class Pica2ModsURIResolver implements URIResolver {
         if (href.startsWith("resource:")) {
             String path = href.substring("resource:".length());
             InputStream is = getClass().getClassLoader()
-                .getResourceAsStream(Pica2ModsGenerator.PICA2MODS_XSLT_PATH + path);
+                .getResourceAsStream(path);
             return new StreamSource(is);
         }
 
