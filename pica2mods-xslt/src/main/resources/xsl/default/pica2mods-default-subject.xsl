@@ -26,13 +26,14 @@
     <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->
       <mods:subject>
         <!-- Subfield x ist nicht in der Format-Dokumentation (PPN 898955750) -->
+        <!-- kann mehrfach vorkommen -->
         <xsl:variable name="sf_x" select="./p:subfield[@code='x']" />
         <!-- TODO Schlagwortketten mit " / " habe ich in Rostock nicht gefunden -->
         <xsl:for-each select="tokenize(./p:subfield[@code='a']/text(), ' / ')">
           <mods:topic>
             <xsl:choose>
               <xsl:when test="$sf_x">
-                <xsl:value-of select="concat(., ' / ', $sf_x)" />
+                <xsl:value-of select="concat(., ' / ', string-join($sf_x,' / '))" />
               </xsl:when>
               <xsl:otherwise>
                 <xsl:value-of select="." />
