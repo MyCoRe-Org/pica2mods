@@ -13,7 +13,7 @@
   exclude-result-prefixes="mods fn xs err map pica2mods p xlink array">
 
 
-  <xsl:function name="pica2mods:detectLanguage" as="xs:string">
+  <xsl:function name="pica2mods:detectLanguage" as="xs:string?">
     <xsl:param name="text" as="xs:string" />
 
     <xsl:variable name="words" as="map(xs:string, array(xs:string))">
@@ -40,9 +40,9 @@
     <xsl:variable name="data" select="tokenize(lower-case($text))"></xsl:variable>
 
     <xsl:variable name="wordCounts" as="item()*">
-      <counts>
+      <values>
         <xsl:for-each select="map:for-each($words, function($k, $v){$k})">
-          <count lang="{.}">
+          <value lang="{.}">
             <xsl:value-of
               select="
             sum(
@@ -59,13 +59,19 @@
                 }
               )
            )" />
-          </count>
+          </value>
         </xsl:for-each>
-        <!-- default -->
-        <count lang="mis">1</count>
-      </counts>
+      </values>
     </xsl:variable>
     <xsl:message select="$wordCounts" />
-    <xsl:value-of select="$wordCounts/count[.= max(../count)]/@lang" />
+    
+    <xsl:choose>
+      <xsl:when test="$wordCounts/value[. > 3 and . =  max(../value) and count(../value[. = max(../value)]) = 1 ]">
+        <xsl:value-of select="$wordCounts/value[. =  max(../value)]/@lang" />
+     </xsl:when>
+     <xsl:otherwise>
+         <xsl:value-of select="()" />
+     </xsl:otherwise>
+    </xsl:choose>
   </xsl:function>
 </xsl:stylesheet>

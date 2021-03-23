@@ -49,7 +49,10 @@
             <xsl:value-of select="normalize-space(substring(., 1, string-length(.)-5))" />
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="xml:lang"><xsl:value-of select="pica2mods:detectLanguage(.)" /></xsl:attribute>
+            <xsl:variable name="lang" select="pica2mods:detectLanguage(.)" />
+            <xsl:if test="$lang">
+              <xsl:attribute name="xml:lang"><xsl:value-of select="$lang" /></xsl:attribute>
+            </xsl:if>
             <xsl:value-of select="." />
           </xsl:otherwise>
         </xsl:choose>
