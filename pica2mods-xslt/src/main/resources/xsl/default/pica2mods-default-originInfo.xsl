@@ -36,7 +36,7 @@
                 <xsl:with-param name="record" select="." />
               </xsl:call-template>
             </xsl:when>
-            <xsl:when test="pica0500_2='b'">
+            <xsl:when test="$pica0500_2='b'">
               <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
               <xsl:call-template name="common_date_issued"> <!-- 1100 der A-Aufnahme -->
                 <xsl:with-param name="datafield" select="$picaA/p:datafield[@tag='011@']" />
