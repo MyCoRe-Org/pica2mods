@@ -30,11 +30,13 @@
 
   <xsl:template name="modsPhysicalDescriptionDefault">
     <xsl:for-each select="./p:datafield[@tag='034D']/p:subfield[@code='a']">
-      <mods:physicalDescription>
-        <mods:extent>
-          <xsl:value-of select="." />
-        </mods:extent>
-      </mods:physicalDescription>
+      <xsl:if test="not(. = '1 Online-Ressource')">
+        <mods:physicalDescription>
+          <mods:extent>
+            <xsl:value-of select="." />
+          </mods:extent>
+        </mods:physicalDescription>
+      </xsl:if>
     </xsl:for-each>
   </xsl:template>
 
