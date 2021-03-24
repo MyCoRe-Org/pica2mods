@@ -23,12 +23,29 @@
       <xsl:call-template name="COMMON_HostOrSeries" />
     </xsl:for-each>
 
-    <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261 RezensiertesWerk -->
-      <xsl:call-template name="COMMON_Review" />
-    </xsl:for-each>
-    
     <xsl:for-each select="./p:datafield[@tag='039D']"> <!-- 4243 Beziehungen auf Manifestationsebene -->
-      <xsl:call-template name="COMMON_Manifestation" />
+      <xsl:call-template name="COMMON_Reference">
+        <xsl:with-param name="type">otherFormat</xsl:with-param>
+        <xsl:with-param name="datafield" select="." />
+      </xsl:call-template>
+    </xsl:for-each>
+    <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261 Themenbeziehungen (Beziehung zu der Resource, die beschrieben wird) -->
+      <xsl:call-template name="COMMON_Reference">
+        <xsl:with-param name="type">references</xsl:with-param>
+        <xsl:with-param name="datafield" select="." />
+      </xsl:call-template>
+    </xsl:for-each>
+    <xsl:for-each select="./p:datafield[@tag='039Q']"> <!-- 4262 Themenbeziehungen (Beziehung zu einer Beschreibung über die Ressource) -->
+      <xsl:call-template name="COMMON_Reference">
+        <xsl:with-param name="type">isReferencedBy</xsl:with-param>
+        <xsl:with-param name="datafield" select="." />
+      </xsl:call-template>
+    </xsl:for-each>
+    <xsl:for-each select="./p:datafield[@tag='039N' and starts-with(p:subfield[@code='i'], 'Überarbeit')]"> <!-- 4261 Weitere Beziehungen -->
+      <xsl:call-template name="COMMON_Reference">
+        <xsl:with-param name="type">otherVersion</xsl:with-param>
+        <xsl:with-param name="datafield" select="." />
+      </xsl:call-template>
     </xsl:for-each>
 
     <xsl:call-template name="common_relatedItemPreceding" />
@@ -274,45 +291,7 @@
       </xsl:choose>
     </mods:relatedItem>
   </xsl:template>
-
-  <xsl:template name="COMMON_Review">
-    <mods:relatedItem type="reviewOf">
-      <mods:titleInfo>
-        <xsl:if test="./p:subfield[@code='a']">
-          <xsl:variable name="mainTitle" select="./p:subfield[@code='a']" />
-          <xsl:choose>
-            <xsl:when test="contains($mainTitle, '@')">
-              <xsl:variable name="nonSort" select="normalize-space(substring-before($mainTitle, '@'))" />
-              <xsl:choose>
-                <xsl:when test="string-length(nonSort) &lt; 9">
-                  <mods:nonSort>
-                    <xsl:value-of select="$nonSort" />
-                  </mods:nonSort>
-                  <mods:title>
-                    <xsl:value-of select="substring-after($mainTitle, '@')" />
-                  </mods:title>
-                </xsl:when>
-                <xsl:otherwise>
-                  <mods:title>
-                    <xsl:value-of select="$mainTitle" />
-                  </mods:title>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:when>
-            <xsl:otherwise>
-              <mods:title>
-                <xsl:value-of select="$mainTitle" />
-              </mods:title>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:if>
-      </mods:titleInfo>
-      <mods:identifier type="PPN">
-        <xsl:value-of select="./p:subfield[@code='9']" />
-      </mods:identifier>
-    </mods:relatedItem>
-  </xsl:template>
-
+  
   <!-- Vorgänger, Nachfolger Verknüpfung ZDB -->
   <xsl:template name="common_relatedItemPreceding">
     <xsl:variable name="pica0500_2"
@@ -344,32 +323,127 @@
       </xsl:for-each>
     </xsl:if>
   </xsl:template>
-  
-   <xsl:template name="COMMON_Manifestation">
-     <xsl:choose>
-      <xsl:when test="./p:subfield[@code='C' and text()='DOI']">
-        <mods:relatedItem type="otherFormat">
-          <mods:identifier type="doi">
-          <xsl:value-of select="./p:subfield[@code='C' and text()='DOI']/following-sibling::p:subfield[@code='6'][1]" />
-          </mods:identifier>
-          <xsl:if test="./p:subfield[@code='n']">
-            <mods:note type="format_type"><xsl:value-of select="./p:subfield[@code='n']" /></mods:note>
-          </xsl:if>
-        </mods:relatedItem>
-      </xsl:when>
-      <xsl:when test="./p:subfield[@code='9']">
+ 
+  <xsl:template name="COMMON_Reference">
+    <xsl:param name="type" />
+    <xsl:param name="datafield" />
+    <xsl:comment>COMMON_REFERENCE for <xsl:value-of select="$datafield/@tag" /></xsl:comment>
+    <xsl:choose>
+      <xsl:when test="$datafield/p:subfield[@code='9']">
         <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
-        <xsl:if test="starts-with($parent/p:datafield[@tag='002@']/p:subfield[@code='0'], 'O') and $parent/p:datafield[@tag='004V']">
-          <mods:relatedItem type="otherFormat">
-            <mods:identifier type="doi">
-              <xsl:value-of select="$parent/p:datafield[@tag='004V']/p:subfield[@code='0']" />
-            </mods:identifier>
-            <xsl:if test="./p:subfield[@code='n']">
-              <mods:note type="format_type"><xsl:value-of select="./p:subfield[@code='n']" /></mods:note>
-           </xsl:if>
-        </mods:relatedItem>
+       
+        <xsl:if test="starts-with($parent/p:datafield[@tag='002@']/p:subfield[@code='0'], 'O')">
+          <mods:relatedItem type="{$type}">
+            <mods:recordInfo>
+              <xsl:for-each
+                 select="$parent/p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '//purl.uni-rostock.de')][1]"> <!-- 4950 URL (kein eigenes Feld) -->
+                <mods:recordIdentifier source="DE-28"><xsl:value-of select="substring-after(substring(.,9), '/')" /></mods:recordIdentifier>
+              </xsl:for-each>
+              <mods:recordInfoNote type="k10plus:ppn">
+                <xsl:value-of select="$parent/p:datafield[@tag='003@']/p:subfield[@code='0']" /> <!-- 0100 PPN -->
+              </mods:recordInfoNote>
+            </mods:recordInfo>
+            <xsl:if test="$parent/p:datafield[@tag='021A']">
+              <xsl:call-template name="simple_title">
+                <xsl:with-param name="datafield" select="$parent/p:datafield[@tag='021A']" />
+              </xsl:call-template>
+            </xsl:if>
+            <xsl:choose>
+              <xsl:when test="$parent/p:datafield[@tag='004V']">
+                <mods:identifier type='doi'><xsl:value-of select="$parent/p:datafield[@tag='004V']/p:subfield[@code='0']" /></mods:identifier>
+              </xsl:when>
+              <xsl:when test="$parent/p:datafield[@tag='017C']">
+                <mods:identifier type='url'><xsl:value-of select="$parent/p:datafield[@tag='017C'][1]/p:subfield[@code='u']" /></mods:identifier>
+              </xsl:when>
+            </xsl:choose>
+            <xsl:if test="$datafield/p:subfield[@code='i']">
+              <mods:note type="relation_label"><xsl:value-of select="$datafield/p:subfield[@code='i']" /></mods:note>
+            </xsl:if>
+            <xsl:if test="$datafield[@tag='039D']/p:subfield[@code='n']">  <!-- 4243 039D Beziehung auf Manifestationsebene -->
+              <mods:note type="format_type"><xsl:value-of select="$datafield[@tag='039D']/p:subfield[@code='n']" /></mods:note>
+            </xsl:if>
+          </mods:relatedItem>
         </xsl:if>
       </xsl:when>
+      <xsl:otherwise>
+      <!-- <xsl:when test="$datafield/p:subfield[@code='C' and text()='DOI']"> -->
+        <mods:relatedItem type="{$type}">
+          <xsl:if test="$datafield/p:subfield[@code='a']">
+            <xsl:variable name="titlefield">
+              <p:datafield tag="021A">
+                <xsl:copy-of select="$datafield/p:subfield[@code='a']" />
+              </p:datafield>
+            </xsl:variable>
+            <xsl:call-template name="simple_title">
+              <xsl:with-param name="datafield" select="$titlefield/p:datafield" />
+            </xsl:call-template>
+          </xsl:if>
+          <xsl:if test="$datafield/p:subfield[@code='t']">
+            <xsl:variable name="titlefield">
+              <p:datafield tag="021A">
+                <p:subfield code="a">
+                  <xsl:value-of select="$datafield/p:subfield[@code='t']/text()" />
+                </p:subfield>              
+              </p:datafield>
+            </xsl:variable>
+            <xsl:call-template name="simple_title">
+              <xsl:with-param name="datafield" select="$titlefield/p:datafield" />
+            </xsl:call-template>
+          </xsl:if>
+          <xsl:if test="$datafield/p:subfield[@code='C' and text()='DOI']">
+            <mods:identifier type="doi">
+              <xsl:value-of select="$datafield/p:subfield[@code='C' and text()='DOI']/following-sibling::p:subfield[@code='6'][1]" />
+            </mods:identifier>
+          </xsl:if>
+          <xsl:if test="$datafield/p:subfield[@code='i']">
+             <mods:note type="relation_label"><xsl:value-of select="$datafield/p:subfield[@code='i']" /></mods:note>
+          </xsl:if>
+          <xsl:if test="$datafield[@tag='039D']/p:subfield[@code='n']">  <!-- 4243 039D Beziehung auf Manifestationsebene -->
+            <mods:note type="format_type"><xsl:value-of select="$datafield[@tag='039D']/p:subfield[@code='n']" /></mods:note>
+          </xsl:if>
+        </mods:relatedItem>
+      </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  
+  
+  <xsl:template name="simple_title">
+    <xsl:param name="datafield" />
+    <xsl:if test="$datafield/p:subfield[@code='a']">
+      <mods:titleInfo>
+         <xsl:variable name="mainTitle" select="$datafield/p:subfield[@code='a'][1]" />
+         <xsl:choose>
+          <xsl:when test="contains($mainTitle, '@')">
+            <xsl:variable name="nonSort" select="normalize-space(substring-before($mainTitle, '@'))" />
+            <xsl:choose>
+              <!-- nonSort this should be deadCode -->
+              <xsl:when test="string-length(nonSort) &lt; 9">
+                <mods:nonSort>
+                  <xsl:value-of select="$nonSort" />
+                </mods:nonSort>
+                <mods:title>
+                  <xsl:value-of select="substring-after($mainTitle, '@')" />
+                </mods:title>
+              </xsl:when>
+              <xsl:otherwise>
+                <mods:title>
+                  <xsl:value-of select="$mainTitle" />
+                </mods:title>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:otherwise>
+            <mods:title>
+              <xsl:value-of select="$mainTitle" />
+            </mods:title>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:if test="$datafield/p:subfield[@code='d']">
+          <mods:subTitle>
+            <xsl:value-of select="$datafield/p:subfield[@code='d']" />
+          </mods:subTitle>
+        </xsl:if>
+      </mods:titleInfo>
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
