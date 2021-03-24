@@ -91,6 +91,9 @@
                 <mods:recordIdentifier source="DE-28">
                   <xsl:value-of select="substring(.,28,100) " />
                 </mods:recordIdentifier>
+                 <mods:recordInfoNote type="k10plus:ppn">
+                    <xsl:value-of select="$od/p:datafield[@tag='003@']/p:subfield[@code='0']" /> <!-- 0100 PPN -->
+                 </mods:recordInfoNote>
               </mods:recordInfo>
               <mods:identifier type="purl">
                 <xsl:value-of select="." />
@@ -101,9 +104,6 @@
             <xsl:attribute name="type">series</xsl:attribute>
           </xsl:otherwise>
         </xsl:choose>
-        <mods:identifier type="PPN">
-          <xsl:value-of select="$od/p:datafield[@tag='003@']/p:subfield[@code='0']" />
-        </mods:identifier>
         <xsl:if test="$od/p:datafield[@tag='006Z']/p:subfield[@code='0']">
           <mods:identifier type="zdb">
             <xsl:value-of select="$od/p:datafield[@tag='006Z']/p:subfield[@code='0']" />
