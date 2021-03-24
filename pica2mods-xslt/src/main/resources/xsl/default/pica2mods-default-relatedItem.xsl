@@ -10,7 +10,7 @@
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
 
   <xsl:template name="modsRelatedItem">
-    <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241 übergeordnetes Werk -->
+    <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241 Beziehungen zur größeren Einheit -->
       <xsl:call-template name="COMMON_AppearsIn" />
     </xsl:for-each>
 
@@ -25,6 +25,10 @@
 
     <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261 RezensiertesWerk -->
       <xsl:call-template name="COMMON_Review" />
+    </xsl:for-each>
+    
+    <xsl:for-each select="./p:datafield[@tag='039D']"> <!-- 4243 Beziehungen auf Manifestationsebene -->
+      <xsl:call-template name="COMMON_Manifestation" />
     </xsl:for-each>
 
     <xsl:call-template name="common_relatedItemPreceding" />
@@ -151,53 +155,119 @@
 
   <xsl:template name="COMMON_AppearsIn">
     <mods:relatedItem>
-      <xsl:attribute name="type">host</xsl:attribute>
-      <xsl:attribute name="displayLabel">appears_in</xsl:attribute>
-      <xsl:if test="./p:subfield[@code='l']">
-        <mods:name>
-          <mods:displayForm>
-            <xsl:value-of select="./p:subfield[@code='l']" />
-          </mods:displayForm>
-        </mods:name>
-      </xsl:if>
-      <xsl:if test="./p:subfield[@code='t']">
-        <mods:titleInfo>
-          <mods:title>
-            <xsl:value-of select="./p:subfield[@code='t']" />
-          </mods:title>
-        </mods:titleInfo>
-      </xsl:if>
-      <xsl:if test="./p:subfield[@code='p']">
-        <mods:part>
-          <mods:text>
-            <xsl:value-of select="./p:subfield[@code='p']" />
-          </mods:text>
-        </mods:part>
-      </xsl:if>
-      <xsl:if test="./p:subfield[@code='C' and text()='DOI']">
-        <mods:identifier type="doi">
-          <xsl:value-of
-            select="./p:subfield[@code='C' and text()='DOI']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
-        </mods:identifier>
-      </xsl:if>
-      <xsl:if test="./p:subfield[@code='C' and text()='ISBN']">
-        <mods:identifier type="isbn">
-          <xsl:value-of
-            select="./p:subfield[@code='C' and text()='ISBN']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
-        </mods:identifier>
-      </xsl:if>
-      <xsl:if test="./p:subfield[@code='C' and text()='ISSN']">
-        <mods:identifier type="issn">
-          <xsl:value-of
-            select="./p:subfield[@code='C' and text()='ISSN']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
-        </mods:identifier>
-      </xsl:if>
-      <xsl:if test="./p:subfield[@code='C' and text()='ZDB']">
-        <mods:identifier type="zdb">
-          <xsl:value-of
-            select="./p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
-        </mods:identifier>
-      </xsl:if>
+      <xsl:attribute name="otherType">appears_in</xsl:attribute>
+
+      <xsl:variable name="pica0500_2" select="substring(./../p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
+      <xsl:variable name="parent">
+        <xsl:if test="./p:subfield[@code='9']">
+          <xsl:copy-of select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
+        </xsl:if>
+      </xsl:variable>
+            
+      <xsl:choose>
+        <xsl:when test="$pica0500_2='s'">
+          <xsl:attribute name="type">host</xsl:attribute>
+          <mods:part>
+            <xsl:for-each select="./../p:datafield[@tag='031A']"> <!-- 4070 Differenzierende Angaben zur Quelle -->
+              <xsl:if test="./p:subfield[@code='h']">
+                <mods:extent unit="pages">
+                  <mods:list>
+                    <xsl:value-of select="concat('Seiten ',./p:subfield[@code='h'])" />
+                  </mods:list>
+                </mods:extent>
+              </xsl:if>
+
+            </xsl:for-each>  
+            <xsl:if test="./p:subfield[@code='x']">
+              <mods:text type="sortstring">
+               <xsl:value-of select="pica2mods:sortableSortstring(./p:subfield[@code='x'])" />
+              </mods:text>
+            </xsl:if>
+          </mods:part>
+          <xsl:choose>
+            <!-- NICHT A ODER B = keine Rostock-PURL am Aufsatz ODER Rostock-PURL am Host -->
+            <xsl:when test="not(../p:datafield[@tag='017C']/p:subfield[@code='u'][starts-with(.,'http://purl.uni-rostock.de/')]) or $parent/p:record/p:datafield[@tag='017C']/p:subfield[@code='u'][starts-with(.,'http://purl.uni-rostock.de/')]">
+              <xsl:variable name="parentMODS">
+                <xsl:apply-templates select="$parent" />
+              </xsl:variable>
+              <xsl:copy-of select="$parentMODS/mods:mods/*" />
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- Haben wir Os-Sätze ohne zugehörige Zeitschriftenaufsätze, die nicht auf RosDok sind? -->
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$pica0500_2='a'">
+          <xsl:choose>
+            <xsl:when test="$parent//p:datafield">
+              <xsl:variable name="parentMODS">
+                <xsl:apply-templates select="$parent" />
+              </xsl:variable>
+              <xsl:copy-of select="$parentMODS/mods:mods/*" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:if test="./p:subfield[@code='t']">
+                <mods:titleInfo>
+                  <mods:title>
+                    <xsl:value-of select="./p:subfield[@code='t']" />
+                  </mods:title>
+                </mods:titleInfo>
+              </xsl:if>
+              <xsl:if test="./p:subfield[@code='f' or @code='d' or @code='e']">
+                <mods:originInfo eventType="publication">
+                  <xsl:if test="./p:subfield[@code='f']">
+                    <mods:dateIssued keyDate="yes" encoding="w3cdtf">
+                      <xsl:value-of select="./p:subfield[@code='f']" />
+                    </mods:dateIssued>
+                  </xsl:if>
+                  <xsl:if test="./p:subfield[@code='e']">
+                    <mods:publisher><xsl:value-of select="./p:subfield[@code='e']" /></mods:publisher>
+                  </xsl:if>
+                  <xsl:if test="./p:subfield[@code='d']">
+                    <mods:place>
+                      <mods:placeTerm type="text"><xsl:value-of select="./p:subfield[@code='d']" /></mods:placeTerm>
+                    </mods:place>
+                  </xsl:if>
+                </mods:originInfo>
+              </xsl:if>
+              <xsl:if test="./p:subfield[@code='p']">
+                <mods:part>
+                  <mods:text>
+                    <xsl:value-of select="./p:subfield[@code='p']" />
+                 </mods:text>
+               </mods:part>
+              </xsl:if>
+              <xsl:if test="./p:subfield[@code='l']">
+                <mods:name>
+                  <mods:displayForm>
+                    <xsl:value-of select="./p:subfield[@code='l']" />
+                  </mods:displayForm>
+                </mods:name>
+              </xsl:if>
+              <xsl:if test="./p:subfield[@code='C' and text()='DOI']">
+                <mods:identifier type="doi">
+                  <xsl:value-of select="./p:subfield[@code='C' and text()='DOI']/following-sibling::p:subfield[@code='6'][1]" />
+                </mods:identifier>
+              </xsl:if>
+              <xsl:if test="./p:subfield[@code='C' and text()='ISBN']">
+                <mods:identifier type="isbn">
+                  <xsl:value-of select="./p:subfield[@code='C' and text()='ISBN']/following-sibling::p:subfield[@code='6'][1]" />
+                </mods:identifier>
+              </xsl:if>
+              <xsl:if test="./p:subfield[@code='C' and text()='ISSN']">
+                <mods:identifier type="issn">
+                  <xsl:value-of select="./p:subfield[@code='C' and text()='ISSN']/following-sibling::p:subfield[@code='6'][1]" />
+                </mods:identifier>
+              </xsl:if>
+              <xsl:if test="./p:subfield[@code='C' and text()='ZDB']">
+                <mods:identifier type="zdb">
+                  <xsl:value-of select="./p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]" />
+                </mods:identifier>
+              </xsl:if>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+      </xsl:choose>
     </mods:relatedItem>
   </xsl:template>
 
@@ -263,12 +333,39 @@
           <xsl:if test="./p:subfield[@code='C' and text()='ZDB']">
             <mods:identifier type="zdb">
               <xsl:value-of
-                select="./p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]"></xsl:value-of>
+                select="./p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]" />
             </mods:identifier>
           </xsl:if>
         </mods:relatedItem>
       </xsl:for-each>
     </xsl:if>
   </xsl:template>
-
+  
+   <xsl:template name="COMMON_Manifestation">
+     <xsl:choose>
+      <xsl:when test="./p:subfield[@code='C' and text()='DOI']">
+        <mods:relatedItem type="otherFormat">
+          <mods:identifier type="doi">
+          <xsl:value-of select="./p:subfield[@code='C' and text()='DOI']/following-sibling::p:subfield[@code='6'][1]" />
+          </mods:identifier>
+          <xsl:if test="./p:subfield[@code='n']">
+            <mods:note type="format_type"><xsl:value-of select="./p:subfield[@code='n']" /></mods:note>
+          </xsl:if>
+        </mods:relatedItem>
+      </xsl:when>
+      <xsl:when test="./p:subfield[@code='9']">
+        <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
+        <xsl:if test="starts-with($parent/p:datafield[@tag='002@']/p:subfield[@code='0'], 'O') and $parent/p:datafield[@tag='004V']">
+          <mods:relatedItem type="otherFormat">
+            <mods:identifier type="doi">
+              <xsl:value-of select="$parent/p:datafield[@tag='004V']/p:subfield[@code='0']" />
+            </mods:identifier>
+            <xsl:if test="./p:subfield[@code='n']">
+              <mods:note type="format_type"><xsl:value-of select="./p:subfield[@code='n']" /></mods:note>
+           </xsl:if>
+        </mods:relatedItem>
+        </xsl:if>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
 </xsl:stylesheet>
