@@ -179,6 +179,15 @@
             select="concat($datafield/p:subfield[@code='n'][1], ' ', $datafield/p:subfield[@code='p'][1])" />
         </mods:publisher>
       </xsl:when>
+      <xsl:when
+        test="$datafield/p:subfield[@code='n' 
+                 and (tokenize('university,library',',') = tokenize(lower-case(.),' ')[1]) 
+                 and $datafield/p:subfield[@code='p' and not(contains($datafield/p:subfield[@code='n'][1], . ))]] ">
+        <mods:publisher>
+          <xsl:value-of
+            select="concat($datafield/p:subfield[@code='n'][1], ' of ', $datafield/p:subfield[@code='p'][1])" />
+        </mods:publisher>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:for-each select="$datafield/p:subfield[@code='n']">
           <mods:publisher>
