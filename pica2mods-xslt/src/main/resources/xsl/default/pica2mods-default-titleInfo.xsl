@@ -130,13 +130,13 @@
     <xsl:for-each
       select="./p:datafield[@tag='027A' or @tag='021F' or @tag='046C' or @tag='046D']/p:subfield[@code='a'] | ./p:datafield[@tag='021A']/p:subfield[@code='f'] ">
       <mods:titleInfo type="alternative">
-        <mods:title>
-          <xsl:if test="./../p:subfield[@code='i']">
-            <xsl:value-of select="./../p:subfield[@code='i']" />
-            :
+        <xsl:variable name="t">
+          <xsl:if test="./../p:subfield[@code='i']"> <!-- Einleitende Wendung -->
+            <xsl:value-of select="./../p:subfield[@code='i']" />: 
           </xsl:if>
-          <xsl:value-of select="translate(., '@', '')" />
-        </mods:title>
+          <xsl:value-of select="." />
+        </xsl:variable>
+        <mods:title><xsl:value-of select="normalize-space(translate($t, '@', ''))" /></mods:title>
       </mods:titleInfo>
     </xsl:for-each>
     <xsl:for-each select="./p:datafield[@tag='022A']">
