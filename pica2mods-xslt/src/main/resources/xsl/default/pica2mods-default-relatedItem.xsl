@@ -176,7 +176,11 @@
                   </mods:list>
                 </mods:extent>
               </xsl:if>
-
+              <xsl:if test="./p:subfield[@code='i']">
+                <mods:detail type="article_number">
+                  <number><xsl:value-of select="./p:subfield[@code='i']" /></number>
+                </mods:detail>
+              </xsl:if>
             </xsl:for-each>  
             <xsl:if test="./p:subfield[@code='x']">
               <mods:text type="sortstring">
