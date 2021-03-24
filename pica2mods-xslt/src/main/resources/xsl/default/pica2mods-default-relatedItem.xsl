@@ -23,7 +23,7 @@
       <xsl:call-template name="COMMON_HostOrSeries" />
     </xsl:for-each>
 
-    <xsl:for-each select="./p:datafield[@tag='039D']"> <!-- 4243 Beziehungen auf Manifestationsebene -->
+    <xsl:for-each select="./p:datafield[@tag='039D' and starts-with(subfield[@code='R'], 'O')]"> <!-- 4243 Beziehungen auf Manifestationsebene -->
       <xsl:call-template name="COMMON_Reference">
         <xsl:with-param name="type">otherFormat</xsl:with-param>
         <xsl:with-param name="datafield" select="." />
@@ -47,8 +47,32 @@
         <xsl:with-param name="datafield" select="." />
       </xsl:call-template>
     </xsl:for-each>
-
-    <xsl:call-template name="common_relatedItemPreceding" />
+    
+    <!-- 4244 Vorgänger-Nachfolge-Beziehungen auf Werkebene [nur für Ob Sätze = Zeitschriften] -->
+    <xsl:for-each select=".[starts-with(p:datafield[@tag='002@']/p:subfield[@code='0'],'Ob')]/p:datafield[@tag='039E']">
+      <xsl:choose>
+        <xsl:when test="./p:subfield[@code='b' and text()='f']">
+          <xsl:call-template name="COMMON_Reference">
+            <xsl:with-param name="type">preceding</xsl:with-param>
+            <xsl:with-param name="otherType">chronological</xsl:with-param>
+            <xsl:with-param name="datafield" select="." />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="./p:subfield[@code='b' and text()='s']">
+          <xsl:call-template name="COMMON_Reference">
+            <xsl:with-param name="type">succeeding</xsl:with-param>
+            <xsl:with-param name="otherType">chronological</xsl:with-param>
+            <xsl:with-param name="datafield" select="." />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="COMMON_Reference">
+            <xsl:with-param name="otherType">chronological</xsl:with-param>
+            <xsl:with-param name="datafield" select="." />
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="COMMON_HostOrSeries">
@@ -292,48 +316,22 @@
     </mods:relatedItem>
   </xsl:template>
   
-  <!-- Vorgänger, Nachfolger Verknüpfung ZDB -->
-  <xsl:template name="common_relatedItemPreceding">
-    <xsl:variable name="pica0500_2"
-      select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
-    <xsl:if test="$pica0500_2='b'">
-      <xsl:for-each
-        select="./p:datafield[@tag='039E' and (./p:subfield[@code='b' and text()='f'] or ./p:subfield[@code='b'and text()='s'])]"><!-- 4244 -->
-        <mods:relatedItem>
-          <xsl:if test="./p:subfield[@code='b' and text()='f']">
-            <xsl:attribute name="type">preceding</xsl:attribute>
-          </xsl:if>
-          <xsl:if test="./p:subfield[@code='b' and text()='s']">
-            <xsl:attribute name="type">succeeding</xsl:attribute>
-          </xsl:if>
-          <xsl:if test="./p:subfield[@code='t']">
-            <mods:titleInfo>
-              <mods:title>
-                <xsl:value-of select="./p:subfield[@code='t']" />
-              </mods:title>
-            </mods:titleInfo>
-          </xsl:if>
-          <xsl:if test="./p:subfield[@code='C' and text()='ZDB']">
-            <mods:identifier type="zdb">
-              <xsl:value-of
-                select="./p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]" />
-            </mods:identifier>
-          </xsl:if>
-        </mods:relatedItem>
-      </xsl:for-each>
-    </xsl:if>
-  </xsl:template>
- 
   <xsl:template name="COMMON_Reference">
-    <xsl:param name="type" />
+    <xsl:param name="type" required="no" />
+    <xsl:param name="otherType" required="no" />
     <xsl:param name="datafield" />
     <xsl:comment>COMMON_REFERENCE for <xsl:value-of select="$datafield/@tag" /></xsl:comment>
-    <xsl:choose>
-      <xsl:when test="$datafield/p:subfield[@code='9']">
-        <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
-       
-        <xsl:if test="starts-with($parent/p:datafield[@tag='002@']/p:subfield[@code='0'], 'O')">
-          <mods:relatedItem type="{$type}">
+    <mods:relatedItem>
+      <xsl:if test="$type">
+        <xsl:attribute name="type" select="$type" /> 
+      </xsl:if>
+      <xsl:if test="$otherType">
+        <xsl:attribute name="otherType" select="$otherType" /> 
+      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="$datafield/p:subfield[@code='9']">
+          <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
+           <xsl:if test="starts-with($parent/p:datafield[@tag='002@']/p:subfield[@code='0'], 'O')">
             <mods:recordInfo>
               <xsl:for-each
                  select="$parent/p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '//purl.uni-rostock.de')][1]"> <!-- 4950 URL (kein eigenes Feld) -->
@@ -356,19 +354,16 @@
                 <mods:identifier type='url'><xsl:value-of select="$parent/p:datafield[@tag='017C'][1]/p:subfield[@code='u']" /></mods:identifier>
               </xsl:when>
             </xsl:choose>
-            <xsl:if test="$datafield/p:subfield[@code='i']">
-              <mods:note type="relation_label"><xsl:value-of select="$datafield/p:subfield[@code='i']" /></mods:note>
+            <xsl:if test="$parent[starts-with(p:datafield[@tag='002@']/p:subfield[@code='0'], 'Ob')]/p:datafield[@tag='006Z']">
+            <mods:identifier type="zdb">
+              <xsl:value-of select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']" />
+            </mods:identifier>
             </xsl:if>
-            <xsl:if test="$datafield[@tag='039D']/p:subfield[@code='n']">  <!-- 4243 039D Beziehung auf Manifestationsebene -->
-              <mods:note type="format_type"><xsl:value-of select="$datafield[@tag='039D']/p:subfield[@code='n']" /></mods:note>
-            </xsl:if>
-          </mods:relatedItem>
-        </xsl:if>
-      </xsl:when>
-      <xsl:otherwise>
-      <!-- <xsl:when test="$datafield/p:subfield[@code='C' and text()='DOI']"> -->
-        <mods:relatedItem type="{$type}">
-          <xsl:if test="$datafield/p:subfield[@code='a']">
+          </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+        <!-- <xsl:when test="$datafield/p:subfield[@code='C' and text()='DOI']"> -->
+         <xsl:if test="$datafield/p:subfield[@code='a']">
             <xsl:variable name="titlefield">
               <p:datafield tag="021A">
                 <xsl:copy-of select="$datafield/p:subfield[@code='a']" />
@@ -395,15 +390,15 @@
               <xsl:value-of select="$datafield/p:subfield[@code='C' and text()='DOI']/following-sibling::p:subfield[@code='6'][1]" />
             </mods:identifier>
           </xsl:if>
-          <xsl:if test="$datafield/p:subfield[@code='i']">
-             <mods:note type="relation_label"><xsl:value-of select="$datafield/p:subfield[@code='i']" /></mods:note>
-          </xsl:if>
-          <xsl:if test="$datafield[@tag='039D']/p:subfield[@code='n']">  <!-- 4243 039D Beziehung auf Manifestationsebene -->
-            <mods:note type="format_type"><xsl:value-of select="$datafield[@tag='039D']/p:subfield[@code='n']" /></mods:note>
-          </xsl:if>
-        </mods:relatedItem>
-      </xsl:otherwise>
-    </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:if test="$datafield/p:subfield[@code='i']">
+        <mods:note type="relation_label"><xsl:value-of select="$datafield/p:subfield[@code='i']" /></mods:note>
+      </xsl:if>
+      <xsl:if test="$datafield[@tag='039D']/p:subfield[@code='n']">  <!-- 4243 039D Beziehung auf Manifestationsebene -->
+        <mods:note type="format_type"><xsl:value-of select="$datafield[@tag='039D']/p:subfield[@code='n']" /></mods:note>
+      </xsl:if>
+    </mods:relatedItem>
   </xsl:template>
   
   
