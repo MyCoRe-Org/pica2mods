@@ -113,38 +113,10 @@
       <xsl:if test="not(./p:subfield[@code='9'])">
         <xsl:attribute name="type">series</xsl:attribute>
       </xsl:if>
-
-      <!-- ToDo teilweise redundant mit title template -->
-      <mods:titleInfo>
-        <xsl:if test="./p:subfield[@code='a']">
-          <xsl:variable name="mainTitle" select="./p:subfield[@code='a'][1]" />
-          <xsl:choose>
-            <xsl:when test="contains($mainTitle, '@')">
-              <xsl:variable name="nonSort" select="normalize-space(substring-before($mainTitle, '@'))" />
-              <xsl:choose>
-                <xsl:when test="string-length(nonSort) &lt; 9">
-                  <mods:nonSort>
-                    <xsl:value-of select="$nonSort" />
-                  </mods:nonSort>
-                  <mods:title>
-                    <xsl:value-of select="substring-after($mainTitle, '@')" />
-                  </mods:title>
-                </xsl:when>
-                <xsl:otherwise>
-                  <mods:title>
-                    <xsl:value-of select="$mainTitle" />
-                  </mods:title>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:when>
-            <xsl:otherwise>
-              <mods:title>
-                <xsl:value-of select="$mainTitle" />
-              </mods:title>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:if>
-      </mods:titleInfo>
+      
+      <xsl:call-template name="simple_title">
+        <xsl:with-param name="datafield" select="." />
+      </xsl:call-template>
 
       <mods:part>
         <!-- set order attribute only if value of subfield $X is a number -->
@@ -238,7 +210,7 @@
               <xsl:copy-of select="$parentMODS/mods:mods/*" />
             </xsl:when>
             <xsl:otherwise>
-              <!-- Haben wir Os-Sätze ohne zugehörige Zeitschriftenaufsätze, die nicht auf RosDok sind? -->
+              <!-- Wir haben keine Os-Sätze deren zugehörenden Zeitschriften nicht auf RosDok sind! -->
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
@@ -252,11 +224,14 @@
             </xsl:when>
             <xsl:otherwise>
               <xsl:if test="./p:subfield[@code='t']">
-                <mods:titleInfo>
-                  <mods:title>
-                    <xsl:value-of select="./p:subfield[@code='t']" />
-                  </mods:title>
-                </mods:titleInfo>
+                <xsl:variable name="titlefield">
+                  <p:datafield tag="021A">
+                    <xsl:copy-of select="./p:subfield[@code='t']" />
+                  </p:datafield>
+                </xsl:variable>
+                <xsl:call-template name="simple_title">
+                  <xsl:with-param name="datafield" select="$titlefield/p:datafield" />
+                </xsl:call-template>
               </xsl:if>
               <xsl:if test="./p:subfield[@code='f' or @code='d' or @code='e']">
                 <mods:originInfo eventType="publication">
