@@ -5,6 +5,7 @@
                  xmlns:p="info:srw/schema/5/picaXML-v1.0"
                  xmlns:mods="http://www.loc.gov/mods/v3"
                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xmlns:json="http://www.w3.org/2005/xpath-functions"
                  exclude-result-prefixes="mods pica2mods"
                  expand-text="yes">
 
@@ -69,6 +70,63 @@
       <xsl:apply-templates select="*|@*|text()|processing-instruction()|comment()"
         mode="ubrPostProcessing" />
     </xsl:copy>
+  </xsl:template>
+
+  <!-- Expand personal details -->
+  <xsl:template match="mods:mods" mode="ubrPostProcessing">
+    <xsl:variable name="personal_details" select="json-to-xml(mods:note[@type='personal_details'])" />
+    <mods:mods>
+      <xsl:apply-templates select="*|@*|text()|processing-instruction()|comment()"
+        mode="ubrPostProcessing">
+        <xsl:with-param name="personal_details" select="$personal_details" />
+      </xsl:apply-templates>
+      <xsl:comment>
+        Temporär zu Demonstrationszwecken und Debugging ...
+      </xsl:comment>
+      <mods:extension displayLabel="person_details">
+        <xsl:copy-of select="$personal_details" />
+      </mods:extension>
+    </mods:mods>
+  </xsl:template>
+
+  <xsl:template match="mods:name" mode="ubrPostProcessing">
+    <xsl:param name="personal_details" />
+    <xsl:variable name="mods_name" select="." />
+    <mods:name>
+      <xsl:copy-of select="*|@*|processing-instruction()|comment()" />
+      <xsl:variable name="key"
+        select="concat($mods_name/mods:namePart[@type='family'], ', ',$mods_name/mods:namePart[@type='given'])" />
+      <xsl:comment>
+        Key:
+        <xsl:value-of select="$key" />
+      </xsl:comment>
+      <xsl:for-each select="$personal_details/json:map/json:map[@key=$key]">
+        <xsl:if
+          test="./json:string[@key='orcid']  and not(./json:string[@key='orcid'] = $mods_name/mods:nameIdentifier[@type='orcid'])">
+          <mods:nameIdentifier type="orcid">
+            <xsl:value-of select="./json:string[@key='orcid']" />
+          </mods:nameIdentifier>
+        </xsl:if>
+        <xsl:if
+          test="./json:string[@key='gnd']  and not(./json:string[@key='gnd'] = $mods_name/mods:nameIdentifier[@type='gnd'])">
+          <mods:nameIdentifier type="gnd">
+            <xsl:value-of select="./json:string[@key='gnd']" />
+          </mods:nameIdentifier>
+        </xsl:if>
+        <xsl:if
+          test="./json:string[@key='affil']  and not(./json:string[@key='affil'] = $mods_name/mods:affiliation)">
+          <mods:affiliation>
+            <xsl:value-of select="./json:string[@key='affil']" />
+          </mods:affiliation>
+        </xsl:if>
+        <xsl:if
+          test="./json:string[@key='affil2']  and not(./json:string[@key='affil2'] = $mods_name/mods:affiliation)">
+          <mods:affiliation>
+            <xsl:value-of select="./json:string[@key='affil2']" />
+          </mods:affiliation>
+        </xsl:if>
+      </xsl:for-each>
+    </mods:name>
   </xsl:template>
   
 </xsl:stylesheet>

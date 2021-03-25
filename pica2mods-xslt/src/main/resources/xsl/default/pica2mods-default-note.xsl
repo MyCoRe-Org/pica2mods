@@ -39,6 +39,14 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:for-each>
+      
+        <xsl:for-each
+          select="./p:datafield[@tag='220B']/p:subfield[@code='a' and starts-with(., 'personal_details:')]"><!-- Details zu personen -->
+          <mods:note type="personal_details">
+            <xsl:value-of select="normalize-space(substring-after(., 'personal_details:'))" />
+          </mods:note>
+        </xsl:for-each>
+        
       </xsl:otherwise>
     </xsl:choose>
 
