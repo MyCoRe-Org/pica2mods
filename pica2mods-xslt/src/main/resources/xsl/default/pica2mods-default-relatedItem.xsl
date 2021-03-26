@@ -127,23 +127,22 @@
               test="string-length(./p:subfield[@code='X']) = string-length(translate(./p:subfield[@code='X'], ',','')) + 2">
               <xsl:if test="number(translate(./p:subfield[@code='X'], ',',''))">
                 <xsl:attribute name="order">
-                                    <xsl:value-of select="translate(./p:subfield[@code='X'], ',','')" />
-                                </xsl:attribute>
+                  <xsl:value-of select="format-number(number(translate(./p:subfield[@code='X'], ',','')), '#')" />
+                </xsl:attribute>
               </xsl:if>
             </xsl:when>
             <xsl:when test="contains(./p:subfield[@code='X'], ',')">
               <xsl:if test="number(substring-before(substring-before(./p:subfield[@code='X'], '.'), ','))">
                 <xsl:attribute name="order">
-                                    <xsl:value-of
-                  select="substring-before(substring-before(./p:subfield[@code='X'], '.'), ',')" />
-                                </xsl:attribute>
+                   <xsl:value-of select="format-number(number(substring-before(substring-before(./p:subfield[@code='X'], '.'), ',')), '#')" />
+                </xsl:attribute>
               </xsl:if>
             </xsl:when>
             <xsl:otherwise>
               <xsl:if test="number(substring-before(./p:subfield[@code='X'], '.'))">
                 <xsl:attribute name="order">
-                                    <xsl:value-of select="substring-before(./p:subfield[@code='X'], '.')" />
-                                </xsl:attribute>
+                  <xsl:value-of select="format-number(number(substring-before(./p:subfield[@code='X'], '.')),'#')" />
+               </xsl:attribute>
               </xsl:if>
             </xsl:otherwise>
           </xsl:choose>
