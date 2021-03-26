@@ -32,7 +32,7 @@
         </mods:recordIdentifier>
       </xsl:for-each>
       <xsl:for-each select="./p:datafield[@tag='003@']/p:subfield[@code='0']"> <!-- 0100 PPN -->
-        <mods:recordInfoNote type="k10plus:ppn">{.}</mods:recordInfoNote>
+        <mods:recordInfoNote type="k10plus_ppn">{.}</mods:recordInfoNote>
       </xsl:for-each>
       <xsl:if test="./p:datafield[@tag='010E']/p:subfield[@code='e']/text()='rda'">
         <mods:descriptionStandard>rda</mods:descriptionStandard>
