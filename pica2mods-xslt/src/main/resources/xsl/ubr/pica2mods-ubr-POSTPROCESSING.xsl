@@ -99,8 +99,7 @@
       <xsl:variable name="key"
         select="concat($mods_name/mods:namePart[@type='family'], ', ',$mods_name/mods:namePart[@type='given'])" />
       <xsl:comment>
-        Key:
-        <xsl:value-of select="$key" />
+        <xsl:value-of select="concat('Key: ', $key)" />
       </xsl:comment>
       <xsl:for-each select="$personal_details/json:map/json:map[@key=$key]">
         <xsl:if
