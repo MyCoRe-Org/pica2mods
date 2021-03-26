@@ -98,9 +98,11 @@
       <xsl:copy-of select="*|@*|processing-instruction()|comment()" />
       <xsl:variable name="key"
         select="concat($mods_name/mods:namePart[@type='family'], ', ',$mods_name/mods:namePart[@type='given'])" />
-      <xsl:comment>
-        <xsl:value-of select="concat('Key: ', $key)" />
-      </xsl:comment>
+      <xsl:if test="$personal_details/*">
+        <xsl:comment>
+          <xsl:value-of select="concat('Key: ', $key)" />
+        </xsl:comment>
+      </xsl:if>
       <xsl:for-each select="$personal_details/json:map/json:map[@key=$key]">
         <xsl:if
           test="./json:string[@key='orcid']  and not(./json:string[@key='orcid'] = $mods_name/mods:nameIdentifier[@type='orcid'])">
