@@ -81,9 +81,7 @@
         <xsl:with-param name="personal_details" select="$personal_details" />
       </xsl:apply-templates>
       <xsl:if test="$personal_details/*">
-        <xsl:comment>
-          Temporär zu Demonstrationszwecken und Debugging ...
-        </xsl:comment>
+        <xsl:comment>Temporär zu Demonstrationszwecken und Debugging ...</xsl:comment>
         <mods:extension displayLabel="person_details">
           <xsl:copy-of select="$personal_details" />
         </mods:extension>
