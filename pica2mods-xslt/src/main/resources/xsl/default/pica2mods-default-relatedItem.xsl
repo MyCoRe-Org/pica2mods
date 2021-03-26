@@ -17,9 +17,10 @@
     <xsl:for-each select="./p:datafield[@tag='036D']"> <!-- 4160 übergeordnetes Werk -->
       <xsl:call-template name="COMMON_HostOrSeries" />
     </xsl:for-each>
-
-    <!--TODO: Unterscheidung nach 0500 2. Pos: wenn 'v' dann type->host, sonst type->series -->
     <xsl:for-each select="./p:datafield[@tag='036F']"> <!-- 4180 Schriftenreihe, Zeitschrift -->
+      <xsl:call-template name="COMMON_HostOrSeries" />
+    </xsl:for-each>
+    <xsl:for-each select="./p:datafield[@tag='036E' and not(../p:datafield[@tag='036F'])]"> <!-- 4180 Schriftenreihe, Zeitschrift ohne Od,Ob-Verknüpfung -->
       <xsl:call-template name="COMMON_HostOrSeries" />
     </xsl:for-each>
 
@@ -77,47 +78,61 @@
 
   <xsl:template name="COMMON_HostOrSeries">
     <mods:relatedItem>
-      <xsl:if test="./p:subfield[@code='9']">
-        <xsl:variable name="od"
-          select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
-        <xsl:choose>
-          <xsl:when
-            test="$od/p:datafield[@tag='017C']/p:subfield[@code='u'][starts-with(.,'http://purl.uni-rostock.de/')][1]">
-            <xsl:for-each
-              select="$od/p:datafield[@tag='017C']/p:subfield[@code='u'][starts-with(.,'http://purl.uni-rostock.de/')][1]">
-              <xsl:attribute name="type">host</xsl:attribute>
+      <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
+      <xsl:variable name="parentPica0500_2" select="substring($parent/p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
+      <xsl:choose>
+        <xsl:when test="./@tag='036D'"> <!-- 4160  Mehrbändiges Werk -->
+          <xsl:attribute name="type">host</xsl:attribute>
+        </xsl:when>
+        <xsl:when test="./@tag='036F' and $parentPica0500_2 = 'b'"> <!-- 4180  Zeitung / Zeitschrift-->
+          <xsl:attribute name="type">host</xsl:attribute>
+        </xsl:when>
+        <xsl:when test="./@tag='036F' and $parentPica0500_2 = 'd'"> <!-- 4180  Schriftenreihe -->
+          <xsl:attribute name="type">series</xsl:attribute>
+        </xsl:when>
+        <xsl:when test="./@tag='036E'"> <!-- 4180  Schriftenreihe -->
+          <xsl:attribute name="type">series</xsl:attribute>
+        </xsl:when>
+      </xsl:choose>
+      <xsl:attribute name="otherType">hierarchical</xsl:attribute>
 
-              <mods:recordInfo>
-                <mods:recordIdentifier source="DE-28">
-                  <xsl:value-of select="substring(.,28,100) " />
-                </mods:recordIdentifier>
-                 <mods:recordInfoNote type="k10plus:ppn">
-                    <xsl:value-of select="$od/p:datafield[@tag='003@']/p:subfield[@code='0']" /> <!-- 0100 PPN -->
-                 </mods:recordInfoNote>
-              </mods:recordInfo>
-              <mods:identifier type="purl">
-                <xsl:value-of select="." />
-              </mods:identifier>
-            </xsl:for-each>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:attribute name="type">series</xsl:attribute>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:if test="$od/p:datafield[@tag='006Z']/p:subfield[@code='0']">
-          <mods:identifier type="zdb">
-            <xsl:value-of select="$od/p:datafield[@tag='006Z']/p:subfield[@code='0']" />
-          </mods:identifier>
-        </xsl:if>
-      </xsl:if>
-      <xsl:if test="not(./p:subfield[@code='9'])">
-        <xsl:attribute name="type">series</xsl:attribute>
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="$parent/*">
+          <xsl:for-each select="$parent/p:datafield[@tag='017C']/p:subfield[@code='u'][starts-with(.,'http://purl.uni-rostock.de/')][1]">
+            <mods:recordInfo>
+              <mods:recordIdentifier source="DE-28">
+                <xsl:value-of select="substring(.,28,100) " />
+              </mods:recordIdentifier>
+              <mods:recordInfoNote type="k10plus_ppn">
+                <xsl:value-of select="$parent/p:datafield[@tag='003@']/p:subfield[@code='0']" /> <!-- 0100 PPN -->
+              </mods:recordInfoNote>
+            </mods:recordInfo>
+            <mods:identifier type="purl">
+              <xsl:value-of select="." />
+            </mods:identifier>
+          </xsl:for-each>
+          <xsl:for-each select="$parent/p:datafield[@tag='003@']/p:subfield[@code='0']"> <!-- 0100 PPN-->
+            <mods:identifier type="uri">
+             <xsl:value-of select="concat('https://uri.gbv.de/document/k10plus:ppn:', .)" />
+            </mods:identifier>
+          </xsl:for-each>
+          
+          <xsl:call-template name="simple_title">
+            <xsl:with-param name="datafield" select="$parent/p:datafield[@tag='021A']" />
+          </xsl:call-template>
+          <xsl:if test="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']">
+            <mods:identifier type="zdb">
+              <xsl:value-of select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']" />
+            </mods:identifier>
+          </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="simple_title">
+            <xsl:with-param name="datafield" select="." />
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
       
-      <xsl:call-template name="simple_title">
-        <xsl:with-param name="datafield" select="." />
-      </xsl:call-template>
-
       <mods:part>
         <!-- set order attribute only if value of subfield $X is a number -->
         <xsl:if test="./p:subfield[@code='X']">
@@ -148,12 +163,35 @@
           </xsl:choose>
         </xsl:if>
 
-        <!-- ToDo: type attribute: issue, volume, chapter, .... -->
         <xsl:if test="./p:subfield[@code='l']">
           <mods:detail type="volume">
-            <mods:number>
-              <xsl:value-of select="./p:subfield[@code='l']" />
-            </mods:number>
+            <xsl:choose>
+              <xsl:when test="@tag='036F' and ../p:datafield[@tag='036E']">
+                <mods:number>
+                  <xsl:value-of select="../p:datafield[@tag='036E']/p:subfield[@code='l']" />
+                  <xsl:if test="../p:datafield[@tag='036E']/p:subfield[@code='p' or @code='m']">
+                    <xsl:value-of select="concat(' (', string-join(../p:datafield[@tag='036E']/p:subfield[@code='p' or @code='m'], ', '), ')' )" />
+                  </xsl:if>
+                </mods:number>
+                <xsl:comment>[alternativ aus 4160: <xsl:value-of select="./p:subfield[@code='l']" />]</xsl:comment>
+              </xsl:when>
+              <xsl:when test="@tag='036D' and ../p:datafield[@tag='036C']">
+                <mods:number>
+                  <xsl:value-of select="../p:datafield[@tag='036C']/p:subfield[@code='l']" />
+                </mods:number>
+                <xsl:comment>[alternativ aus 4180: <xsl:value-of select="./p:subfield[@code='l']" />]</xsl:comment>
+              </xsl:when>
+              <xsl:otherwise>
+                <mods:number>
+                  <xsl:value-of select="./p:subfield[@code='l']" />
+                </mods:number>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="../p:datafield[@tag='021A']">
+              <mods:title>
+                <xsl:value-of select="replace(string-join(../p:datafield[@tag='021A']/p:subfield[@code='a' or @code='d'], ' : '), '@', '')" />
+              </mods:title>
+            </xsl:if>
           </mods:detail>
         </xsl:if>
         <xsl:if test="(@tag='036D' or @tag='036F') and ./p:subfield[@code='X']"> <!-- 4160, 4180 -->
@@ -215,7 +253,7 @@
         </xsl:when>
         <xsl:when test="$pica0500_2='a'">
           <xsl:choose>
-            <xsl:when test="$parent//p:datafield">
+            <xsl:when test="$parent/p:datafield">
               <xsl:variable name="parentMODS">
                 <xsl:apply-templates select="$parent" />
               </xsl:variable>
@@ -311,10 +349,16 @@
                  select="$parent/p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '//purl.uni-rostock.de')][1]"> <!-- 4950 URL (kein eigenes Feld) -->
                 <mods:recordIdentifier source="DE-28"><xsl:value-of select="substring-after(substring(.,9), '/')" /></mods:recordIdentifier>
               </xsl:for-each>
-              <mods:recordInfoNote type="k10plus:ppn">
+              <mods:recordInfoNote type="k10plus_ppn">
                 <xsl:value-of select="$parent/p:datafield[@tag='003@']/p:subfield[@code='0']" /> <!-- 0100 PPN -->
               </mods:recordInfoNote>
             </mods:recordInfo>
+            <xsl:for-each select="$parent/p:datafield[@tag='003@']/p:subfield[@code='0']"> <!-- 0100 PPN-->
+              <mods:identifier type="uri">
+               <xsl:value-of select="concat('https://uri.gbv.de/document/k10plus:ppn:', .)" />
+              </mods:identifier>
+            </xsl:for-each>
+            
             <xsl:if test="$parent/p:datafield[@tag='021A']">
               <xsl:call-template name="simple_title">
                 <xsl:with-param name="datafield" select="$parent/p:datafield[@tag='021A']" />
