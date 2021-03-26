@@ -55,29 +55,35 @@
 
   <xsl:function name="pica2mods:queryPicaFromUnAPIWithPPN" as="element()?">
     <xsl:param name="database" as="xs:string" />
-    <xsl:param name="ppn" as="xs:string" />
-
-    <xsl:if test="contains($ppn, 'x')">
-      <xsl:message>
-        PPN {$ppn} ends with small 'x' Please fix it!
-      </xsl:message>
-    </xsl:if>
-    <xsl:variable name="requestURL"
-      select="concat($MCR.PICA2MODS.UNAPI.URL, '?format=picaxml&amp;id=', $database,':ppn:', upper-case($ppn))" />
-    <xsl:try>
-      <xsl:sequence select="document($requestURL)//p:record" />
-      <xsl:catch>
-        <xsl:message>
-          No result for UnAPIQuery:
-          <xsl:value-of select="fn:concat($database,':ppn:',$ppn)" />
-          Error code:
-          <xsl:value-of select="$err:code" />
-          Reason:
-          <xsl:value-of select="$err:description" />
-        </xsl:message>
+    <xsl:param name="ppn" as="xs:string?" />
+    <xsl:choose>
+      <xsl:when test="$ppn">
+        <xsl:if test="contains($ppn, 'x')">
+          <xsl:message>
+            PPN {$ppn} ends with small 'x' Please fix it!
+          </xsl:message>
+        </xsl:if>
+        <xsl:variable name="requestURL"
+          select="concat($MCR.PICA2MODS.UNAPI.URL, '?format=picaxml&amp;id=', $database,':ppn:', upper-case($ppn))" />
+        <xsl:try>
+          <xsl:sequence select="document($requestURL)//p:record" />
+          <xsl:catch>
+            <xsl:message>
+              No result for UnAPIQuery:
+              <xsl:value-of select="fn:concat($database,':ppn:',$ppn)" />
+              Error code:
+              <xsl:value-of select="$err:code" />
+              Reason:
+              <xsl:value-of select="$err:description" />
+            </xsl:message>
+            <xsl:sequence select="()" />
+          </xsl:catch>
+        </xsl:try>
+      </xsl:when>
+      <xsl:otherwise>
         <xsl:sequence select="()" />
-      </xsl:catch>
-    </xsl:try>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:function>
 
   <xsl:function name="pica2mods:queryPicaDruck" as="element()?">
