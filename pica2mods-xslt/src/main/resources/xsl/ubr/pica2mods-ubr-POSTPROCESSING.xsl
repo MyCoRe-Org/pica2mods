@@ -80,12 +80,14 @@
         mode="ubrPostProcessing">
         <xsl:with-param name="personal_details" select="$personal_details" />
       </xsl:apply-templates>
-      <xsl:comment>
-        Temporär zu Demonstrationszwecken und Debugging ...
-      </xsl:comment>
-      <mods:extension displayLabel="person_details">
-        <xsl:copy-of select="$personal_details" />
-      </mods:extension>
+      <xsl:if test="$personal_details/*">
+        <xsl:comment>
+          Temporär zu Demonstrationszwecken und Debugging ...
+        </xsl:comment>
+        <mods:extension displayLabel="person_details">
+          <xsl:copy-of select="$personal_details" />
+        </mods:extension>
+      </xsl:if>
     </mods:mods>
   </xsl:template>
 
