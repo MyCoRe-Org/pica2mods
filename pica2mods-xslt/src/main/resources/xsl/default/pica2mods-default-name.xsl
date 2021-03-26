@@ -276,43 +276,115 @@
     <!-- zusätzlich geprüft 033J = 4043 Druckernormadaten (alt) -->
     <xsl:for-each select="./p:datafield[starts-with(@tag, '029') or @tag='033J']">
       <xsl:choose>
+        <!-- Normdatensatz vorhanden: -->
         <xsl:when test="./p:subfield[@code='9']">
           <xsl:variable name="ppn" select="./p:subfield[@code='9']" />
           <xsl:variable name="tb" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', $ppn)" />
-          <xsl:if test="starts-with($tb/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tb')">
-            <mods:name type="corporate">
-              <mods:nameIdentifier type="gnd">
-                <xsl:value-of
-                  select="$tb/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" />
-              </mods:nameIdentifier>
-              <xsl:if test="$tb/p:datafield[@tag='029A']/p:subfield[@code='a']">
-                <mods:namePart>
-                  <xsl:value-of select="$tb/p:datafield[@tag='029A']/p:subfield[@code='a']" />
-                </mods:namePart>
-              </xsl:if>
-              <xsl:if test="$tb/p:datafield[@tag='029A']/p:subfield[@code='b']">
-                <mods:namePart>
-                  <xsl:value-of select="$tb/p:datafield[@tag='029A']/p:subfield[@code='b']" />
-                </mods:namePart>
-              </xsl:if>
-              <xsl:if test="$tb/p:datafield[@tag='029A']/p:subfield[@code='g']">
-                <mods:namePart>
-                  <xsl:value-of select="$tb/p:datafield[@tag='029A']/p:subfield[@code='g']" />
-                </mods:namePart>
-              </xsl:if>
-              <xsl:if test="$tb/p:datafield[@tag='065A']/p:subfield[@code='a']">
-                <mods:namePart>
-                  <xsl:value-of select="$tb/p:datafield[@tag='065A']/p:subfield[@code='a']" />
-                </mods:namePart>
-              </xsl:if>
-              <xsl:if test="$tb/p:datafield[@tag='065A']/p:subfield[@code='g']">
-                <mods:namePart>
-                  <xsl:value-of select="$tb/p:datafield[@tag='065A']/p:subfield[@code='g']" />
-                </mods:namePart>
-              </xsl:if>
+          <xsl:choose>
+            <xsl:when test="starts-with($tb/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tb')">
+              <mods:name type="corporate">
+                <mods:nameIdentifier type="gnd">
+                  <xsl:value-of
+                    select="$tb/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" />
+                </mods:nameIdentifier>
+                <xsl:if test="$tb/p:datafield[@tag='029A']/p:subfield[@code='a']">
+                  <mods:namePart>
+                    <xsl:value-of select="$tb/p:datafield[@tag='029A']/p:subfield[@code='a']" />
+                  </mods:namePart>
+                </xsl:if>
+                <xsl:if test="$tb/p:datafield[@tag='029A']/p:subfield[@code='b']">
+                  <mods:namePart>
+                    <xsl:value-of select="$tb/p:datafield[@tag='029A']/p:subfield[@code='b']" />
+                  </mods:namePart>
+                </xsl:if>
+                <xsl:if test="$tb/p:datafield[@tag='029A']/p:subfield[@code='g']">
+                  <mods:namePart>
+                    <xsl:value-of select="$tb/p:datafield[@tag='029A']/p:subfield[@code='g']" />
+                  </mods:namePart>
+                </xsl:if>
+                <xsl:if test="$tb/p:datafield[@tag='065A']/p:subfield[@code='a']">
+                  <mods:namePart>
+                    <xsl:value-of select="$tb/p:datafield[@tag='065A']/p:subfield[@code='a']" />
+                  </mods:namePart>
+                </xsl:if>
+                <xsl:if test="$tb/p:datafield[@tag='065A']/p:subfield[@code='g']">
+                  <mods:namePart>
+                    <xsl:value-of select="$tb/p:datafield[@tag='065A']/p:subfield[@code='g']" />
+                  </mods:namePart>
+                </xsl:if>
+  
+                <xsl:for-each
+                  select="$tb/p:datafield[@tag='060R' and (./p:subfield[@code='4']='datb' or ./p:subfield[@code='4']='datv')]">
+                  <xsl:if test="./p:subfield[@code='a']">
+                    <xsl:variable name="out_date">
+                      <xsl:value-of select="./p:subfield[@code='a']" />
+                      -
+                      <xsl:value-of select="./p:subfield[@code='b']" />
+                    </xsl:variable>
+                    <mods:namePart type="date">
+                      <xsl:value-of select="normalize-space($out_date)" />
+                    </mods:namePart>
+                  </xsl:if>
+                  <xsl:if test="./p:subfield[@code='d']">
+                    <mods:namePart type="date">
+                      <xsl:value-of select="./p:subfield[@code='d']" />
+                    </mods:namePart>
+                  </xsl:if>
+                </xsl:for-each>
+                <xsl:call-template name="COMMON_CorporateName_ROLES">
+                  <xsl:with-param name="datafield" select="." />
+                </xsl:call-template>
+              </mods:name>
+            </xsl:when>
+            <xsl:when test="starts-with($tb/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tf')">
+              <mods:name type="conference">
+                <mods:nameIdentifier type="gnd">
+                  <xsl:value-of
+                    select="$tb/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" />
+                </mods:nameIdentifier>
+                <xsl:for-each select="$tb/p:datafield[@tag='030A']">
+                  <mods:namePart>
+                    <!-- Zählung -->
+                    <xsl:if test="./p:subfield[@code='n']">
+                      <xsl:variable name="num" select="./p:subfield[@code='n']" />
+                      <xsl:value-of select="$num" />
+                      <xsl:if test="not(ends-with($num,'.'))"><xsl:text>.</xsl:text></xsl:if>
+                      <xsl:text> </xsl:text>
+                    </xsl:if>
+                    <!-- Hauptname -->
+                    <xsl:if test="./p:subfield[@code='a']">
+                      <xsl:value-of select="./p:subfield[@code='a']" />
+                    </xsl:if>
+                    <xsl:if test="./p:subfield[@code='g']">
+                      <xsl:text> : </xsl:text>
+                      <xsl:value-of select="./p:subfield[@code='g']" />
+                    </xsl:if>
+                    <!-- Untergeordnete Einheit -->
+                    <xsl:if test="./p:subfield[@code='b']">
+                      <xsl:text> ; </xsl:text>
+                      <xsl:value-of select="./p:subfield[@code='b']" />
+                    </xsl:if>
+                    <!-- Datum / Ort -->
+                    <xsl:if test="./p:subfield[@code='d' or @code='c']">
+                      <xsl:text> (</xsl:text>
+                      <!-- Ort -->
+                      <xsl:if test="./p:subfield[@code='c']">
+                       <xsl:value-of select="./p:subfield[@code='c']" />
+                      </xsl:if>
+                      <!-- Trenner -->
+                      <xsl:if test="./p:subfield[@code='d'] and ./p:subfield[@code='d']">
+                        <xsl:text>, </xsl:text>
+                      </xsl:if>
+                      <!-- Datum -->
+                      <xsl:if test="./p:subfield[@code='d']">
+                        <xsl:value-of select="./p:subfield[@code='d']" />
+                      </xsl:if>
 
-              <xsl:for-each
-                select="$tb/p:datafield[@tag='060R' and (./p:subfield[@code='4']='datb' or ./p:subfield[@code='4']='datv')]">
+                      <xsl:text>)</xsl:text>
+                    </xsl:if>
+                  </mods:namePart>
+                </xsl:for-each>
+                <xsl:for-each select="$tb/p:datafield[@tag='060R' and ./p:subfield[@code='4']='datv']">
                 <xsl:if test="./p:subfield[@code='a']">
                   <xsl:variable name="out_date">
                     <xsl:value-of select="./p:subfield[@code='a']" />
@@ -328,12 +400,52 @@
                     <xsl:value-of select="./p:subfield[@code='d']" />
                   </mods:namePart>
                 </xsl:if>
+                <xsl:if test="./p:subfield[@code='c']">
+                  <mods:namePart type="date">
+                    <xsl:value-of select="./p:subfield[@code='c']" />
+                  </mods:namePart>
+                </xsl:if>
               </xsl:for-each>
-              <xsl:call-template name="COMMON_CorporateName_ROLES">
-                <xsl:with-param name="datafield" select="." />
-              </xsl:call-template>
-            </mods:name>
-          </xsl:if>
+              
+              <!-- Ort 
+                  MODS Regelwerk:
+                  <affiliation> may also contain other elements that are part of the affiliation, 
+                  such as email address, street address, job title, etc.
+                  (https://www.loc.gov/standards/mods/userguide/name.html#affiliation) -->
+              <xsl:for-each select="$tb/p:datafield[@tag='065R' and ./p:subfield[@code='4']='ortv']">
+                <mods:affiliation>
+                  <xsl:choose>
+                    <xsl:when test="./p:subfield[@code='9']">
+                      <xsl:variable name="ppnOrt" select="./p:subfield[@code='9']" />
+                      <xsl:variable name="tg" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', $ppnOrt)" />
+                      <xsl:value-of select="$tg/p:datafield[@tag='065A']/p:subfield[@code='a']" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:if test="./p:subfield[@code='a']">
+                        <xsl:value-of select="./p:subfield[@code='a']" />
+                      </xsl:if>
+                      <xsl:if test="./p:subfield[@code='g']">
+                        <xsl:text> : </xsl:text>
+                        <xsl:value-of select="./p:subfield[@code='g']" />
+                      </xsl:if>
+                      <xsl:for-each select="./p:subfield[@code='x']">
+                        <xsl:text> / </xsl:text>
+                        <xsl:value-of select="." />
+                      </xsl:for-each>
+                      <xsl:for-each select="./p:subfield[@code='z']">
+                        <xsl:text> / </xsl:text>
+                        <xsl:value-of select="." />
+                      </xsl:for-each>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </mods:affiliation>
+                </xsl:for-each>    
+                <xsl:call-template name="COMMON_CorporateName_ROLES">
+                  <xsl:with-param name="datafield" select="." />
+                </xsl:call-template>
+              </mods:name>
+            </xsl:when>  
+          </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
           <mods:name type="corporate">
@@ -369,8 +481,91 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:for-each>
+    
+    <!-- 3160 / 030F Konferenz (andere Unterfelder als im Tf-Normdatensatz)-->
+    <xsl:for-each select="./p:datafield[@tag='030F']">
+      <mods:name type="conference">
+        <mods:namePart>
+          <!-- Zählung -->
+          <xsl:if test="./p:subfield[@code='j']">
+            <!-- Im Normdatensatz mit "." - hier ohne ? -->
+            <xsl:variable name="num" select="./p:subfield[@code='j']" />
+            <xsl:value-of select="$num" />
+            <xsl:if test="not(ends-with($num,'.'))"><xsl:text>.</xsl:text></xsl:if>
+            <xsl:text> </xsl:text>
+          </xsl:if>
+          <!-- Hauptname -->
+          <xsl:if test="./p:subfield[@code='a']">
+            <xsl:value-of select="./p:subfield[@code='a']" />
+          </xsl:if>
+          <!-- Untergeordnete Einheit -->
+          <xsl:if test="./p:subfield[@code='b']">
+            <xsl:text> ; </xsl:text>
+            <xsl:value-of select="./p:subfield[@code='b']" />
+          </xsl:if>
+          <!-- Datum / Ort -->
+          <xsl:if test="./p:subfield[@code='k' or @code='p']">
+            <xsl:text> (</xsl:text>
+            <!-- Ort -->
+            <xsl:if test="./p:subfield[@code='k']">
+              <xsl:value-of select="./p:subfield[@code='k']" />
+            </xsl:if>
+            <!-- Trenner -->
+            <xsl:if test="./p:subfield[@code='k'] and ./p:subfield[@code='p']">
+              <xsl:text>, </xsl:text>
+            </xsl:if>
+            <!-- Datum -->
+            <!-- hier in normierter Form
+            Jahr. / Jahr.-Jahr. / Jahr.Monat. / Jahr.Monat.-Jahr.Monat. / Jahr.Monat.-Monat.
+            Jahr.Monat.Tag / Jahr.Monat.Tag-Tag / Jahr.Monat.Tag-Monat.Tag / Jahr.Monat.Tag-Jahr.Monat.Tag 
+            -->
+            <xsl:if test="./p:subfield[@code='p']">
+              <xsl:call-template name="conference_date_from3160">
+                  <xsl:with-param name="date" select="./p:subfield[@code='p']" />
+              </xsl:call-template>
+            </xsl:if>
+            <xsl:text>)</xsl:text>
+          </xsl:if>
+        </mods:namePart>
+        <!-- erstmal keine Rolle für diesen Fall, eine Option wäre:
+        <mods:role>
+          <mods:roleTerm type="code" authority="marcrelator">orm</mods:roleTerm>
+          <mods:roleTerm type="text" authority="GBV">VeranstalterIn</mods:roleTerm>
+        </mods:role>
+        -->
+      </mods:name>
+     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template name="conference_date_from3160">
+    <xsl:param name="date" />
+    <!-- mögliche Datumsformate gem. Formatdokumentation:
+         Jahr.
+         Jahr.-Jahr.
+         Jahr.Monat.
+         Jahr.Monat.-Jahr.Monat.
+         Jahr.Monat.-Monat.
+         Jahr.Monat.Tag
+         Jahr.Monat.Tag-Tag
+         Jahr.Monat.Tag-Monat.Tag
+         Jahr.Monat.Tag-Jahr.Monat.Tag
+         (https://format.k10plus.de/k10plushelp.pl?cmd=kat&val=3160&katalog=Standard)
+    --> 
+    <xsl:choose>
+      <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\d\d')">
+        <xsl:value-of select="concat(substring($date,9,2),'.',substring($date,6,2),'.',substring($date,1,4))" />
+      </xsl:when>
+      <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\d\d\-\d\d')">
+        <xsl:value-of select="concat(substring($date,9,5),'.',substring($date,6,2),'.',substring($date,1,4))" />
+      </xsl:when>
+      <!-- ToDo andere Fälle bei Bedarf -->
+      <xsl:otherwise>
+        <xsl:value-of select="$date" />
+      </xsl:otherwise>
+    
+    </xsl:choose>
+    
+  </xsl:template>  
 
   <xsl:template name="COMMON_CorporateName_ROLES">
     <xsl:param name="datafield"></xsl:param>
