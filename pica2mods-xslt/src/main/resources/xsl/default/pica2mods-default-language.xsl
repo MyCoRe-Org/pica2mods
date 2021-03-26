@@ -26,9 +26,9 @@
           <mods:languageTerm type="code" authority="rfc5646">
             <xsl:variable name="l" select="." />
             <xsl:choose>
-              <xsl:when test="$rfc5646/mycoreclass/categories/category[label[@xml:lang='x-bibl']/@text=$l]">
+              <xsl:when test="$rfc5646/mycoreclass/categories//category[label[@xml:lang='x-bibl']/@text=$l]">
                 <xsl:value-of
-                  select="$rfc5646/mycoreclass/categories/category[label[@xml:lang='x-bibl']/@text=$l]/@ID" />
+                  select="$rfc5646/mycoreclass/categories//category[label[@xml:lang='x-bibl']/@text=$l]/@ID" />
               </xsl:when>
               <xsl:otherwise>
                 <xsl:value-of select="concat('???', . ,'???')" />
