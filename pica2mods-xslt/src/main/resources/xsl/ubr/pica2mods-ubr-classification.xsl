@@ -69,7 +69,7 @@
         test="./p:datafield[@tag='209O']/p:subfield[@code='a' and (ends-with(text(), ':doctype:epub.series') or ends-with(text(), ':doctype:epub.journal'))]">
         <!-- Schriftenreihe oder Zeitschrift (Bundle) keine Default-Klassifikationen für licenseInfo und acessCondition -->
       </xsl:when>
-      <xsl:when test="./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':doctype:epub')]">
+      <xsl:when test="./p:datafield[@tag='209O']/p:subfield[@code='a' and (contains(text(), ':doctype:epub') or contains(text(), ':doctype:data'))]">
         <xsl:if
           test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:deposit')])">
           <mods:classification displayLabel="licenseinfo"
