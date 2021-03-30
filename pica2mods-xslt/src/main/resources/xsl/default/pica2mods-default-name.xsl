@@ -143,7 +143,7 @@
           <mods:role>
             <xsl:if test="preceding-sibling::p:subfield[@code='B']">
               <mods:roleTerm type="text" authority="GBV">
-                <xsl:value-of select="preceding-sibling::p:subfield[@code='B'][last()]" />
+                <xsl:value-of select="preceding-sibling::p:subfield[@code='B'][1]" />
               </mods:roleTerm>
             </xsl:if>
             <mods:roleTerm type="code" authority="marcrelator">
@@ -576,7 +576,7 @@
           <mods:role>
             <xsl:if test="preceding-sibling::p:subfield[@code='B']">
               <mods:roleTerm type="text" authority="GBV">
-                <xsl:value-of select="preceding-sibling::p:subfield[@code='B'][last()]" />
+                <xsl:value-of select="preceding-sibling::p:subfield[@code='B'][1]" />
               </mods:roleTerm>
             </xsl:if>
             <mods:roleTerm type="code" authority="marcrelator">
