@@ -23,8 +23,8 @@
         <xsl:call-template name="common_source_note" />
       </xsl:when>
       <xsl:otherwise>
-        <!-- Für EPUB - besondere Behandlung der Gutachter und aufsammeln der sonstige Anmerkungen in type='other' statt 
-          type='source note' -->
+        <!-- Für EPUB - besondere Behandlung der Gutachter
+             und aufsammeln der sonstige Anmerkungen in type='other' statt type='source_note' -->
         <xsl:for-each select="./p:datafield[@tag='037A']"><!-- Gutachter in Anmerkungen -->
           <xsl:choose>
             <xsl:when test="starts-with(./p:subfield[@code='a'], 'GutachterInnen:')">
@@ -51,6 +51,7 @@
     </xsl:choose>
 
     <xsl:call-template name="common_reproduction_note" />
+    <xsl:call-template name="common_external_link_note" />
     <xsl:call-template name="common_titleword_index" />
     <xsl:call-template name="common_statement_of_responsibility" />
   </xsl:template>
@@ -63,12 +64,21 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="common_titleword_index">
-    <xsl:for-each select="./p:datafield[@tag='047C' or @tag='022A']">
-      <!-- 4200 (047C, abweichende Sucheinstiege, RDA zusätzlich:3210 (022A, Werktitel) und 3260 (027A, abweichender Titel) -->
-
+  <xsl:template name="common_titleword_index"> <!-- 4200 abweichende Sucheinstiege --> 
+    <xsl:for-each select="./p:datafield[@tag='047C']">
       <mods:note type="titlewordindex">
         <xsl:value-of select="./p:subfield[@code='a']" />
+      </mods:note>
+    </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template name="common_external_link_note"> <!-- 4200 abweichende Sucheinstiege --> 
+ <xsl:for-each select="./p:datafield[@tag='017H']"> <!-- 4961 URL für sonstige Angaben zur Resource -->
+      <mods:note type="external_link">
+        <xsl:attribute name="xlink:href">
+                    <xsl:value-of select="./p:subfield[@code='u']" />
+                </xsl:attribute>
+        <xsl:value-of select="./p:subfield[@code='y']" />
       </mods:note>
     </xsl:for-each>
   </xsl:template>
@@ -82,18 +92,10 @@
   </xsl:template>
 
   <xsl:template name="common_source_note">
-    <xsl:for-each select="./p:datafield[@tag='017H']"> <!-- 4961 URL für sonstige Angaben zur Resource -->
-      <mods:note type="source note">
-        <xsl:attribute name="xlink:href">
-                    <xsl:value-of select="./p:subfield[@code='u']" />
-                </xsl:attribute>
-        <xsl:value-of select="./p:subfield[@code='y']" />
-      </mods:note>
-    </xsl:for-each>
     <xsl:for-each
       select="./p:datafield[@tag='037A' or @tag='037B' or @tag='046L' or @tag='046F' or @tag='046G' or @tag='046H' or @tag='046I' or @tag='046P']"><!-- 4201, 4202, 4221, 4215, 4216, 4217, 4218 RDA raus 4202, 4215, 4216 neu 4210, 4212, 4221, 4223, 4225, 4226 
-        (einfach den ganzen Anmerkungskrams mitnehmen)" -->
-      <mods:note type="source note">
+        (einfach den ganzen Anmerkungskrams mitnehmen) -->
+      <mods:note type="source_note">
         <xsl:value-of select="./p:subfield[@code='a']" />
       </mods:note>
     </xsl:for-each>
