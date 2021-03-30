@@ -130,20 +130,33 @@
 
 
   <xsl:template name="COMMON_Alt_Uniform_Title">
-    <!-- 3260/027A$a abweichender Titel, 4212/046C abweichender Titel, 4213/046D früherere Hauptitel 4002/021F Paralleltitel, 
-      4000/021A$f Paralleltitel (RAK), 3210/022A Werktitel, 3232/026C Zeitschriftenkurztitel -->
+    <xsl:for-each select="./p:datafield[@tag='021G']"> <!-- 4002 Paralleltitel -->
+      <mods:titleInfo type="translated">
+        <mods:title>
+          <xsl:value-of select="translate(./p:subfield[@code='a'], '@', '')" />
+        </mods:title>
+        <xsl:if test="./p:subfield[@code='d']">
+          <mods:subTitle>
+            <xsl:value-of select="./p:subfield[@code='d']" />
+          </mods:subTitle>
+        </xsl:if>
+      </mods:titleInfo>
+    </xsl:for-each>
+    
+    <!-- 3260/027A$a abweichender Titel, 4212/046C abweichender Titel, 4213/046D früherere Hauptitel, 3210/022A Werktitel, 3232/026C Zeitschriftenkurztitel -->
     <xsl:for-each
-      select="./p:datafield[@tag='027A' or @tag='021F' or @tag='046C' or @tag='046D']/p:subfield[@code='a'] | ./p:datafield[@tag='021A']/p:subfield[@code='f'] ">
+      select="./p:datafield[@tag='027A' or @tag='046C' or @tag='046D']/p:subfield[@code='a'] | ./p:datafield[@tag='021A']/p:subfield[@code='f'] ">
       <mods:titleInfo type="alternative">
         <xsl:variable name="t">
           <xsl:if test="./../p:subfield[@code='i']"> <!-- Einleitende Wendung -->
-            <xsl:value-of select="./../p:subfield[@code='i']" />: 
+            <xsl:value-of select="concat(./../p:subfield[@code='i'],': ')" /> 
           </xsl:if>
           <xsl:value-of select="." />
         </xsl:variable>
         <mods:title><xsl:value-of select="normalize-space(translate($t, '@', ''))" /></mods:title>
       </mods:titleInfo>
     </xsl:for-each>
+
     <xsl:for-each select="./p:datafield[@tag='022A']">
       <mods:titleInfo type="uniform">
         <mods:title>
