@@ -27,7 +27,6 @@
         <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
         <xsl:call-template name="COMMON_UBR_Class_Collection" />
         <xsl:call-template name="COMMON_UBR_Class_Provider" />
-        <xsl:call-template name="COMMON_UBR_Class_Doctype" />
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="EPUB_SDNB">
@@ -39,9 +38,10 @@
   </xsl:template>
 
   <xsl:template name="COMMON_CLASS">
-    <!-- ToDoKlassifikationen aus 209O/01 $a mappen -->
+    <!-- Klassifikationen aus 209O/01  8600 exemplarspezifische Abrufzeichen mappen
+         Doctype-Klassifikation jetzt als mods:Genre (MyCoRe/MIR konform) -->
     <xsl:for-each
-      select="./p:datafield[@tag='209O']/p:subfield[@code='a' and (starts-with(text(), 'ROSDOK:') or starts-with(text(), 'DBHSNB:'))]">
+      select="./p:datafield[@tag='209O']/p:subfield[@code='a' and (starts-with(text(), 'ROSDOK:') or starts-with(text(), 'DBHSNB:')) and not(contains(text(), ':doctype:'))]">
       <xsl:variable name="classid" select="substring-before(substring-after(current(),':'),':')" />
       <xsl:variable name="categid" select="substring-after(substring-after(current(),':'),':')" />
 
