@@ -71,9 +71,9 @@
       </mods:note>
     </xsl:for-each>
   </xsl:template>
-  
-  <xsl:template name="common_external_link_note"> <!-- 4200 abweichende Sucheinstiege --> 
- <xsl:for-each select="./p:datafield[@tag='017H']"> <!-- 4961 URL für sonstige Angaben zur Resource -->
+
+  <xsl:template name="common_external_link_note"> <!-- 4961 URL für sonstige Angaben zur Resource -->
+    <xsl:for-each select="./p:datafield[@tag='017H']">
       <mods:note type="external_link">
         <xsl:attribute name="xlink:href">
                     <xsl:value-of select="./p:subfield[@code='u']" />
