@@ -164,6 +164,29 @@
         </mods:identifier>
       </xsl:if>
     </xsl:for-each>
+  
+    <!-- Gesamtkatalog der Wiegendrucke -->
+    <xsl:for-each select="./p:datafield[@tag='007Y']/p:subfield[@code='0'][starts-with(., 'GW')]">
+      <mods:identifier type="gw">
+        <xsl:value-of select="normalize-space(substring-after(., 'GW'))" />
+      </mods:identifier>
+    </xsl:for-each>
+    <xsl:for-each select="./p:datafield[@tag='007S']/p:subfield[@code='0'][starts-with(., 'GW')]">
+      <xsl:if test="not(./p:datafield[@tag='007Y']/p:subfield[@code='0'][starts-with(., 'GW')])">
+        <mods:identifier type="gw">
+          <xsl:value-of select="normalize-space(substring-after(., 'GW'))" />
+        </mods:identifier>
+      </xsl:if>
+    </xsl:for-each>
+    
+    <!-- Incunabula Short Title Catalogue -->
+    <xsl:for-each select="./p:datafield[@tag='007S']/p:subfield[@code='0'][starts-with(., 'ISTC')]">
+      <xsl:if test="not(./p:datafield[@tag='007Y']/p:subfield[@code='0'][starts-with(., 'ISTC')])">
+        <mods:identifier type="istc">
+          <xsl:value-of select="normalize-space(substring-after(., 'ISTC'))" />
+        </mods:identifier>
+      </xsl:if>
+    </xsl:for-each>
 
     <!-- URLs -->
     <xsl:for-each
