@@ -41,23 +41,13 @@
                 </mods:namePart>
               </xsl:if>
               <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='P']">
-                <mods:namePart type="family">
+                <mods:namePart> <!-- Persönlicher Name -->
                   <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='P']" />
                 </mods:namePart>
               </xsl:if>
-              <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='c']">
+              <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='c' or @code='n' or @code='l']">
                 <mods:namePart type="termsOfAddress">
-                  <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='c']" />
-                </mods:namePart>
-              </xsl:if>
-              <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='n']">
-                <mods:namePart type="termsOfAddress">
-                  <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='n']" />
-                </mods:namePart>
-              </xsl:if>
-              <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='l']">
-                <mods:namePart type="termsOfAddress">
-                  <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='l']" />
+                  <xsl:value-of select="string-join($tp/p:datafield[@tag='028A']/p:subfield[@code='c' or @code='n' or @code='l'], ', ')" />
                 </mods:namePart>
               </xsl:if>
               <xsl:for-each select="$tp/p:datafield[@tag='060R' and ./p:subfield[@code='4']='datl']">
@@ -105,25 +95,15 @@
                 <xsl:value-of select="./p:subfield[@code='a']" />
               </mods:namePart>
             </xsl:if>
-            <xsl:if test="./p:subfield[@code='c']">
-              <mods:namePart type="termsOfAddress">
-                <xsl:value-of select="./p:subfield[@code='c']" />
-              </mods:namePart>
-            </xsl:if>
-
             <xsl:if test="./p:subfield[@code='P']">
               <mods:namePart>
                 <xsl:value-of select="./p:subfield[@code='P']" />
               </mods:namePart>
             </xsl:if>
-            <xsl:if test="./p:subfield[@code='n']">
+            
+            <xsl:if test="./p:subfield[@code='c' or @code='n' or @code='l'] ">
               <mods:namePart type="termsOfAddress">
-                <xsl:value-of select="./p:subfield[@code='n']" />
-              </mods:namePart>
-            </xsl:if>
-            <xsl:if test="./p:subfield[@code='l']">
-              <mods:namePart type="termsOfAddress">
-                <xsl:value-of select="./p:subfield[@code='l']" />
+                <xsl:value-of select="string-join(./p:subfield[@code='c' or @code='n' or @code='l'], ', ')" />
               </mods:namePart>
             </xsl:if>
             <xsl:call-template name="COMMON_PersonalName_ROLES">
