@@ -204,9 +204,6 @@
   </xsl:template>
 
   <xsl:template name="COMMON_AppearsIn">
-    <mods:relatedItem>
-      <xsl:attribute name="otherType">appears_in</xsl:attribute>
-
       <xsl:variable name="pica0500_2" select="substring(./../p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
       <xsl:variable name="parent">
         <xsl:if test="./p:subfield[@code='9']">
@@ -216,6 +213,8 @@
             
       <xsl:choose>
         <xsl:when test="$pica0500_2='s'">
+         <mods:relatedItem>
+         <xsl:attribute name="otherType">appears_in</xsl:attribute>
           <xsl:attribute name="type">host</xsl:attribute>
           <mods:part>
             <xsl:for-each select="./../p:datafield[@tag='031A']"> <!-- 4070 Differenzierende Angaben zur Quelle -->
@@ -250,8 +249,11 @@
               <!-- Wir haben keine Os-Sätze deren zugehörenden Zeitschriften nicht auf RosDok sind! -->
             </xsl:otherwise>
           </xsl:choose>
+         </mods:relatedItem>
         </xsl:when>
         <xsl:when test="$pica0500_2='a'">
+         <mods:relatedItem>
+         <xsl:attribute name="otherType">appears_in</xsl:attribute>
           <xsl:choose>
             <xsl:when test="$parent/p:datafield">
               <xsl:variable name="parentMODS">
@@ -323,9 +325,10 @@
               </xsl:if>
             </xsl:otherwise>
           </xsl:choose>
+         </mods:relatedItem>
         </xsl:when>
       </xsl:choose>
-    </mods:relatedItem>
+
   </xsl:template>
   
   <xsl:template name="COMMON_Reference">
