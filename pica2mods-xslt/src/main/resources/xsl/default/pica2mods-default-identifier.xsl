@@ -135,6 +135,35 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:for-each>
+    
+    <!--  ISSN -->
+    <xsl:for-each select="./p:datafield[@tag='005I']/p:subfield[@code='0']"> <!-- 2005 -->
+      <mods:identifier type="issn">
+        <xsl:value-of select="." />
+      </mods:identifier>
+    </xsl:for-each>
+    <xsl:for-each select="./p:datafield[@tag='005I']/p:subfield[@code='l']"> <!-- 2005 (ISSN-L) -->
+      <mods:identifier type="issn-l">
+        <xsl:comment>
+          ISSN-Linking (übergeordnete ISSN)
+        </xsl:comment>
+        <xsl:value-of select="." />
+      </mods:identifier>
+    </xsl:for-each>
+    <xsl:for-each select="./p:datafield[@tag='005A']/p:subfield[@code='0']"> <!-- 2010 ISSN -->
+      <xsl:if test="not(. = ../../p:datafield[@tag='005I']/p:subfield[@code='0'])">
+        <mods:identifier type="issn">
+          <xsl:value-of select="." />
+        </mods:identifier>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:for-each select="./p:datafield[@tag='005P']/p:subfield[@code='0']"> <!-- 2013 ISSN paralleler Ausgaben -->
+      <xsl:if test="not(. = ../../p:datafield[@tag='005I']/p:subfield[@code='0'])">
+        <mods:identifier type="issn">
+          <xsl:value-of select="." />
+        </mods:identifier>
+      </xsl:if>
+    </xsl:for-each>
 
     <!-- URLs -->
     <xsl:for-each
