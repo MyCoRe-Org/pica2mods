@@ -54,6 +54,7 @@
     <xsl:call-template name="common_external_link_note" />
     <xsl:call-template name="common_titleword_index" />
     <xsl:call-template name="common_statement_of_responsibility" />
+    <xsl:call-template name="common_available_volumes" />
   </xsl:template>
 
   <xsl:template name="common_statement_of_responsibility">
@@ -99,6 +100,19 @@
         <xsl:value-of select="./p:subfield[@code='a']" />
       </mods:note>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="common_available_volumes"> <!-- URL, digitalisierte Ausgaben in interner Bemerkung / nur Ob-Sätze -->
+    <xsl:variable name="pica0500_2"
+      select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
+    <xsl:if test="$pica0500_2='b'">
+      <xsl:for-each
+        select="./p:datafield[@tag='017C'][contains(./p:subfield[@code='u'],'purl.uni-rostock.de')]/p:subfield[@code='x']">
+        <mods:note type="available_volumes">
+          <xsl:value-of select="substring-after(.,' ')" />
+        </mods:note>
+      </xsl:for-each>
+    </xsl:if>
   </xsl:template>
     
 </xsl:stylesheet>
