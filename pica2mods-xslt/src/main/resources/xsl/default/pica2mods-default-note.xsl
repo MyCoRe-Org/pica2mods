@@ -109,7 +109,7 @@
       <xsl:for-each
         select="./p:datafield[@tag='017C'][contains(./p:subfield[@code='u'],'purl.uni-rostock.de')]/p:subfield[@code='x']">
         <mods:note type="available_volumes">
-          <xsl:value-of select="substring-after(.,' ')" />
+          <xsl:value-of select="substring-after(.,'; ')" />
         </mods:note>
       </xsl:for-each>
     </xsl:if>
