@@ -270,7 +270,9 @@
               <xsl:if test="./p:subfield[@code='t']">
                 <xsl:variable name="titlefield">
                   <p:datafield tag="021A">
-                    <xsl:copy-of select="./p:subfield[@code='t']" />
+                    <p:subfield code="a">
+                      <xsl:value-of select="./p:subfield[@code='t']/text()" />
+                    </p:subfield>
                   </p:datafield>
                 </xsl:variable>
                 <xsl:call-template name="simple_title">
