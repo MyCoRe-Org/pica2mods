@@ -14,15 +14,18 @@
       <xsl:call-template name="COMMON_AppearsIn" />
     </xsl:for-each>
 
-    <xsl:for-each select="./p:datafield[@tag='036D']"> <!-- 4160 übergeordnetes Werk -->
-      <xsl:call-template name="COMMON_HostOrSeries" />
-    </xsl:for-each>
-    <xsl:for-each select="./p:datafield[@tag='036F']"> <!-- 4180 Schriftenreihe, Zeitschrift -->
-      <xsl:call-template name="COMMON_HostOrSeries" />
-    </xsl:for-each>
-    <xsl:for-each select="./p:datafield[@tag='036E' and not(../p:datafield[@tag='036F'])]"> <!-- 4180 Schriftenreihe, Zeitschrift ohne Od,Ob-Verknüpfung -->
-      <xsl:call-template name="COMMON_HostOrSeries" />
-    </xsl:for-each>
+    <xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
+    <xsl:if test="not($pica0500_2 = 'b' or $pica0500_2 = 'd')">
+      <xsl:for-each select="./p:datafield[@tag='036D']"> <!-- 4160 übergeordnetes Werk -->
+        <xsl:call-template name="COMMON_HostOrSeries" />
+      </xsl:for-each>
+      <xsl:for-each select="./p:datafield[@tag='036F']"> <!-- 4180 Schriftenreihe, Zeitschrift -->
+        <xsl:call-template name="COMMON_HostOrSeries" />
+      </xsl:for-each>
+      <xsl:for-each select="./p:datafield[@tag='036E' and not(../p:datafield[@tag='036F'])]"> <!-- 4180 Schriftenreihe, Zeitschrift ohne Od,Ob-Verknüpfung -->
+        <xsl:call-template name="COMMON_HostOrSeries" />
+      </xsl:for-each>
+    </xsl:if>
 
     <xsl:for-each select="./p:datafield[@tag='039D' and starts-with(subfield[@code='R'], 'O')]"> <!-- 4243 Beziehungen auf Manifestationsebene -->
       <xsl:call-template name="COMMON_Reference">
@@ -133,6 +136,7 @@
         </xsl:otherwise>
       </xsl:choose>
       
+      <xsl:if test="../p:datafield[@tag='036C' or @tag='036D' or @tag='036E' or @tag='036F']/p:subfield[@code='l']">
       <mods:part>
         <!-- set order attribute only if value of subfield $X is a number -->
         <xsl:if test="./p:subfield[@code='X']">
@@ -200,6 +204,7 @@
           </mods:text>
         </xsl:if>
       </mods:part>
+      </xsl:if>
     </mods:relatedItem>
   </xsl:template>
 
