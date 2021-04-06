@@ -19,61 +19,60 @@
     <xsl:variable name="pica0500_2"
       select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
     <xsl:variable name="picaMode" select="pica2mods:detectMode(.)" />
+    <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
     <xsl:choose>
-      <xsl:when test="$picaMode = 'REPRO'">
+      <xsl:when test="$picaMode = 'REPRO' and $picaA/p:datafield">
         <mods:originInfo eventType="publication">
-          <xsl:choose>
-            <xsl:when test="./p:datafield[@tag='011@']/p:subfield[@code='r']"> <!-- 1100$r -->
-              <mods:dateIssued keyDate="yes" encoding="w3cdtf">
-                <xsl:value-of select="./p:datafield[@tag='011@']/p:subfield[@code='r']" />
-              </mods:dateIssued>
-              <xsl:for-each select="./p:datafield[@tag='033A']">
-                <xsl:call-template name="common_publisher_name_place_with_university_place_expansion"> <!-- 4030 -->
-                  <xsl:with-param name="datafield" select="." />
-                </xsl:call-template>
-              </xsl:for-each>
-              <xsl:call-template name="common_norm_place"> <!-- 4040 / 033D -->
-                <xsl:with-param name="record" select="." />
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="$pica0500_2='b'">
-              <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
-              <xsl:call-template name="common_date_issued"> <!-- 1100 der A-Aufnahme -->
-                <xsl:with-param name="datafield" select="$picaA/p:datafield[@tag='011@']" />
-              </xsl:call-template>
-              <xsl:for-each select="./p:datafield[@tag='033A']">
-                <xsl:call-template name="common_publisher_name_place_with_university_place_expansion"> <!-- 4030 -->
-                  <xsl:with-param name="datafield" select="." />
-                </xsl:call-template>
-              </xsl:for-each>
-              <xsl:call-template name="common_norm_place"> <!-- 4040 / 033D -->
-                <xsl:with-param name="record" select="$picaA" />
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="common_date_issued"> <!-- 1100 -->
-                <xsl:with-param name="datafield" select="./p:datafield[@tag='011@']" />
-              </xsl:call-template>
-              <xsl:for-each select="./p:datafield[@tag='033A']">
-                <xsl:call-template name="common_publisher_name_place_with_university_place_expansion"> <!-- 4030 -->
-                  <xsl:with-param name="datafield" select="." />
-                </xsl:call-template>
-              </xsl:for-each>
-              <xsl:call-template name="common_norm_place"> <!-- 4040 / 033D -->
-                <xsl:with-param name="record" select="." />
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-
-
+          <xsl:call-template name="common_date_issued"> <!-- 1100 der A-Aufnahme -->
+            <xsl:with-param name="datafield" select="$picaA/p:datafield[@tag='011@']" />
+          </xsl:call-template>
+          <xsl:for-each select="$picaA/p:datafield[@tag='033A']">
+            <xsl:call-template name="common_publisher_name_place_with_university_place_expansion"> <!-- 4030 -->
+              <xsl:with-param name="datafield" select="." />
+            </xsl:call-template>
+          </xsl:for-each>
+          <xsl:call-template name="common_norm_place"> <!-- 4040 / 033D -->
+            <xsl:with-param name="record" select="$picaA" />
+          </xsl:call-template>
           <xsl:call-template name="common_edition">
+            <xsl:with-param name="record" select="$picaA" />
+          </xsl:call-template>
+          <xsl:call-template name="common_issuance">
+            <xsl:with-param name="record" select="$picaA" />
+          </xsl:call-template>
+        </mods:originInfo>
+      </xsl:when>
+      <xsl:otherwise>
+        <mods:originInfo eventType="publication">
+          <xsl:call-template name="common_date_issued"> <!-- 1100 -->
+            <xsl:with-param name="datafield" select="./p:datafield[@tag='011@']" />
+          </xsl:call-template>
+          <xsl:for-each select="./p:datafield[@tag='033A']">  <!-- 4030 -->
+            <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
+              <xsl:with-param name="datafield" select="." />
+            </xsl:call-template>
+          </xsl:for-each>
+          <xsl:call-template name="common_norm_place"> <!-- 4040 / 033D -->
+            <xsl:with-param name="record" select="." />
+          </xsl:call-template>
+          <xsl:call-template name="common_edition"> <!-- 4020 / 032@ -->
             <xsl:with-param name="record" select="." />
           </xsl:call-template>
           <xsl:call-template name="common_issuance">
-            <xsl:with-param name="pica0500_2" select="$pica0500_2" />
+            <xsl:with-param name="record" select="." />
           </xsl:call-template>
-        </mods:originInfo>
 
+          <!-- PPN 1726228770 an 2 Hochschulen eingereicht -->
+          <xsl:if test="./p:datafield[@tag='037C']/p:subfield[@code='f']">  <!-- 4204 Hochschulschriftenvermerk, Jahr der Verteidigung -->
+            <mods:dateOther type="defence" encoding="w3cdtf">
+              <xsl:value-of select="./p:datafield[@tag='037C']/p:subfield[@code='f'][1]" />
+            </mods:dateOther>
+          </xsl:if>
+        </mods:originInfo>
+      </xsl:otherwise>
+    </xsl:choose>
+
+    <xsl:if test="$picaMode = 'REPRO'"> 
         <mods:originInfo eventType="digitization">
           <xsl:choose>
             <xsl:when test="./p:datafield[@tag='011B']"> <!-- 1109 -->
@@ -87,7 +86,6 @@
               </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
-
           <xsl:choose>
             <xsl:when test="./p:datafield[@tag='033N']"> <!-- 4048 -->
               <xsl:for-each select="./p:datafield[@tag='033N']">
@@ -119,34 +117,7 @@
             </xsl:otherwise>
           </xsl:choose>
         </mods:originInfo>
-      </xsl:when>
-      <xsl:otherwise>
-        <mods:originInfo eventType="publication">
-          <xsl:call-template name="common_date_issued"> <!-- 1100 -->
-            <xsl:with-param name="datafield" select="./p:datafield[@tag='011@']" />
-          </xsl:call-template>
-          <xsl:for-each select="./p:datafield[@tag='033A']">  <!-- 4030 -->
-            <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
-              <xsl:with-param name="datafield" select="." />
-            </xsl:call-template>
-          </xsl:for-each>
-          <xsl:call-template name="common_norm_place"> <!-- 4040 / 033D -->
-            <xsl:with-param name="record" select="." />
-          </xsl:call-template>
-          <xsl:call-template name="common_edition"> <!-- 4020 / 032@ -->
-            <xsl:with-param name="record" select="." />
-          </xsl:call-template>
-          <xsl:call-template name="common_issuance">
-            <xsl:with-param name="pica0500_2" select="$pica0500_2" />
-          </xsl:call-template>
-
-          <!-- PPN 1726228770 an 2 Hochschulen eingereicht -->
-          <xsl:if test="./p:datafield[@tag='037C']/p:subfield[@code='f']">  <!-- 4204 Hochschulschriftenvermerk, Jahr der Verteidigung -->
-            <mods:dateOther type="defence" encoding="w3cdtf">
-              <xsl:value-of select="./p:datafield[@tag='037C']/p:subfield[@code='f'][1]" />
-            </mods:dateOther>
-          </xsl:if>
-        </mods:originInfo>
+        </xsl:if>
 
         <xsl:if test="./p:datafield[@tag='033E']"> <!-- 4034 -->
           <mods:originInfo eventType="upload">
@@ -160,8 +131,6 @@
             </xsl:call-template>
           </mods:originInfo>
         </xsl:if>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="common_publisher_name_place_with_university_place_expansion">
@@ -206,7 +175,8 @@
   </xsl:template>
 
   <xsl:template name="common_issuance">
-    <xsl:param name="pica0500_2" />
+    <xsl:param name="record" />
+    <xsl:variable name="pica0500_2" select="substring($record/p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
     <xsl:choose>
       <xsl:when test="$pica0500_2='a'">
         <mods:issuance>monographic</mods:issuance>
