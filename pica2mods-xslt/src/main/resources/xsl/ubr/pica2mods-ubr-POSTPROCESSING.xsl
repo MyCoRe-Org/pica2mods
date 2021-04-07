@@ -101,7 +101,7 @@
           <xsl:value-of select="concat('Key: ', $key)" />
         </xsl:comment>
       </xsl:if>
-      <xsl:for-each select="$personal_details/json:map/json:map[@key=$key]">
+      <xsl:for-each select="$personal_details/json:array/json:map[json:string[@key='name']=$key]">
         <xsl:if
           test="./json:string[@key='orcid']  and not(./json:string[@key='orcid'] = $mods_name/mods:nameIdentifier[@type='orcid'])">
           <mods:nameIdentifier type="orcid">
