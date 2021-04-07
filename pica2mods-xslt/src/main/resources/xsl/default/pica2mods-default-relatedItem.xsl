@@ -27,7 +27,7 @@
       </xsl:for-each>
     </xsl:if>
 
-    <xsl:for-each select="./p:datafield[@tag='039D' and starts-with(subfield[@code='R'], 'O')]"> <!-- 4243 Beziehungen auf Manifestationsebene -->
+    <xsl:for-each select="./p:datafield[@tag='039D' and p:subfield[@code='n'] = 'Verlags-Ausgabe']"> <!-- 4243 Beziehungen auf Manifestationsebene -->
       <xsl:call-template name="COMMON_Reference">
         <xsl:with-param name="type">otherFormat</xsl:with-param>
         <xsl:with-param name="datafield" select="." />
