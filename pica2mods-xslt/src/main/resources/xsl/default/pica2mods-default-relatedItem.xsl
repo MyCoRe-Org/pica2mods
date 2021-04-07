@@ -254,6 +254,9 @@
               <!-- Wir haben keine Os-Sätze deren zugehörenden Zeitschriften nicht auf RosDok sind! -->
             </xsl:otherwise>
           </xsl:choose>
+          <xsl:if test="./p:subfield[@code='i']">
+            <mods:note type="relation_label"><xsl:value-of select="./p:subfield[@code='i']" /></mods:note>
+          </xsl:if>
          </mods:relatedItem>
         </xsl:when>
         <xsl:when test="$pica0500_2='a'">
@@ -332,6 +335,9 @@
               </xsl:if>
             </xsl:otherwise>
           </xsl:choose>
+          <xsl:if test="./p:subfield[@code='i']">
+            <mods:note type="relation_label"><xsl:value-of select="./p:subfield[@code='i']" /></mods:note>
+          </xsl:if>
          </mods:relatedItem>
         </xsl:when>
       </xsl:choose>
