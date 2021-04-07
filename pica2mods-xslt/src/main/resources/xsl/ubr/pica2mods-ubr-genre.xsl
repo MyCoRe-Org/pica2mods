@@ -52,7 +52,7 @@
                 <xsl:attribute name="usage">primary</xsl:attribute>
                 <xsl:attribute name="displayLabel">doctype</xsl:attribute>
                 <xsl:attribute name="authorityURI">{$WebApplicationBaseURL}classifications/doctype</xsl:attribute>
-                <xsl:attribute name="valueURI">{$WebApplicationBaseURL}classifications/doctype#'{./@ID}</xsl:attribute>
+                <xsl:attribute name="valueURI">{$WebApplicationBaseURL}classifications/doctype#{./@ID}</xsl:attribute>
                 <xsl:value-of select="./label[@xml:lang='de']/@text" />
               </xsl:element>
             </xsl:if>
