@@ -440,7 +440,7 @@
     <xsl:param name="datafield" />
     <xsl:if test="$datafield/p:subfield[@code='a']">
       <mods:titleInfo>
-         <xsl:variable name="mainTitle" select="$datafield/p:subfield[@code='a'][1]" />
+         <xsl:variable name="mainTitle" select="$datafield[1]/p:subfield[@code='a'][1]" />
          <xsl:choose>
           <xsl:when test="contains($mainTitle, '@')">
             <xsl:variable name="nonSort" select="normalize-space(substring-before($mainTitle, '@'))" />
