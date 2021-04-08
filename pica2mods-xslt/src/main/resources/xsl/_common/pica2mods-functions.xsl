@@ -26,7 +26,10 @@
         '?operation=searchRetrieve&amp;maximumRecords=1&amp;recordSchema=picaxml&amp;query=',
         $encodedSruQuery)" />
     <xsl:try>
-      <xsl:sequence select="document($requestURL)//p:record" />
+      <xsl:variable name="picaWithoutLang">
+        <xsl:apply-templates select="document($requestURL)//p:record" mode="picaPreProcessing" />
+      </xsl:variable>
+      <xsl:sequence select="$picaWithoutLang//p:record" />
       <xsl:catch>
         <xsl:message>
           No result for SRUQuery:
@@ -66,7 +69,10 @@
         <xsl:variable name="requestURL"
           select="concat($MCR.PICA2MODS.UNAPI.URL, '?format=picaxml&amp;id=', $database,':ppn:', upper-case($ppn))" />
         <xsl:try>
-          <xsl:sequence select="document($requestURL)//p:record" />
+          <xsl:variable name="picaWithoutLang">
+              <xsl:apply-templates select="document($requestURL)//p:record" mode="picaPreProcessing" />
+          </xsl:variable>
+          <xsl:sequence select="$picaWithoutLang//p:record" />
           <xsl:catch>
             <xsl:message>
               No result for UnAPIQuery:

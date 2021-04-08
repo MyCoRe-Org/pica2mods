@@ -25,36 +25,43 @@
   <xsl:import href="default/pica2mods-default-relatedItem.xsl" />
 
   <xsl:import href="ubr/pica2mods-ubr-POSTPROCESSING.xsl" />
+  <xsl:import href="_common/pica2mods-pica-PREPROCESSING.xsl" />
 
   <xsl:import href="_common/pica2mods-functions.xsl" />
   <xsl:param name="MCR.PICA2MODS.CONVERTER_VERSION" select="'Pica2Mods 2.0'" />
   <!-- TO: MyCoRe-AnwendungsURL -->
   <xsl:param name="WebApplicationBaseURL" select="'http://rosdok.uni-rostock.de/'" />
 
-
   <xsl:template match="p:record">
-    <xsl:variable name="mods_orig">
-      <mods:mods>
-        <xsl:call-template name="modsRecordInfo" />
-        <xsl:call-template name="UBR_modsGenre_Doctype" />
-        <xsl:call-template name="modsGenre" />
-        <xsl:call-template name="modsTitleInfo" />
-        <xsl:call-template name="modsAbstract" />
-        <xsl:call-template name="modsName" />
-        <xsl:call-template name="UBR_modsIdentifier" />
-        <xsl:call-template name="modsIdentifier" />
-        <xsl:call-template name="modsClassification" />
-        <xsl:call-template name="modsLanguage" />
-        <xsl:call-template name="modsPhysicalDescription" />
-        <xsl:call-template name="modsOriginInfo" />
-        <xsl:call-template name="modsLocation" />
-        <xsl:call-template name="modsNote" />
-        <xsl:call-template name="modsRelatedItem" />
-        <xsl:call-template name="modsSubject" />
-      </mods:mods>
+    <xsl:variable name="picaNew">
+      <xsl:apply-templates select="." mode="picaPreProcessing" />
     </xsl:variable>
-    <xsl:apply-templates select="$mods_orig" mode="ubrPostProcessing" />
+    <xsl:variable name="mods_orig">
+      <xsl:apply-templates select="$picaNew" mode="mods" />
+    </xsl:variable>
 
+    <xsl:apply-templates select="$mods_orig" mode="ubrPostProcessing" />
+  </xsl:template>
+
+  <xsl:template match="p:record" mode="mods">
+    <mods:mods>
+      <xsl:call-template name="modsRecordInfo" />
+      <xsl:call-template name="UBR_modsGenre_Doctype" />
+      <xsl:call-template name="modsGenre" />
+      <xsl:call-template name="modsTitleInfo" />
+      <xsl:call-template name="modsAbstract" />
+      <xsl:call-template name="modsName" />
+      <xsl:call-template name="UBR_modsIdentifier" />
+      <xsl:call-template name="modsIdentifier" />
+      <xsl:call-template name="modsClassification" />
+      <xsl:call-template name="modsLanguage" />
+      <xsl:call-template name="modsPhysicalDescription" />
+      <xsl:call-template name="modsOriginInfo" />
+      <xsl:call-template name="modsLocation" />
+      <xsl:call-template name="modsNote" />
+      <xsl:call-template name="modsRelatedItem" />
+      <xsl:call-template name="modsSubject" />
+    </mods:mods>
   </xsl:template>
 
 </xsl:stylesheet>
