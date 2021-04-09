@@ -224,11 +224,11 @@
           <mods:part>
             <xsl:for-each select="./../p:datafield[@tag='031A']"> <!-- 4070 Differenzierende Angaben zur Quelle -->
               <xsl:if test="./p:subfield[@code='h']">
-                <mods:extent unit="pages">
-                  <mods:list>
+                <mods:detail type="article">
+                  <mods:number>
                     <xsl:value-of select="concat('Seiten ',./p:subfield[@code='h'])" />
-                  </mods:list>
-                </mods:extent>
+                  </mods:number>
+                </mods:detail>
               </xsl:if>
               <xsl:if test="./p:subfield[@code='i']">
                 <mods:detail type="article_number">
@@ -301,9 +301,11 @@
               </xsl:if>
               <xsl:if test="./p:subfield[@code='p']">
                 <mods:part>
-                  <mods:text>
-                    <xsl:value-of select="./p:subfield[@code='p']" />
-                 </mods:text>
+                  <mods:detail type="article">
+                    <mods:number>
+                      <xsl:value-of select="./p:subfield[@code='p']" />
+                    </mods:number>
+                 </mods:detail>
                </mods:part>
               </xsl:if>
               <xsl:if test="./p:subfield[@code='l']">
