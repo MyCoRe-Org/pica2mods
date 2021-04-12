@@ -187,6 +187,13 @@
         </mods:identifier>
       </xsl:if>
     </xsl:for-each>
+  
+    <!-- Fingerprint (Format: type="fingerprint_fei" or "fingerprint_stcnf") -->
+    <xsl:for-each select="./p:datafield[@tag='007P']">
+      <mods:identifier type="{concat('fingerprint_', p:subfield[@code='S'])}">
+        <xsl:value-of select="p:subfield[@code='0']" />
+      </mods:identifier>
+    </xsl:for-each>
 
     <!-- URLs -->
     <xsl:for-each
