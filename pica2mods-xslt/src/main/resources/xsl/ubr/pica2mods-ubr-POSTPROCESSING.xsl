@@ -130,4 +130,8 @@
     </mods:name>
   </xsl:template>
   
+  <xsl:template match="mods:identifier[@type='uri']" mode="ubrPostProcessing">
+    <!--PPN for k10plus as URI - deleted! / we use recordInfo/recordSourceNote instead -->
+  </xsl:template>
+  
 </xsl:stylesheet>

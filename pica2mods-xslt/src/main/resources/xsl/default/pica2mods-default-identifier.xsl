@@ -19,7 +19,8 @@
   <xsl:template name="modsIdentifier">
     <xsl:for-each select="./p:datafield[@tag='003@']/p:subfield[@code='0']"> <!-- 0100 -->
       <mods:identifier type="uri">
-        <xsl:value-of select="concat('https://uri.gbv.de/document/k10plus:ppn:', .)" />
+        <!-- ISIL DE-627 equals K10plus Verbundkatalog -->
+        <xsl:value-of select="concat('https://uri.gbv.de/document/opac-de-627:ppn:', .)" />
       </mods:identifier>
     </xsl:for-each>
 
