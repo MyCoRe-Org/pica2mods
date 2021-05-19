@@ -24,7 +24,7 @@
     <!-- TODO Titel fingiert, wenn kein Titel in 4000 -->
     <xsl:choose>
       <xsl:when test="$pica0500_2='f' or $pica0500_2='F' ">
-        <xsl:for-each select="./p:datafield[@tag='036C']"><!-- 4150 -->
+        <xsl:for-each select="./p:datafield[@tag='036C'][1]"><!-- 4150 -->
           <xsl:call-template name="COMMON_Title" />
         </xsl:for-each>
       </xsl:when>
