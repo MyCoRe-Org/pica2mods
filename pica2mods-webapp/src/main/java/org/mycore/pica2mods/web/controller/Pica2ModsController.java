@@ -3,14 +3,18 @@ package org.mycore.pica2mods.web.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.mycore.pica2mods.validation.ModsValidator;
 import org.mycore.pica2mods.web.Pica2ModsWebapp;
 import org.mycore.pica2mods.web.util.XMLSchemaValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +51,16 @@ public class Pica2ModsController {
     @Value("#{${pica2mods.catalogs.xsls}}")
     private Map<String, String> catalogXSLs;
 
+    @Value("${pica2mods.validation.schematron.resource}")
+    private String schematronResource;
+    
+    private ModsValidator modsValidator;
+    
+    @PostConstruct
+    private void init() {
+        modsValidator = new ModsValidator(schematronResource);
+    }
+
     @GetMapping("/")
     String index(@RequestParam(name = "ppn", required = false) String ppn,
         @RequestParam(name = "catalog", defaultValue = "ubr") String catalog,
@@ -69,10 +83,17 @@ public class Pica2ModsController {
 
             XMLSchemaValidator xsv = new XMLSchemaValidator();
             boolean isValid = xsv.validate(modsXML);
+            model.addAttribute("isValid", isValid);
             if (!isValid) {
                 model.addAttribute("xmlSchemaError", xsv.getErrorMsg());
             }
-
+            if ("ubr".equals(catalog)) {
+                List<String> result = modsValidator.run(new StreamSource(new StringReader(modsXML)));
+                if (!result.isEmpty()) {
+                    model.addAttribute("schematronError", result);
+                    model.addAttribute("isValid", false);
+                }
+            }
         } else {
             model.addAttribute("ppn", "");
             model.addAttribute("modsxml", "");
@@ -82,7 +103,7 @@ public class Pica2ModsController {
         List<String> xslFiles = new ArrayList<String>();
         try {
             PathMatchingResourcePatternResolver xslFileResolver = new PathMatchingResourcePatternResolver();
-            Resource[] resources = xslFileResolver.getResources("classpath*:xsl/**/*.xsl");
+            Resource[] resources = xslFileResolver.getResources("classpath*:xsl/**/*.x?l");
             for (Resource r : resources) {
                 String s = r.getURL().toString();
                 xslFiles.add(s.substring(s.lastIndexOf("xsl/") + 4));
@@ -115,7 +136,7 @@ public class Pica2ModsController {
         };
     }
 
-    @GetMapping(value = "/ppn{ppn}.mods.xml", produces = {MediaType.APPLICATION_XML_VALUE })
+    @GetMapping(value = "/ppn{ppn}.mods.xml", produces = { MediaType.APPLICATION_XML_VALUE })
     @ResponseBody
     String getXML(@PathVariable(name = "ppn", required = false) String ppn,
         @RequestParam(name = "catalog", required = false, defaultValue = "ubr") String catalog,

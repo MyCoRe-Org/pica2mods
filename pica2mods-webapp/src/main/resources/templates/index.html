@@ -12,12 +12,12 @@
   <div class="d-flex flex-column justify-content-between vh-100">
     <div class="container-fluid pt-3">
       <div style="float: right; margin-top: 12px">
-        <div th:if="${not(#strings.isEmpty(ppn))}" th:unless="${xmlSchemaError}">
+        <div th:if="${not(#strings.isEmpty(ppn))}" th:unless="${not(isValid)}">
           <a class="btn btn-success btn-sm" th:href="@{/ppn__${ppn}__.mods.xml?catalog=__${catalog}__}">
             <strong>&#128190; MODS valid</strong>
           </a>
         </div>
-        <span th:if="${xmlSchemaError}" style="font-size: 100%" class="badge badge-danger">MODS ERROR!</span>
+        <span th:unless="${isValid}" style="font-size: 100%" class="badge badge-danger">MODS ERROR!</span>
       </div>
       <h2> <img alt="MyCoRe" th:src="@{mycore_logo_170x40_frei.png}" valign="center"/> Pica2MODS Konverter
         <sup><small><a class="btn btn-link" th:title="${pica2modsVersion}">&#128712;</a></small></sup>
@@ -76,6 +76,11 @@
         <div class="row mt-4" th:if="${xmlSchemaError}">
           <div class="col">
             <div class="alert alert-danger pt-0" role="alert" style="white-space: pre-line;" th:text="${xmlSchemaError}"></div>
+          </div>
+        </div>
+        <div class="row mt-4" th:if="${schematronError}">
+          <div class="col">
+            <div class="alert alert-warning pt-0" role="alert" style="white-space: pre-line;" th:each="e:${schematronError}" th:text="${e}"></div>
           </div>
         </div>
       </form>
