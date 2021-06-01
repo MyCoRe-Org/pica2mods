@@ -49,7 +49,8 @@
     <!-- <rule context="//mods:mods[contains(string(mods:classification/@valueURI),'doctype#histbest')]"> funktioniert nicht, 
       da nicht alle XPath-Ausdrücke erlaubt sind. Nur XSLT-Pattern sind erlaubt: https://www.w3.org/TR/xslt20/#patterns -->
 
-    <rule context="mods:mods[$doctype='epub']">
+
+    <rule id="mods_epub" abstract="true">
       <extends rule="mods_global" />
       <assert test="mods:identifier[@type='doi']">
         Das Dokument muss eine DOI haben.
@@ -59,7 +60,15 @@
         Der RecordIdentifier muss Bestandteil der DOI sein.
       </assert>
     </rule>
-    <rule context="mods:mods[$doctype='histbest']">
+
+    <rule context="mods:mods[$doctype='epub']">
+      <extends rule="mods_epub" />
+    </rule>
+    <rule context="mods:mods[$doctype='data']">
+      <extends rule="mods_epub" />
+    </rule>
+    <rule context="mods:mods">
+      <!-- fallback, default: doctype=histbest -->
       <extends rule="mods_global" />
     </rule>
 
