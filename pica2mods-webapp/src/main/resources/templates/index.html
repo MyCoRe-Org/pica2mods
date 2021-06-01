@@ -79,8 +79,8 @@
           </div>
         </div>
         <div class="row mt-4" th:if="${schematronError}">
-          <div class="col">
-            <div class="alert alert-warning pt-0" role="alert" style="white-space: pre-line;" th:each="e:${schematronError}" th:text="${e}"></div>
+          <div class="col-12 col-lg-6" th:each="e:${schematronError}">
+            <div class="alert alert-warning pt-0" role="alert" style="white-space: pre-line;" th:text="${e}"></div>
           </div>
         </div>
       </form>
