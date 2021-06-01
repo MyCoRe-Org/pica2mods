@@ -20,7 +20,7 @@ import name.dmaus.schxslt.SchematronException;
 public class ModsValidator {
     private static final Logger LOGGER = LoggerFactory.getLogger(ModsValidator.class);
 
-    private static final String DEFAULT_SCHEMATRON_RESOURCE = "/validation/ubr_mods_validation.sch.xml";
+    public static final String DEFAULT_SCHEMATRON_RESOURCE = "/xsl/validation/ubr_mods_validation.sch.xml";
 
     private static List<Path> SAMPLE_FILES = Arrays.<Path>asList(
         Paths.get("R:\\git\\mods_validation\\sample\\matrikel_1760.mcr.xml"),
