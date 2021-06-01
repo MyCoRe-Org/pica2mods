@@ -67,6 +67,29 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>[1.7.0,1.7.99]</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.13.1</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jdom</groupId>
+        <artifactId>jdom2</artifactId>
+        <version>2.0.6</version>
+        <scope>test</scope>
+      </dependency>
+      <!-- https://mvnrepository.com/artifact/net.sf.saxon/Saxon-HE -->
+      <dependency>
+        <groupId>net.sf.saxon</groupId>
+        <artifactId>Saxon-HE</artifactId>
+        <version>10.2</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <developers>
@@ -98,15 +121,12 @@
   <modules>
     <module>pica2mods-xslt</module>
     <module>pica2mods-webapp</module>
+    <module>pica2mods-validation</module>
   </modules>
   <build>
     <plugins>
-      <!-- If you like to install or deploy artifacts by using the above setup you have to use 
-         the flatten-maven-plugin otherwise you will install/deploy artifacts in your repository 
-         which will not be consumable by Maven anymore. 
-    
-         see: https://maven.apache.org/maven-ci-friendly.html#install-deploy
-       -->
+      <!-- If you like to install or deploy artifacts by using the above setup you have to use the flatten-maven-plugin otherwise 
+        you will install/deploy artifacts in your repository which will not be consumable by Maven anymore. see: https://maven.apache.org/maven-ci-friendly.html#install-deploy -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>flatten-maven-plugin</artifactId>
@@ -134,4 +154,4 @@
       </plugin>
     </plugins>
   </build>
- </project>
+</project>

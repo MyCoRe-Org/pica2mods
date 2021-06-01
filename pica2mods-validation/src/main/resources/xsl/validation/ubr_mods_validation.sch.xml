@@ -1,0 +1,83 @@
+<schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt3">
+  <title>
+    MODS-Validierung für UB Rostock
+  </title>
+  <ns prefix='mods' uri='http://www.loc.gov/mods/v3' />
+
+  <pattern>
+    <let name="doctype"
+      value="substring-before(substring-after(//mods:*[@displayLabel='doctype']/@valueURI, '#'),'.')" />
+
+    <rule id="mods_global" abstract="true">
+      <assert test="count(mods:recordInfo/mods:recordIdentifier)=1">
+        Das Dokument muss GENAU EINEN RecordIdentifier haben.
+      </assert>
+      <assert test="mods:identifier[@type='purl']">
+        Das Dokument muss eine PURL haben.
+      </assert>
+      <assert test="ends-with(mods:identifier[@type='purl'], mods:recordInfo/mods:recordIdentifier)">
+        Der RecordIdentifier muss Bestandteil der PURL sein.
+      </assert>
+      <assert test="count(mods:titleInfo[@usage='primary']/mods:title)=1">
+        Das Dokument muss GENAU EIN &lt;title&gt; unterhalb &lt;titleInfo usage='primary'&gt; haben.
+      </assert>
+      <report
+        test="../mods:mods[mods:relatedItem[@type='host']/mods:recordInfo/mods:recordIdentifier][not(mods:titleInfo/mods:partNumber|mods:titleInfo/mods:partName)]">
+        Das Dokument muss ein &lt;partNumber&gt; oder &lt;partName&gt; unterhalb &lt;titleInfo usage='primary'&gt; haben.
+      </report>
+      <assert test="count(mods:originInfo[@eventType='publication']/mods:dateIssued[@keyDate='yes'])=1">
+        Das Dokument muss GENAU EIN &lt;originInfo @eventType='publication'&gt; / &lt;dateIssued @keyDate='yes'&gt; haben.
+      </assert>
+      <assert test="count(mods:originInfo[@eventType='publication']/mods:dateIssued[not(@*)])=1">
+        Das Dokument muss GENAU EIN &lt;originInfo @evenType='publication'&gt; / &lt;dateIssued&gt; (ohne Attribut) haben.
+      </assert>
+
+      <!-- ToDo-Check that the value is a valid classification item -->
+      <assert test="count(mods:*[@displayLabel='doctype'][ends-with(@authorityURI, '/doctype')])=1">
+        Das Dokument muss GENAU EINE doctype-Klassifikation haben.
+      </assert>
+      <assert test="count(mods:classification[ends-with(@authorityURI, '/accesscondition')])=1">
+        Das Dokument muss GENAU EINE accesscondition-Klassifikation haben.
+      </assert>
+      <assert test="count(mods:classification[contains(@valueURI, '/licenseinfo#work')])=1">
+        Das Dokument muss GENAU EINE licenseinfo#work-Klassifikation haben.
+      </assert>
+      <assert test="count(mods:classification[contains(@valueURI, '/licenseinfo#metadata')])=1">
+        Das Dokument muss GENAU EINE licenseinfo#metadata-Klassifikation haben.
+      </assert>
+    </rule>
+    <!-- <rule context="//mods:mods[contains(string(mods:classification/@valueURI),'doctype#histbest')]"> funktioniert nicht, 
+      da nicht alle XPath-Ausdrücke erlaubt sind. Nur XSLT-Pattern sind erlaubt: https://www.w3.org/TR/xslt20/#patterns -->
+
+    <rule context="mods:mods[$doctype='epub']">
+      <extends rule="mods_global" />
+      <assert test="mods:identifier[@type='doi']">
+        Das Dokument muss eine DOI haben.
+      </assert>
+      <assert
+        test="contains(mods:identifier[@type='doi'], translate(mods:recordInfo/mods:recordIdentifier, '/','_'))">
+        Der RecordIdentifier muss Bestandteil der DOI sein.
+      </assert>
+    </rule>
+    <rule context="mods:mods[$doctype='histbest']">
+      <extends rule="mods_global" />
+    </rule>
+
+    <rule context="mods:mods/mods:relatedItem[@type='host']">
+      <assert test="count(mods:titleInfo)=1">
+        Das &lt;relatedItem type='host'&gt; muss GENAU EIN &lt;titleInfo&gt; haben.</assert>
+      <assert test="count(mods:part/mods:text[@type='sortstring'])">
+        Das &lt;relatedItem type='host'&gt; muss GENAU EIN &lt;part&gt; / &lt;text type='sortstring'&gt; haben.
+      </assert>
+    </rule>
+    <rule context="mods:mods/mods:relatedItem[@type='series']">
+      <assert test="count(mods:titleInfo)=1">
+        Das &lt;relatedItem type='series'&gt; muss GENAU EIN &lt;titleInfo&gt; haben.
+      </assert>
+      <assert test="count(mods:part/mods:text[@type='sortstring'])">
+        Das &lt;relatedItem type='series'&gt; muss GENAU EIN &lt;part&gt; / &lt;text type='sortstring'&gt; haben.
+      </assert>
+    </rule>
+
+  </pattern>
+</schema>
