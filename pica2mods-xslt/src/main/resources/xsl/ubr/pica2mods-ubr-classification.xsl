@@ -24,7 +24,6 @@
 
     <xsl:choose>
       <xsl:when test="$picaMode = 'REPRO'">
-        <xsl:call-template name="COMMON_UBR_Class_AADGenres" />
         <xsl:call-template name="COMMON_UBR_Class_Collection" />
         <xsl:call-template name="COMMON_UBR_Class_Provider" />
       </xsl:when>
@@ -185,23 +184,6 @@
         </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="COMMON_UBR_Class_AADGenres">
-    <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" />
-    <xsl:variable name="aadGenres" select="$picaA/p:datafield[@tag='044S'] | ./p:datafield[@tag='044S']" />
-    <xsl:for-each-group select="$aadGenres/p:subfield[@code='9']" group-by=".">
-      <xsl:variable name="ppn" select="." />
-      <xsl:for-each
-        select="document('classification:aadgenre')//category/label[@xml:lang='x-ppn' and @text=$ppn]">
-        <xsl:element name="mods:classification">
-          <xsl:attribute name="authorityURI">{$WebApplicationBaseURL}classifications/aadgenre</xsl:attribute>
-          <xsl:attribute name="valueURI">{$WebApplicationBaseURL}classifications/aadgenre#{./../@ID}</xsl:attribute>
-          <xsl:attribute name="displayLabel">aadgenre</xsl:attribute>
-          <xsl:value-of select="./../label[@xml:lang='de']/@text" />
-        </xsl:element>
-      </xsl:for-each>
-    </xsl:for-each-group>
   </xsl:template>
 
   <!-- TODO SDNB - Klassifiation ist ein Fall für default .... -->
