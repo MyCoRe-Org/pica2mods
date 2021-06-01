@@ -204,7 +204,7 @@
               </xsl:if>
               <xsl:if test="./p:subfield[@code='i']">
                 <mods:detail type="article_number">
-                  <number><xsl:value-of select="./p:subfield[@code='i']" /></number>
+                  <mods:number><xsl:value-of select="./p:subfield[@code='i']" /></mods:number>
                 </mods:detail>
               </xsl:if>
             </xsl:for-each>  
