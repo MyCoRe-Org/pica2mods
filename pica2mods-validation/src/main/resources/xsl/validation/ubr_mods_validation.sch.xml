@@ -72,19 +72,17 @@
       <extends rule="mods_global" />
     </rule>
 
-    <rule context="mods:mods/mods:relatedItem[@type='host']">
+    <rule context="mods:mods/mods:relatedItem[@type='host' or @type='series'][not(./mods:recordInfo/mods:recordIdentifier)]">
       <assert test="count(mods:titleInfo)=1">
-        Das &lt;relatedItem type='host'&gt; muss GENAU EIN &lt;titleInfo&gt; haben.</assert>
-      <assert test="count(mods:part/mods:text[@type='sortstring'])">
-        Das &lt;relatedItem type='host'&gt; muss GENAU EIN &lt;part&gt; / &lt;text type='sortstring'&gt; haben.
+        Das &lt;relatedItem type='host|series'&gt; muss GENAU EIN &lt;titleInfo&gt; haben.
       </assert>
     </rule>
-    <rule context="mods:mods/mods:relatedItem[@type='series']">
+    <rule context="mods:mods/mods:relatedItem[@type='host' or @type='series'][./mods:recordInfo/mods:recordIdentifier]">
       <assert test="count(mods:titleInfo)=1">
-        Das &lt;relatedItem type='series'&gt; muss GENAU EIN &lt;titleInfo&gt; haben.
+        Das &lt;relatedItem type='host|series'&gt; muss GENAU EIN &lt;titleInfo&gt; haben.
       </assert>
       <assert test="count(mods:part/mods:text[@type='sortstring'])">
-        Das &lt;relatedItem type='series'&gt; muss GENAU EIN &lt;part&gt; / &lt;text type='sortstring'&gt; haben.
+        Das &lt;relatedItem type='host|series'&gt; muss GENAU EIN &lt;part&gt; / &lt;text type='sortstring'&gt; haben.
       </assert>
     </rule>
 
