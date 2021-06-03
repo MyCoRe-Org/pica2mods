@@ -82,7 +82,7 @@
             valueURI="{$WebApplicationBaseURL}classifications/licenseinfo#work.rightsreserved">alle Rechte vorbehalten</mods:classification>
         </xsl:if>
         <xsl:if
-          test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':accesscondition:openaccess')])">
+          test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':accesscondition')])">
           <mods:classification displayLabel="accesscondition"
             authorityURI="{$WebApplicationBaseURL}classifications/accesscondition"
             valueURI="{$WebApplicationBaseURL}classifications/accesscondition#openaccess">frei zugänglich (Open Access)</mods:classification>
@@ -109,7 +109,7 @@
             valueURI="{$WebApplicationBaseURL}classifications/licenseinfo#work.publicdomain">gemeinfrei</mods:classification>
         </xsl:if>
         <xsl:if
-          test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':accesscondition:openaccess')])">
+          test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':accesscondition')])">
           <mods:classification displayLabel="accesscondition"
             authorityURI="{$WebApplicationBaseURL}classifications/accesscondition"
             valueURI="{$WebApplicationBaseURL}classifications/accesscondition#openaccess">frei zugänglich (Open Access)</mods:classification>
