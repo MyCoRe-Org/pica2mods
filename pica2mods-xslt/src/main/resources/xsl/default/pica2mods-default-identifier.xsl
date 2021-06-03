@@ -118,9 +118,20 @@
           </xsl:if>
         </xsl:when>
         <xsl:when test="starts-with(./p:subfield[@code='0'], 'RISM')">
-          <mods:identifier type="rism">
-            <xsl:value-of select="normalize-space(substring-after(./p:subfield[@code='0'], 'RISM'))" />
-          </mods:identifier>
+          <xsl:variable name="entry" select="normalize-space(substring-after(./p:subfield[@code='0'], 'RISM'))" />
+          <xsl:analyze-string select="normalize-space($entry)" regex="ID\D+(.+)" flags="x">
+            <!-- \D = non numeric character -->
+            <xsl:matching-substring>
+              <mods:identifier type="rism_id">
+                <xsl:value-of select="regex-group(1)"/>
+              </mods:identifier>
+            </xsl:matching-substring>
+            <xsl:non-matching-substring>
+              <mods:identifier type="rism_series">
+                <xsl:value-of select="." />
+              </mods:identifier>
+            </xsl:non-matching-substring>
+           </xsl:analyze-string>
         </xsl:when>
         <xsl:when test="starts-with(./p:subfield[@code='0'], 'Kalliope')">
           <mods:identifier type="kalliope">
