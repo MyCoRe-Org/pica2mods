@@ -119,7 +119,7 @@
         </xsl:when>
         <xsl:when test="starts-with(./p:subfield[@code='0'], 'RISM')">
           <xsl:variable name="entry" select="normalize-space(substring-after(./p:subfield[@code='0'], 'RISM'))" />
-          <xsl:analyze-string select="normalize-space($entry)" regex="ID\D+(.+)" flags="x">
+          <xsl:analyze-string select="$entry" regex="ID\D+(.+)" flags="x">
             <!-- \D = non numeric character -->
             <xsl:matching-substring>
               <mods:identifier type="rism_id">
