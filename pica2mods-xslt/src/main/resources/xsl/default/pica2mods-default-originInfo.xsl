@@ -122,7 +122,7 @@
         <xsl:if test="./p:datafield[@tag='033E']"> <!-- 4034 -->
           <mods:originInfo eventType="upload">
             <xsl:if test="./p:datafield[@tag='033E']/p:subfield[@code='h']">  <!-- 4034 $h Jahr -->
-              <mods:dateCaptured encoding="iso8601">
+              <mods:dateCaptured encoding="w3cdtf">
                 <xsl:value-of select="./p:datafield[@tag='033E']/p:subfield[@code='h']" />
               </mods:dateCaptured>
             </xsl:if>
