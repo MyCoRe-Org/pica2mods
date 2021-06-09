@@ -112,7 +112,7 @@
         </xsl:otherwise>
       </xsl:choose>
       
-      <xsl:if test="../p:datafield[@tag='036C' or @tag='036D' or @tag='036E' or @tag='036F']/p:subfield[@code='l']">
+      <xsl:if test="../p:datafield[@tag='036C' or @tag='036D' or @tag='036E' or @tag='036F']">
       <mods:part>
         <!-- set order attribute only if value of subfield $X is a number -->
         <xsl:if test="./p:subfield[@code='X']">
@@ -143,8 +143,9 @@
           </xsl:choose>
         </xsl:if>
 
-        <xsl:if test="./p:subfield[@code='l']">
-          <mods:detail type="volume">
+    
+        <mods:detail type="volume">
+          <xsl:if test="./p:subfield[@code='l']">
             <xsl:choose>
               <xsl:when test="@tag='036F' and ../p:datafield[@tag='036E']">
                 <mods:number>
@@ -167,13 +168,14 @@
                 </mods:number>
               </xsl:otherwise>
             </xsl:choose>
-            <xsl:if test="../p:datafield[@tag='021A']">
+          </xsl:if>
+          <xsl:if test="../p:datafield[@tag='021A']">
               <mods:title>
                 <xsl:value-of select="replace(string-join(../p:datafield[@tag='021A']/p:subfield[@code='a' or @code='d'], ' : '), '@', '')" />
               </mods:title>
-            </xsl:if>
-          </mods:detail>
-        </xsl:if>
+          </xsl:if>
+        </mods:detail>
+
         <xsl:if test="(@tag='036D' or @tag='036F') and ./p:subfield[@code='X']"> <!-- 4160, 4180 -->
           <mods:text type="sortstring">
             <xsl:value-of select="pica2mods:sortableSortstring(./p:subfield[@code='X'])" />
