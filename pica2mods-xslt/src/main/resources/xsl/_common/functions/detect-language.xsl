@@ -63,7 +63,6 @@
         </xsl:for-each>
       </values>
     </xsl:variable>
-    <xsl:message select="$wordCounts" />
     
     <xsl:choose>
       <xsl:when test="$wordCounts/value[. > 3 and . =  max(../value) and count(../value[. = max(../value)]) = 1 ]">
