@@ -84,16 +84,19 @@
       <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
       <xsl:variable name="parentPica0500_2" select="substring($parent/p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
       <xsl:choose>
+        <xsl:when test="./@tag='036C'"> <!-- 4150  Mehrbändiges Werk -->
+          <xsl:attribute name="type">host</xsl:attribute>
+        </xsl:when>
         <xsl:when test="./@tag='036D'"> <!-- 4160  Mehrbändiges Werk -->
           <xsl:attribute name="type">host</xsl:attribute>
+        </xsl:when>
+        <xsl:when test="./@tag='036E'"> <!-- 4170  fortlaufende Resource -->
+          <xsl:attribute name="type">series</xsl:attribute>
         </xsl:when>
         <xsl:when test="./@tag='036F' and $parentPica0500_2 = 'b'"> <!-- 4180  Zeitung / Zeitschrift-->
           <xsl:attribute name="type">host</xsl:attribute>
         </xsl:when>
         <xsl:when test="./@tag='036F' and $parentPica0500_2 = 'd'"> <!-- 4180  Schriftenreihe -->
-          <xsl:attribute name="type">series</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="./@tag='036E'"> <!-- 4180  Schriftenreihe -->
           <xsl:attribute name="type">series</xsl:attribute>
         </xsl:when>
       </xsl:choose>
@@ -169,7 +172,8 @@
               </xsl:otherwise>
             </xsl:choose>
           </xsl:if>
-          <xsl:if test="../p:datafield[@tag='021A']">
+          <xsl:if test="../p:datafield[@tag='021A'] and (@tag='036C' or @tag='036D')">
+              <!-- Title nur für MBW -->
               <mods:title>
                 <xsl:value-of select="replace(string-join(../p:datafield[@tag='021A']/p:subfield[@code='a' or @code='d'], ' : '), '@', '')" />
               </mods:title>
