@@ -24,15 +24,6 @@
     </license>
   </licenses>
   <repositories>
-    <!-- central is required for bibsonomy not to take over every artifact -->
-    <repository>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>central</id>
-      <name>Central Repository</name>
-      <url>https://repo.maven.apache.org/maven2</url>
-    </repository>
     <repository>
       <releases>
         <enabled>false</enabled>
@@ -42,14 +33,6 @@
       </snapshots>
       <id>ossrh</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </repository>
-    <repository>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>dev.bibsonomy.org</id>
-      <name>Official Source Code Releases of selected BibSonomy Modules</name>
-      <url>http://dev.bibsonomy.org/maven2/</url>
     </repository>
   </repositories>
   <pluginRepositories>
@@ -126,7 +109,8 @@
   <build>
     <plugins>
       <!-- If you like to install or deploy artifacts by using the above setup you have to use the flatten-maven-plugin otherwise 
-        you will install/deploy artifacts in your repository which will not be consumable by Maven anymore. see: https://maven.apache.org/maven-ci-friendly.html#install-deploy -->
+        you will install/deploy artifacts in your repository which will not be consumable by Maven anymore. 
+        see: https://maven.apache.org/maven-ci-friendly.html#install-deploy -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>flatten-maven-plugin</artifactId>
