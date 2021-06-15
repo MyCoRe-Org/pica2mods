@@ -146,7 +146,7 @@
           </xsl:choose>
         </xsl:if>
 
-    
+        <xsl:if test="./p:subfield[@code='l'] or (../p:datafield[@tag='021A'] and (@tag='036C' or @tag='036D'))">
         <mods:detail type="volume">
           <xsl:if test="./p:subfield[@code='l']">
             <xsl:choose>
@@ -179,6 +179,7 @@
               </mods:title>
           </xsl:if>
         </mods:detail>
+        </xsl:if>
 
         <xsl:if test="(@tag='036D' or @tag='036F') and ./p:subfield[@code='X']"> <!-- 4160, 4180 -->
           <mods:text type="sortstring">
