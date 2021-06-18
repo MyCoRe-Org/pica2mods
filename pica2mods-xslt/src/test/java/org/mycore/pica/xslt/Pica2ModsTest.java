@@ -156,11 +156,12 @@ public class Pica2ModsTest {
                 final StreamSource streamSource = new StreamSource(styleIS);
                 final Transformer transformer = getTFactory().newTransformer(streamSource);
                 final JDOMResult jdomResult = new JDOMResult();
+                transformer.setParameter("MCR.PICA2MODS.DATABASE", "k10plus");
                 transformer.transform(new JDOMSource(jdom), jdomResult);
 
                 return jdomResult.getDocument();
             } catch (IOException | JDOMException | TransformerException e) {
-                throw new RuntimeException("Error while resolving", e);
+                throw new RuntimeException("Error while resolving "+stylePath, e);
             }
         } catch (IOException e) {
             throw new RuntimeException("Error while reading Stylesheet", e);

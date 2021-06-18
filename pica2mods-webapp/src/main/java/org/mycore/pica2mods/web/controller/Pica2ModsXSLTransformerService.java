@@ -49,8 +49,11 @@ public class Pica2ModsXSLTransformerService {
     @Value("${pica2mods.mycore.base.url}")
     private String mycoreBaseURL;
 
-    @Value("#{${pica2mods.catalogs.keys}}")
-    private Map<String, String> catalogKeys;
+    @Value("#{${pica2mods.catalogs.unapikeys}}")
+    private Map<String, String> catalogUnapiKeys;
+    
+    @Value("#{${pica2mods.catalogs.srudbs}}")
+    private Map<String, String> catalogSRUDBs;
 
     @Value("#{${pica2mods.catalogs.xsls}}")
     private Map<String, String> catalogXSLs;
@@ -65,7 +68,7 @@ public class Pica2ModsXSLTransformerService {
         Map<String, String> xslParams = new HashMap<>();
         xslParams.put("MCR.PICA2MODS.CONVERTER_VERSION", Pica2ModsWebapp.PICA2MODS_VERSION);
         
-        pica2modsGenerator.createMODSDocumentFromSRU(Pica2ModsWebapp.DEFAULT_CATALOG_KEY_K10PLUS, "pica.ppn=" + ppn,
+        pica2modsGenerator.createMODSDocumentFromSRU(catalogSRUDBs.get(catalog), "pica.ppn=" + ppn,
             catalogXSLs.get(catalog), result, xslParams);
 
         return sw.toString();
@@ -73,7 +76,7 @@ public class Pica2ModsXSLTransformerService {
 
     public List<PPNLink> resolveOtherIssues(String catalog, String ppn) {
         List<PPNLink> result = new ArrayList<>();
-        String url = unapiURL + "?format=picaxml&id=" + catalogKeys.get(catalog) + ":ppn:" + ppn;
+        String url = unapiURL + "?format=picaxml&id=" + catalogUnapiKeys.get(catalog) + ":ppn:" + ppn;
         XPath xpath = factory.newXPath();
         xpath.setNamespaceContext(new Pica2ModsNamespaceContext());
 

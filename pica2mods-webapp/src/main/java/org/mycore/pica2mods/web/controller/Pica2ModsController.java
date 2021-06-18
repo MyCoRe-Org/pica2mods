@@ -45,7 +45,7 @@ public class Pica2ModsController {
     @Value("#{${pica2mods.catalogs.urls}}")
     private Map<String, String> catalogUrls;
 
-    @Value("#{${pica2mods.catalogs.keys}}")
+    @Value("#{${pica2mods.catalogs.unapikeys}}")
     private Map<String, String> catalogKeys;
 
     @Value("#{${pica2mods.catalogs.xsls}}")
