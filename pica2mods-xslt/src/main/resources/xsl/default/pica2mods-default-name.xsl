@@ -7,8 +7,9 @@
                 exclude-result-prefixes="mods pica2mods">
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
-
+  
   <!-- This template is for testing purposes -->
+  <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
   <xsl:template match="p:record">
     <mods:mods>
       <xsl:call-template name="modsName" />
@@ -27,7 +28,7 @@
       <xsl:choose>
         <xsl:when test="./p:subfield[@code='9']">
           <xsl:variable name="ppn" select="./p:subfield[@code='9']" />
-          <xsl:variable name="tp" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', $ppn)" />
+          <xsl:variable name="tp" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $ppn)" />
           <xsl:if test="starts-with($tp/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tp')">
             <mods:name type="personal">
               <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='d']">
@@ -259,7 +260,7 @@
         <!-- Normdatensatz vorhanden: -->
         <xsl:when test="./p:subfield[@code='9']">
           <xsl:variable name="ppn" select="./p:subfield[@code='9']" />
-          <xsl:variable name="tb" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', $ppn)" />
+          <xsl:variable name="tb" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $ppn)" />
           <xsl:choose>
             <xsl:when test="starts-with($tb/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tb')">
               <mods:name type="corporate">
@@ -397,7 +398,7 @@
                   <xsl:choose>
                     <xsl:when test="./p:subfield[@code='9']">
                       <xsl:variable name="ppnOrt" select="./p:subfield[@code='9']" />
-                      <xsl:variable name="tg" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', $ppnOrt)" />
+                      <xsl:variable name="tg" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $ppnOrt)" />
                       <xsl:value-of select="$tg/p:datafield[@tag='065A']/p:subfield[@code='a']" />
                     </xsl:when>
                     <xsl:otherwise>

@@ -350,7 +350,7 @@
             </mods:recordInfo>
             <xsl:for-each select="$parent/p:datafield[@tag='003@']/p:subfield[@code='0']"> <!-- 0100 PPN-->
               <mods:identifier type="uri">
-               <xsl:value-of select="concat('https://uri.gbv.de/document/k10plus:ppn:', .)" />
+               <xsl:value-of select="concat('https://uri.gbv.de/document/',$MCR.PICA2MODS.DATABASE, ':ppn:', .)" />
               </mods:identifier>
             </xsl:for-each>
             
@@ -473,7 +473,7 @@
     </xsl:for-each>
     <xsl:for-each select="$parent/p:datafield[@tag='003@']/p:subfield[@code='0']"> <!-- 0100 PPN -->
       <mods:identifier type="uri">
-        <xsl:value-of select="concat('https://uri.gbv.de/document/k10plus:ppn:', .)" />
+        <xsl:value-of select="concat('https://uri.gbv.de/document/',$MCR.PICA2MODS.DATABASE,':ppn:', .)" />
       </mods:identifier>
     </xsl:for-each>
 

@@ -10,6 +10,7 @@
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
 
   <!-- This template is for testing purposes -->
+  <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
   <xsl:template match="p:record">
     <mods:mods>
       <xsl:call-template name="modsIdentifier" />
@@ -20,7 +21,7 @@
     <xsl:for-each select="./p:datafield[@tag='003@']/p:subfield[@code='0']"> <!-- 0100 -->
       <mods:identifier type="uri">
         <!-- ISIL DE-627 equals K10plus Verbundkatalog -->
-        <xsl:value-of select="concat('https://uri.gbv.de/document/opac-de-627:ppn:', .)" />
+        <xsl:value-of select="concat('https://uri.gbv.de/document/', $MCR.PICA2MODS.DATABASE, ':ppn:', .)" />
       </mods:identifier>
     </xsl:for-each>
 
