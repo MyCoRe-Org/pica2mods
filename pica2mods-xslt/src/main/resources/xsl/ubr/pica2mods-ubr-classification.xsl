@@ -68,28 +68,7 @@
         test="./p:datafield[@tag='209O']/p:subfield[@code='a' and (ends-with(text(), ':doctype:epub.series') or ends-with(text(), ':doctype:epub.journal'))]">
         <!-- Schriftenreihe oder Zeitschrift (Bundle) keine Default-Klassifikationen für licenseInfo und acessCondition -->
       </xsl:when>
-      <xsl:when test="./p:datafield[@tag='209O']/p:subfield[@code='a' and (contains(text(), ':doctype:epub') or contains(text(), ':doctype:data'))]">
-        <xsl:if
-          test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:deposit')])">
-          <mods:classification displayLabel="licenseinfo"
-            authorityURI="{$WebApplicationBaseURL}classifications/licenseinfo"
-            valueURI="{$WebApplicationBaseURL}classifications/licenseinfo#deposit.rightsgranted">Nutzungsrechte erteilt</mods:classification>
-        </xsl:if>
-        <xsl:if
-          test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:work')])">
-          <mods:classification displayLabel="licenseinfo"
-            authorityURI="{$WebApplicationBaseURL}classifications/licenseinfo"
-            valueURI="{$WebApplicationBaseURL}classifications/licenseinfo#work.rightsreserved">alle Rechte vorbehalten</mods:classification>
-        </xsl:if>
-        <xsl:if
-          test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':accesscondition')])">
-          <mods:classification displayLabel="accesscondition"
-            authorityURI="{$WebApplicationBaseURL}classifications/accesscondition"
-            valueURI="{$WebApplicationBaseURL}classifications/accesscondition#openaccess">frei zugänglich (Open Access)</mods:classification>
-        </xsl:if>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- default: ':doctype:histbest' -->
+      <xsl:when test="./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':doctype:histbest')]">
         <xsl:if
           test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:digitisedimages')])">
           <mods:classification displayLabel="licenseinfo"
@@ -114,7 +93,8 @@
             authorityURI="{$WebApplicationBaseURL}classifications/accesscondition"
             valueURI="{$WebApplicationBaseURL}classifications/accesscondition#openaccess">frei zugänglich (Open Access)</mods:classification>
         </xsl:if>
-      </xsl:otherwise>
+      </xsl:when>
+      <!--  keine Default-Klassifikationen für epub und data -->
     </xsl:choose>
   </xsl:template>
 
