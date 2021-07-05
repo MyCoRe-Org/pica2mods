@@ -103,13 +103,13 @@
       <!-- Verknüpfung über PPN -->
       <xsl:when test="$current/p:datafield[@tag='039I']/p:subfield[@code='9']">
         <xsl:variable name="ppnA"
-          select="$current/p:datafield[@tag='039I']/p:subfield[@code='9'][1]/text()" />
+          select="$current/p:datafield[@tag='039I'][1]/p:subfield[@code='9']/text()" />
         <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.ppn=', $ppnA))" />
       </xsl:when>
       <!-- Verknüpfung über ZDB-ID -->
       <xsl:when test="$current/p:datafield[@tag='039I']/p:subfield[@code='C' and text()='ZDB']">
         <xsl:variable name="zdbA"
-          select="$current/p:datafield[@tag='039I']/p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]/text()" />
+          select="$current/p:datafield[@tag='039I'][1]/p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]/text()" />
         <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.zdb=', $zdbA))" />
       </xsl:when>
       <!-- Fallback: leere Sequence -->
