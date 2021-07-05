@@ -4,6 +4,8 @@
   <title>
     MODS-Validierung für UB Rostock
   </title>
+  <!-- extends unterstützt anscheinend keine hierarchische Vererbung, 
+       Mehrfachvererbung -->
   <ns prefix='mods' uri='http://www.loc.gov/mods/v3' />
   <ns prefix='f' uri='http://www.mycore.org/functions/validation/mods-ubr' />
 
@@ -86,7 +88,6 @@
 
 
     <rule id="mods_epub" abstract="true">
-      <extends rule="mods_global" />
       <assert test="mods:identifier[@type='doi']">
         Das Dokument muss eine DOI haben.
       </assert>
@@ -97,9 +98,11 @@
     </rule>
 
     <rule context="mods:mods[$doctype='epub']">
+      <extends rule="mods_global" />
       <extends rule="mods_epub" />
     </rule>
     <rule context="mods:mods[$doctype='data']">
+    <extends rule="mods_global" />
       <extends rule="mods_epub" />
     </rule>
     <rule context="mods:mods">
