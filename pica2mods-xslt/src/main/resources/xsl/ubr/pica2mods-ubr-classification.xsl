@@ -68,7 +68,11 @@
         test="./p:datafield[@tag='209O']/p:subfield[@code='a' and (ends-with(text(), ':doctype:epub.series') or ends-with(text(), ':doctype:epub.journal'))]">
         <!-- Schriftenreihe oder Zeitschrift (Bundle) keine Default-Klassifikationen für licenseInfo und acessCondition -->
       </xsl:when>
-      <xsl:when test="./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':doctype:histbest')]">
+      <xsl:when test="./p:datafield[@tag='209O']/p:subfield[@code='a' and (contains(text(), ':doctype:epub') or contains(text(), ':doctype:data'))]">
+		<!-- epub / data -keine Default-Klassifikationen -->
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- default: Histbest (kein ':doctype:histbest' im Pica!) -->
         <xsl:if
           test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:digitisedimages')])">
           <mods:classification displayLabel="licenseinfo"
@@ -93,8 +97,7 @@
             authorityURI="{$WebApplicationBaseURL}classifications/accesscondition"
             valueURI="{$WebApplicationBaseURL}classifications/accesscondition#openaccess">frei zugänglich (Open Access)</mods:classification>
         </xsl:if>
-      </xsl:when>
-      <!--  keine Default-Klassifikationen für epub und data -->
+      </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
