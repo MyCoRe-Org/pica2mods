@@ -5,6 +5,7 @@
                 xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:err="http://www.w3.org/2005/xqt-errors"
                 exclude-result-prefixes="mods pica2mods p"
                 expand-text="yes">
 
@@ -39,22 +40,25 @@
   <xsl:template name="COMMON_CLASS">
     <!-- Klassifikationen aus 209O/01  8600 exemplarspezifische Abrufzeichen mappen
          Doctype-Klassifikation jetzt als mods:Genre (MyCoRe/MIR konform) -->
-    <xsl:for-each
-      select="./p:datafield[@tag='209O']/p:subfield[@code='a' and (starts-with(text(), 'ROSDOK:') or starts-with(text(), 'DBHSNB:')) and not(contains(text(), ':doctype:'))]">
+    <xsl:for-each select="./p:datafield[@tag='209O']/p:subfield[@code='a' and (starts-with(text(), 'ROSDOK:') or starts-with(text(), 'DBHSNB:')) and not(contains(text(), ':doctype:'))]">
       <xsl:variable name="classid" select="substring-before(substring-after(current(),':'),':')" />
       <xsl:variable name="categid" select="substring-after(substring-after(current(),':'),':')" />
-
-      <xsl:variable name="class_doc" select="document(concat('classification:',$classid))" />
-      <xsl:if test="$class_doc//category[@ID=$categid]">
-        <xsl:element name="mods:classification">
-          <xsl:attribute name="authorityURI"><xsl:value-of
-            select="$class_doc/mycoreclass/label[@xml:lang='x-uri']/@text" /></xsl:attribute>
-          <xsl:attribute name="valueURI"><xsl:value-of
-            select="concat($class_doc/mycoreclass/label[@xml:lang='x-uri']/@text,'#', $categid)" /></xsl:attribute>
-          <xsl:attribute name="displayLabel"><xsl:value-of select="$class_doc/mycoreclass/@ID" /></xsl:attribute>
-          <xsl:value-of select="$class_doc//category[@ID=$categid]/label[@xml:lang='de']/@text" />
-        </xsl:element>
-      </xsl:if>
+      <xsl:try>
+        <xsl:variable name="class_doc" select="document(concat('classification:',$classid))" />
+        <xsl:if test="$class_doc//category[@ID=$categid]">
+          <xsl:element name="mods:classification">
+            <xsl:attribute name="authorityURI"><xsl:value-of
+              select="$class_doc/mycoreclass/label[@xml:lang='x-uri']/@text" /></xsl:attribute>
+            <xsl:attribute name="valueURI"><xsl:value-of
+              select="concat($class_doc/mycoreclass/label[@xml:lang='x-uri']/@text,'#', $categid)" /></xsl:attribute>
+            <xsl:attribute name="displayLabel"><xsl:value-of select="$class_doc/mycoreclass/@ID" /></xsl:attribute>
+            <xsl:value-of select="$class_doc//category[@ID=$categid]/label[@xml:lang='de']/@text" />
+          </xsl:element>
+        </xsl:if>
+        <xsl:catch>
+          <xsl:comment>Error resolving classification for 8600 {.}</xsl:comment>
+        </xsl:catch>
+      </xsl:try>
     </xsl:for-each>
     <xsl:if
       test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:metadata')])">
