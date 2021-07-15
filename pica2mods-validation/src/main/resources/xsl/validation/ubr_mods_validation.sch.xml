@@ -76,7 +76,14 @@
       <assert test="count(mods:classification[ends-with(@authorityURI, '/accesscondition')])=1">
         Das Dokument muss GENAU EINE accesscondition-Klassifikation haben.
       </assert>
-      <assert test="count(mods:classification[contains(@valueURI, '/licenseinfo#work')])=1">
+      <!-- LicenseInfo Work für alle Nicht-Bundle-Objekte 
+           Genre != epub.journal, epub.multipart, epub.series, histbest.print.multipart, histbest.print.journal, histbest.print.series, histbest.newspaper.newspaper, 
+                    histbest.manuscript.multipart, histbest.musicalsource.multipartprint, histbest.musicalsource.multipartmanuscript, histbest.personalpapers.multipart
+                    histbest.archivalmaterial.multipart
+      -->
+      <assert test="mods:*[@displayLabel='doctype'][contains(@valueURI, 'journal') or contains(@valueURI, 'series') 
+                                                  or contains(@valueURI, 'newspaper') or contains(@valueURI, 'multipart')] 
+                   or count(mods:classification[contains(@valueURI, '/licenseinfo#work')])=1">
         Das Dokument muss GENAU EINE licenseinfo#work-Klassifikation haben.
       </assert>
       <assert test="count(mods:classification[contains(@valueURI, '/licenseinfo#metadata')])=1">
