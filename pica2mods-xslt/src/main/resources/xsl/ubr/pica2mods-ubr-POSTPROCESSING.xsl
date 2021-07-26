@@ -6,7 +6,7 @@
                  xmlns:mods="http://www.loc.gov/mods/v3"
                  xmlns:xlink="http://www.w3.org/1999/xlink"
                  xmlns:json="http://www.w3.org/2005/xpath-functions"
-                 exclude-result-prefixes="mods pica2mods"
+                 exclude-result-prefixes="mods pica2mods json p xlink"
                  expand-text="yes">
 
   <!-- add a default dateIssued for display (without @encoding attribute) -->

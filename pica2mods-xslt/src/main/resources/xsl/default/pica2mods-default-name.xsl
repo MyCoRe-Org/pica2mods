@@ -4,7 +4,8 @@
                 xmlns:pica2mods="http://www.mycore.org/pica2mods/xsl/functions" 
                 xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
-                exclude-result-prefixes="mods pica2mods">
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                exclude-result-prefixes="mods pica2mods p xlink">
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
   
