@@ -93,6 +93,14 @@
           </execution>
         </executions>
       </plugin>
+      <!-- exclude pica2mods webapp from deployment -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>
