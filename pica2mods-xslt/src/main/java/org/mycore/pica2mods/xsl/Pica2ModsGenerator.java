@@ -48,7 +48,7 @@ public class Pica2ModsGenerator {
 
     public static Pica2ModsGenerator instanceForRosDok() {
         return new Pica2ModsGenerator("https://sru.k10plus.de", "https://unapi.k10plus.de",
-            "http://rosdok.uni-rostock.de/");
+            "https://rosdok.uni-rostock.de/");
     }
 
     private String sruURL;
