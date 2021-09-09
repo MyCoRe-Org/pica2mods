@@ -77,7 +77,7 @@ public class Pica2ModsGenerator {
         }
     }
 
-    // http://sru.gbv.de/opac-de-28?operation=searchRetrieve&maximumRecords=1&recordSchema=picaxml&query=pica.ppn%3D1023803275
+    // http://sru.k10plus.de/opac-de-28?operation=searchRetrieve&maximumRecords=1&recordSchema=picaxml&query=pica.ppn%3D1023803275
     public Element retrievePicaXMLViaSRU(String database, String sruQuery) throws Exception {
         URL url = new URL(
             sruURL + "/" + database + "?operation=searchRetrieve&maximumRecords=1&recordSchema=picaxml&query="
@@ -162,6 +162,24 @@ public class Pica2ModsGenerator {
     }
 
     public void createMODSDocumentFromSRU(String catalogKey, String sruQuery, String xslFile, Result result, Map<String, String> parameter) {
+        try {
+            Element picaRecord = retrievePicaXMLViaSRU(catalogKey, sruQuery);
+            createMODSDocumentFromPicaXML(picaRecord, xslFile, result, parameter);
+        } catch (Exception e) {
+            LOGGER.error("Error transforming XML", e);
+        }
+    }
+
+    public void createMODSDocumentFromUnAPI(String catalogKey, String ppn, String xslFile, Result result, Map<String, String> parameter) {
+        try {
+            Element picaRecord = retrievePicaXMLViaUnAPI(catalogKey, ppn);
+            createMODSDocumentFromPicaXML(picaRecord, xslFile, result, parameter);
+        } catch (Exception e) {
+            LOGGER.error("Error transforming XML", e);
+        }
+    }
+
+    private void createMODSDocumentFromPicaXML(Element picaRecord, String xslFile, Result result, Map<String, String> parameter) throws TransformerException {
         //uses the configured Transformer-Factory (e.g. XALAN, if installed)
         //TransformerFactory TRANS_FACTORY = TransformerFactory.newInstance();
         //Java 9 provides a method newDefaultInstance() to retrieve the built-in system default implementation
@@ -171,34 +189,28 @@ public class Pica2ModsGenerator {
             "net.sf.saxon.TransformerFactoryImpl", getClass().getClassLoader());
 
         TRANS_FACTORY.setURIResolver(new Pica2ModsURIResolver(this));
-        try {
-            Element picaRecord = retrievePicaXMLViaSRU(catalogKey, sruQuery);
 
-            if (picaRecord != null) {
-                Source xsl = new StreamSource(getClass().getClassLoader()
-                    .getResourceAsStream(PICA2MODS_XSLT_PATH + xslFile));
-                xsl.setSystemId(PICA2MODS_XSLT_PATH + xslFile);
-                Transformer transformer = TRANS_FACTORY.newTransformer(xsl);
+        if (picaRecord != null) {
+            Source xsl = new StreamSource(getClass().getClassLoader()
+                .getResourceAsStream(PICA2MODS_XSLT_PATH + xslFile));
+            xsl.setSystemId(PICA2MODS_XSLT_PATH + xslFile);
+            Transformer transformer = TRANS_FACTORY.newTransformer(xsl);
 
-                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
-                /*
+            /*
                 <xsl:param name="MCR.SRU.URL" select="'https://sru.k10plus.de'"/>
                 <xsl:param name="MCR.UNAPI.URL" select="'https://unapi.k10plus.de'"/>
                 <xsl:param name="MCR.PICA.DATABASE.k10plus" select="'k10plus'"/>
                 <xsl:param name="MCR.PICA2MODS.CONVERTER_VERSION" select="'Pica2Mods 2.0'"/>
-                */
+             */
 
-                transformer.setParameter("WebApplicationBaseURL", mycoreBaseURL);
-                for(String key: parameter.keySet()) {
-                    transformer.setParameter(key, parameter.get(key));
-                }
-                transformer.transform(new DOMSource(picaRecord), result);
+            transformer.setParameter("WebApplicationBaseURL", mycoreBaseURL);
+            for(String key: parameter.keySet()) {
+                transformer.setParameter(key, parameter.get(key));
             }
-
-        } catch (Exception e) {
-            LOGGER.error("Error transforming XML", e);
+            transformer.transform(new DOMSource(picaRecord), result);
         }
     }
 
