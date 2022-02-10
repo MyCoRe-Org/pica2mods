@@ -81,7 +81,7 @@
           test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:digitisedimages')])">
           <mods:classification displayLabel="licenseinfo"
             authorityURI="{$WebApplicationBaseURL}classifications/licenseinfo"
-            valueURI="{$WebApplicationBaseURL}classifications/licenseinfo#digitisedimages.cclicense.cc-by-sa.v40">Lizenz Digitalisate: CC BY SA 4.0</mods:classification>
+            valueURI="{$WebApplicationBaseURL}classifications/licenseinfo#digitisedimages.norestrictions">Keine Einschränkungen</mods:classification>
         </xsl:if>
         <xsl:if
           test="not(./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), ':licenseinfo:deposit')])">
