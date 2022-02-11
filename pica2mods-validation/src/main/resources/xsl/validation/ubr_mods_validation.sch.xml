@@ -46,8 +46,8 @@
   </xsl:function>
   
   <pattern>
-    <let name="doctype"
-      value="substring-before(substring-after(//mods:*[@displayLabel='doctype']/@valueURI, '#'),'.')" />
+    <let name="doctype_class" value="substring-after(//mods:*[@displayLabel='doctype']/@valueURI, '#')" />
+    <let name="doctype" value="if (contains($doctype_class, '.')) then substring-before($doctype_class,'.') else $doctype_class" />
 
     <rule id="mods_global" abstract="true">
       <assert test="count(mods:recordInfo/mods:recordIdentifier)=1">
@@ -93,14 +93,13 @@
     <!-- <rule context="//mods:mods[contains(string(mods:classification/@valueURI),'doctype#histbest')]"> funktioniert nicht, 
       da nicht alle XPath-Ausdrücke erlaubt sind. Nur XSLT-Pattern sind erlaubt: https://www.w3.org/TR/xslt20/#patterns -->
 
-
     <rule id="mods_epub" abstract="true">
       <assert test="mods:identifier[@type='doi']">
         Das Dokument muss eine DOI haben.
       </assert>
       <assert
-        test="contains(mods:identifier[@type='doi'], translate(mods:recordInfo/mods:recordIdentifier, '/','_'))">
-        Der RecordIdentifier muss Bestandteil der DOI sein.
+        test="mods:identifier[@type='doi' and text()=concat('10.18453/',translate(../mods:recordInfo/mods:recordIdentifier, '/','_'))]">
+        Die DOI muss folgender Syntax entsprechen 10.18453/<value-of select="translate(mods:recordInfo/mods:recordIdentifier, '/','_')" />
       </assert>
     </rule>
 
@@ -109,7 +108,7 @@
       <extends rule="mods_epub" />
     </rule>
     <rule context="mods:mods[$doctype='data']">
-    <extends rule="mods_global" />
+      <extends rule="mods_global" />
       <extends rule="mods_epub" />
     </rule>
     <rule context="mods:mods">
