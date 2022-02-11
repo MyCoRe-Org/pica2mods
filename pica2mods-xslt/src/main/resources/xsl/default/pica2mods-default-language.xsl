@@ -23,18 +23,21 @@
       <!-- weiter Unterfelder für Orginaltext / Zwischenübersetzung nicht abbildbar -->
       <xsl:for-each select="./p:subfield[@code='a']">
         <mods:language>
-          <mods:languageTerm type="code" authority="rfc5646">
             <xsl:variable name="l" select="." />
             <xsl:choose>
               <xsl:when test="$rfc5646/mycoreclass/categories//category[label[@xml:lang='x-bibl']/@text=$l]">
-                <xsl:value-of
-                  select="$rfc5646/mycoreclass/categories//category[label[@xml:lang='x-bibl']/@text=$l]/@ID" />
+                <mods:languageTerm type="code" authority="rfc5646">
+                  <xsl:value-of
+                    select="$rfc5646/mycoreclass/categories//category[label[@xml:lang='x-bibl']/@text=$l]/@ID" />
+                </mods:languageTerm>  
               </xsl:when>
               <xsl:otherwise>
-                <xsl:value-of select="concat('???', . ,'???')" />
+                <xsl:comment>unknown language code</xsl:comment>
+                <mods:languageTerm type="code">
+                  <xsl:value-of select="." />
+                </mods:languageTerm>
               </xsl:otherwise>
             </xsl:choose>
-          </mods:languageTerm>
         </mods:language>
       </xsl:for-each>
     </xsl:for-each>
