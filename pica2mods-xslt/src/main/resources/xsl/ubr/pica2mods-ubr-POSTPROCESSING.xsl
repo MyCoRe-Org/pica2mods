@@ -61,6 +61,18 @@
     </xsl:copy>
   </xsl:template>
 
+  <!-- delete all external DOIs and URNs -->
+  <xsl:template match="mods:identifier[@type='urn' and not(starts-with(text(), 'urn:nbn:de:gbv:28'))]" mode="ubrPostProcessing">
+    <xsl:comment>
+      <xsl:text>UBR-Post-Processing: deleted external identifier </xsl:text> <xsl:value-of select="./text()" />
+    </xsl:comment>
+  </xsl:template>
+  <xsl:template match="mods:identifier[@type='doi' and not(contains(./text(), '/10.18453/'))]" mode="ubrPostProcessing">
+    <xsl:comment>
+      <xsl:text>UBR-Post-Processing: deleted external identifier </xsl:text> <xsl:value-of select="./text()" />
+    </xsl:comment>
+  </xsl:template>
+  
   <!-- delete all urls which look like our purls / do nothing -->
   <xsl:template match="mods:identifier[@type='url' and text()= ./../mods:identifier[@type='purl']/text()]"
     mode="ubrPostProcessing" />
