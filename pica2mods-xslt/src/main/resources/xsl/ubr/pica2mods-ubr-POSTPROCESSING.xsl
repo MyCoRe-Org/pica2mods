@@ -67,7 +67,7 @@
       <xsl:text>UBR-Post-Processing: deleted external identifier </xsl:text> <xsl:value-of select="./text()" />
     </xsl:comment>
   </xsl:template>
-  <xsl:template match="mods:identifier[@type='doi' and not(contains(./text(), '/10.18453/'))]" mode="ubrPostProcessing">
+  <xsl:template match="mods:identifier[@type='doi' and not(starts-with(./text(), '10.18453/'))]" mode="ubrPostProcessing">
     <xsl:comment>
       <xsl:text>UBR-Post-Processing: deleted external identifier </xsl:text> <xsl:value-of select="./text()" />
     </xsl:comment>
