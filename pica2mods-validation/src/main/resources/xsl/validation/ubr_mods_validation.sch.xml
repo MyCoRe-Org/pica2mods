@@ -99,7 +99,7 @@
       </assert>
       <assert
         test="mods:identifier[@type='doi' and text()=concat('10.18453/',translate(../mods:recordInfo/mods:recordIdentifier, '/','_'))]">
-        Die DOI muss folgender Syntax entsprechen 10.18453/<value-of select="translate(mods:recordInfo/mods:recordIdentifier, '/','_')" />
+        Die DOI muss folgender Syntax entsprechen: 10.18453/<value-of select="translate(mods:recordInfo/mods:recordIdentifier, '/','_')" />
       </assert>
     </rule>
 
