@@ -62,11 +62,11 @@
       <assert test="count(mods:titleInfo[@usage='primary']/mods:title)=1">
         Das Dokument muss GENAU EIN &lt;title&gt; unterhalb &lt;titleInfo usage='primary'&gt; haben.
       </assert>
-      <assert test="count(mods:originInfo[@eventType='publication']/mods:dateIssued[@keyDate='yes'])=1">
-        Das Dokument muss GENAU EIN &lt;originInfo @eventType='publication'&gt; / &lt;dateIssued @keyDate='yes'&gt; haben.
+      <assert test="count(mods:originInfo[@eventType='publication']/mods:dateIssued[@keyDate='yes']|mods:originInfo[@eventType='production']/mods:dateCreated[@keyDate='yes'])=1">
+        Das Dokument muss GENAU EIN &lt;originInfo @eventType='publication'&gt; / &lt;dateIssued @keyDate='yes'&gt; ODER &lt;originInfo @eventType='production'&gt; / &lt;dateCreated @keyDate='yes'&gt; haben.
       </assert>
-      <assert test="count(mods:originInfo[@eventType='publication']/mods:dateIssued[not(@*)])=1">
-        Das Dokument muss GENAU EIN &lt;originInfo @evenType='publication'&gt; / &lt;dateIssued&gt; (ohne Attribut) haben.
+      <assert test="count(mods:originInfo[@eventType='publication']/mods:dateIssued[not(@*)]|mods:originInfo[@eventType='production']/mods:dateCreated[not(@*)])=1">
+        Das Dokument muss GENAU EIN &lt;originInfo @evenType='publication'&gt; / &lt;dateIssued&gt; ODER &lt;originInfo @evenType='production'&gt; / &lt;dateCreated&gt; (ohne Attribut) haben.
       </assert>
 
       <!-- ToDo-Check that the value is a valid classification item -->
