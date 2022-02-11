@@ -9,7 +9,7 @@
   xmlns:map="http://www.w3.org/2005/xpath-functions/map"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:err="http://www.w3.org/2005/xqt-errors"
-  exclude-result-prefixes="mods fn xs">
+  exclude-result-prefixes="mods fn xs err">
 
   <xsl:import href="_common/functions/detect-language.xsl" />
 

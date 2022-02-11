@@ -6,7 +6,7 @@
                 xmlns:mods="http://www.loc.gov/mods/v3"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:err="http://www.w3.org/2005/xqt-errors"
-                exclude-result-prefixes="mods pica2mods p xlink"
+                exclude-result-prefixes="mods pica2mods p xlink err"
                 expand-text="yes">
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
