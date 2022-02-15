@@ -128,7 +128,6 @@
     </mods:titleInfo>
   </xsl:template>
 
-
   <xsl:template name="COMMON_Alt_Uniform_Title">
     <xsl:for-each select="./p:datafield[@tag='021G']"> <!-- 4002 Paralleltitel -->
       <mods:titleInfo type="translated">
@@ -143,7 +142,7 @@
       </mods:titleInfo>
     </xsl:for-each>
     
-    <!-- 3260/027A$a abweichender Titel, 4212/046C abweichender Titel, 4213/046D früherere Hauptitel, 3210/022A Werktitel, 3232/026C Zeitschriftenkurztitel -->
+    <!-- 3260/027A abweichender Titel, 4212/046C abweichender Titel, 4213/046D früherere Hauptitel -->
     <xsl:for-each
       select="./p:datafield[@tag='027A' or @tag='046C' or @tag='046D']/p:subfield[@code='a'] | ./p:datafield[@tag='021A']/p:subfield[@code='f'] ">
       <mods:titleInfo type="alternative">
@@ -157,6 +156,7 @@
       </mods:titleInfo>
     </xsl:for-each>
 
+    <!-- 3210/022A Werktitel -->
     <xsl:for-each select="./p:datafield[@tag='022A']">
       <mods:titleInfo type="uniform">
         <mods:title>
@@ -164,6 +164,8 @@
         </mods:title>
       </mods:titleInfo>
     </xsl:for-each>
+    
+    <!-- 3232/026C Zeitschriftenkurztitel -->
     <xsl:for-each select="./p:datafield[@tag='026C']">
       <mods:titleInfo type="abbreviated">
         <mods:title>
@@ -171,6 +173,23 @@
         </mods:title>
       </mods:titleInfo>
     </xsl:for-each>
+    
+    <!-- 4222/046M Haupttitel von Teilwerken -->
+    <xsl:for-each select="./p:datafield[@tag='046M']">
+      <mods:titleInfo otherType="contained_work">
+        <mods:title>
+           <xsl:variable name="the_title" select="translate(./p:subfield[@code='a'], '@', '')" />
+           <xsl:variable name="the_responsible" select="./p:subfield[@code='h']" />
+           <xsl:value-of select="if ($the_responsible) then (concat($the_title, ' / ', $the_responsible)) else ($the_title)" />
+        </mods:title>
+        <xsl:if test="./p:subfield[@code='d']">
+          <mods:subTitle>
+            <xsl:value-of select="./p:subfield[@code='d']" />
+          </mods:subTitle>
+        </xsl:if>
+      </mods:titleInfo>
+    </xsl:for-each>
+    
   </xsl:template>
   
 </xsl:stylesheet>
