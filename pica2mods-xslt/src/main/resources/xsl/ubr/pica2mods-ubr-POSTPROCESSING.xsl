@@ -34,6 +34,32 @@
       </mods:dateIssued>
     </xsl:copy>
   </xsl:template>
+  
+  <!-- add a default dateCreated for display (without @encoding attribute) -->
+  <xsl:template match=".[mods:dateCreated[@encoding] and not(mods:dateCreated[not(@encoding)])]"
+    mode="ubrPostProcessing">
+    <xsl:copy>
+      <xsl:copy-of select="*|@*|processing-instruction()|comment()" />
+      <xsl:comment>
+        <xsl:text>UBR-Post-Processing:</xsl:text>
+      </xsl:comment>
+      <mods:dateCreated>
+        <xsl:choose>
+          <xsl:when
+            test="mods:dateCreated[@encoding and @point='start'] and mods:dateCreated[@encoding and @point='end']">
+            <xsl:value-of
+              select="concat(mods:dateCreated[@encoding and @point='start'],'-',mods:dateCreated[@encoding and @point='end'])" />
+          </xsl:when>
+          <xsl:when test="mods:dateCreated[@encoding and @point='start']">
+            <xsl:value-of select="concat(mods:dateCreated[@encoding and @point='start'],'-')" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="mods:dateCreated[@encoding]" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </mods:dateCreated>
+    </xsl:copy>
+  </xsl:template>
 
   <!-- add a default dateCaptured for display (without @encoding attribute) -->
   <xsl:template match=".[mods:dateCaptured[@encoding] and not(mods:dateCaptured[not(@encoding)])]"
