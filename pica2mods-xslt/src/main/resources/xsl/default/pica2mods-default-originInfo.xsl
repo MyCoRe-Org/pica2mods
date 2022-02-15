@@ -18,7 +18,7 @@
 
   <xsl:template name="modsOriginInfo">
     <xsl:variable name="picaMode" select="pica2mods:detectMode(.)" />
-    <xsl:if test="./p:datafield[@tag='033F' or @tag='033A']">
+
       <mods:originInfo>
         <xsl:choose>
           <xsl:when test="./p:datafield[@tag='033F']">
@@ -56,7 +56,6 @@
           </mods:dateOther>
         </xsl:if>
       </mods:originInfo>
-    </xsl:if>
 
     <xsl:if test="$picaMode = 'REPRO'"> 
         <mods:originInfo eventType="digitization">
