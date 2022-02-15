@@ -146,40 +146,47 @@
           </xsl:choose>
         </xsl:if>
 
-        <xsl:if test="./p:subfield[@code='l'] or (../p:datafield[@tag='021A'] and (@tag='036C' or @tag='036D'))">
-        <mods:detail type="volume">
-          <xsl:if test="./p:subfield[@code='l']">
-            <xsl:choose>
-              <xsl:when test="@tag='036F' and ../p:datafield[@tag='036E']">
-                <mods:number>
-                  <xsl:value-of select="../p:datafield[@tag='036E']/p:subfield[@code='l']" />
-                  <xsl:if test="../p:datafield[@tag='036E']/p:subfield[@code='p' or @code='m']">
-                    <xsl:value-of select="concat(' (', string-join(../p:datafield[@tag='036E']/p:subfield[@code='p' or @code='m'], ', '), ')' )" />
-                  </xsl:if>
-                </mods:number>
-                <xsl:comment>[alternativ aus 4180: <xsl:value-of select="./p:subfield[@code='l']" />]</xsl:comment>
-              </xsl:when>
-              <xsl:when test="@tag='036D' and ../p:datafield[@tag='036C']">
-                <mods:number>
-                  <xsl:value-of select="../p:datafield[@tag='036C']/p:subfield[@code='l']" />
-                </mods:number>
-                <xsl:comment>[alternativ aus 4160: <xsl:value-of select="./p:subfield[@code='l']" />]</xsl:comment>
-              </xsl:when>
-              <xsl:otherwise>
-                <mods:number>
-                  <xsl:value-of select="./p:subfield[@code='l']" />
-                </mods:number>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:if>
-          <xsl:if test="../p:datafield[@tag='021A'] and (@tag='036C' or @tag='036D')">
-              <!-- Title nur für MBW -->
-              <mods:title>
-                <xsl:value-of select="replace(string-join(../p:datafield[@tag='021A']/p:subfield[@code='a' or @code='d'], ' : '), '@', '')" />
-              </mods:title>
-          </xsl:if>
-        </mods:detail>
-        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="./p:subfield[@code='l'] or (../p:datafield[@tag='021A'] and (@tag='036C' or @tag='036D'))">
+            <mods:detail type="volume">
+              <xsl:if test="./p:subfield[@code='l']">
+                <xsl:choose>
+                  <xsl:when test="@tag='036F' and ../p:datafield[@tag='036E']">
+                    <mods:number>
+                      <xsl:value-of select="../p:datafield[@tag='036E']/p:subfield[@code='l']" />
+                      <xsl:if test="../p:datafield[@tag='036E']/p:subfield[@code='p' or @code='m']">
+                       <xsl:value-of select="concat(' (', string-join(../p:datafield[@tag='036E']/p:subfield[@code='p' or @code='m'], ', '), ')' )" />
+                      </xsl:if>
+                    </mods:number>
+                    <xsl:comment>[alternativ aus 4180: <xsl:value-of select="./p:subfield[@code='l']" />]</xsl:comment>
+                  </xsl:when>
+                  <xsl:when test="@tag='036D' and ../p:datafield[@tag='036C']">
+                    <mods:number>
+                      <xsl:value-of select="../p:datafield[@tag='036C']/p:subfield[@code='l']" />
+                    </mods:number>
+                    <xsl:comment>[alternativ aus 4160: <xsl:value-of select="./p:subfield[@code='l']" />]</xsl:comment>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <mods:number>
+                      <xsl:value-of select="./p:subfield[@code='l']" />
+                    </mods:number>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:if>
+              <xsl:if test="../p:datafield[@tag='021A'] and (@tag='036C' or @tag='036D')">
+                <!-- Title nur für MBW -->
+                <mods:title>
+                  <xsl:value-of select="replace(string-join(../p:datafield[@tag='021A']/p:subfield[@code='a' or @code='d'], ' : '), '@', '')" />
+                </mods:title>
+              </xsl:if>
+            </mods:detail>
+          </xsl:when>
+          <xsl:otherwise>
+            <mods:detail type="volume">
+              <mods:caption>[uncounted]</mods:caption>
+            </mods:detail>
+          </xsl:otherwise>
+        </xsl:choose>
 
         <xsl:if test="(@tag='036D' or @tag='036F') and ./p:subfield[@code='X']"> <!-- 4160, 4180 -->
           <mods:text type="sortstring">
