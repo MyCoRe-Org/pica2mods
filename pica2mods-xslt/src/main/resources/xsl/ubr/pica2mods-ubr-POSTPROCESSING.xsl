@@ -172,16 +172,16 @@
     <!--PPN for k10plus as URI - deleted! / we use recordInfo/recordSourceNote instead -->
   </xsl:template>
 
-  <xsl:template match="mods:extent[unit='pages']" mode="ubrPostProcessing">
+  <xsl:template match="mods:extent[@unit='pages']" mode="ubrPostProcessing">
     <mods:detail type="article">
       <mods:number>
         <xsl:choose>
-          <xsl:when test="mods:start">
+          <xsl:when test="mods:start and not(mods:end)">
+            <xsl:value-of select="concat('Seite ',mods:start)" />
+          </xsl:when>
+          <xsl:when test="mods:start and mods:end">
             <xsl:value-of select="concat('Seiten ',mods:start, '-', mods:end)" />
           </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="." />
-          </xsl:otherwise>
         </xsl:choose>
       </mods:number>
     </mods:detail>

@@ -223,20 +223,21 @@
                   </mods:number>
                 </mods:detail>
               </xsl:if>
-              <xsl:if test="./p:subfield[@code='h']">
-                <xsl:choose>
-                  <xsl:when test="matches(./p:subfield[@code='h'],'^[0-9]+-[0-9]+$')">
-                    <mods:extent unit="pages">
+              <xsl:if test="./p:subfield[@code='h' or @code='g']">
+                <mods:extent unit="pages">
+                  <xsl:choose>
+                    <xsl:when test="matches(./p:subfield[@code='h'],'^[0-9]+-[0-9]+$')">
                       <mods:start><xsl:value-of select="substring-before(./p:subfield[@code='h'],'-')" /></mods:start>
                       <mods:end><xsl:value-of select="substring-after(./p:subfield[@code='h'],'-')" /></mods:end>
-                    </mods:extent>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <mods:extent unit="pages">
-                      <xsl:value-of select="concat('Seiten ',./p:subfield[@code='h'])" />
-                    </mods:extent>
-                  </xsl:otherwise>
-                </xsl:choose>
+                    </xsl:when>
+                    <xsl:when test="matches(./p:subfield[@code='h'],'^[0-9]+$')">
+                      <mods:start><xsl:value-of select="./p:subfield[@code='h']" /></mods:start>
+                    </xsl:when>
+                  </xsl:choose>
+                  <xsl:if test="./p:subfield[@code='g']">
+                     <mods:total><xsl:value-of select="./p:subfield[@code='g']" /></mods:total>
+                  </xsl:if>
+                </mods:extent>
               </xsl:if>
               <xsl:if test="./p:subfield[@code='i']">
                 <mods:detail type="article_number">
@@ -247,6 +248,11 @@
             <xsl:if test="./p:subfield[@code='x']">
               <mods:text type="sortstring">
                <xsl:value-of select="pica2mods:sortableSortstring(./p:subfield[@code='x'])" />
+              </mods:text>
+            </xsl:if>
+            <xsl:if test="./p:subfield[@code='y']">
+              <mods:text type="display">
+                <xsl:value-of select="./p:subfield[@code='y']" />
               </mods:text>
             </xsl:if>
           </mods:part>
