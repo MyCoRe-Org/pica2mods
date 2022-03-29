@@ -209,12 +209,35 @@
           <xsl:attribute name="type">host</xsl:attribute>
           <mods:part>
             <xsl:for-each select="./../p:datafield[@tag='031A']"> <!-- 4070 Differenzierende Angaben zur Quelle -->
-              <xsl:if test="./p:subfield[@code='h']">
-                <mods:detail type="article">
+              <xsl:if test="./p:subfield[@code='d']">
+                <mods:detail type="volume">
                   <mods:number>
-                    <xsl:value-of select="concat('Seiten ',./p:subfield[@code='h'])" />
+                    <xsl:value-of select="./p:subfield[@code='d']" />
                   </mods:number>
                 </mods:detail>
+              </xsl:if>
+              <xsl:if test="./p:subfield[@code='e'] or ./p:subfield[@code='f']">
+                <mods:detail type="issue">
+                  <mods:number>
+                    <xsl:value-of select="./p:subfield[@code='e'] | ./p:subfield[@code='f']" />
+                  </mods:number>
+                </mods:detail>
+              </xsl:if>
+              <xsl:if test="./p:subfield[@code='h' or @code='g']">
+                <mods:extent unit="pages">
+                  <xsl:choose>
+                    <xsl:when test="matches(./p:subfield[@code='h'],'^[0-9]+-[0-9]+$')">
+                      <mods:start><xsl:value-of select="substring-before(./p:subfield[@code='h'],'-')" /></mods:start>
+                      <mods:end><xsl:value-of select="substring-after(./p:subfield[@code='h'],'-')" /></mods:end>
+                    </xsl:when>
+                    <xsl:when test="matches(./p:subfield[@code='h'],'^[0-9]+$')">
+                      <mods:start><xsl:value-of select="./p:subfield[@code='h']" /></mods:start>
+                    </xsl:when>
+                  </xsl:choose>
+                  <xsl:if test="./p:subfield[@code='g']">
+                     <mods:total><xsl:value-of select="./p:subfield[@code='g']" /></mods:total>
+                  </xsl:if>
+                </mods:extent>
               </xsl:if>
               <xsl:if test="./p:subfield[@code='i']">
                 <mods:detail type="article_number">
@@ -225,6 +248,11 @@
             <xsl:if test="./p:subfield[@code='x']">
               <mods:text type="sortstring">
                <xsl:value-of select="pica2mods:sortableSortstring(./p:subfield[@code='x'])" />
+              </mods:text>
+            </xsl:if>
+            <xsl:if test="./p:subfield[@code='y']">
+              <mods:text type="display">
+                <xsl:value-of select="./p:subfield[@code='y']" />
               </mods:text>
             </xsl:if>
           </mods:part>
