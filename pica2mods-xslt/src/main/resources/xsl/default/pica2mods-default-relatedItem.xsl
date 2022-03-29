@@ -209,12 +209,34 @@
           <xsl:attribute name="type">host</xsl:attribute>
           <mods:part>
             <xsl:for-each select="./../p:datafield[@tag='031A']"> <!-- 4070 Differenzierende Angaben zur Quelle -->
-              <xsl:if test="./p:subfield[@code='h']">
-                <mods:detail type="article">
+              <xsl:if test="./p:subfield[@code='d']">
+                <mods:detail type="volume">
                   <mods:number>
-                    <xsl:value-of select="concat('Seiten ',./p:subfield[@code='h'])" />
+                    <xsl:value-of select="./p:subfield[@code='d']" />
                   </mods:number>
                 </mods:detail>
+              </xsl:if>
+              <xsl:if test="./p:subfield[@code='e'] or ./p:subfield[@code='f']">
+                <mods:detail type="issue">
+                  <mods:number>
+                    <xsl:value-of select="./p:subfield[@code='e'] | ./p:subfield[@code='f']" />
+                  </mods:number>
+                </mods:detail>
+              </xsl:if>
+              <xsl:if test="./p:subfield[@code='h']">
+                <xsl:choose>
+                  <xsl:when test="matches(./p:subfield[@code='h'],'^[0-9]+-[0-9]+$')">
+                    <mods:extent unit="pages">
+                      <mods:start><xsl:value-of select="substring-before(./p:subfield[@code='h'],'-')" /></mods:start>
+                      <mods:end><xsl:value-of select="substring-after(./p:subfield[@code='h'],'-')" /></mods:end>
+                    </mods:extent>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <mods:extent unit="pages">
+                      <xsl:value-of select="concat('Seiten ',./p:subfield[@code='h'])" />
+                    </mods:extent>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:if>
               <xsl:if test="./p:subfield[@code='i']">
                 <mods:detail type="article_number">
