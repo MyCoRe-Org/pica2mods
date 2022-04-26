@@ -72,10 +72,12 @@
               <xsl:call-template name="COMMON_PersonalName_ROLES">
                 <xsl:with-param name="datafield" select="." />
               </xsl:call-template>
-              <mods:nameIdentifier type="gnd">
-                <xsl:value-of
-                  select="$tp/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" />
-              </mods:nameIdentifier>
+              <xsl:if test="$tp/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']">
+                <mods:nameIdentifier type="gnd">
+                  <xsl:value-of
+                    select="$tp/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" />
+                </mods:nameIdentifier>
+              </xsl:if>
               <xsl:if test="$tp/p:datafield[@tag='006X' and ./p:subfield[@code='S']='orcid']">
                 <mods:nameIdentifier type="orcid">
                   <xsl:value-of
@@ -265,10 +267,12 @@
           <xsl:choose>
             <xsl:when test="starts-with($tb/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tb')">
               <mods:name type="corporate">
-                <mods:nameIdentifier type="gnd">
-                  <xsl:value-of
-                    select="$tb/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" />
-                </mods:nameIdentifier>
+                <xsl:if test="$tb/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']">
+                  <mods:nameIdentifier type="gnd">
+                    <xsl:value-of
+                      select="$tb/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" />
+                  </mods:nameIdentifier>
+                </xsl:if>
                 <xsl:if test="$tb/p:datafield[@tag='029A']/p:subfield[@code='a']">
                   <mods:namePart>
                     <xsl:value-of select="$tb/p:datafield[@tag='029A']/p:subfield[@code='a']" />
@@ -320,10 +324,12 @@
             </xsl:when>
             <xsl:when test="starts-with($tb/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tf')">
               <mods:name type="conference">
-                <mods:nameIdentifier type="gnd">
-                  <xsl:value-of
-                    select="$tb/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" />
-                </mods:nameIdentifier>
+                <xsl:if test="$tb/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']">
+                  <mods:nameIdentifier type="gnd">
+                    <xsl:value-of
+                      select="$tb/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" />
+                  </mods:nameIdentifier>
+                </xsl:if>
                 <xsl:for-each select="$tb/p:datafield[@tag='030A']">
                   <mods:namePart>
                     <!-- Zählung -->
