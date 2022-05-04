@@ -48,8 +48,9 @@
   <pattern>
     <let name="doctype_class" value="substring-after(//mods:*[@displayLabel='doctype']/@valueURI, '#')" />
     <let name="doctype" value="if (contains($doctype_class, '.')) then substring-before($doctype_class,'.') else $doctype_class" />
+    <let name="project" value="substring-before(/mycoreobject/@ID, '_')" />
 
-    <rule id="mods_global" abstract="true">
+    <rule id="mods_recordID" abstract="true">
       <assert test="count(mods:recordInfo/mods:recordIdentifier)=1">
         Das Dokument muss GENAU EINEN RecordIdentifier haben.
       </assert>
@@ -59,6 +60,9 @@
       <assert test="ends-with(mods:identifier[@type='purl'], mods:recordInfo/mods:recordIdentifier)">
         Der RecordIdentifier muss Bestandteil der PURL sein.
       </assert>
+    </rule>
+    
+    <rule id="mods_global" abstract="true">
       <assert test="count(mods:titleInfo[@usage='primary']/mods:title)=1">
         Das Dokument muss GENAU EIN &lt;title&gt; unterhalb &lt;titleInfo usage='primary'&gt; haben.
       </assert>
@@ -102,17 +106,22 @@
         Die DOI muss folgender Syntax entsprechen: 10.18453/<value-of select="translate(mods:recordInfo/mods:recordIdentifier, '/','_')" />
       </assert>
     </rule>
-
+	
+    <rule context="mods:mods[$project eq 'dbhsnb']">
+      <extends rule="mods_global" />
+    </rule>
     <rule context="mods:mods[$doctype='epub']">
+      <extends rule="mods_recordID" />
       <extends rule="mods_global" />
       <extends rule="mods_epub" />
     </rule>
     <rule context="mods:mods[$doctype='data']">
+      <extends rule="mods_recordID" />
       <extends rule="mods_global" />
       <extends rule="mods_epub" />
     </rule>
-    <rule context="mods:mods">
-      <!-- fallback, default: doctype=histbest -->
+    <rule context="mods:mods[$doctype='histbest']">
+      <extends rule="mods_recordID" />
       <extends rule="mods_global" />
     </rule>
     
