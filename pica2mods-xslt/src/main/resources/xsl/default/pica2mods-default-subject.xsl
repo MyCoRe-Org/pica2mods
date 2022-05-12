@@ -27,7 +27,7 @@
 
   <xsl:template name="modsSubject">
     <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->
-      <mods:subject>
+      <mods:subject authority="k10plus_144Z">
         <!-- Subfield x ist nicht in der Format-Dokumentation (PPN 898955750) -->
         <!-- kann mehrfach vorkommen -->
         <xsl:variable name="sf_x" select="./p:subfield[@code='x']" />
@@ -50,7 +50,7 @@
     <!-- Schlagwortketten aus 044K subfield 9 (GND auflösen), zusammengehörige Ketten über @occurrence="xx" erkennen
          Beispiel: ikar:ppn:100659853  -->
     <xsl:for-each-group select="./p:datafield[@tag='044K']" group-by="if (not(@occurrence)) then ('00') else (@occurrence)">
-      <mods:subject>
+      <mods:subject authority="k10plus_044K">
         <xsl:for-each select="current-group()">
           <mods:topic>
             <xsl:choose>
