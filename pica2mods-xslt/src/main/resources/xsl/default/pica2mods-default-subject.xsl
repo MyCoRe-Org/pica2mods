@@ -55,6 +55,9 @@
           <mods:topic>
             <xsl:choose>
               <xsl:when test="p:subfield[@code='9']">
+                <xsl:attribute name="authorityURI" select="'http://d-nb.info/gnd/'" />
+                <xsl:attribute name="valueURI" select="concat('http://d-nb.info/gnd/',p:subfield[@code='9'])" />
+                <xsl:attribute name="authority" select="'gnd'" />
                 <xsl:call-template name="getSubjectFromPPN">
                   <xsl:with-param name="subjectPPN" select="p:subfield[@code='9']" />
                 </xsl:call-template>
@@ -78,7 +81,15 @@
     <xsl:param name="subjectPPN" />
     <xsl:variable name="tp" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $subjectPPN)" />
 
-    <xsl:value-of select="$tp/p:datafield[@tag='041A']/p:subfield[@code='a']" />
+    <xsl:choose>
+      <xsl:when test="$tp/p:datafield[@tag='041A']"><xsl:value-of select="$tp/p:datafield[@tag='041A']/p:subfield[@code='a']" /></xsl:when>
+      <xsl:when test="$tp/p:datafield[@tag='065A']"><xsl:value-of select="$tp/p:datafield[@tag='065A']/p:subfield[@code='a']" /></xsl:when>
+      <xsl:when test="$tp/p:datafield[@tag='022A']"><xsl:value-of select="$tp/p:datafield[@tag='022A']/p:subfield[@code='a']" /></xsl:when>
+      <xsl:when test="$tp/p:datafield[@tag='030A']"><xsl:value-of select="$tp/p:datafield[@tag='030A']/p:subfield[@code='a']" /></xsl:when>
+      <xsl:when test="$tp/p:datafield[@tag='029A']"><xsl:value-of select="$tp/p:datafield[@tag='029A']/p:subfield[@code='a']" /></xsl:when>
+      <xsl:when test="$tp/p:datafield[@tag='028A']"><xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='a']" />, <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='b']" /></xsl:when>
+    </xsl:choose>
+
   </xsl:template>
 
 </xsl:stylesheet>
