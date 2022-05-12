@@ -49,19 +49,22 @@
 
     <!-- Schlagwortketten aus 044K subfield 9 (GND auflösen), zusammengehörige Ketten über @occurrence="xx" erkennen
          Beispiel: ikar:ppn:100659853  -->
-    <xsl:for-each-group select="./p:datafield[@tag='044K']" group-by="if not(@occurence) then '0' else @occurence">
+    <xsl:for-each-group select="./p:datafield[@tag='044K']" group-by="if (not(@occurrence)) then ('00') else (@occurrence)">
       <mods:subject>
         <xsl:for-each select="current-group()">
           <mods:topic>
             <xsl:choose>
-              <xsl:when test="../p:subfield[@code='9']">
+              <xsl:when test="p:subfield[@code='9']">
                 <xsl:call-template name="getSubjectFromPPN">
-                  <xsl:with-param name="subjectPPN" select="../p:subfield[@code='9']" />
+                  <xsl:with-param name="subjectPPN" select="p:subfield[@code='9']" />
                 </xsl:call-template>
               </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="." />
-              </xsl:otherwise>
+              <xsl:when test="p:subfield[@code='a']">
+                <xsl:value-of select="p:subfield[@code='a']" />
+              </xsl:when>
+              <xsl:when test="p:subfield[@code='A']">
+                <xsl:value-of select="p:subfield[@code='A']" />
+              </xsl:when>
             </xsl:choose>
           </mods:topic>
         </xsl:for-each>
