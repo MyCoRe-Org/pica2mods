@@ -40,7 +40,7 @@
     <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" /><!-- 5570 Gattungsbegriffe bei Alten Drucken -->
     <xsl:variable name="aadGenres" select="$picaA/p:datafield[@tag='044S'] | ./p:datafield[@tag='044S']" />
     <xsl:for-each-group select="$aadGenres/p:subfield[@code='9']" group-by=".">
-      <xsl:variable name="genre_obj" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', .)" />
+      <xsl:variable name="genre_obj" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, .)" />
       <xsl:element name="mods:genre">
         <xsl:attribute name="type">aadgenre</xsl:attribute>
         <xsl:attribute name="displayLabel">aadgenre</xsl:attribute>
