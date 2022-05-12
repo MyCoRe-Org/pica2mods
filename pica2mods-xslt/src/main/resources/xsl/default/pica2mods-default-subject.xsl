@@ -9,6 +9,9 @@
                 expand-text="yes">
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
+  
+  <!-- This template is for testing purposes -->
+  <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
 
   <!-- This template is for testing purposes -->
   <xsl:template match="p:record">
@@ -43,6 +46,36 @@
         </xsl:for-each>
       </mods:subject>
     </xsl:for-each>
+
+    <!-- Schlagwortketten aus 044K subfield 9 (GND auflösen), zusammengehörige Ketten über @occurrence="xx" erkennen
+         Beispiel: ikar:ppn:100659853  -->
+    <xsl:for-each-group select="./p:datafield[@tag='044K']" group-by="if not(@occurence) then '0' else @occurence">
+      <mods:subject>
+        <xsl:for-each select="current-group()">
+          <mods:topic>
+            <xsl:choose>
+              <xsl:when test="../p:subfield[@code='9']">
+                <xsl:call-template name="getSubjectFromPPN">
+                  <xsl:with-param name="subjectPPN" select="../p:subfield[@code='9']" />
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="." />
+              </xsl:otherwise>
+            </xsl:choose>
+          </mods:topic>
+        </xsl:for-each>
+      </mods:subject>
+    </xsl:for-each-group>
+
+  </xsl:template>
+  
+  
+  <xsl:template name="getSubjectFromPPN">
+    <xsl:param name="subjectPPN" />
+    <xsl:variable name="tp" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $subjectPPN)" />
+
+    <xsl:value-of select="$tp/p:datafield[@tag='041A']/p:subfield[@code='a']" />
   </xsl:template>
 
 </xsl:stylesheet>
