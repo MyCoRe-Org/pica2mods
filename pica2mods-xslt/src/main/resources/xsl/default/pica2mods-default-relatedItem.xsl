@@ -8,7 +8,7 @@
                 exclude-result-prefixes="mods pica2mods p xlink">
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
-
+  <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
   <xsl:template name="modsRelatedItem">
     <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241 Beziehungen zur größeren Einheit -->
       <xsl:call-template name="COMMON_AppearsIn" />
@@ -81,7 +81,7 @@
 
   <xsl:template name="COMMON_HostOrSeries">
     <mods:relatedItem>
-      <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
+      <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, ./p:subfield[@code='9'])" />
       <xsl:variable name="parentPica0500_2" select="substring($parent/p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
       <xsl:choose>
         <xsl:when test="./@tag='036C'"> <!-- 4150  Mehrbändiges Werk -->
@@ -200,7 +200,7 @@
 
   <xsl:template name="COMMON_AppearsIn">
       <xsl:variable name="pica0500_2" select="substring(./../p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
-      <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
+      <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, ./p:subfield[@code='9'])" />
 
       <xsl:choose>
         <xsl:when test="$pica0500_2='s'">
@@ -372,14 +372,14 @@
       </xsl:if>
       <xsl:choose>
         <xsl:when test="$datafield/p:subfield[@code='9']">
-          <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
+          <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, ./p:subfield[@code='9'])" />
            <xsl:if test="starts-with($parent/p:datafield[@tag='002@']/p:subfield[@code='0'], 'O')">
             <mods:recordInfo>
               <xsl:for-each
                  select="$parent/p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '//purl.uni-rostock.de')][1]"> <!-- 4950 URL (kein eigenes Feld) -->
                 <mods:recordIdentifier source="DE-28"><xsl:value-of select="substring-after(substring(.,9), '/')" /></mods:recordIdentifier>
               </xsl:for-each>
-              <mods:recordInfoNote type="k10plus_ppn">
+              <mods:recordInfoNote type="{$MCR.PICA2MODS.DATABASE}_ppn">
                 <xsl:value-of select="$parent/p:datafield[@tag='003@']/p:subfield[@code='0']" /> <!-- 0100 PPN -->
               </mods:recordInfoNote>
             </mods:recordInfo>
@@ -498,7 +498,7 @@
         <mods:recordIdentifier source="DE-28">
           <xsl:value-of select="substring(.,28,100) " />
         </mods:recordIdentifier>
-        <mods:recordInfoNote type="k10plus_ppn">
+        <mods:recordInfoNote type="{$MCR.PICA2MODS.DATABASE}_ppn">
           <xsl:value-of select="$parent/p:datafield[@tag='003@']/p:subfield[@code='0']" /> <!-- 0100 PPN -->
         </mods:recordInfoNote>
       </mods:recordInfo>

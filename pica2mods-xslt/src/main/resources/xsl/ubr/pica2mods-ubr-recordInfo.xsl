@@ -9,6 +9,8 @@
                 expand-text="yes">
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
+  
+  <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
 
   <!-- This template is for testing purposes -->
   <xsl:template match="p:record">
@@ -30,10 +32,10 @@
         <mods:recordIdentifier source="DE-519">dbhsnb/{substring(.,20,string-length(.)-19-2)}</mods:recordIdentifier>
       </xsl:for-each>
       <xsl:for-each select="./p:datafield[@tag='003@']/p:subfield[@code='0']"> <!-- 0100 PPN -->
-        <mods:recordInfoNote type="k10plus_ppn">{.}</mods:recordInfoNote>
+        <mods:recordInfoNote type="{$MCR.PICA2MODS.DATABASE}_ppn">{.}</mods:recordInfoNote>
       </xsl:for-each>
       <xsl:for-each select="./p:datafield[@tag='002@']/p:subfield[@code='0']"> <!-- 0100 PPN -->
-        <mods:recordInfoNote type="k10plus_bbg">{.}</mods:recordInfoNote>
+        <mods:recordInfoNote type="{$MCR.PICA2MODS.DATABASE}_bbg">{.}</mods:recordInfoNote>
       </xsl:for-each>
       <xsl:if test="./p:datafield[@tag='010E']/p:subfield[@code='e']/text()='rda'">
         <mods:descriptionStandard>rda</mods:descriptionStandard>
