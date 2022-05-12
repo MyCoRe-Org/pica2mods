@@ -10,6 +10,8 @@
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
 
+  <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
+
   <!-- This template is for testing purposes -->
   <xsl:template match="p:record">
     <mods:mods>
@@ -20,7 +22,7 @@
   <xsl:template name="modsGenre">
     <xsl:for-each select="./p:datafield[@tag='013D']"><!-- 1131 Art des Inhalts -->
       <xsl:variable name="genre_obj"
-        select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
+        select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, ./p:subfield[@code='9'])" />
       <xsl:element name="mods:genre">
         <xsl:attribute name="type">nature_of_content</xsl:attribute>
         <xsl:attribute name="displayLabel">natureOfContent</xsl:attribute>
@@ -38,7 +40,7 @@
     <xsl:variable name="picaA" select="pica2mods:queryPicaDruck(.)" /><!-- 5570 Gattungsbegriffe bei Alten Drucken -->
     <xsl:variable name="aadGenres" select="$picaA/p:datafield[@tag='044S'] | ./p:datafield[@tag='044S']" />
     <xsl:for-each-group select="$aadGenres/p:subfield[@code='9']" group-by=".">
-      <xsl:variable name="genre_obj" select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', .)" />
+      <xsl:variable name="genre_obj" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, .)" />
       <xsl:element name="mods:genre">
         <xsl:attribute name="type">aadgenre</xsl:attribute>
         <xsl:attribute name="displayLabel">aadgenre</xsl:attribute>

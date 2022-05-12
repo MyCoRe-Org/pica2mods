@@ -15,6 +15,7 @@
 
   <xsl:param name="MCR.PICA2MODS.SRU.URL" select="'https://sru.k10plus.de'" />
   <xsl:param name="MCR.PICA2MODS.UNAPI.URL" select="'https://unapi.k10plus.de'" />
+  <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
 
   <xsl:function name="pica2mods:queryPicaFromSRUWithQuery" as="element()?">
     <xsl:param name="database" as="xs:string" />
@@ -104,13 +105,13 @@
       <xsl:when test="$current/p:datafield[@tag='039I']/p:subfield[@code='9']">
         <xsl:variable name="ppnA"
           select="$current/p:datafield[@tag='039I'][1]/p:subfield[@code='9']/text()" />
-        <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.ppn=', $ppnA))" />
+        <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery($MCR.PICA2MODS.DATABASE, concat('pica.ppn=', $ppnA))" />
       </xsl:when>
       <!-- Verknüpfung über ZDB-ID -->
       <xsl:when test="$current/p:datafield[@tag='039I']/p:subfield[@code='C' and text()='ZDB']">
         <xsl:variable name="zdbA"
           select="$current/p:datafield[@tag='039I'][1]/p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]/text()" />
-        <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery('k10plus', concat('pica.zdb=', $zdbA))" />
+        <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery(MCR.PICA2MODS.DATABASE, concat('pica.zdb=', $zdbA))" />
       </xsl:when>
       <!-- Fallback: leere Sequence -->
       <xsl:otherwise>

@@ -8,7 +8,9 @@
                 exclude-result-prefixes="mods pica2mods p xlink">
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
-
+  
+  <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
+  
   <!-- This template is for testing purposes -->
   <xsl:template match="p:record">
     <mods:mods>
@@ -321,7 +323,7 @@
         <mods:placeTerm lang="ger" type="text">
           <xsl:if test="./p:subfield[@code='9']">
             <xsl:variable name="pOrt"
-              select="pica2mods:queryPicaFromUnAPIWithPPN('k10plus', ./p:subfield[@code='9'])" />
+              select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, ./p:subfield[@code='9'])" />
             <xsl:attribute name="authorityURI">http://d-nb.info/gnd/</xsl:attribute>
             <xsl:attribute name="valueURI"><xsl:value-of
               select="$pOrt/p:datafield[@tag='003U']/p:subfield[@code='a']" /></xsl:attribute>
