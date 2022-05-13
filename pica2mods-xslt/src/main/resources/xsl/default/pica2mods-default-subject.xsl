@@ -9,6 +9,8 @@
                 expand-text="yes">
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
+  
+  <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
 
   <!-- This template is for testing purposes -->
   <xsl:template match="p:record">
@@ -23,8 +25,9 @@
     wieder 101@) ermitteln -->
 
   <xsl:template name="modsSubject">
+    <!-- Schlagwortketten auf lokaler Ebene aus 6500 (144Z) -->
     <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->
-      <mods:subject>
+      <mods:subject authority="k10plus_field_6500">
         <!-- Subfield x ist nicht in der Format-Dokumentation (PPN 898955750) -->
         <!-- kann mehrfach vorkommen -->
         <xsl:variable name="sf_x" select="./p:subfield[@code='x']" />
@@ -43,6 +46,58 @@
         </xsl:for-each>
       </mods:subject>
     </xsl:for-each>
+
+    <!-- Schlagwortketten auf bibliograpischer Ebene aus 6400 (044K) 
+         subfield 9 (GND auflösen), zusammengehörige Ketten über @occurrence="xx" erkennen
+         Beispiel: ikar:ppn:100659853  -->
+    <xsl:for-each-group select="./p:datafield[@tag='044K']" group-by="if (not(@occurrence)) then ('00') else (@occurrence)">
+      <mods:subject authority="k10plus_field_6400">
+        <xsl:for-each select="current-group()">
+            <xsl:choose>
+              <xsl:when test="p:subfield[@code='9']">
+                <xsl:call-template name="getSubjectFromPPN">
+                  <xsl:with-param name="subjectPPN" select="p:subfield[@code='9']" />
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:when test="p:subfield[@code='a']">
+                <mods:topic>
+                  <xsl:value-of select="p:subfield[@code='a']" />
+                </mods:topic>
+              </xsl:when>
+              <xsl:when test="p:subfield[@code='A']">
+                <mods:topic>
+                  <xsl:value-of select="p:subfield[@code='A']" />
+                </mods:topic>
+              </xsl:when>
+            </xsl:choose>
+        </xsl:for-each>
+      </mods:subject>
+    </xsl:for-each-group>
+
+  </xsl:template>
+  
+  
+  <xsl:template name="getSubjectFromPPN">
+    <xsl:param name="subjectPPN" />
+    <xsl:variable name="tp" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $subjectPPN)" />
+    <mods:topic>
+      <xsl:if test="$tp/p:datafield[@tag='003U']">
+        <xsl:attribute name="authorityURI" select="'http://d-nb.info/gnd/'" />
+        <xsl:attribute name="valueURI" select="$tp/p:datafield[@tag='003U']/p:subfield[@code='a']" />
+        <xsl:attribute name="authority" select="'gnd'" />
+      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="$tp/p:datafield[@tag='041A']"><xsl:value-of select="$tp/p:datafield[@tag='041A']/p:subfield[@code='a']" /></xsl:when>
+        <xsl:when test="$tp/p:datafield[@tag='065A']"><xsl:value-of select="$tp/p:datafield[@tag='065A']/p:subfield[@code='a']" /></xsl:when>
+        <xsl:when test="$tp/p:datafield[@tag='022A']"><xsl:value-of select="$tp/p:datafield[@tag='022A']/p:subfield[@code='a']" /></xsl:when>
+        <xsl:when test="$tp/p:datafield[@tag='030A']"><xsl:value-of select="$tp/p:datafield[@tag='030A']/p:subfield[@code='a']" /></xsl:when>
+        <xsl:when test="$tp/p:datafield[@tag='029A']"><xsl:value-of select="$tp/p:datafield[@tag='029A']/p:subfield[@code='a']" /></xsl:when>
+        <xsl:when test="$tp/p:datafield[@tag='028A']">
+            <!-- Person -->
+            <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='a']" />, <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='b']" />
+        </xsl:when>
+      </xsl:choose>
+    </mods:topic>
   </xsl:template>
 
 </xsl:stylesheet>
