@@ -10,7 +10,6 @@
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
   
-  <!-- This template is for testing purposes -->
   <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
 
   <!-- This template is for testing purposes -->
