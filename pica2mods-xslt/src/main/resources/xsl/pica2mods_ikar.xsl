@@ -23,7 +23,7 @@
   <xsl:import href="_common/pica2mods-pica-PREPROCESSING.xsl" />
   <xsl:import href="_common/pica2mods-functions.xsl" />
 
-  <xsl:param name="MCR.PICA2MODS.CONVERTER_VERSION" select="'Pica2Mods 2.1'" />
+  <xsl:param name="MCR.PICA2MODS.CONVERTER_VERSION" select="'Pica2Mods 2.3'" />
   <xsl:param name="MCR.PICA2MODS.DATABASE" select="'ikar'" />
 
   <xsl:template match="p:record">
