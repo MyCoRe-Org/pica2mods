@@ -41,7 +41,8 @@
       <xsl:for-each select="./p:datafield[@tag='001A']/p:subfield[@code='0']"> <!-- 0100 PPN -->
         <xsl:variable name="year" select="number(substring(.,12,2))" />
         <mods:recordCreationDate encoding="w3cdtf">
-        <xsl:value-of select="concat(if (year > 69) then ('19') else ('20'),substring(.,12,2),'-',substring(.,9,2),'-',substring(.,6,2))" /></mods:recordCreationDate>
+          <xsl:value-of select="concat(if ($year > 69) then ('19') else ('20'),substring(.,12,2),'-',substring(.,9,2),'-',substring(.,6,2))" />
+        </mods:recordCreationDate>
       </xsl:for-each>
       <mods:recordChangeDate encoding="w3cdtf">
         <xsl:value-of select="format-dateTime(adjust-dateTime-to-timezone(current-dateTime(),xs:dayTimeDuration('PT0H')),'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]Z')"/>

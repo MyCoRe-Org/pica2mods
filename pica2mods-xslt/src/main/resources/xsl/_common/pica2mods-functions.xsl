@@ -111,7 +111,7 @@
       <xsl:when test="$current/p:datafield[@tag='039I']/p:subfield[@code='C' and text()='ZDB']">
         <xsl:variable name="zdbA"
           select="$current/p:datafield[@tag='039I'][1]/p:subfield[@code='C' and text()='ZDB']/following-sibling::p:subfield[@code='6'][1]/text()" />
-        <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery(MCR.PICA2MODS.DATABASE, concat('pica.zdb=', $zdbA))" />
+        <xsl:sequence select="pica2mods:queryPicaFromSRUWithQuery($MCR.PICA2MODS.DATABASE, concat('pica.zdb=', $zdbA))" />
       </xsl:when>
       <!-- Fallback: leere Sequence -->
       <xsl:otherwise>
