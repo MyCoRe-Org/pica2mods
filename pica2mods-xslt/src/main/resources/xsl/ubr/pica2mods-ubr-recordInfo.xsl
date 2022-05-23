@@ -35,10 +35,10 @@
       <xsl:for-each select="./p:datafield[@tag='003@']/p:subfield[@code='0']"> <!-- 0100 PPN -->
         <mods:recordInfoNote type="{$MCR.PICA2MODS.DATABASE}_ppn">{.}</mods:recordInfoNote>
       </xsl:for-each>
-      <xsl:for-each select="./p:datafield[@tag='002@']/p:subfield[@code='0']"> <!-- 0100 PPN -->
+      <xsl:for-each select="./p:datafield[@tag='002@']/p:subfield[@code='0']"> <!-- 0500 Bibliografische Gattung und Status -->
         <mods:recordInfoNote type="{$MCR.PICA2MODS.DATABASE}_bbg">{.}</mods:recordInfoNote>
       </xsl:for-each>
-      <xsl:for-each select="./p:datafield[@tag='001A']/p:subfield[@code='0']"> <!-- 0100 PPN -->
+      <xsl:for-each select="./p:datafield[@tag='001A']/p:subfield[@code='0']"> <!-- 0200 Kennung und Datum der Ersterfassung -->
         <xsl:variable name="year" select="number(substring(.,12,2))" />
         <mods:recordCreationDate encoding="w3cdtf">
           <xsl:value-of select="concat(if ($year > 69) then ('19') else ('20'),substring(.,12,2),'-',substring(.,9,2),'-',substring(.,6,2))" />
@@ -46,7 +46,7 @@
       </xsl:for-each>
       <mods:recordChangeDate encoding="w3cdtf">
         <xsl:value-of select="format-dateTime(adjust-dateTime-to-timezone(current-dateTime(),xs:dayTimeDuration('PT0H')),'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]Z')"/>
-      </mods:recordChangeDate>        
+      </mods:recordChangeDate>
       <xsl:if test="./p:datafield[@tag='010E']/p:subfield[@code='e']/text()='rda'">
         <mods:descriptionStandard>rda</mods:descriptionStandard>
       </xsl:if>

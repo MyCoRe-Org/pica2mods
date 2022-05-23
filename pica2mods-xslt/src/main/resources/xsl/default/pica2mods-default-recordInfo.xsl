@@ -22,8 +22,18 @@
   <xsl:template name="modsRecordInfo">
     <xsl:variable name="picaMode" select="pica2mods:detectMode(.)" />
     <mods:recordInfo>
-      <mods:recordIdentifier source="{$MCR.PICA2MODS.DATABASE}">{./p:datafield[@tag='003@']/p:subfield[@code='0']}
+      <mods:recordIdentifier source="{$MCR.PICA2MODS.DATABASE}">
+        <xsl:value-of select="./p:datafield[@tag='003@']/p:subfield[@code='0']" />
       </mods:recordIdentifier>
+      <xsl:for-each select="./p:datafield[@tag='001A']/p:subfield[@code='0']"> <!-- 0100 Kennung und Datum der Ersterfassung -->
+        <xsl:variable name="year" select="number(substring(.,12,2))" />
+        <mods:recordCreationDate encoding="w3cdtf">
+          <xsl:value-of select="concat(if ($year > 69) then ('19') else ('20'),substring(.,12,2),'-',substring(.,9,2),'-',substring(.,6,2))" />
+        </mods:recordCreationDate>
+      </xsl:for-each>
+      <mods:recordChangeDate encoding="w3cdtf"><!-- use current timestamp -->
+        <xsl:value-of select="format-dateTime(adjust-dateTime-to-timezone(current-dateTime(),xs:dayTimeDuration('PT0H')),'[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]Z')"/>
+      </mods:recordChangeDate>
       <xsl:if test="./p:datafield[@tag='010E']/p:subfield[@code='e']/text()='rda'">
         <mods:descriptionStandard>rda</mods:descriptionStandard>
       </xsl:if>
