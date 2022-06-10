@@ -4,7 +4,8 @@
                 xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
-                exclude-result-prefixes="xsl p xlink">
+                xmlns:zs="http://www.loc.gov/zing/srw/"
+                exclude-result-prefixes="xsl p xlink zs">
   <xsl:mode on-no-match="shallow-copy"/>
   
   <xsl:import href="default/pica2mods-default-titleInfo.xsl" />
@@ -45,4 +46,8 @@
     </mods:mods>
   </xsl:template>
 
+  <xsl:template match="zs:searchRetrieveResponse">
+    <xsl:apply-templates select="//p:record" />
+  </xsl:template>
+ 
 </xsl:stylesheet>
