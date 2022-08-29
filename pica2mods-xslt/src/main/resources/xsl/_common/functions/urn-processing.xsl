@@ -46,7 +46,6 @@
   </xsl:function>
     
   <xsl:function name="pica2mods:validateURN" as="xs:boolean">
-    <!-- Algorithmus: https://web.archive.org/web/20200214004623/http://www.persistent-identifier.de/?link=316 -->
     <xsl:param name="urn" as="xs:string" />
     <xsl:sequence select="pica2mods:createChecksumForURNBase(substring($urn, 1, string-length($urn)- 1)) = number(substring($urn, string-length($urn), 1))" />
   </xsl:function>
