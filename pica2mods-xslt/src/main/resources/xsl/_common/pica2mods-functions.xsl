@@ -12,6 +12,7 @@
   exclude-result-prefixes="mods fn xs err">
 
   <xsl:import href="_common/functions/detect-language.xsl" />
+  <xsl:import href="_common/functions/urn-processing.xsl" />
 
   <xsl:param name="MCR.PICA2MODS.SRU.URL" select="'https://sru.k10plus.de'" />
   <xsl:param name="MCR.PICA2MODS.UNAPI.URL" select="'https://unapi.k10plus.de'" />
