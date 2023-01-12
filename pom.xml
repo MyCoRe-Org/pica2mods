@@ -48,6 +48,10 @@
       <plugin>
         <groupId>pl.project13.maven</groupId>
         <artifactId>git-commit-id-plugin</artifactId>
+        <configuration>
+          <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+          <offline>true</offline>
+        </configuration>
         <executions>
           <execution>
             <id>get-the-git-infos</id>
@@ -57,10 +61,6 @@
             <phase>validate</phase>
           </execution>
         </executions>
-        <configuration>
-          <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
-          <offline>true</offline>
-        </configuration>
       </plugin>
     </plugins>
   </build>
