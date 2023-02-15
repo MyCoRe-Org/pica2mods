@@ -49,7 +49,9 @@
         <groupId>pl.project13.maven</groupId>
         <artifactId>git-commit-id-plugin</artifactId>
         <configuration>
+          <useNativeGit>false</useNativeGit>
           <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+          <failOnNoGitDirectory>false</failOnNoGitDirectory>
           <offline>true</offline>
         </configuration>
         <executions>
