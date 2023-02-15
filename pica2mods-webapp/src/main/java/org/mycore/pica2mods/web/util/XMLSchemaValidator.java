@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -52,7 +53,7 @@ public class XMLSchemaValidator {
         List<String> schemas = new ArrayList<>();
         for (String s : SchemaLocations.split("\\s")) {
             s = s.trim();
-            if (s.toLowerCase().endsWith(".xsd")) {
+            if (s.toLowerCase(Locale.ROOT).endsWith(".xsd")) {
                 schemas.add(s);
             }
         }
