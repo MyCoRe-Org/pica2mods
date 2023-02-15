@@ -6,3 +6,4 @@
 *.iml
 pica2mods-xslt/result.html
 **/.DS_Store
+*.bak
