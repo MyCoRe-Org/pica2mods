@@ -538,8 +538,12 @@
          Jahr.Monat.Tag-Monat.Tag
          Jahr.Monat.Tag-Jahr.Monat.Tag
          (https://format.k10plus.de/k10plushelp.pl?cmd=kat&val=3160&katalog=Standard)
-    --> 
+    -->
     <xsl:choose>
+      <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\d\d\-\d\d.\d\d')">
+        <xsl:variable name="year" select="substring($date,1,4)"/>
+        <xsl:value-of select="concat(substring($date,6,2), '.', substring($date,9,2), '.', $year, '-', substring($date,12,2), '.', substring($date,15,2), '.', $year)" />
+      </xsl:when>
       <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\d\d')">
         <xsl:value-of select="concat(substring($date,9,2),'.',substring($date,6,2),'.',substring($date,1,4))" />
       </xsl:when>
@@ -550,7 +554,6 @@
       <xsl:otherwise>
         <xsl:value-of select="$date" />
       </xsl:otherwise>
-    
     </xsl:choose>
     
   </xsl:template>  
