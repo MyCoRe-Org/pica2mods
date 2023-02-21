@@ -226,11 +226,7 @@
               <xsl:if test="./p:subfield[@code='h' or @code='g']">
                 <mods:extent unit="pages">
                   <xsl:choose>
-                    <xsl:when test="matches(./p:subfield[@code='h'],'^[0-9]+-[0-9]+$')">
-                      <mods:start><xsl:value-of select="substring-before(./p:subfield[@code='h'],'-')" /></mods:start>
-                      <mods:end><xsl:value-of select="substring-after(./p:subfield[@code='h'],'-')" /></mods:end>
-                    </xsl:when>
-                    <xsl:when test="matches(./p:subfield[@code='h'],'^\[[0-9]+\]-[0-9]+$')">
+                    <xsl:when test="matches(./p:subfield[@code='h'],'^\[?[0-9]+\]?-\[?[0-9]+\]?$')">
                       <mods:start><xsl:value-of select="substring-before(./p:subfield[@code='h'],'-')" /></mods:start>
                       <mods:end><xsl:value-of select="substring-after(./p:subfield[@code='h'],'-')" /></mods:end>
                     </xsl:when>
