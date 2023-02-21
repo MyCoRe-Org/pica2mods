@@ -46,41 +46,77 @@
         </xsl:for-each>
       </mods:subject>
     </xsl:for-each>
-
-    <!-- Schlagwortketten auf bibliograpischer Ebene aus 5550 (044K) 
+    
+    <!-- Schlagwortfolgen (GBV, SWB, K10plus) auf bibliograpischer Ebene aus 5550 (044K) 
          subfield 9 (GND auflösen), zusammengehörige Ketten über @occurrence="xx" erkennen
          Beispiel: ikar:ppn:100659853  -->
-    <xsl:for-each-group select="./p:datafield[@tag='044K' or @tag='041A']" group-by="if (not(@occurrence)) then ('00') else (@occurrence)">
-      <mods:subject authority="{if(@tag='044K') then ('k10plus_field_555X') else (if (@tag='041A') then ('k10plus_field_51XX') else (''))}">
+    <xsl:for-each-group select="./p:datafield[@tag='044K']" group-by="if (not(@occurrence)) then ('00') else (@occurrence)">
+      <mods:subject authority="k10plus_field_555X">
         <xsl:for-each select="current-group()">
-            <xsl:choose>
-              <xsl:when test="p:subfield[@code='9']">
-                <xsl:call-template name="getSubjectFromPPN">
-                  <xsl:with-param name="subjectPPN" select="p:subfield[@code='9']" />
-                </xsl:call-template>
-              </xsl:when>
-              <xsl:when test="p:subfield[@code='a']">
-                <mods:topic>
-                  <xsl:value-of select="p:subfield[@code='a']" />
-                </mods:topic>
-              </xsl:when>
-              <xsl:when test="p:subfield[@code='A']">
-                <mods:topic>
-                  <xsl:value-of select="p:subfield[@code='A']" />
-                </mods:topic>
-              </xsl:when>
-            </xsl:choose>
+            <xsl:call-template name="processSubject" />
         </xsl:for-each>
       </mods:subject>
     </xsl:for-each-group>
 
+    <!-- Schlagwortketten auf bibliograpischer Ebene aus 5100 (041A) 
+         subfield 9 (GND auflösen), zusammengehörige Ketten über 1. Position in @occurrence erkennen
+         Beispiel: gvk:ppn:846106841  -->
+    <xsl:for-each-group select="./p:datafield[@tag='041A']" group-by="if (not(@occurrence)) then ('0') else (substring(@occurrence,1,1))">
+      <mods:subject authority="k10plus_field_51XX">
+        <xsl:for-each select="current-group()">
+          <!-- @occurrence x9 = Quelle -->
+          <xsl:if test="not(ends-with(@occurrence, '9'))">
+              <xsl:call-template name="processSubject" />
+          </xsl:if>
+        </xsl:for-each>
+      </mods:subject>
+    </xsl:for-each-group>
   </xsl:template>
-  
-  
-  <xsl:template name="getSubjectFromPPN">
+ 
+  <!-- Hilfstemplate, um Unterfelder der verschiedenen Schlagwortfelder auszuwerten -->
+  <xsl:template name="processSubject">
+    <xsl:choose>
+      <xsl:when test="p:subfield[@code='9']">
+        <!-- Daten aus verknüpftem Normdatensatz übernehmen -->
+        <xsl:call-template name="retrieveSubjectFromPPN">
+          <xsl:with-param name="subjectPPN" select="p:subfield[@code='9']" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- Felder nur auswerten, wenn keine Normdatensatzverknüpfung vorliegt -->
+        <xsl:if test="p:subfield[@code='a']">
+          <mods:topic>
+            <xsl:value-of select="p:subfield[@code='a']" />
+          </mods:topic>
+        </xsl:if>
+        <xsl:if test="p:subfield[@code='g']">
+          <mods:geographic>
+            <xsl:value-of select="p:subfield[@code='g']" />
+          </mods:geographic>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+    <!-- Zeitschlagworte kommen nie über die Normdatensatzverknüpfung -->
+    <xsl:if test="p:subfield[@code='z']">
+      <mods:temporal>
+        <xsl:value-of select="p:subfield[@code='z']" />
+      </mods:temporal>
+    </xsl:if>
+    <!-- Das Unterfeld $A (Einrichtung als Quelle des Schlagworts) ist nur in den Feldern 51X9 vorgesehen -->
+  </xsl:template>
+
+  <xsl:template name="retrieveSubjectFromPPN">
     <xsl:param name="subjectPPN" />
     <xsl:variable name="tp" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $subjectPPN)" />
-    <mods:topic>
+    <xsl:variable name="pica0500_2" select="substring($tp/p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
+    <xsl:variable name="elementName">
+      <xsl:choose>
+        <xsl:when test="$pica0500_2='g'">mods:geographic</xsl:when>
+        <xsl:otherwise>mods:topic</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:element name="{$elementName}">
       <xsl:if test="$tp/p:datafield[@tag='003U']">
         <xsl:attribute name="authorityURI" select="'http://d-nb.info/gnd/'" />
         <xsl:attribute name="valueURI" select="$tp/p:datafield[@tag='003U']/p:subfield[@code='a']" />
@@ -97,7 +133,7 @@
             <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='a']" />, <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='b']" />
         </xsl:when>
       </xsl:choose>
-    </mods:topic>
+    </xsl:element>
   </xsl:template>
 
 </xsl:stylesheet>
