@@ -230,6 +230,10 @@
                       <mods:start><xsl:value-of select="substring-before(./p:subfield[@code='h'],'-')" /></mods:start>
                       <mods:end><xsl:value-of select="substring-after(./p:subfield[@code='h'],'-')" /></mods:end>
                     </xsl:when>
+                    <xsl:when test="matches(./p:subfield[@code='h'],'^\[[0-9]+\]-[0-9]+$')">
+                      <mods:start><xsl:value-of select="substring-before(./p:subfield[@code='h'],'-')" /></mods:start>
+                      <mods:end><xsl:value-of select="substring-after(./p:subfield[@code='h'],'-')" /></mods:end>
+                    </xsl:when>
                     <xsl:when test="matches(./p:subfield[@code='h'],'^[0-9]+$')">
                       <mods:start><xsl:value-of select="./p:subfield[@code='h']" /></mods:start>
                     </xsl:when>
