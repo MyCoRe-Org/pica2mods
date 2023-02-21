@@ -50,7 +50,7 @@
     <!-- Schlagwortketten auf bibliograpischer Ebene aus 5550 (044K) 
          subfield 9 (GND auflösen), zusammengehörige Ketten über @occurrence="xx" erkennen
          Beispiel: ikar:ppn:100659853  -->
-    <xsl:for-each-group select="./p:datafield[@tag='044K']" group-by="if (not(@occurrence)) then ('00') else (@occurrence)">
+    <xsl:for-each-group select="./p:datafield[@tag='044K' or @tag='041A']" group-by="if (not(@occurrence)) then ('00') else (@occurrence)">
       <mods:subject authority="k10plus_field_5550">
         <xsl:for-each select="current-group()">
             <xsl:choose>
