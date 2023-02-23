@@ -150,5 +150,6 @@
     <module>pica2mods-xslt</module>
     <module>pica2mods-webapp</module>
     <module>pica2mods-validation</module>
+    <module>pica2mods-runner</module>
   </modules>
 </project>
