@@ -18,7 +18,6 @@
 
 package org.mycore.pica2mods.runner;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.mycore.pica2mods.runner.model.Catalog;
