@@ -1,0 +1,47 @@
+spring:
+  main:
+    banner-mode: off
+  config:
+    active:
+      on-profile: prod
+
+pica2mods:
+  defaultCatalogName: gvk
+  sruUrl: https://sru.k10plus.de
+  unapiUrl: https://unapi.k10plus.de
+  catalogs:
+    erf:
+      url: http://opac.uni-erfurt.de/DB=7/LNG=DU/
+      sruKey: opac-de-3204
+      unapiKey: opac-de-3204
+      xsl: pica2mods.xsl
+    gvk:
+      url: https://kxp.k10plus.de/DB=2.1/
+      sruKey: k10plus
+      unapiKey: gvk
+      xsl: pica2mods.xsl
+    ikar:
+      url: https://kxp.k10plus.de/DB=1.68/
+      sruKey: ikar
+      unapiKey: ikar
+      xsl: pica2mods_ikar.xsl
+    ilm:
+      url: http://opac.lbs-ilmenau.gbv.de/DB=1.3/
+      sruKey: k10plus
+      unapiKey: opac-de-ilm1
+      xsl: pica2mods.xsl
+    ubr:
+      url: https://opac.lbs-rostock.gbv.de/DB=1/
+      sruKey: k10plus
+      unapiKey: k10plus
+      xsl: pica2mods_ubr.xsl
+    ubbs:
+      url: https://opac.lbs-braunschweig.gbv.de/DB=1/
+      sruKey: opac-de-84
+      unapiKey: opac-de-84
+      xsl: pica2mods.xsl
+    vd18:
+      url: https://kxp.k10plus.de/DB=1.65/
+      sruKey: vd18
+      unapiKey: vd18
+      xsl: pica2mods.xsl

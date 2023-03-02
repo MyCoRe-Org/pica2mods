@@ -7,7 +7,7 @@
   </appender> -->
 
   <appender name="file" class="ch.qos.logback.core.FileAppender">
-    <file>application.log</file>
+    <file>pica-runner.log</file>
     <append>true</append>
     <immediateFlush>true</immediateFlush>
     <encoder>

@@ -16,7 +16,7 @@
  * along with MyCoRe.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mycore.pica2mods;
+package org.mycore.pica2mods.runner;
 
 import java.io.StringWriter;
 import java.nio.file.Files;
@@ -31,9 +31,11 @@ import java.util.Set;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
+import org.mycore.pica2mods.runner.model.Catalog;
 import org.mycore.pica2mods.xsl.Pica2ModsGenerator;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -43,9 +45,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 @SpringBootApplication
-public class Application implements ApplicationRunner {
+public class Runner implements ApplicationRunner {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Application.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(Runner.class);
 
     private static final String PICA2MODS_VERSION = Pica2ModsGenerator.retrieveBuildInfosFromManifest(true);
 
@@ -53,21 +55,13 @@ public class Application implements ApplicationRunner {
 
     private final static String OUTPUT_OPTION = "output";
 
-    private final static Map<String, Catalog> CATALOGS = getCatalogMap();
-
     private final static Set<String> VALID_OPTION_NAMES = new HashSet<>(Arrays.asList(CATALOG_OPTION, OUTPUT_OPTION));
 
-    @Value("${pica2mods.defaultCatalogName}")
-    private String defaultCatalogName;
-
-    @Value("${pica2mods.sru.url}")
-    private String sruUrl;
-
-    @Value("${pica2mods.unapi.url}")
-    private String unapiUrl;
+    @Autowired
+    private RunnerConfig config;
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(Runner.class, args);
     }
 
     @Override
@@ -89,10 +83,10 @@ public class Application implements ApplicationRunner {
         final String catalogName = getOptionValue(args, CATALOG_OPTION);
         Catalog catalog = null;
         if (catalogName == null) {
-            catalog = CATALOGS.get(defaultCatalogName);
-            LOGGER.info("No catalog specified, using default catalog: {}.", defaultCatalogName);
+            catalog = config.getCatalogs().get(config.getDefaultCatalogName());
+            LOGGER.info("No catalog specified, using default catalog: {}.", config.getDefaultCatalogName());
         } else {
-            catalog = CATALOGS.get(catalogName);
+            catalog = config.getCatalogs().get(catalogName);
             if (catalog == null) {
                 System.out.println("Unknown catalog: " + catalogName);
                 System.exit(1);
@@ -116,18 +110,13 @@ public class Application implements ApplicationRunner {
     private String transform(String baseUrl, Catalog catalog, String ppn) throws Exception {
         final StringWriter sw = new StringWriter();
         final Result result = new StreamResult(sw);
-        final Pica2ModsGenerator pica2modsGenerator = new Pica2ModsGenerator(sruUrl, unapiUrl, baseUrl);
+        final Pica2ModsGenerator pica2modsGenerator = new Pica2ModsGenerator(config.getSruUrl(), config.getUnapiUrl(), baseUrl);
         final Map<String, String> xslParams = new HashMap<>();
         xslParams.put("MCR.PICA2MODS.CONVERTER_VERSION", PICA2MODS_VERSION);
-        xslParams.put("MCR.PICA2MODS.DATABASE", catalog.getUnapiUrl());
-        pica2modsGenerator.createMODSDocumentFromSRUSafe(catalog.getSrudbUrl(), "pica.ppn=" + ppn, catalog.getXsl(), result,
+        xslParams.put("MCR.PICA2MODS.DATABASE", catalog.getUnapiKey());
+        pica2modsGenerator.createMODSDocumentFromSRUSafe(catalog.getSruKey(), "pica.ppn=" + ppn, catalog.getXsl(), result,
             xslParams);
         return sw.toString();
-    }
-
-    private static Map<String, Catalog> getCatalogMap() {
-        final ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-        return (HashMap) context.getBean("catalogs");
     }
 
     private static String getOptionValue(ApplicationArguments args, String optionName) {
