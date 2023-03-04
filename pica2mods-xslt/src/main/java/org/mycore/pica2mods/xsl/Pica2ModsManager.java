@@ -32,15 +32,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
-/**
- * 
- * @deprecated - use Pica2ModsManager instead, which includes cleaner API
- * @author mcradmin
- *
- */
-public class Pica2ModsGenerator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Pica2ModsGenerator.class);
+public class Pica2ModsManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Pica2ModsManager.class);
 
     public static final String PICA2MODS_XSLT_PATH = "xsl/";
 
@@ -53,8 +46,8 @@ public class Pica2ModsGenerator {
         DBF.setNamespaceAware(true);
     }
 
-    public static Pica2ModsGenerator instanceForRosDok() {
-        return new Pica2ModsGenerator("https://sru.k10plus.de", "https://unapi.k10plus.de",
+    public static Pica2ModsManager instanceForRosDok() {
+        return new Pica2ModsManager("https://sru.k10plus.de", "https://unapi.k10plus.de",
             "https://rosdok.uni-rostock.de/");
     }
 
@@ -71,7 +64,7 @@ public class Pica2ModsGenerator {
         return mycoreBaseURL;
     }
 
-    public Pica2ModsGenerator(String sruURL, String unapiURL, String mycoreBaseURL) {
+    public Pica2ModsManager(String sruURL, String unapiURL, String mycoreBaseURL) {
         super();
 
         this.sruURL = sruURL;
@@ -278,7 +271,7 @@ public class Pica2ModsGenerator {
 
         Enumeration<URL> resources;
         try {
-            resources = Pica2ModsGenerator.class.getClassLoader().getResources("META-INF/MANIFEST.MF");
+            resources = Pica2ModsManager.class.getClassLoader().getResources("META-INF/MANIFEST.MF");
             while (resources.hasMoreElements()) {
                 URL url = resources.nextElement();
 
