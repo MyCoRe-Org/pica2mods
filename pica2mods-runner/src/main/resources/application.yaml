@@ -6,7 +6,7 @@ spring:
       on-profile: prod
 
 pica2mods:
-  defaultCatalogName: gvk
+  defaultCatalog: gvk
   sruUrl: https://sru.k10plus.de
   unapiUrl: https://unapi.k10plus.de
   catalogs:
@@ -17,7 +17,7 @@ pica2mods:
       xsl: pica2mods.xsl
     gvk:
       opacUrl: https://kxp.k10plus.de/DB=2.1/
-      sruKey: k10plus
+      sruKey: gvk
       unapiKey: gvk
       xsl: pica2mods.xsl
     ikar:
