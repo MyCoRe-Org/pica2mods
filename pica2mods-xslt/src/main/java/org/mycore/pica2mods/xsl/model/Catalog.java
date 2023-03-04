@@ -16,7 +16,7 @@
  * along with MyCoRe.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mycore.pica2mods.runner.model;
+package org.mycore.pica2mods.xsl.model;
 
 public class Catalog {
 
