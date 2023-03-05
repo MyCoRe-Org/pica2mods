@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -25,6 +26,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.mycore.pica2mods.xsl.model.Pica2ModsConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -46,145 +48,104 @@ public class Pica2ModsManager {
         DBF.setNamespaceAware(true);
     }
 
-    public static Pica2ModsManager instanceForRosDok() {
-        return new Pica2ModsManager("https://sru.k10plus.de", "https://unapi.k10plus.de",
-            "https://rosdok.uni-rostock.de/");
+    private Pica2ModsConfig config = null;
+
+    public Pica2ModsManager(Pica2ModsConfig config) {
+        this.config = config;
     }
 
-    private String sruURL;
-
-    private String unapiURL;
-
-    /**
-     * baseURL for the corresponding MyCoRe Application ends with slash;
-     */
-    private String mycoreBaseURL;
-
-    public String getMycoreBaseURL() {
-        return mycoreBaseURL;
-    }
-
-    public Pica2ModsManager(String sruURL, String unapiURL, String mycoreBaseURL) {
-        super();
-
-        this.sruURL = sruURL;
-        this.unapiURL = unapiURL;
-
-        if (!mycoreBaseURL.endsWith("/")) {
-            this.mycoreBaseURL = mycoreBaseURL + "/";
-        } else {
-            this.mycoreBaseURL = mycoreBaseURL;
-        }
+    public Pica2ModsConfig getConfig() {
+        return config;
     }
 
     // http://sru.k10plus.de/opac-de-28?operation=searchRetrieve&maximumRecords=1&recordSchema=picaxml&query=pica.ppn%3D1023803275
-    public Element retrievePicaXMLViaSRU(String database, String sruQuery) throws Exception {
-        URL url = new URL(
-            sruURL + "/" + database + "?operation=searchRetrieve&maximumRecords=1&recordSchema=picaxml&query="
-                + URLEncoder.encode(sruQuery, "UTF-8"));
-        int loop = 0;
-        Document document = null;
-        do {
-            loop++;
-            LOGGER.debug("Getting catalogue data from: " + url.toString());
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            try (InputStream xmlStream = conn.getInputStream()) {
-                DocumentBuilder dBuilder = DBF.newDocumentBuilder();
-                document = dBuilder.parse(xmlStream);
-            } catch (Exception e) {
-                if (loop <= 2) {
-                    LOGGER.error("An error occurred - waiting 5 min and try again", e);
-                    TimeUnit.MINUTES.sleep(5);
-                } else {
-                    throw e;
-                }
-            }
-        } while (document == null && loop <= 2);
-        if (document == null) {
-            String msg = "Could not retrieve Metadata from catalogue: " + url.toString();
-            LOGGER.error(msg);
-            throw new Pica2ModsException(msg);
-        }
-
-        NodeList nl = document.getElementsByTagNameNS(NS_PICA, "record");
-        if (nl.getLength() > 0) {
-            return (Element) nl.item(0);
-        } else {
-            String msg = "No Record found for: " + url.toString();
-            LOGGER.error(msg);
-            Element err = document.createElement("error");
-            err.appendChild(document.createComment(msg));
-            return err;
-        }
+    public Element retrievePicaXMLViaSRU(String catalogId, String sruQuery) throws Pica2ModsException {
+        String theURL = config.getSruUrl() + config.getCatalogs().get(catalogId).getSruKey()
+            + "?operation=searchRetrieve&maximumRecords=1&recordSchema=picaxml&query="
+            + URLEncoder.encode(sruQuery, StandardCharsets.UTF_8);
+        return retrievePicaXMLFromURL(theURL);
     }
 
     //https://unapi.k10plus.de/?&format=picaxml&id=opac-de-28:ppn:1662436106
-    public Element retrievePicaXMLViaUnAPI(String catalogKey, String ppn) throws Exception {
-        return retrievePicaXMLViaUnAPI(catalogKey + ":ppn:" + ppn);
+    public Element retrievePicaXMLViaUnAPI(String catalogId, String ppn) throws Pica2ModsException {
+        String unapiKey = config.getCatalogs().get(catalogId).getUnapiKey() + ":ppn:" + ppn;
+        return retrievePicaXMLViaUnAPI(unapiKey);
     }
 
-    public Element retrievePicaXMLViaUnAPI(String unapiID) throws Exception {
-        URL url = new URL(unapiURL + "?format=picaxml&id=" + unapiID);
-        int loop = 0;
-        Document document = null;
-        do {
-            loop++;
-            LOGGER.debug("Getting catalogue data from: " + url.toString());
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            try (InputStream xmlStream = conn.getInputStream()) {
-                DocumentBuilder dBuilder = DBF.newDocumentBuilder();
-                document = dBuilder.parse(xmlStream);
-            } catch (Exception e) {
-                if (loop <= 2) {
-                    LOGGER.error("An error occurred - waiting 5 min and try again", e);
-                    TimeUnit.MINUTES.sleep(5);
-                } else {
-                    throw e;
-                }
-            }
-        } while (document == null && loop <= 2);
-        if (document == null) {
-            String msg = "Could not retrieve Metadata from catalogue: " + url.toString();
-            LOGGER.error(msg);
-            throw new Pica2ModsException(msg);
-        }
+    //https://unapi.k10plus.de/?&format=picaxml&id=opac-de-28:ppn:1662436106
+    public Element retrievePicaXMLViaUnAPI(String unapiKey) throws Pica2ModsException {
+        String theURL = config.getUnapiUrl() + "?&format=picaxml&id=" + unapiKey;
+        return retrievePicaXMLFromURL(theURL);
+    }
 
+    private Element retrievePicaXMLFromURL(String theURL) throws Pica2ModsException {
+        Document document = retrieveWithRetryXMLFromURL(theURL);
         NodeList nl = document.getElementsByTagNameNS(NS_PICA, "record");
         if (nl.getLength() > 0) {
             return (Element) nl.item(0);
         } else {
-            String msg = "No Record found for: " + url.toString();
-            LOGGER.error(msg);
-            Element err = document.createElement("error");
-            err.appendChild(document.createComment(msg));
-            return err;
+            String msg = "No Record found for: " + theURL;
+            throw new Pica2ModsException(msg);
         }
     }
 
-    public void createMODSDocumentFromSRU(String catalogKey, String sruQuery, String xslFile, Result result, Map<String, String> parameter) {
+    protected Document retrieveWithRetryXMLFromURL(String theURL) throws Pica2ModsException {
         try {
-            Element picaRecord = retrievePicaXMLViaSRU(catalogKey, sruQuery);
-            createMODSDocumentFromPicaXML(picaRecord, xslFile, result, parameter);
-        } catch (Exception e) {
-            LOGGER.error("Error transforming XML", e);
+            URL url = new URL(theURL);
+
+            int loop = 0;
+            Document document = null;
+            do {
+                loop++;
+                LOGGER.debug("Getting catalogue data from: " + theURL);
+                try (InputStream xmlStream = url.openStream()) {
+                    DocumentBuilder dBuilder = DBF.newDocumentBuilder();
+                    document = dBuilder.parse(xmlStream);
+                } catch (Exception e) {
+                    if (loop <= 2) {
+                        LOGGER.error("An error occurred - waiting 5 min and try again", e);
+                        TimeUnit.MINUTES.sleep(5);
+                    } else {
+                        String msg = "Could not retrieve Pica from URL: " + theURL;
+                        throw new Pica2ModsException(msg, e);
+                    }
+                }
+            } while (document == null && loop <= 2);
+            if (document == null) {
+                String msg = "Could not retrieve Pica from URL: " + theURL;
+                throw new Pica2ModsException(msg, null);
+            }
+            return document;
+
+        } catch (MalformedURLException mfe) {
+            throw new Pica2ModsException("The SRU URL is wrong", mfe);
+        } catch (InterruptedException ie) {
+            throw new Pica2ModsException("An interrupted exception occurred", ie);
         }
     }
 
-    public void createMODSDocumentFromSRUSafe(String catalogKey, String sruQuery, String xslFile, Result result, Map<String, String> parameter) throws Exception {
-        Element picaRecord = retrievePicaXMLViaSRU(catalogKey, sruQuery);
-        createMODSDocumentFromPicaXML(picaRecord, xslFile, result, parameter);
-    }
-
-    public void createMODSDocumentFromUnAPI(String catalogKey, String ppn, String xslFile, Result result, Map<String, String> parameter) {
+    public void createMODSDocumentViaSRU(String catalogId, String sruQuery, Result result,
+        Map<String, String> parameter) throws Pica2ModsException {
+        Element picaRecord = retrievePicaXMLViaSRU(catalogId, sruQuery);
         try {
-            Element picaRecord = retrievePicaXMLViaUnAPI(catalogKey, ppn);
-            createMODSDocumentFromPicaXML(picaRecord, xslFile, result, parameter);
-        } catch (Exception e) {
-            LOGGER.error("Error transforming XML", e);
+            createMODSDocumentFromPicaXML(picaRecord, catalogId, result, parameter);
+        } catch (TransformerException tfe) {
+            throw new Pica2ModsException("Could not create MODS from PicaXML", tfe);
         }
     }
 
-    private void createMODSDocumentFromPicaXML(Element picaRecord, String xslFile, Result result, Map<String, String> parameter) throws TransformerException {
+    public void createMODSDocumentViaUnAPI(String catalogId, String ppn, Result result,
+        Map<String, String> parameter) throws Pica2ModsException {
+        Element picaRecord = retrievePicaXMLViaUnAPI(catalogId, ppn);
+        try {
+            createMODSDocumentFromPicaXML(picaRecord, catalogId, result, parameter);
+        } catch (TransformerException tfe) {
+            throw new Pica2ModsException("Could not create MODS from PicaXML", tfe);
+        }
+    }
+
+    private void createMODSDocumentFromPicaXML(Element picaRecord, String catalogId, Result result,
+        Map<String, String> parameter) throws TransformerException {
         //uses the configured Transformer-Factory (e.g. XALAN, if installed)
         //TransformerFactory TRANS_FACTORY = TransformerFactory.newInstance();
         //Java 9 provides a method newDefaultInstance() to retrieve the built-in system default implementation
@@ -193,12 +154,12 @@ public class Pica2ModsManager {
         TransformerFactory TRANS_FACTORY = TransformerFactory.newInstance(
             "net.sf.saxon.TransformerFactoryImpl", getClass().getClassLoader());
 
-        TRANS_FACTORY.setURIResolver(new Pica2ModsURIResolver(this));
+        TRANS_FACTORY.setURIResolver(new Pica2ModsXSLTURIResolver(this));
 
         if (picaRecord != null) {
             Source xsl = new StreamSource(getClass().getClassLoader()
-                .getResourceAsStream(PICA2MODS_XSLT_PATH + xslFile));
-            xsl.setSystemId(PICA2MODS_XSLT_PATH + xslFile);
+                .getResourceAsStream(PICA2MODS_XSLT_PATH + getConfig().getCatalog(catalogId).getXsl()));
+            xsl.setSystemId(PICA2MODS_XSLT_PATH + getConfig().getCatalog(catalogId).getXsl());
             Transformer transformer = TRANS_FACTORY.newTransformer(xsl);
 
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -211,15 +172,15 @@ public class Pica2ModsManager {
                 <xsl:param name="MCR.PICA2MODS.CONVERTER_VERSION" select="'Pica2Mods 2.3'"/>
              */
 
-            transformer.setParameter("WebApplicationBaseURL", mycoreBaseURL);
-            for(String key: parameter.keySet()) {
+            transformer.setParameter("WebApplicationBaseURL", config.getMycoreBaseUrl());
+            for (String key : parameter.keySet()) {
                 transformer.setParameter(key, parameter.get(key));
             }
             transformer.transform(new DOMSource(picaRecord), result);
         }
     }
 
-    public static String outputXML(Node node) {
+    public static String outputXML(Node node) throws Pica2ModsException {
         // ein Stylesheet zur Identitätskopie ...
         String IDENTITAETS_XSLT = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>"
             + "<xsl:template match='/'><xsl:copy-of select='.'/>" + "</xsl:template></xsl:stylesheet>";
@@ -237,36 +198,12 @@ public class Pica2ModsManager {
             trans.transform(xmlSource, ergebnis);
 
         } catch (TransformerException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new Pica2ModsException("Could not output XML", e);
         }
-
         return sw.toString();
     }
 
-    @Deprecated
-    public String getPica2MODSVersion(String xslFile) throws Pica2ModsException {
-        String version = "";
-        try {
-            DocumentBuilder dBuilder = DBF.newDocumentBuilder();
-            Document doc = dBuilder.parse(
-                getClass().getClassLoader().getResourceAsStream(PICA2MODS_XSLT_PATH + xslFile));
-            NodeList nl = doc.getDocumentElement().getElementsByTagName("xsl:variable");
-
-            for (int i = 0; i < nl.getLength(); i++) {
-                if (nl.item(i).getAttributes().getNamedItem("name").getTextContent().equals("XSL_VERSION_PICA2MODS")) {
-                    version = nl.item(i).getTextContent();
-                    break;
-                }
-            }
-
-        } catch (Exception e) {
-            throw new Pica2ModsException("Error getting mods metadata: " + e.getMessage());
-        }
-        return version;
-    }
- 
-    //does not work from Eclipse
+    //does not work when application was started inside Eclipse
     public static String retrieveBuildInfosFromManifest(boolean addCommitInfos) {
 
         Enumeration<URL> resources;
@@ -291,7 +228,9 @@ public class Pica2ModsManager {
             }
         } catch (IOException e) {
             LOGGER.error("Unable to read manifest entry", e);
+            //do not rethrow exception, but use default value
         }
         return "Pica2MODS";
     }
+
 }

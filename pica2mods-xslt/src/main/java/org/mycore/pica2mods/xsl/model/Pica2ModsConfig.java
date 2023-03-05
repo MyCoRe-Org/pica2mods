@@ -18,6 +18,7 @@
 
 package org.mycore.pica2mods.xsl.model;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class Pica2ModsConfig {
@@ -28,7 +29,9 @@ public class Pica2ModsConfig {
 
     private String unapiUrl;
 
-    private Map<String, Catalog> catalogs;
+    private String mycoreBaseUrl;
+
+    private Map<String, Catalog> catalogs = Collections.emptyMap();
 
     public String getDefaultCatalog() {
         return defaultCatalog;
@@ -42,12 +45,20 @@ public class Pica2ModsConfig {
         return catalogs;
     }
 
+    public Catalog getCatalog(String name) {
+        return catalogs.get(name);
+    }
+
     public void setCatalogs(Map<String, Catalog> catalogs) {
         this.catalogs = catalogs;
     }
 
     public String getSruUrl() {
-        return sruUrl;
+        if (sruUrl.endsWith("/")) {
+            return sruUrl;
+        } else {
+            return sruUrl + "/";
+        }
     }
 
     public void setSruUrl(String sruUrl) {
@@ -60,5 +71,17 @@ public class Pica2ModsConfig {
 
     public void setUnapiUrl(String unapiUrl) {
         this.unapiUrl = unapiUrl;
+    }
+
+    public String getMycoreBaseUrl() {
+        if (mycoreBaseUrl.endsWith("/")) {
+            return mycoreBaseUrl;
+        } else {
+            return mycoreBaseUrl + "/";
+        }
+    }
+
+    public void setMycoreBaseUrl(String mycoreBaseUrl) {
+        this.mycoreBaseUrl = mycoreBaseUrl;
     }
 }
