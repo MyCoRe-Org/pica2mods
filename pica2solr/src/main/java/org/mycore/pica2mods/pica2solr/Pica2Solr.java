@@ -15,13 +15,14 @@ public class Pica2Solr {
     public static String SRU_BASEURL = "https://sru.k10plus.de/";
 
     public static String SOLR_CORE = "pica_rosdok";
-    public static String SRU_CATALOG = "k10plus";
+    public static String SRU_CATALOG = "gvk";
 
     //public static String SRU_QUERY = "query=pica.url%3Dpurl*rosdokid*";
     public static String SRU_QUERY = "query=pica.url%3Dpurl*rosdok*";
     
     //ID der Besitzenden Bibliothek für Filterung nach Exemplaren (Pica 101@/a)
-    public static String LIB_OWNER_ID="62";
+    //public static String LIB_OWNER_ID="62";
+    public static String LIB_OWNER_ID=null;
 
     public static int OFFSET=250;
     
@@ -30,21 +31,21 @@ public class Pica2Solr {
 
     public static void main(String[] args) {
         Pica2Solr app = new Pica2Solr();
-        app.run(SOLR_CORE);
+        app.run(SOLR_CORE, SRU_CATALOG, SRU_QUERY);
     }
 
-    private void run(String solrCore) {
+    private void run(String solrCore, String sruCatalog, String sruQuery) {
         SRUProcessor sruProc = new SRUProcessor();
         try {
             //clearSolrCollection();
-            initCore(SOLR_CORE);
+            initCore(solrCore);
             int start = 0001;
             String ingest = null;
 
             do {
                 System.out.print(">> " + start + " :");
-                String uri = SRU_BASEURL + SRU_CATALOG + "?operation=searchRetrieve&maximumRecords="+OFFSET+"&recordSchema=picaxml&startRecord=" + start + "&query="
-                        + SRU_QUERY;
+                String uri = SRU_BASEURL + sruCatalog + "?operation=searchRetrieve&maximumRecords="+OFFSET+"&recordSchema=picaxml&startRecord=" + start + "&query="
+                        + sruQuery;
                 HttpRequest requestSRU = HttpRequest.newBuilder().uri(URI.create(uri)).GET()//.setHeader("User-Agent", "Pica2Solr") // add request header
                         .setHeader("Content-Type", "text/xml").build();
 
