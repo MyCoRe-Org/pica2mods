@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>49</version>
+    <version>51</version>
   </parent>
   <groupId>org.mycore.pica2mods</groupId>
   <artifactId>pica2mods-parent</artifactId>
@@ -151,5 +151,6 @@
     <module>pica2mods-webapp</module>
     <module>pica2mods-validation</module>
     <module>pica2mods-runner</module>
+    <module>pica2solr</module>
   </modules>
 </project>
