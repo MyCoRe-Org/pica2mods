@@ -46,6 +46,6 @@ java -jar pica2solr.jar run
 ```   
 #### Run with modified parameters
 ```
-java -jar pica2solr.jar run --solr_core=picaX --sru_catalog=opac-de-28 --sru_query=pica.all%3Dmycore --sru_query=pica.all%3D62
+java -jar pica2solr.jar run --solr_core=picaX --sru_catalog=opac-de-28 --sru_query=pica.all%3Dmycore --library_id=62
 ```   
 
