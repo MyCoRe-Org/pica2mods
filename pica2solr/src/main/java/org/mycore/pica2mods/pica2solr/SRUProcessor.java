@@ -11,16 +11,22 @@ import javax.xml.stream.events.XMLEvent;
 
 public class SRUProcessor {
     private static String NS_PICA = "info:srw/schema/5/picaXML-v1.0";
+
     @SuppressWarnings("unused")
     private static String NS_SRU = "http://docs.oasis-open.org/ns/search-ws/sruResponse";
-    
+
     private static XMLInputFactory XML_INPUT_FACTORY = XMLInputFactory.newInstance();
 
     private static QName QN_PICA_RECORD = new QName(NS_PICA, "record");
+
     private static QName QN_PICA_DATAFIELD = new QName(NS_PICA, "datafield");
+
     private static QName QN_PICA_SUBFIELD = new QName(NS_PICA, "subfield");
+
     private static QName QN_ATTR_TAG = new QName("tag");
+
     private static QName QN_ATTR_OCC = new QName("occurrence");
+
     private static QName QN_ATTR_CODE = new QName("code");
 
     public String process(InputStream is, String filterItemsByLibraryId) {
@@ -50,7 +56,7 @@ public class SRUProcessor {
                     if (xmlEvent.asStartElement().getName().equals(QN_PICA_DATAFIELD)) {
                         currentDataField = xmlEvent.asStartElement().getAttributeByName(QN_ATTR_TAG).getValue();
                         currentOccurence = xmlEvent.asStartElement().getAttributeByName(QN_ATTR_OCC) == null ? null
-                                : xmlEvent.asStartElement().getAttributeByName(QN_ATTR_OCC).getValue();
+                            : xmlEvent.asStartElement().getAttributeByName(QN_ATTR_OCC).getValue();
                     }
                     if (xmlEvent.asStartElement().getName().equals(QN_PICA_SUBFIELD)) {
                         currentSubfield = xmlEvent.asStartElement().getAttributeByName(QN_ATTR_CODE).getValue();
@@ -78,7 +84,7 @@ public class SRUProcessor {
                             currentPPN = value;
                         }
                         if ("101@".equals(currentDataField) && "a".equals(currentSubfield)) {
-                            filterItem = !value.equals(filterItemsByLibraryId);
+                            filterItem = filterItemsByLibraryId != null && !value.equals(filterItemsByLibraryId);
                         }
 
                         if (!filterItem) {
