@@ -1,19 +1,21 @@
 Pica2Solr
 =========
 
-This tools creates a Solr collection of Pica catalog records.
-This collection can be used to analyse the frequency and content of certain Pica fields.
+This tools creates a Solr core from Pica catalog records.
 
-As input a SRU query to a GBV catalog is used. The input format is PicaXML.
+The core can be used to analyze the frequency and content of certain Pica fields.
+
+The input is based on an SRU query to a GBV catalog. The input format is PicaXML.
 
 
 Installation
 ------------
-- Solr
+### Solr
   - install Solr (tested with the latest Solr 8 version) on your local machine
   - deploy the config set folder to /{solr-install-dir}/server/solr/configsets
   - start/restart the Solr server
 
+### Appplication
 The tool itself is provided as Java application (in a single JAR file).
 
 
@@ -29,7 +31,7 @@ You may use the following command line arguments:
 java -jar pica2solr.jar list-cores
 ```
 
-#### Initialize a new Solr cores
+#### Initialize a new Solr core
 ```
 java -jar pica2solr.jar init-core <name>
 ```
