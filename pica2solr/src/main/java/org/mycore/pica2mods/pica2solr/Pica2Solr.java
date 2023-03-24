@@ -46,12 +46,19 @@ public class Pica2Solr implements ApplicationRunner {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(Pica2Solr.class, new String[] { PICA2SOLR_CMD_RUN, "--solr-core=pica_04" });
+        SpringApplication.run(Pica2Solr.class, new String[] { PICA2SOLR_CMD_RUN, "--solr_core=pica_mycore" });
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Pica2SolrConfig config = createConfigFromArgs(args);
+        if (args.getNonOptionArgs().size() == 0) {
+            System.out.println("Pica2Solr");
+            System.out.println("-----------------------------");
+            System.out.println("for help and commandline arguments see https://github.com/MyCoRe-Org/pica2mods/pica2solr");
+            return;
+        }
+
         if (args.getNonOptionArgs().size() > 0) {
             String command = args.getNonOptionArgs().get(0);
             switch (command) {
@@ -105,19 +112,19 @@ public class Pica2Solr implements ApplicationRunner {
 
     private Pica2SolrConfig createConfigFromArgs(ApplicationArguments args) {
         Pica2SolrConfig config = defaultConfig.clone();
-        List<String> solrCore = args.getOptionValues("solr-core");
+        List<String> solrCore = args.getOptionValues("solr_core");
         if (solrCore != null && solrCore.size() == 1) {
             config.setSolrCore(solrCore.get(0));
         }
-        List<String> sruCatalog = args.getOptionValues("sru-catalog");
+        List<String> sruCatalog = args.getOptionValues("sru_catalog");
         if (sruCatalog != null && sruCatalog.size() == 1) {
             config.setSruCatalog(sruCatalog.get(0));
         }
-        List<String> sruQuery = args.getOptionValues("sru-query");
+        List<String> sruQuery = args.getOptionValues("sru_query");
         if (sruQuery != null && sruQuery.size() == 1) {
             config.setSruQuery(sruQuery.get(0));
         }
-        List<String> libraryId = args.getOptionValues("library-id");
+        List<String> libraryId = args.getOptionValues("library_id");
         if (libraryId != null && libraryId.size() == 1) {
             config.setLibraryId(libraryId.get(0));
         }

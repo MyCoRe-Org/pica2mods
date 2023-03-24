@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "pica2solr.default_config")
+@ConfigurationProperties(prefix = "pica2solr.default-config")
 public class Pica2SolrConfig implements Cloneable {
 
     private String solrCore;

@@ -49,6 +49,7 @@
     <!-- <dependency> <groupId>org.eclipse.parsson</groupId> <artifactId>parsson</artifactId> <version>1.1.1</version> </dependency> -->
   </dependencies>
   <build>
+    <finalName>pica2solr</finalName>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>

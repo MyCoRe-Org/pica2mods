@@ -19,7 +19,33 @@ The tool itself is provided as Java application (in a single JAR file).
 
 Running
 -------
-   
+First make sure that your local server is running (default URL: http://localhost:8983).
 
+You may use the following command line arguments:
 
+### to manage Solr
+#### List all available Solr cores
+```
+java -jar pica2solr.jar list-cores
+```
+
+#### Initialize a new Solr cores
+```
+java -jar pica2solr.jar init-core <name>
+```
+
+#### Delete the content of an existing Solr core
+```
+java -jar pica2solr.jar clear-core <name>
+```
+
+### to fill the Solr Core with data from Catalog
+#### Run with default parameters
+```
+java -jar pica2solr.jar run
+```   
+#### Run with modified parameters
+```
+java -jar pica2solr.jar run --solr_core=picaX --sru_catalog=opac-de-28 --sru_query=pica.all%3Dmycore --sru_query=pica.all%3D62
+```   
 
