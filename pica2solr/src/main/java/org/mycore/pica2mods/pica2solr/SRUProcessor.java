@@ -1,8 +1,10 @@
 package org.mycore.pica2mods.pica2solr;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -38,7 +40,7 @@ public class SRUProcessor {
         String currentPPN = null;
         boolean filterItem = false;
         try {
-            Reader fileReader = new InputStreamReader(is);
+            Reader fileReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader(fileReader);
             while (xmlEventReader.hasNext()) {
                 XMLEvent xmlEvent = xmlEventReader.nextEvent();
