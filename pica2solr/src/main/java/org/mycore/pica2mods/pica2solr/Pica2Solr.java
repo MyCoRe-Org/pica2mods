@@ -46,7 +46,8 @@ public class Pica2Solr implements ApplicationRunner {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(Pica2Solr.class, new String[] { PICA2SOLR_CMD_RUN, "--solr_core=pica_mycore" });
+       //debug:  SpringApplication.run(Pica2Solr.class, new String[] { PICA2SOLR_CMD_RUN, "--solr_core=pica_mycore" });
+        SpringApplication.run(Pica2Solr.class, args);
     }
 
     @Override
@@ -55,7 +56,8 @@ public class Pica2Solr implements ApplicationRunner {
         if (args.getNonOptionArgs().size() == 0) {
             System.out.println("Pica2Solr");
             System.out.println("-----------------------------");
-            System.out.println("for help and commandline arguments see https://github.com/MyCoRe-Org/pica2mods/pica2solr");
+            System.out
+                .println("for help and commandline arguments see https://github.com/MyCoRe-Org/pica2mods/pica2solr");
             return;
         }
 
@@ -95,14 +97,13 @@ public class Pica2Solr implements ApplicationRunner {
                     System.out.println("      - SRU catalog : " + config.getSruCatalog());
                     System.out.println("      - SRU query   : " + config.getSruQuery());
                     System.out.println(">>>> Start");
-                    
+
                     if (StringUtils.hasText(config.getLibraryId())) {
                         System.out.println("      - Library Id  : " + config.getLibraryId());
                     }
                     if (processQuery(config)) {
                         System.out.println(">>>> The operation completed successfully,");
-                    }
-                    else {
+                    } else {
                         System.err.println(">>>> The operation finished with an error!");
                     }
                     break;
