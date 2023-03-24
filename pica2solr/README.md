@@ -23,7 +23,7 @@ First make sure that your local server is running (default URL: http://localhost
 
 You may use the following command line arguments:
 
-### to manage Solr
+### Managing Solr
 #### List all available Solr cores
 ```
 java -jar pica2solr.jar list-cores
@@ -39,7 +39,7 @@ java -jar pica2solr.jar init-core <name>
 java -jar pica2solr.jar clear-core <name>
 ```
 
-### to fill the Solr Core with data from Catalog
+### Adding catalog data to Solr core
 #### Run with default parameters
 ```
 java -jar pica2solr.jar run
