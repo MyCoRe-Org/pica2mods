@@ -32,7 +32,6 @@ import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
 import org.mycore.pica2mods.xsl.Pica2ModsManager;
-import org.mycore.pica2mods.xsl.model.Catalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,41 +82,40 @@ public class Pica2ModsRunner implements ApplicationRunner {
         }
 
         final String ppn = nonOptionArgs.get(0);
-        final String catalogName = getOptionValue(args, CATALOG_OPTION);
-        Catalog catalog = null;
+        String catalogName = getOptionValue(args, CATALOG_OPTION);
         if (catalogName == null) {
-            catalog = config.getCatalogs().get(config.getDefaultCatalogName());
-            LOGGER.info("No catalog specified, using default catalog: {}.", config.getDefaultCatalogName());
+            catalogName = config.getDefaultCatalogName();
+            LOGGER.info("No catalog specified, using default catalog: {}.", catalogName);
         } else {
-            catalog = config.getCatalogs().get(catalogName);
-            if (catalog == null) {
+            if (config.getCatalogs().get(catalogName) == null) {
                 System.out.println("Unknown catalog: " + catalogName);
                 System.exit(1);
             }
         }
         final String output = getOptionValue(args, OUTPUT_OPTION);
         try {
-            final String result = transform(catalog, ppn);
+            final String result = transform(catalogName, ppn);
             if (output != null) {
                 Files.writeString(Path.of(output), result);
             } else {
                 System.out.println(result);
             }
         } catch (Exception e) {
-            System.out.println("Error while transforming/outputing: " + e);
+            System.out.println("Error while transforming/outputing: " + e.getMessage());
+            LOGGER.error("Error while transforming/outputing", e);
             System.exit(1);
         }
     }
 
     // TODO exceptions are crappy
-    private String transform(Catalog catalog, String ppn) throws Exception {
+    private String transform(String catalogName, String ppn) throws Exception {
         final StringWriter sw = new StringWriter();
         final Result result = new StreamResult(sw);
         final Pica2ModsManager pica2modsManager = new Pica2ModsManager(config);
         final Map<String, String> xslParams = new HashMap<>();
         xslParams.put("MCR.PICA2MODS.CONVERTER_VERSION", PICA2MODS_VERSION);
-        xslParams.put("MCR.PICA2MODS.DATABASE", catalog.getUnapiKey());
-        pica2modsManager.createMODSDocumentViaSRU(catalog.getSruKey(), "pica.ppn=" + ppn, result, xslParams);
+        xslParams.put("MCR.PICA2MODS.DATABASE", config.getCatalogs().get(catalogName).getUnapiKey());
+        pica2modsManager.createMODSDocumentViaSRU(catalogName, "pica.ppn=" + ppn, result, xslParams);
         return sw.toString();
     }
 
