@@ -19,7 +19,8 @@
       <!-- see: https://memorynotfound.com/spring-boot-create-executable-using-maven-without-parent-pom/ -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
+        <artifactId>spring-boot-maven-plugin</artifactId> 
+        <version>${spring.boot.version}</version>
         <configuration>
           <executable>true</executable>
         </configuration>

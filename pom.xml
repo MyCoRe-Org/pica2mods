@@ -12,6 +12,9 @@
   <packaging>pom</packaging>
   <name>MyCoRe Pica2MODS</name>
   <description>an XSL based transformer from PicaXML to MODS</description>
+  <properties>
+    <spring.boot.version>2.7.10</spring.boot.version>
+  </properties>
   <licenses>
     <license>
       <name>GNU General Public License, version 3</name>
