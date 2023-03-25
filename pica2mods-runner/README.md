@@ -4,8 +4,9 @@
 ```
 java -jar pica2mods-runner.jar <PPN> <MyCoRe Base URL>
 ```
-    --catalog=           (default: gvk)
-    --output=            (default: STDOUT)
+#### Optional parameter:
+* `--catalog=<catalog_name>`        (default: gvk)
+* `--output=<file_path|STDTOUT>`		(default: STDOUT)
 
 ## Supported catalogs
 *   GVK Verbundkatalog (gvk)
