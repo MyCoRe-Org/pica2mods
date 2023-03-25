@@ -60,7 +60,7 @@ public class Pica2ModsXSLTransformerService {
             return sw.toString();
         }
         catch(Pica2ModsException e) {
-            StringBuffer msg = new StringBuffer("<error><![CDATA[\n\n");
+            StringBuilder msg = new StringBuilder("<error><![CDATA[\n\n");
             msg.append(e.getMessage());
             if(e.getCause()!=null) {msg.append(", ").append(e.getCause().getMessage());}
             msg.append("\n\n]]></error>");
@@ -73,6 +73,9 @@ public class Pica2ModsXSLTransformerService {
         String url = config.getUnapiUrl() + "?format=picaxml&id=" + config.getCatalog(catalog).getUnapiKey() + ":ppn:" + ppn;
         XPath xpath = factory.newXPath();
         xpath.setNamespaceContext(new Pica2ModsNamespaceContext());
+        if(!url.startsWith("http://") && !url.startsWith("https://")) {
+            throw new IllegalArgumentException ("The URL should start with 'http://' or 'https://'");
+        }
 
         try (InputStream input = new URL(url).openStream()) {
             XPathExpression expression = xpath.compile(XPATH_PARALLEL);

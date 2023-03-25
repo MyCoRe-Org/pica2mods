@@ -9,7 +9,7 @@ public class JSONValue {
      * through U+001F).
      * 
      * @param s
-     * @return
+     * @return the escaped string
      */
     public static String escape(String s) {
         if (s == null)

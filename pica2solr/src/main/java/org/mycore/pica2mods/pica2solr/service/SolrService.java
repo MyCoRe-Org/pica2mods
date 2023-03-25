@@ -40,12 +40,12 @@ public class SolrService {
         if (response.statusCode() != 200) {
             System.err.println("ERROR");
             System.err.println(response.body());
-            return Collections.emptyList();
+            return List.of();
         } else {
             JsonReader jsonReader = Json.createReader(
                 new StringReader(response.body()));
             JsonObject jsonObject = jsonReader.readObject();
-            return new ArrayList<String>(jsonObject.getJsonObject("status").keySet());
+            return List.copyOf(jsonObject.getJsonObject("status").keySet());
         }
     }
 

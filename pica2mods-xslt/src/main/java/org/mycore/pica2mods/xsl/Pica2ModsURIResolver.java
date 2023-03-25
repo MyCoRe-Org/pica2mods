@@ -38,7 +38,7 @@ public class Pica2ModsURIResolver implements URIResolver {
     public Source resolve(String href, String base) throws TransformerException {
         //default: resolve internet sources
         if (href.startsWith("http:") || href.startsWith("https:")) {
-            if(href.startsWith("https://unapi.k10plus.de?") || href.startsWith("https://sru.k10plus.de?")) {
+            if (href.startsWith("https://unapi.k10plus.de?") || href.startsWith("https://sru.k10plus.de?")) {
                 return gbvCatalogCall(href);
             }
             URL url;
@@ -139,26 +139,29 @@ public class Pica2ModsURIResolver implements URIResolver {
     }
 
     private StreamSource gbvCatalogCall(String href) {
-       try {
-        URL url = new URL(href);
-        int loop = 0;
-        do {
-            loop++;
-            LOGGER.debug("Getting catalogue data for: " + url.toString());
-            try {
-                return new StreamSource(url.openStream());
-                
-            } catch (Exception e) {
-                if (loop <= 2) {
-                    LOGGER.error("An error occurred - waiting 5 min and try again", e);
-                    TimeUnit.MINUTES.sleep(5);
-                } else throw e;
-            }
-        } while (loop <= 2);
-       }
-       catch(Exception e) {
-           LOGGER.error("Error retrieving catalog data from "+ href, e);
-       }
-       return new StreamSource(new StringReader(""));
+        if (!href.startsWith("http://") && !href.startsWith("https://")) {
+            throw new IllegalArgumentException("The URL should start with 'http://' or 'https://'");
+        }
+        try {
+            URL url = new URL(href);
+            int loop = 0;
+            do {
+                loop++;
+                LOGGER.debug("Getting catalogue data for: " + url.toString());
+                try {
+                    return new StreamSource(url.openStream());
+
+                } catch (Exception e) {
+                    if (loop <= 2) {
+                        LOGGER.error("An error occurred - waiting 5 min and try again", e);
+                        TimeUnit.MINUTES.sleep(5);
+                    } else
+                        throw e;
+                }
+            } while (loop <= 2);
+        } catch (Exception e) {
+            LOGGER.error("Error retrieving catalog data from " + href, e);
+        }
+        return new StreamSource(new StringReader(""));
     }
 }

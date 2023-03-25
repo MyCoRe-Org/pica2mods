@@ -10,6 +10,7 @@ import java.util.Locale;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
@@ -35,7 +36,7 @@ public class XMLSchemaValidator {
     */
     static final String DEFAULT_METS_SCHEMA_LOCATIONS = "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd";
 
-    private DocumentBuilderFactory DOC_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
+    private DocumentBuilderFactory DOC_BUILDER_FACTORY = DocumentBuilderFactory.newInstance().;
 
     private boolean isValid = true;
 
@@ -119,7 +120,7 @@ public class XMLSchemaValidator {
 
             docBuilder.parse(new InputSource(new StringReader(xmlContent)));
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerFactory.getLogger(XMLSchemaValidator.class).error("XML Schema validation failed.", e);
         }
 
         return isValid;

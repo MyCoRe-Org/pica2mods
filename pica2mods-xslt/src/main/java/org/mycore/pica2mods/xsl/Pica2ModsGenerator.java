@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -221,8 +222,8 @@ public class Pica2ModsGenerator {
              */
 
             transformer.setParameter("WebApplicationBaseURL", mycoreBaseURL);
-            for (String key : parameter.keySet()) {
-                transformer.setParameter(key, parameter.get(key));
+            for (Entry<String,String> e : parameter.entrySet()) {
+                transformer.setParameter(e.getKey(), e.getValue());
             }
             transformer.transform(new DOMSource(picaRecord), result);
         }
@@ -247,7 +248,7 @@ public class Pica2ModsGenerator {
 
         } catch (TransformerException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            LoggerFactory.getLogger(Pica2ModsGenerator.class).error("Could not output XML", e);
         }
 
         return sw.toString();
