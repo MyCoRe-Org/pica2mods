@@ -29,7 +29,7 @@ public class Pica2ModsConfig {
 
     private String unapiUrl;
 
-    private String mycoreBaseUrl;
+    private String mycoreUrl;
 
     private Map<String, Catalog> catalogs = Collections.emptyMap();
 
@@ -73,15 +73,15 @@ public class Pica2ModsConfig {
         this.unapiUrl = unapiUrl;
     }
 
-    public String getMycoreBaseUrl() {
-        if (mycoreBaseUrl.endsWith("/")) {
-            return mycoreBaseUrl;
+    public String getMycoreUrl() {
+        if (mycoreUrl.endsWith("/")) {
+            return mycoreUrl;
         } else {
-            return mycoreBaseUrl + "/";
+            return mycoreUrl + "/";
         }
     }
 
-    public void setMycoreBaseUrl(String mycoreBaseUrl) {
-        this.mycoreBaseUrl = mycoreBaseUrl;
+    public void setMycoreUrl(String mycoreUrl) {
+        this.mycoreUrl = mycoreUrl;
     }
 }

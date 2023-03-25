@@ -58,14 +58,20 @@ public class Pica2ModsRunner implements ApplicationRunner {
     private Pica2ModsRunnerConfig config;
 
     public static void main(String[] args) {
-        SpringApplication.run(Pica2ModsRunner.class, args);
+        //SpringApplication.run(Pica2ModsRunner.class, args);
+        try {
+            SpringApplication.run(Pica2ModsRunner.class, "1667675745");
+        }
+        catch(Exception e) {
+            LOGGER.error(e.getMessage());
+        }
     }
 
     @Override
     public void run(ApplicationArguments args) {
         final List<String> nonOptionArgs = args.getNonOptionArgs();
-        if (nonOptionArgs.size() != 2) {
-            System.out.println("A MyCoRe base url and ppn must be specified at least.");
+        if (nonOptionArgs.size() != 1) {
+            System.out.println("At least a PPN must be provided.");
             System.exit(1);
         }
         final Set<String> unknownOptionNames = new HashSet<>(args.getOptionNames());
@@ -76,8 +82,7 @@ public class Pica2ModsRunner implements ApplicationRunner {
             System.exit(1);
         }
 
-        final String baseUrl = nonOptionArgs.get(0);
-        final String ppn = nonOptionArgs.get(1);
+        final String ppn = nonOptionArgs.get(0);
         final String catalogName = getOptionValue(args, CATALOG_OPTION);
         Catalog catalog = null;
         if (catalogName == null) {
@@ -92,7 +97,7 @@ public class Pica2ModsRunner implements ApplicationRunner {
         }
         final String output = getOptionValue(args, OUTPUT_OPTION);
         try {
-            final String result = transform(baseUrl, catalog, ppn);
+            final String result = transform(catalog, ppn);
             if (output != null) {
                 Files.writeString(Path.of(output), result);
             } else {
@@ -105,7 +110,7 @@ public class Pica2ModsRunner implements ApplicationRunner {
     }
 
     // TODO exceptions are crappy
-    private String transform(String baseUrl, Catalog catalog, String ppn) throws Exception {
+    private String transform(Catalog catalog, String ppn) throws Exception {
         final StringWriter sw = new StringWriter();
         final Result result = new StreamResult(sw);
         final Pica2ModsManager pica2modsManager = new Pica2ModsManager(config);

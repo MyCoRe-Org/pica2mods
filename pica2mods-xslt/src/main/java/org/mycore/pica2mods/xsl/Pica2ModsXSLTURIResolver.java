@@ -111,7 +111,7 @@ public class Pica2ModsXSLTURIResolver implements URIResolver {
             } catch (ClassNotFoundException e) {
                 URL url;
                 try {
-                    url = new URL(manager.getConfig().getMycoreBaseUrl() + "api/v1/classifications/" + classid);
+                    url = new URL(manager.getConfig().getMycoreUrl() + "api/v1/classifications/" + classid);
                     return new StreamSource(url.openStream());
                 } catch (MalformedURLException e1) {
                     throw new TransformerException("Malformed URL", e1);

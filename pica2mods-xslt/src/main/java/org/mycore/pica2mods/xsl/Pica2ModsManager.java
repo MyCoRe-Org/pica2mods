@@ -172,7 +172,7 @@ public class Pica2ModsManager {
                 <xsl:param name="MCR.PICA2MODS.CONVERTER_VERSION" select="'Pica2Mods 2.3'"/>
              */
 
-            transformer.setParameter("WebApplicationBaseURL", config.getMycoreBaseUrl());
+            transformer.setParameter("WebApplicationBaseURL", config.getMycoreUrl());
             for (String key : parameter.keySet()) {
                 transformer.setParameter(key, parameter.get(key));
             }
