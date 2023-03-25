@@ -1,8 +1,9 @@
 # pica2mods-runner
 
 ## Usage
-
-    usage java -jar pica2mods-runner.jar <PPN> <MyCoRe Base URL> 
+```
+java -jar pica2mods-runner.jar <PPN> <MyCoRe Base URL>
+```
     --catalog=           (default: gvk)
     --output=            (default: STDOUT)
 

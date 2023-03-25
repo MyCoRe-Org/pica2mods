@@ -28,13 +28,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
-import org.mycore.pica2mods.xsl.Pica2ModsManager;
-import org.slf4j.Logger;
+import org.mycore.pica2mods.runner.model.Catalog;
+import org.mycore.pica2mods.xsl.Pica2ModsGenerator;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -46,7 +46,7 @@ public class Runner implements ApplicationRunner {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Runner.class);
 
-    private static final String PICA2MODS_VERSION = Pica2ModsManager.retrieveBuildInfosFromManifest(true);
+    private static final String PICA2MODS_VERSION = Pica2ModsGenerator.retrieveBuildInfosFromManifest(true);
 
     private final static String CATALOG_OPTION = "catalog";
 
@@ -63,16 +63,11 @@ public class Runner implements ApplicationRunner {
         SpringApplication.run(Runner.class, args);
     }
 
-    @PostConstruct
-    private void init() {
-        pica2modsManager = new Pica2ModsManager(config);
-    }
-
     @Override
     public void run(ApplicationArguments args) {
         final List<String> nonOptionArgs = args.getNonOptionArgs();
-        if (nonOptionArgs.size() == 0 || nonOptionArgs.size() > 2) {
-            System.out.println("A PPN and a MyCoRe base url (optional) must be specified.");
+        if (nonOptionArgs.size() != 2) {
+            System.out.println("A MyCoRe base url and ppn must be specified at least.");
             System.exit(1);
         }
         final Set<String> unknownOptionNames = new HashSet<>(args.getOptionNames());
@@ -82,25 +77,24 @@ public class Runner implements ApplicationRunner {
             System.out.println(unknownOptionNames);
             System.exit(1);
         }
-        if (nonOptionArgs.size() == 2) {
-            final String baseUrl = nonOptionArgs.get(1);
-            pica2modsManager.getConfig().setMycoreBaseUrl(baseUrl);
-        }
-        final String ppn = nonOptionArgs.get(0);
 
-        String catalogName = getOptionValue(args, CATALOG_OPTION);
+        final String baseUrl = nonOptionArgs.get(0);
+        final String ppn = nonOptionArgs.get(1);
+        final String catalogName = getOptionValue(args, CATALOG_OPTION);
+        Catalog catalog = null;
         if (catalogName == null) {
-            catalogName = config.getDefaultCatalog();
-            LOGGER.info("No catalog specified, using default catalog: {}.", config.getDefaultCatalog());
+            catalog = config.getCatalogs().get(config.getDefaultCatalogName());
+            LOGGER.info("No catalog specified, using default catalog: {}.", config.getDefaultCatalogName());
         } else {
-            if (!config.getCatalogs().containsKey(catalogName)) {
+            catalog = config.getCatalogs().get(catalogName);
+            if (catalog == null) {
                 System.out.println("Unknown catalog: " + catalogName);
                 System.exit(1);
             }
         }
         final String output = getOptionValue(args, OUTPUT_OPTION);
         try {
-            final String result = transform(catalogName, ppn);
+            final String result = transform(baseUrl, catalog, ppn);
             if (output != null) {
                 Files.writeString(Path.of(output), result);
             } else {
@@ -112,14 +106,16 @@ public class Runner implements ApplicationRunner {
         }
     }
 
-    private String transform(String catalogName, String ppn) throws Exception {
+    // TODO exceptions are crappy
+    private String transform(String baseUrl, Catalog catalog, String ppn) throws Exception {
         final StringWriter sw = new StringWriter();
         final Result result = new StreamResult(sw);
-        final Pica2ModsManager manager = new Pica2ModsManager(config);
+        final Pica2ModsGenerator pica2modsGenerator = new Pica2ModsGenerator(config.getSruUrl(), config.getUnapiUrl(), baseUrl);
         final Map<String, String> xslParams = new HashMap<>();
         xslParams.put("MCR.PICA2MODS.CONVERTER_VERSION", PICA2MODS_VERSION);
-        xslParams.put("MCR.PICA2MODS.DATABASE", manager.getConfig().getCatalog(catalogName).getSruKey());
-        manager.createMODSDocumentViaSRU(catalogName, "pica.ppn=" + ppn, result, xslParams);
+        xslParams.put("MCR.PICA2MODS.DATABASE", catalog.getUnapiKey());
+        pica2modsGenerator.createMODSDocumentFromSRUSafe(catalog.getSruKey(), "pica.ppn=" + ppn, catalog.getXsl(), result,
+            xslParams);
         return sw.toString();
     }
 

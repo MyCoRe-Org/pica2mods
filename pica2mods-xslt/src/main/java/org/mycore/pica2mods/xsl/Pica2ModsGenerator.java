@@ -178,14 +178,12 @@ public class Pica2ModsGenerator {
         }
     }
 
-    public void createMODSDocumentFromSRUSafe(String catalogKey, String sruQuery, String xslFile, Result result,
-        Map<String, String> parameter) throws Exception {
+    public void createMODSDocumentFromSRUSafe(String catalogKey, String sruQuery, String xslFile, Result result, Map<String, String> parameter) throws Exception {
         Element picaRecord = retrievePicaXMLViaSRU(catalogKey, sruQuery);
         createMODSDocumentFromPicaXML(picaRecord, xslFile, result, parameter);
     }
 
-    public void createMODSDocumentFromUnAPI(String catalogKey, String ppn, String xslFile, Result result,
-        Map<String, String> parameter) {
+    public void createMODSDocumentFromUnAPI(String catalogKey, String ppn, String xslFile, Result result, Map<String, String> parameter) {
         try {
             Element picaRecord = retrievePicaXMLViaUnAPI(catalogKey, ppn);
             createMODSDocumentFromPicaXML(picaRecord, xslFile, result, parameter);
