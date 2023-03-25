@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class Pica2ModsConfig {
 
-    private String defaultCatalog;
+    private String defaultCatalogName;
 
     private String sruUrl;
 
@@ -33,12 +33,12 @@ public class Pica2ModsConfig {
 
     private Map<String, Catalog> catalogs = Collections.emptyMap();
 
-    public String getDefaultCatalog() {
-        return defaultCatalog;
+    public String getDefaultCatalogName() {
+        return defaultCatalogName;
     }
 
-    public void setDefaultCatalog(String defaultCatalog) {
-        this.defaultCatalog = defaultCatalog;
+    public void setDefaultCatalogName(String defaultCatalogName) {
+        this.defaultCatalogName = defaultCatalogName;
     }
 
     public Map<String, Catalog> getCatalogs() {

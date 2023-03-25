@@ -31,10 +31,10 @@ import java.util.Set;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
-import org.mycore.pica2mods.runner.model.Catalog;
-import org.mycore.pica2mods.xsl.Pica2ModsGenerator;
-import org.slf4j.LoggerFactory;
+import org.mycore.pica2mods.xsl.Pica2ModsManager;
+import org.mycore.pica2mods.xsl.model.Catalog;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -46,7 +46,7 @@ public class Runner implements ApplicationRunner {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Runner.class);
 
-    private static final String PICA2MODS_VERSION = Pica2ModsGenerator.retrieveBuildInfosFromManifest(true);
+    private static final String PICA2MODS_VERSION = Pica2ModsManager.retrieveBuildInfosFromManifest(true);
 
     private final static String CATALOG_OPTION = "catalog";
 
@@ -56,8 +56,6 @@ public class Runner implements ApplicationRunner {
 
     @Autowired
     private RunnerConfig config;
-
-    private Pica2ModsManager pica2modsManager = null;
 
     public static void main(String[] args) {
         SpringApplication.run(Runner.class, args);
@@ -110,12 +108,11 @@ public class Runner implements ApplicationRunner {
     private String transform(String baseUrl, Catalog catalog, String ppn) throws Exception {
         final StringWriter sw = new StringWriter();
         final Result result = new StreamResult(sw);
-        final Pica2ModsGenerator pica2modsGenerator = new Pica2ModsGenerator(config.getSruUrl(), config.getUnapiUrl(), baseUrl);
+        final Pica2ModsManager pica2modsManager = new Pica2ModsManager(config);
         final Map<String, String> xslParams = new HashMap<>();
         xslParams.put("MCR.PICA2MODS.CONVERTER_VERSION", PICA2MODS_VERSION);
         xslParams.put("MCR.PICA2MODS.DATABASE", catalog.getUnapiKey());
-        pica2modsGenerator.createMODSDocumentFromSRUSafe(catalog.getSruKey(), "pica.ppn=" + ppn, catalog.getXsl(), result,
-            xslParams);
+        pica2modsManager.createMODSDocumentViaSRU(catalog.getSruKey(), "pica.ppn=" + ppn, result, xslParams);
         return sw.toString();
     }
 
