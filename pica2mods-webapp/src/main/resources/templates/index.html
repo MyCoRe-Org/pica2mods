@@ -13,7 +13,7 @@
     <div class="container-fluid pt-3">
       <div style="float: right; margin-top: 12px">
         <div th:if="${not(#strings.isEmpty(ppn))}" th:unless="${not(isValid)}">
-          <a class="btn btn-success btn-sm" th:href="@{/ppn__${ppn}__.mods.xml?catalog=__${catalog}__}">
+          <a class="btn btn-success btn-sm" th:href="@{/ppn__${ppn}__.mods.xml?catalog=__${catalogId}__}">
             <strong>&#128190; MODS valid</strong>
           </a>
         </div>
@@ -31,8 +31,8 @@
                 <span class="input-group-text">Profil:</span>
               </div>
               <select class="form-control" name="catalog">
-                  <option th:each="key : ${catalogs}" th:value="${key}" th:text="${catalogNames.get(key)}"
-                          th:selected=${key==catalog}></option>
+                  <option th:each="c : ${catalogs}" th:value="${c.value.id}" th:text="${c.value.name}"
+                          th:selected=${c.key==catalogId}></option>
               </select>
             </div>
           </div>
@@ -49,7 +49,7 @@
           </div>
           
           <div class="col-1">
-            <a class="btn btn-outline-secondary btn-sm d-block" th:href="${catalogUrls.get(catalog) + 'XMLPRS=N/PPN?PPN=' + ppn}">OPAC</a>
+            <a class="btn btn-outline-secondary btn-sm d-block" th:href="${catalogs.get(catalogId).opacUrl + 'XMLPRS=N/PPN?PPN=' + ppn}">OPAC</a>
           </div>
           <div class="col-2">
             <a class="btn btn-outline-secondary btn-sm d-block"
@@ -57,14 +57,14 @@
               th:utext="'UnAPI (K10plus)'">
               (UnAPI (Katalog))</a>
             <a class="btn btn-outline-secondary btn-sm d-block"
-              th:href="${'https://unapi.k10plus.de/?&amp;format=picaxml&amp;id=' + catalogKeys.get(catalog) + ':ppn:' + ppn}" 
-              th:utext="'UnAPI (__${catalogKeys.get(catalog)}__)'">
+              th:href="${'https://unapi.k10plus.de/?&amp;format=picaxml&amp;id=' + catalogs.get(catalogId).unapiKey + ':ppn:' + ppn}" 
+              th:utext="'UnAPI (__${catalogs.get(catalogId).unapiKey}__)'">
               (UnAPI (Katalog))</a>
           </div>
           <div class="col-3" th:with="p=${#lists.size(related)>0}">
             <span th:each="r : ${related}">
               <a class="btn btn-outline-secondary btn-sm d-block"
-                 th:href="@{/(catalog=${catalog}, ppn=${r.ppn})}"
+                 th:href="@{/(catalog=${catalogId}, ppn=${r.ppn})}"
                  th:text="${r.type + ' (PPN '+ r.ppn +')'}">
                  Druckausgabe [UnAPI(gvk)]
             </a>

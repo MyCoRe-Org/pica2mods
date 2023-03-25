@@ -29,7 +29,7 @@ public class Pica2ModsNamespaceContext implements NamespaceContext {
         }
     }
 
-    @SuppressWarnings({ "rawtypes" })
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Iterator getPrefixes(String namespace) {
         return null;
     }
