@@ -82,19 +82,19 @@ public class Pica2ModsRunner implements ApplicationRunner {
         }
 
         final String ppn = nonOptionArgs.get(0);
-        String catalogName = getOptionValue(args, CATALOG_OPTION);
-        if (catalogName == null) {
-            catalogName = config.getDefaultCatalogName();
-            LOGGER.info("No catalog specified, using default catalog: {}.", catalogName);
+        String catalogKey = getOptionValue(args, CATALOG_OPTION);
+        if (catalogKey == null) {
+            catalogKey = config.getDefaultCatalogKey();
+            LOGGER.info("No catalog specified, using default catalog: {}.", catalogKey);
         } else {
-            if (config.getCatalogs().get(catalogName) == null) {
-                System.out.println("Unknown catalog: " + catalogName);
+            if (config.getCatalogs().get(catalogKey) == null) {
+                System.out.println("Unknown catalog: " + catalogKey);
                 System.exit(1);
             }
         }
         final String output = getOptionValue(args, OUTPUT_OPTION);
         try {
-            final String result = transform(catalogName, ppn);
+            final String result = transform(catalogKey, ppn);
             if (output != null) {
                 Files.writeString(Path.of(output), result);
             } else {
@@ -108,14 +108,14 @@ public class Pica2ModsRunner implements ApplicationRunner {
     }
 
     // TODO exceptions are crappy
-    private String transform(String catalogName, String ppn) throws Exception {
+    private String transform(String catalogKey, String ppn) throws Exception {
         final StringWriter sw = new StringWriter();
         final Result result = new StreamResult(sw);
         final Pica2ModsManager pica2modsManager = new Pica2ModsManager(config);
         final Map<String, String> xslParams = new HashMap<>();
         xslParams.put("MCR.PICA2MODS.CONVERTER_VERSION", PICA2MODS_VERSION);
-        xslParams.put("MCR.PICA2MODS.DATABASE", config.getCatalogs().get(catalogName).getUnapiKey());
-        pica2modsManager.createMODSDocumentViaSRU(catalogName, "pica.ppn=" + ppn, result, xslParams);
+        xslParams.put("MCR.PICA2MODS.DATABASE", config.getCatalogs().get(catalogKey).getUnapiKey());
+        pica2modsManager.createMODSDocumentViaSRU(catalogKey, "pica.ppn=" + ppn, result, xslParams);
         return sw.toString();
     }
 

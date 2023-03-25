@@ -20,6 +20,10 @@ package org.mycore.pica2mods.xsl.model;
 
 public class Catalog {
 
+    private String id;
+    
+    private String name;
+    
     private String opacUrl;
 
     private String unapiKey;
@@ -28,7 +32,9 @@ public class Catalog {
 
     private String xsl;
 
-    public Catalog(String opacUrl, String unapiKey, String sruKey, String xsl) {
+    public Catalog(String id, String name, String opacUrl, String unapiKey, String sruKey, String xsl) {
+        this.id = id;
+        this.name = name;
         this.opacUrl = opacUrl;
         this.unapiKey = unapiKey;
         this.sruKey = sruKey;
@@ -36,6 +42,22 @@ public class Catalog {
     }
 
     public Catalog() {
+    }
+    
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getOpacUrl() {
