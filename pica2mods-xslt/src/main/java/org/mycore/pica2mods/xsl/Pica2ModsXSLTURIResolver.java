@@ -2,12 +2,10 @@ package org.mycore.pica2mods.xsl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.TimeUnit;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -19,38 +17,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
-/**
- * This class is deprecated. Use Pica2ModsXSLTURIResolver as replacement.
- * 
- * @author Robert Stephan
- * @deprecated 2023-03-06
- */
-public class Pica2ModsURIResolver implements URIResolver {
-    private final Logger LOGGER = LoggerFactory.getLogger(Pica2ModsURIResolver.class);
+public class Pica2ModsXSLTURIResolver implements URIResolver {
+    private final Logger LOGGER = LoggerFactory.getLogger(Pica2ModsXSLTURIResolver.class);
 
-    private Pica2ModsGenerator p2mGenerator;
+    private Pica2ModsManager manager;
 
-    public Pica2ModsURIResolver(Pica2ModsGenerator p2mGenerator) {
-        this.p2mGenerator = p2mGenerator;
+    public Pica2ModsXSLTURIResolver(Pica2ModsManager manager) {
+        this.manager = manager;
     }
 
     @Override
     public Source resolve(String href, String base) throws TransformerException {
         //default: resolve internet sources
         if (href.startsWith("http:") || href.startsWith("https:")) {
-            if(href.startsWith("https://unapi.k10plus.de?") || href.startsWith("https://sru.k10plus.de?")) {
-                return gbvCatalogCall(href);
-            }
-            URL url;
-            try {
-                url = new URL(href);
-                return new StreamSource(url.openStream());
-            } catch (MalformedURLException e) {
-                LOGGER.error("Malformed URL", e);
-                throw new TransformerException(e);
-            } catch (IOException e) {
-                LOGGER.error("Error opening document at: " + href);
-                throw new TransformerException(e);
+            if (href.startsWith("https://unapi.k10plus.de?") || href.startsWith("https://sru.k10plus.de?")) {
+                try {
+                    return new DOMSource(manager.retrieveWithRetryXMLFromURL(href).getDocumentElement());
+                } catch (Pica2ModsException e) {
+                    throw new TransformerException("Could not read from URL: + href", e);
+                }
+            } else {
+                try {
+                    URL url = new URL(href);
+                    return new StreamSource(url.openStream());
+                } catch (MalformedURLException e) {
+                    throw new TransformerException("Malformed URL", e);
+                } catch (IOException e) {
+                    throw new TransformerException("Error opening URL: ", e);
+                }
             }
         }
 
@@ -65,38 +59,36 @@ public class Pica2ModsURIResolver implements URIResolver {
         if (href.startsWith("sru-gvk:")) {
             String query = href.substring("sru-gvk:".length());
             try {
-                Element el = p2mGenerator.retrievePicaXMLViaSRU("gvk", query);
+                Element el = manager.retrievePicaXMLViaSRU("gvk", query);
                 return new DOMSource(el);
             } catch (Exception e) {
-                LOGGER.error("Error processing SRU Query", e);
-                throw new TransformerException(e);
+                throw new TransformerException("Error processing SRU Query" + href, e);
             }
         }
         if (href.startsWith("sru-k10plus:")) {
             String query = href.substring("sru-k10plus:".length());
             try {
-                Element el = p2mGenerator.retrievePicaXMLViaSRU("k10plus", query);
+                Element el = manager.retrievePicaXMLViaSRU("k10plus", query);
                 return new DOMSource(el);
             } catch (Exception e) {
-                LOGGER.error("Error processing SRU Query", e);
-                throw new TransformerException(e);
+                throw new TransformerException("Error processing SRU Query: " + href, e);
             }
         }
 
         if (href.startsWith("unapi:")) {
-            String id = href.substring("unapi:".length());
+            String unapiKey = href.substring("unapi:".length());
             try {
-                Element el = p2mGenerator.retrievePicaXMLViaUnAPI(id);
+                Element el = manager.retrievePicaXMLViaUnAPI(unapiKey);
                 return new DOMSource(el);
             } catch (Exception e) {
-                LOGGER.error("Error processing SRU Query", e);
-                throw new TransformerException(e);
+                throw new TransformerException("Error processing UnAPI request: " + href, e);
             }
         }
 
         if (href.startsWith("classification:")) {
             String classid = href.substring("classification:".length());
-
+            // if the code runs in a MyCoRe environment, 
+            // use the MyCoe URIResolver to retrieve the classification
             try {
                 @SuppressWarnings("rawtypes")
                 Class classMCRURIResolver = Class.forName("org.mycore.common.xml.MCRURIResolver");
@@ -119,14 +111,12 @@ public class Pica2ModsURIResolver implements URIResolver {
             } catch (ClassNotFoundException e) {
                 URL url;
                 try {
-                    url = new URL(p2mGenerator.getMycoreBaseURL() + "api/v1/classifications/" + classid);
+                    url = new URL(manager.getConfig().getMycoreBaseUrl() + "api/v1/classifications/" + classid);
                     return new StreamSource(url.openStream());
                 } catch (MalformedURLException e1) {
-                    LOGGER.error("Malformed URL", e1);
-                    throw new TransformerException(e1);
+                    throw new TransformerException("Malformed URL", e1);
                 } catch (IOException e1) {
-                    LOGGER.error("Error opening document at: " + href);
-                    throw new TransformerException(e1);
+                    throw new TransformerException("Error opening URL: " + href, e1);
                 }
             }
         }
@@ -134,31 +124,7 @@ public class Pica2ModsURIResolver implements URIResolver {
         //default:
         String path = href;
         InputStream is = getClass().getClassLoader()
-            .getResourceAsStream(Pica2ModsGenerator.PICA2MODS_XSLT_PATH + path);
+            .getResourceAsStream(Pica2ModsManager.PICA2MODS_XSLT_PATH + path);
         return new StreamSource(is);
-    }
-
-    private StreamSource gbvCatalogCall(String href) {
-       try {
-        URL url = new URL(href);
-        int loop = 0;
-        do {
-            loop++;
-            LOGGER.debug("Getting catalogue data for: " + url.toString());
-            try {
-                return new StreamSource(url.openStream());
-                
-            } catch (Exception e) {
-                if (loop <= 2) {
-                    LOGGER.error("An error occurred - waiting 5 min and try again", e);
-                    TimeUnit.MINUTES.sleep(5);
-                } else throw e;
-            }
-        } while (loop <= 2);
-       }
-       catch(Exception e) {
-           LOGGER.error("Error retrieving catalog data from "+ href, e);
-       }
-       return new StreamSource(new StringReader(""));
     }
 }

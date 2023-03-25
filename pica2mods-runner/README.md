@@ -1,10 +1,11 @@
 # pica2mods-runner
 
 ## Usage
-
-    usage java -jar pica2mods-runner.jar <MyCoRe Base URL> <PPN> 
-    --catalog=                     default gvk 
-    --output=					   default STDOUT
+```
+java -jar pica2mods-runner.jar <PPN> <MyCoRe Base URL>
+```
+    --catalog=           (default: gvk)
+    --output=            (default: STDOUT)
 
 ## Supported catalogs
 *   GVK Verbundkatalog (gvk)

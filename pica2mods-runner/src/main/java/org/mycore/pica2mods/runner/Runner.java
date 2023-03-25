@@ -22,8 +22,8 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -57,6 +57,8 @@ public class Runner implements ApplicationRunner {
     @Autowired
     private RunnerConfig config;
 
+    private Pica2ModsManager pica2modsManager = null;
+
     public static void main(String[] args) {
         SpringApplication.run(Runner.class, args);
     }
@@ -75,6 +77,7 @@ public class Runner implements ApplicationRunner {
             System.out.println(unknownOptionNames);
             System.exit(1);
         }
+
         final String baseUrl = nonOptionArgs.get(0);
         final String ppn = nonOptionArgs.get(1);
         final String catalogName = getOptionValue(args, CATALOG_OPTION);
