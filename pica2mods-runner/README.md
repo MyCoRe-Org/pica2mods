@@ -2,7 +2,7 @@
 
 ## Usage
 ```
-java -jar pica2mods-runner.jar <PPN> <MyCoRe Base URL>
+java -jar pica2mods-runner.jar <PPN>
 ```
 #### Optional parameter:
 * `--catalog=<catalog_name>`        (default: gvk)
