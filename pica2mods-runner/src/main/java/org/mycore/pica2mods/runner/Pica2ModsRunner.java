@@ -57,12 +57,12 @@ public class Pica2ModsRunner implements ApplicationRunner {
     private Pica2ModsRunnerConfig config;
 
     public static void main(String[] args) {
-        //SpringApplication.run(Pica2ModsRunner.class, args);
         try {
-            SpringApplication.run(Pica2ModsRunner.class, "1667675745");
+            SpringApplication.run(Pica2ModsRunner.class, args);
+            // example: SpringApplication.run(Pica2ModsRunner.class, "1667675745", "--output=C:\\temp\\ppn1667675745.mods.xml");
         }
         catch(Exception e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("Pica2ModsRunner finished with an exception", e);
         }
     }
 
