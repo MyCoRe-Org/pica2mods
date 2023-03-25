@@ -42,9 +42,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Runner implements ApplicationRunner {
+public class Pica2ModsRunner implements ApplicationRunner {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Runner.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(Pica2ModsRunner.class);
 
     private static final String PICA2MODS_VERSION = Pica2ModsManager.retrieveBuildInfosFromManifest(true);
 
@@ -55,10 +55,10 @@ public class Runner implements ApplicationRunner {
     private final static Set<String> VALID_OPTION_NAMES = new HashSet<>(Arrays.asList(CATALOG_OPTION, OUTPUT_OPTION));
 
     @Autowired
-    private RunnerConfig config;
+    private Pica2ModsRunnerConfig config;
 
     public static void main(String[] args) {
-        SpringApplication.run(Runner.class, args);
+        SpringApplication.run(Pica2ModsRunner.class, args);
     }
 
     @Override

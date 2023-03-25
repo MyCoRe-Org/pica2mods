@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "pica2mods")
-public class RunnerConfig extends Pica2ModsConfig{
+public class Pica2ModsRunnerConfig extends Pica2ModsConfig{
 
    
 }
