@@ -72,7 +72,7 @@ public class Runner implements ApplicationRunner {
         unknownOptionNames.removeAll(VALID_OPTION_NAMES);
         if (!unknownOptionNames.isEmpty()) {
             System.out.println("Found unknown options:");
-            System.out.println(unknownOptionNames);
+            System.out.println(String.join(", ",  unknownOptionNames));
             System.exit(1);
         }
 
@@ -117,6 +117,6 @@ public class Runner implements ApplicationRunner {
     }
 
     private static String getOptionValue(ApplicationArguments args, String optionName) {
-        return args.containsOption(optionName) ? args.getOptionValues(optionName).get(0) : null;
+        return args.containsOption(optionName) && !args.getOptionValues(optionName).isEmpty() ? args.getOptionValues(optionName).get(0) : null;
     }
 }
