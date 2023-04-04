@@ -90,8 +90,8 @@ public class Pica2ModsManager {
     }
 
     protected Document retrieveWithRetryXMLFromURL(String theURL) throws Pica2ModsException {
-        if(!theURL.startsWith("http://") && !theURL.startsWith("https://")) {
-            throw new IllegalArgumentException ("The URL should start with 'http://' or 'https://'");
+        if (!theURL.startsWith("http://") && !theURL.startsWith("https://")) {
+            throw new IllegalArgumentException("The URL should start with 'http://' or 'https://'");
         }
         try {
             URL url = new URL(theURL);
@@ -175,7 +175,9 @@ public class Pica2ModsManager {
                 <xsl:param name="MCR.PICA2MODS.CONVERTER_VERSION" select="'Pica2Mods 2.3'"/>
              */
 
-            transformer.setParameter("WebApplicationBaseURL", config.getMycoreUrl());
+            if (config.getMycoreUrl() != null) {
+                transformer.setParameter("WebApplicationBaseURL", config.getMycoreUrl());
+            }
             for (String key : parameter.keySet()) {
                 transformer.setParameter(key, parameter.get(key));
             }
