@@ -11,7 +11,7 @@
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
 
-  <xsl:param name="WebApplicationBaseURL" select="'http://rosdok.uni-rostock.de/'" />
+  <xsl:param name="WebApplicationBaseURL" select="'https://rosdok.uni-rostock.de/'" />
   <!-- This template is for testing purposes -->
   <xsl:template match="p:record">
     <mods:mods>

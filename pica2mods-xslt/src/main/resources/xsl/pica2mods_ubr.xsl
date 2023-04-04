@@ -33,7 +33,7 @@
   <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
   
   <!-- TO: MyCoRe-AnwendungsURL -->
-  <xsl:param name="WebApplicationBaseURL" select="'http://rosdok.uni-rostock.de/'" />
+  <xsl:param name="WebApplicationBaseURL" select="'https://rosdok.uni-rostock.de/'" />
 
   <xsl:template match="p:record">
     <xsl:variable name="picaNew">
