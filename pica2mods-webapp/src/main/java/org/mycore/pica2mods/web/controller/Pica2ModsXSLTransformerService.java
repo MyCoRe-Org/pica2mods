@@ -44,7 +44,7 @@ public class Pica2ModsXSLTransformerService {
 
     @Autowired
     Pica2ModsWebappConfig config;
-    
+
     private XPathFactory factory = XPathFactory.newInstance();
 
     public String transform(String catalog, String ppn) {
@@ -58,11 +58,15 @@ public class Pica2ModsXSLTransformerService {
         try {
             pica2modsGenerator.createMODSDocumentViaSRU(catalog, "pica.ppn=" + ppn, result, xslParams);
             return sw.toString();
-        }
-        catch(Pica2ModsException e) {
+        } catch (Pica2ModsException e) {
             StringBuilder msg = new StringBuilder("<error><![CDATA[\n\n");
             msg.append(e.getMessage());
-            if(e.getCause()!=null) {msg.append(", ").append(e.getCause().getMessage());}
+            Throwable ee = e;
+            while (ee.getCause() != null) {
+                msg.append(",\n").append(ee.getCause().getMessage().toString());
+                ee = ee.getCause();
+            }
+            // e.printStackTrace();
             msg.append("\n\n]]></error>");
             return msg.toString();
         }
@@ -70,11 +74,12 @@ public class Pica2ModsXSLTransformerService {
 
     public List<PPNLink> resolveOtherIssues(String catalog, String ppn) {
         List<PPNLink> result = new ArrayList<>();
-        String url = config.getUnapiUrl() + "?format=picaxml&id=" + config.getCatalog(catalog).getUnapiKey() + ":ppn:" + ppn;
+        String url = config.getUnapiUrl() + "?format=picaxml&id=" + config.getCatalog(catalog).getUnapiKey() + ":ppn:"
+            + ppn;
         XPath xpath = factory.newXPath();
         xpath.setNamespaceContext(new Pica2ModsNamespaceContext());
-        if(!url.startsWith("http://") && !url.startsWith("https://")) {
-            throw new IllegalArgumentException ("The URL should start with 'http://' or 'https://'");
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            throw new IllegalArgumentException("The URL should start with 'http://' or 'https://'");
         }
 
         try (InputStream input = new URL(url).openStream()) {

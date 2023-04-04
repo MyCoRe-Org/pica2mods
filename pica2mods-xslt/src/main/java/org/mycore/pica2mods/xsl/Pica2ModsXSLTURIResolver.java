@@ -53,7 +53,11 @@ public class Pica2ModsXSLTURIResolver implements URIResolver {
             String path = href.substring("resource:".length());
             InputStream is = getClass().getClassLoader()
                 .getResourceAsStream(path);
-            return new StreamSource(is);
+            if (is != null) {
+                return new StreamSource(is);
+            } else {
+                throw new TransformerException("Classpath resource not found: " + href);
+            }
         }
 
         if (href.startsWith("sru-gvk:")) {
