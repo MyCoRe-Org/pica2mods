@@ -113,14 +113,19 @@ public class Pica2ModsXSLTURIResolver implements URIResolver {
                     LOGGER.error("Error with Java Reflection API", e);
                 }
             } catch (ClassNotFoundException e) {
-                URL url;
-                try {
-                    url = new URL(manager.getConfig().getMycoreUrl() + "api/v1/classifications/" + classid);
-                    return new StreamSource(url.openStream());
-                } catch (MalformedURLException e1) {
-                    throw new TransformerException("Malformed URL", e1);
-                } catch (IOException e1) {
-                    throw new TransformerException("Error opening URL: " + href, e1);
+                if (manager.getConfig().getMycoreUrl() != null) {
+                    // load classification via MyCoRe REST API v1
+                    try {
+                        URL url = new URL(manager.getConfig().getMycoreUrl() + "api/v1/classifications/" + classid);
+                        return new StreamSource(url.openStream());
+                    } catch (MalformedURLException e1) {
+                        throw new TransformerException("Malformed URL", e1);
+                    } catch (IOException e1) {
+                        throw new TransformerException("Error opening URL: " + href, e1);
+                    }
+                } else {
+                    //finally try to load classification from classpath
+                    return resolve("resource:mycore-classifications/" + classid + ".xml", base);
                 }
             }
         }
