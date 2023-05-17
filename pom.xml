@@ -22,8 +22,8 @@
   <scm>
     <connection>scm:git:https://github.com/MyCoRe-Org/pica2mods.git</connection>
     <developerConnection>scm:git:https://github.com/MyCoRe-Org/pica2mods.git</developerConnection>
-    <tag>HEAD</tag>
     <url>https://github.com/MyCoRe-Org/pica2mods</url>
+    <tag>HEAD</tag>
   </scm>
   <developers>
     <developer>
