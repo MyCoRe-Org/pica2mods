@@ -1,5 +1,7 @@
 package org.mycore.pica2mods.pica2solr;
 
+import java.util.Locale;
+
 //"borrowed" Escape-functions from org.json.simple.JSONValue
 //https://github.com/fangyidong/json-simple/blob/2f4b7b5bed38d7518bf9c6a902ea909226910ae3/src/main/java/org/json/simple/JSONValue.java#L258
 
@@ -60,7 +62,7 @@ public class JSONValue {
                     for (int k = 0; k < 4 - ss.length(); k++) {
                         sb.append('0');
                     }
-                    sb.append(ss.toUpperCase());
+                    sb.append(ss.toUpperCase(Locale.getDefault()));
                 } else {
                     sb.append(ch);
                 }

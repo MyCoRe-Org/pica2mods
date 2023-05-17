@@ -7,6 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.List;
+import java.util.Locale;
 
 import org.mycore.pica2mods.pica2solr.service.SolrService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,7 +145,7 @@ public class Pica2Solr implements ApplicationRunner {
             String ingest = null;
 
             do {
-                System.out.print("  >>" + String.format("%6d", start) + " :");
+                System.out.print("  >>" + String.format(Locale.getDefault(), "%6d", start ) + " :");
                 String uri = sruBaseURL + config.getSruCatalog() + "?operation=searchRetrieve&maximumRecords=" + OFFSET
                     + "&recordSchema=picaxml"
                     + "&startRecord=" + start
