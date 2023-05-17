@@ -86,39 +86,6 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </pluginRepository>
   </pluginRepositories>
-  <developers>
-    <developer>
-      <id>mcrsteph</id>
-      <name>Robert Stephan</name>
-      <email>robert.stephan (at) uni-rostock.de</email>
-      <organization>Universität Rostock, Universitätsbibliothek</organization>
-      <organizationUrl>http://www.ub.uni-rostock.de</organizationUrl>
-      <roles>
-        <role>coordination</role>
-        <role>developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <id>mcrkrebs</id>
-      <name>Kathleen Neumann</name>
-      <email>Kathleen.Neumann (at) gbv.de</email>
-      <organization>Verbundzentrale des GBV (VZG), Document Management System</organization>
-      <organizationUrl>http://www.gbv.de</organizationUrl>
-      <roles>
-        <role>coordination</role>
-        <role>developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-  </developers>
-  <modules>
-    <module>pica2mods-xslt</module>
-    <module>pica2mods-webapp</module>
-    <module>pica2mods-validation</module>
-    <module>pica2mods-runner</module>
-    <module>pica2solr</module>
-  </modules>
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -158,4 +125,37 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <developers>
+    <developer>
+      <id>mcrsteph</id>
+      <name>Robert Stephan</name>
+      <email>robert.stephan (at) uni-rostock.de</email>
+      <organization>Universität Rostock, Universitätsbibliothek</organization>
+      <organizationUrl>http://www.ub.uni-rostock.de</organizationUrl>
+      <roles>
+        <role>coordination</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+    <developer>
+      <id>mcrkrebs</id>
+      <name>Kathleen Neumann</name>
+      <email>Kathleen.Neumann (at) gbv.de</email>
+      <organization>Verbundzentrale des GBV (VZG), Document Management System</organization>
+      <organizationUrl>http://www.gbv.de</organizationUrl>
+      <roles>
+        <role>coordination</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+  </developers>
+  <modules>
+    <module>pica2mods-xslt</module>
+    <module>pica2mods-webapp</module>
+    <module>pica2mods-validation</module>
+    <module>pica2mods-runner</module>
+    <module>pica2solr</module>
+  </modules>
 </project>
