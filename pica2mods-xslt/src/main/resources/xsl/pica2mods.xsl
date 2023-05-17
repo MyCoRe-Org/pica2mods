@@ -26,7 +26,7 @@
   <xsl:import href="_common/pica2mods-functions.xsl" />
 
   <xsl:param name="MCR.PICA2MODS.CONVERTER_VERSION" select="'Pica2Mods 2.5'" />
-  <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
+  <xsl:param name="MCR.PICA2MODS.DATABASE" select="'gvk'" />
 
   <xsl:template match="p:record">
     <mods:mods>
