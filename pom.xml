@@ -26,10 +26,10 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
-    <spring.boot.version>2.7.10</spring.boot.version>
     <!-- with snakeyaml 1.30 version there is security vulnerability
          check snakeyaml version on the next spring boot version update -->
     <snakeyaml.version>1.31</snakeyaml.version>
+    <spring.boot.version>2.7.10</spring.boot.version>
   </properties>
   <developers>
     <developer>
