@@ -19,7 +19,12 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
+  <scm>
+    <connection>scm:git:https://github.com/MyCoRe-Org/pica2mods.git</connection>
+    <developerConnection>scm:git:https://github.com/MyCoRe-Org/pica2mods.git</developerConnection>
+    <tag>HEAD</tag>
+    <url>https://github.com/MyCoRe-Org/pica2mods</url>
+  </scm>
   <developers>
     <developer>
       <id>mcrsteph</id>
@@ -53,12 +58,7 @@
     <module>pica2mods-runner</module>
     <module>pica2solr</module>
   </modules>
-  <scm>
-    <connection>scm:git:https://github.com/MyCoRe-Org/pica2mods.git</connection>
-    <developerConnection>scm:git:https://github.com/MyCoRe-Org/pica2mods.git</developerConnection>
-    <tag>HEAD</tag>
-    <url>https://github.com/MyCoRe-Org/pica2mods</url>
-  </scm>
+
   <properties>
     <spring.boot.version>2.7.10</spring.boot.version>
     <!-- with snakeyaml 1.30 version there is security vulnerability
