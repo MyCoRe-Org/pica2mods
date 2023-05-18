@@ -10,6 +10,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -219,7 +220,7 @@ public class Pica2ModsManager {
 
                 Manifest manifest = new Manifest(url.openStream());
                 Attributes attributes = manifest.getMainAttributes();
-                if ("pica2mods-xslt".equals(attributes.getValue("Implementation-Artifact-ID"))) {
+                if (Objects.equals(attributes.getValue("Implementation-Artifact-ID"), "pica2mods-xslt")) {
                     StringBuilder sb = new StringBuilder();
                     sb.append(attributes.getValue("Implementation-Title"))
                         .append(" ").append(attributes.getValue("Implementation-Version"));

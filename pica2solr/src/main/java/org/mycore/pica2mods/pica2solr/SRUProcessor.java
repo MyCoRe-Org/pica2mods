@@ -48,7 +48,7 @@ public class SRUProcessor {
                     if (xmlEvent.asStartElement().getName().equals(QN_PICA_RECORD)) {
                         filterItem = false;
                         currentPPN = null;
-                        if ('[' != jsonResult.charAt(jsonResult.length() - 1)) {
+                        if (jsonResult.charAt(jsonResult.length() - 1) != '[') {
                             jsonResult.append(",\n");
                         }
                         jsonResult.append("{");
@@ -82,10 +82,10 @@ public class SRUProcessor {
                         if (value.length() > 200) {
                             value = value.substring(0, 200) + "…";
                         }
-                        if ("003@".equals(currentDataField) && "0".equals(currentSubfield)) {
+                        if (currentDataField.equals("003@") && currentSubfield.equals("0")) {
                             currentPPN = value;
                         }
-                        if ("101@".equals(currentDataField) && "a".equals(currentSubfield)) {
+                        if (currentDataField.equals("101@") && currentSubfield.equals("a")) {
                             filterItem = filterItemsByLibraryId != null && !value.equals(filterItemsByLibraryId);
                         }
 
