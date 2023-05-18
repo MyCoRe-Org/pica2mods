@@ -34,7 +34,7 @@ public class SRUProcessor {
     private static QName QN_ATTR_CODE = new QName("code");
 
     public String process(InputStream is, String filterItemsByLibraryId) {
-        StringBuffer jsonResult = new StringBuffer("[");
+        StringBuilder jsonResult = new StringBuilder("[");
         String currentDataField = null;
         @SuppressWarnings("unused")
         String currentOccurence = null;

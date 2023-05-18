@@ -90,7 +90,7 @@ public class JSONValue {
     public static String escapeXML(String s) {
         if (s == null)
             return null;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         final int len = s.length();
         for (int i = 0; i < len; i++) {
             char ch = s.charAt(i);
