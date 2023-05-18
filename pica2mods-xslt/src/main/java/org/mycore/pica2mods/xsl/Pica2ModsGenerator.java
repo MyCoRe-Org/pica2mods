@@ -17,6 +17,7 @@ import java.util.jar.Manifest;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -47,12 +48,19 @@ public class Pica2ModsGenerator {
     public static final String PICA2MODS_XSLT_PATH = "xsl/";
 
     private static final String NS_PICA = "info:srw/schema/5/picaXML-v1.0";
+    
+    static final String XML_FEATURE__DISSALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
 
     private static DocumentBuilderFactory DBF;
 
     static {
         DBF = DocumentBuilderFactory.newInstance();
         DBF.setNamespaceAware(true);
+        try {
+            DBF.setFeature(XML_FEATURE__DISSALLOW_DOCTYPE_DECL, true);
+        } catch (ParserConfigurationException e) {
+           //ignore
+        }
     }
 
     public static Pica2ModsGenerator instanceForRosDok() {

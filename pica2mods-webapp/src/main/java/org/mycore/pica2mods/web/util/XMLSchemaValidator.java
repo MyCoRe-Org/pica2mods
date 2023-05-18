@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
@@ -21,6 +22,8 @@ public class XMLSchemaValidator {
     static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
 
     static final String JAXP_SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
+    
+    static final String XML_FEATURE__DISSALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
 
     static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
 
@@ -65,8 +68,9 @@ public class XMLSchemaValidator {
         try {
             DOC_BUILDER_FACTORY.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
             DOC_BUILDER_FACTORY.setAttribute(JAXP_SCHEMA_SOURCE, schemas.toArray(new String[] {}));
+            DOC_BUILDER_FACTORY.setFeature(XML_FEATURE__DISSALLOW_DOCTYPE_DECL, true);
 
-        } catch (IllegalArgumentException x) {
+        } catch (IllegalArgumentException| ParserConfigurationException ex) {
             // Happens if the parser does not support JAXP 1.2
         }
 
