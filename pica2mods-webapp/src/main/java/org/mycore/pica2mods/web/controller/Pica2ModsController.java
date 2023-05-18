@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -72,7 +73,7 @@ public class Pica2ModsController {
             if (!isValid) {
                 model.addAttribute("xmlSchemaError", xsv.getErrorMsg());
             }
-            if ("ubr".equals(catalog)) {
+            if (Objects.equals(catalog, "ubr")) {
                 List<String> result = modsValidator.run(new StreamSource(new StringReader(modsXML)));
                 if (!result.isEmpty()) {
                     model.addAttribute("schematronError", result);

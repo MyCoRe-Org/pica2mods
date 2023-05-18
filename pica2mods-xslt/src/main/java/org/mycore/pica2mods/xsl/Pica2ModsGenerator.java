@@ -10,6 +10,7 @@ import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -232,7 +233,7 @@ public class Pica2ModsGenerator {
     public static String outputXML(Node node) {
         // ein Stylesheet zur Identitätskopie ...
         String IDENTITAETS_XSLT = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>"
-            + "<xsl:template match='/'><xsl:copy-of select='.'/>" + "</xsl:template></xsl:stylesheet>";
+            + "<xsl:template match='/'><xsl:copy-of select='.'/></xsl:template></xsl:stylesheet>";
 
         Source xmlSource = new DOMSource(node);
         Source xsltSource = new StreamSource(new StringReader(IDENTITAETS_XSLT));
@@ -247,7 +248,6 @@ public class Pica2ModsGenerator {
             trans.transform(xmlSource, ergebnis);
 
         } catch (TransformerException e) {
-            // TODO Auto-generated catch block
             LoggerFactory.getLogger(Pica2ModsGenerator.class).error("Could not output XML", e);
         }
 
@@ -287,7 +287,7 @@ public class Pica2ModsGenerator {
 
                 Manifest manifest = new Manifest(url.openStream());
                 Attributes attributes = manifest.getMainAttributes();
-                if ("pica2mods-xslt".equals(attributes.getValue("Implementation-Artifact-ID"))) {
+                if (Objects.equals(attributes.getValue("Implementation-Artifact-ID"), "pica2mods-xslt")) {
                     StringBuilder sb = new StringBuilder();
                     sb.append(attributes.getValue("Implementation-Title"))
                         .append(" ").append(attributes.getValue("Implementation-Version"));

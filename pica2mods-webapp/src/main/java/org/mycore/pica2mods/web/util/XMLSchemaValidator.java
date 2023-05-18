@@ -96,7 +96,7 @@ public class XMLSchemaValidator {
                     String msg = "Line: " + exception.getLineNumber() + ", Column: " + exception.getColumnNumber()
                         + " - " + exception.getMessage();
                     errorMsg += "\n" + msg;
-                    System.err.println(msg);
+                    LoggerFactory.getLogger(XMLSchemaValidator.class).error(msg, exception);
                     isValid = false;
                 }
             });
