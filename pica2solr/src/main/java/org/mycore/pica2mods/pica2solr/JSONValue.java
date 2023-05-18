@@ -20,7 +20,7 @@ public class JSONValue {
         if (s == null) {
             return null;
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         escape(s, sb);
         return sb.toString();
     }
@@ -32,7 +32,7 @@ public class JSONValue {
      * @param s  -the string to escape
      * @param sb - the string buffer that should hold the result
      */
-    public static void escape(String s, StringBuffer sb) {
+    public static void escape(String s, StringBuilder sb) {
         if (s == null) {
             return;
         }

@@ -10,6 +10,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.Attributes;
@@ -179,8 +180,8 @@ public class Pica2ModsManager {
             if (config.getMycoreUrl() != null) {
                 transformer.setParameter("WebApplicationBaseURL", config.getMycoreUrl());
             }
-            for (String key : parameter.keySet()) {
-                transformer.setParameter(key, parameter.get(key));
+            for (Entry<String, String> e : parameter.entrySet()) {
+                transformer.setParameter(e.getKey(), e.getValue());
             }
             transformer.transform(new DOMSource(picaRecord), result);
         }
