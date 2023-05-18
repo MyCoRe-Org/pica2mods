@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -58,6 +59,7 @@ public class Pica2ModsGenerator {
         DBF.setNamespaceAware(true);
         try {
             DBF.setFeature(XML_FEATURE__DISSALLOW_DOCTYPE_DECL, true);
+            DBF.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         } catch (ParserConfigurationException e) {
            //ignore
         }
@@ -249,9 +251,11 @@ public class Pica2ModsGenerator {
         StringWriter sw = new StringWriter();
         Result ergebnis = new StreamResult(sw);
 
-        TransformerFactory transFact = TransformerFactory.newInstance();
+        
 
         try {
+            TransformerFactory transFact = TransformerFactory.newInstance();
+            transFact.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             Transformer trans = transFact.newTransformer(xsltSource);
             trans.transform(xmlSource, ergebnis);
 

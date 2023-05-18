@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -53,6 +54,7 @@ public class Pica2ModsManager {
         DBF.setNamespaceAware(true);
         try {
             DBF.setFeature(XML_FEATURE__DISSALLOW_DOCTYPE_DECL, true);
+            DBF.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         } catch (ParserConfigurationException e) {
             // ignore
         }
@@ -174,6 +176,7 @@ public class Pica2ModsManager {
             "net.sf.saxon.TransformerFactoryImpl", getClass().getClassLoader());
 
         TRANS_FACTORY.setURIResolver(new Pica2ModsXSLTURIResolver(this));
+        TRANS_FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 
         if (picaRecord != null) {
             Source xsl = new StreamSource(getClass().getClassLoader()
@@ -212,9 +215,9 @@ public class Pica2ModsManager {
         StringWriter sw = new StringWriter();
         Result ergebnis = new StreamResult(sw);
 
-        TransformerFactory transFact = TransformerFactory.newInstance();
-
         try {
+            TransformerFactory transFact = TransformerFactory.newInstance();
+            transFact.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             Transformer trans = transFact.newTransformer(xsltSource);
             trans.transform(xmlSource, ergebnis);
 

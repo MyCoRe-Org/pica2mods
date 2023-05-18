@@ -32,6 +32,10 @@ public class SRUProcessor {
     private static QName QN_ATTR_OCC = new QName("occurrence");
 
     private static QName QN_ATTR_CODE = new QName("code");
+    
+    static {
+        XML_INPUT_FACTORY.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+    }
 
     public String process(InputStream is, String filterItemsByLibraryId) {
         StringBuilder jsonResult = new StringBuilder("[");

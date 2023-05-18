@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -73,6 +74,7 @@ public class XMLSchemaValidator {
         }
         try {
             DOC_BUILDER_FACTORY.setFeature(XML_FEATURE__DISSALLOW_DOCTYPE_DECL, true);
+            DOC_BUILDER_FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         } catch (ParserConfigurationException ex) {
             // ignore
         }
