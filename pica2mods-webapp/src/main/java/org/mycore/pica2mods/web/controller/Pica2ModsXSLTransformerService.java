@@ -36,7 +36,8 @@ public class Pica2ModsXSLTransformerService {
      */
     public static String CLASSPATH_PREFIX = "xsl/";
 
-    public static String XPATH_PARALLEL = "concat(//p:datafield[@tag='039D']/p:subfield[@code='n'], //p:datafield[@tag='039D']/p:subfield[@code='i' and not(./../p:subfield[@code='n'])], '|',//p:datafield[@tag='039D']/p:subfield[@code='C' and text()='KXP']/following-sibling::p:subfield[@code='6'][1])";
+    public static String XPATH_PARALLEL
+        = "concat(//p:datafield[@tag='039D']/p:subfield[@code='n'], //p:datafield[@tag='039D']/p:subfield[@code='i' and not(./../p:subfield[@code='n'])], '|',//p:datafield[@tag='039D']/p:subfield[@code='C' and text()='KXP']/following-sibling::p:subfield[@code='6'][1])";
 
     public static String XPATH_PPN_MBW = "//p:datafield[@tag='036D']/p:subfield[@code='9']";
 
@@ -54,7 +55,9 @@ public class Pica2ModsXSLTransformerService {
         Pica2ModsManager pica2modsGenerator = new Pica2ModsManager(config);
         Map<String, String> xslParams = new HashMap<>();
         xslParams.put("MCR.PICA2MODS.CONVERTER_VERSION", Pica2ModsWebapp.PICA2MODS_VERSION);
-        xslParams.put("MCR.PICA2MODS.DATABASE", config.getCatalog(catalog).getUnapiKey());
+        if (config.getCatalog(catalog) != null) {
+            xslParams.put("MCR.PICA2MODS.DATABASE", config.getCatalog(catalog).getUnapiKey());
+        }
         try {
             pica2modsGenerator.createMODSDocumentViaSRU(catalog, "pica.ppn=" + ppn, result, xslParams);
             return sw.toString();
@@ -74,8 +77,10 @@ public class Pica2ModsXSLTransformerService {
 
     public List<PPNLink> resolveOtherIssues(String catalog, String ppn) {
         List<PPNLink> result = new ArrayList<>();
-        String url = config.getUnapiUrl() + "?format=picaxml&id=" + config.getCatalog(catalog).getUnapiKey() + ":ppn:"
-            + ppn;
+        String url = config.getUnapiUrl() + "?format=picaxml";
+        if (config.getCatalog(catalog) != null) {
+            url = url + "&id=" + config.getCatalog(catalog).getUnapiKey() + ":ppn:" + ppn;
+        }
         XPath xpath = factory.newXPath();
         xpath.setNamespaceContext(new Pica2ModsNamespaceContext());
         if (!url.startsWith("http://") && !url.startsWith("https://")) {

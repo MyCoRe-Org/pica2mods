@@ -43,7 +43,7 @@ public class Pica2ModsManager {
     public static final String PICA2MODS_XSLT_PATH = "xsl/";
 
     private static final String NS_PICA = "info:srw/schema/5/picaXML-v1.0";
-    
+
     static final String XML_FEATURE__DISSALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
 
     private static DocumentBuilderFactory DBF;
@@ -70,10 +70,13 @@ public class Pica2ModsManager {
 
     // http://sru.k10plus.de/opac-de-28?operation=searchRetrieve&maximumRecords=1&recordSchema=picaxml&query=pica.ppn%3D1023803275
     public Element retrievePicaXMLViaSRU(String catalogId, String sruQuery) throws Pica2ModsException {
-        String theURL = config.getSruUrl() + config.getCatalogs().get(catalogId).getSruKey()
-            + "?operation=searchRetrieve&maximumRecords=1&recordSchema=picaxml&query="
-            + URLEncoder.encode(sruQuery, StandardCharsets.UTF_8);
-        return retrievePicaXMLFromURL(theURL);
+        if (config.getCatalogs().get(catalogId) != null) {
+            String theURL = config.getSruUrl() + config.getCatalogs().get(catalogId).getSruKey()
+                + "?operation=searchRetrieve&maximumRecords=1&recordSchema=picaxml&query="
+                + URLEncoder.encode(sruQuery, StandardCharsets.UTF_8);
+            return retrievePicaXMLFromURL(theURL);
+        }
+        return null;
     }
 
     //https://unapi.k10plus.de/?&format=picaxml&id=opac-de-28:ppn:1662436106

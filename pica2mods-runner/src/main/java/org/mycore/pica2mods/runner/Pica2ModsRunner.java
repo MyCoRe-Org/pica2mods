@@ -60,8 +60,7 @@ public class Pica2ModsRunner implements ApplicationRunner {
         try {
             SpringApplication.run(Pica2ModsRunner.class, args);
             // example: SpringApplication.run(Pica2ModsRunner.class, "1667675745", "--output=C:\\temp\\ppn1667675745.mods.xml");
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.error("Pica2ModsRunner finished with an exception", e);
         }
     }
@@ -77,7 +76,7 @@ public class Pica2ModsRunner implements ApplicationRunner {
         unknownOptionNames.removeAll(VALID_OPTION_NAMES);
         if (!unknownOptionNames.isEmpty()) {
             System.out.println("Found unknown options:");
-            System.out.println(String.join(", ",  unknownOptionNames));
+            System.out.println(String.join(", ", unknownOptionNames));
             System.exit(1);
         }
 
@@ -114,12 +113,15 @@ public class Pica2ModsRunner implements ApplicationRunner {
         final Pica2ModsManager pica2modsManager = new Pica2ModsManager(config);
         final Map<String, String> xslParams = new HashMap<>();
         xslParams.put("MCR.PICA2MODS.CONVERTER_VERSION", PICA2MODS_VERSION);
-        xslParams.put("MCR.PICA2MODS.DATABASE", config.getCatalogs().get(catalogKey).getUnapiKey());
+        if (config.getCatalogs().get(catalogKey) != null) {
+            xslParams.put("MCR.PICA2MODS.DATABASE", config.getCatalogs().get(catalogKey).getUnapiKey());
+        }
         pica2modsManager.createMODSDocumentViaSRU(catalogKey, "pica.ppn=" + ppn, result, xslParams);
         return sw.toString();
     }
 
     private static String getOptionValue(ApplicationArguments args, String optionName) {
-        return args.containsOption(optionName) && !args.getOptionValues(optionName).isEmpty() ? args.getOptionValues(optionName).get(0) : null;
+        return args.containsOption(optionName) && !args.getOptionValues(optionName).isEmpty()
+            ? args.getOptionValues(optionName).get(0) : null;
     }
 }
