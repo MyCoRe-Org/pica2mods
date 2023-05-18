@@ -81,8 +81,11 @@ public class Pica2ModsManager {
 
     //https://unapi.k10plus.de/?&format=picaxml&id=opac-de-28:ppn:1662436106
     public Element retrievePicaXMLViaUnAPI(String catalogId, String ppn) throws Pica2ModsException {
-        String unapiKey = config.getCatalogs().get(catalogId).getUnapiKey() + ":ppn:" + ppn;
-        return retrievePicaXMLViaUnAPI(unapiKey);
+        if (config.getCatalogs().get(catalogId) != null) {
+            String unapiKey = config.getCatalogs().get(catalogId).getUnapiKey() + ":ppn:" + ppn;
+            return retrievePicaXMLViaUnAPI(unapiKey);
+        }
+        return null;
     }
 
     //https://unapi.k10plus.de/?&format=picaxml&id=opac-de-28:ppn:1662436106
