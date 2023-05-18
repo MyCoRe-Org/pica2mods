@@ -22,7 +22,7 @@ public class XMLSchemaValidator {
     static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
 
     static final String JAXP_SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
-    
+
     static final String XML_FEATURE__DISSALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
 
     static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
@@ -37,10 +37,10 @@ public class XMLSchemaValidator {
             + " http://dfg-viewer.de/ http://purl.uni-rostock.de/ub/standards/dfg-viewer.xsd"
             + " info:srw/schema/5/picaXML-v1.0 http://www.loc.gov/standards/sru/recordSchemas/pica-xml-v1-0.xsd";
     */
-    static final String DEFAULT_METS_SCHEMA_LOCATIONS = "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd";
+    static final String DEFAULT_METS_SCHEMA_LOCATIONS
+        = "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd";
 
-    private DocumentBuilderFactory DOC_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
-
+    private DocumentBuilderFactory DOC_BUILDER_FACTORY;
     private boolean isValid = true;
 
     private String errorMsg = "";
@@ -61,19 +61,21 @@ public class XMLSchemaValidator {
                 schemas.add(s);
             }
         }
-
+        DOC_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
         DOC_BUILDER_FACTORY.setNamespaceAware(true);
         DOC_BUILDER_FACTORY.setValidating(true);
 
         try {
             DOC_BUILDER_FACTORY.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
             DOC_BUILDER_FACTORY.setAttribute(JAXP_SCHEMA_SOURCE, schemas.toArray(new String[] {}));
-            DOC_BUILDER_FACTORY.setFeature(XML_FEATURE__DISSALLOW_DOCTYPE_DECL, true);
-
-        } catch (IllegalArgumentException| ParserConfigurationException ex) {
+        } catch (IllegalArgumentException ex) {
             // Happens if the parser does not support JAXP 1.2
         }
-
+        try {
+            DOC_BUILDER_FACTORY.setFeature(XML_FEATURE__DISSALLOW_DOCTYPE_DECL, true);
+        } catch (ParserConfigurationException ex) {
+            // ignore
+        }
     }
 
     public boolean validate(String xmlContent) {
