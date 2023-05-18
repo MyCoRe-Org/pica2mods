@@ -11,12 +11,12 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.mycore.pica2mods.validation.ModsValidator;
 import org.mycore.pica2mods.web.Pica2ModsWebapp;
 import org.mycore.pica2mods.web.Pica2ModsWebappConfig;
 import org.mycore.pica2mods.web.util.XMLSchemaValidator;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -94,7 +94,7 @@ public class Pica2ModsController {
                 xslFiles.add(s.substring(s.lastIndexOf("xsl/") + 4));
             }
         } catch (IOException e) {
-            LogManager.getLogger(Pica2ModsController.class).error(e);
+            LoggerFactory.getLogger(Pica2ModsController.class).error("Error at listing available XSL files", e);
         }
 
         model.addAttribute("xslFiles", xslFiles);

@@ -11,6 +11,8 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.events.XMLEvent;
 
+import org.slf4j.LoggerFactory;
+
 public class SRUProcessor {
     private static String NS_PICA = "info:srw/schema/5/picaXML-v1.0";
 
@@ -111,7 +113,7 @@ public class SRUProcessor {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerFactory.getLogger(SRUProcessor.class).error("SRU processing failed.", e);
         }
 
         jsonResult.append("]");
