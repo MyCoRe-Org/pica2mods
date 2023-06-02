@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
 import org.mycore.pica2mods.mods2solr.util.JSONValue;
@@ -24,6 +25,8 @@ public class MODSProcessor {
 
     private static QName QN_MODS_ELEM = new QName(NS_MODS, "mods", "mods");
 
+    private static QName QN_MYCORE_MODSCONTAINER = new QName("modsContainer");
+
     static {
         XML_INPUT_FACTORY.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
     }
@@ -34,12 +37,17 @@ public class MODSProcessor {
 
         boolean filterItem = false;
         boolean inMODS = false;
+        String modsContainerType = null;
         try {
             Reader fileReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader(fileReader);
             while (xmlEventReader.hasNext()) {
                 XMLEvent xmlEvent = xmlEventReader.nextEvent();
                 if (xmlEvent.isStartElement()) {
+                    if (xmlEvent.asStartElement().getName().equals(QN_MYCORE_MODSCONTAINER)) {
+                        Attribute a = xmlEvent.asStartElement().getAttributeByName(new QName("type"));
+                        modsContainerType = (a == null) ? null : a.getValue();
+                    }
                     if (xmlEvent.asStartElement().getName().equals(QN_MODS_ELEM)) {
                         inMODS = true;
                         filterItem = false;
@@ -84,10 +92,17 @@ public class MODSProcessor {
                         elementStack.removeLast();
                     }
                     if (xmlEvent.asEndElement().getName().equals(QN_MODS_ELEM)) {
+                        if (modsContainerType != null
+                            && !modsContainerType.equals("imported")
+                            && !modsContainerType.equals("generated")) {
+                            id = id + "_" + modsContainerType;
+                        }
                         jsonResult.append("\"id\":\"" + id + "\"");
                         jsonResult.append("}");
                         inMODS = false;
-
+                    }
+                    if (xmlEvent.asEndElement().getName().equals(QN_MYCORE_MODSCONTAINER)) {
+                        modsContainerType = null;
                     }
                 }
             }
