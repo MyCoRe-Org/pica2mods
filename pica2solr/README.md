@@ -45,9 +45,15 @@ java -jar pica2solr.jar clear-core <name>
 #### Run with default parameters
 ```
 java -jar pica2solr.jar run
-```   
+```
 #### Run with modified parameters
 ```
 java -jar pica2solr.jar run --solr_core=picaX --sru_catalog=opac-de-28 --sru_query=pica.all%3Dmycore --library_id=62
-```   
+```
 
+| Parameter | Description                                                      |
+| --------  | --------------------------------------------------------------- |
+| `solr_core` | the name of the Solr core                                        |
+| `sru_catalog` | the id of the catalog for SRU query                            |
+| `sru_query`  | an SRU query to filter the wanted catalog items                 |
+| `library_id` | internal K10plus library id, to filter holdings by institution  |
