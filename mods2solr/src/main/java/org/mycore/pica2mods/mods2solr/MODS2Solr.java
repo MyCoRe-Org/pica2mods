@@ -47,6 +47,7 @@ public class MODS2Solr implements ApplicationRunner {
 
     static {
         XML_INPUT_FACTORY.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+        XML_INPUT_FACTORY.setProperty(XMLInputFactory.SUPPORT_DTD, false);
     }
 
     private static QName QN_ATTR_ID = new QName("ID");

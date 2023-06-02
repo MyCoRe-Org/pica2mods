@@ -5,8 +5,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.LinkedList;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -33,7 +33,7 @@ public class MODSProcessor {
 
     public String process(String id, InputStream is) {
         StringBuilder jsonResult = new StringBuilder("[");
-        Deque<String> elementStack = new LinkedList<String>();
+        Deque<String> elementStack = new ArrayDeque<String>();
 
         boolean filterItem = false;
         boolean inMODS = false;

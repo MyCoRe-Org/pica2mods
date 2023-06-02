@@ -35,6 +35,7 @@ public class SRUProcessor {
     
     static {
         XML_INPUT_FACTORY.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+        XML_INPUT_FACTORY.setProperty(XMLInputFactory.SUPPORT_DTD, false);
     }
 
     public String process(InputStream is, String filterItemsByLibraryId) {
