@@ -54,7 +54,7 @@
         <!-- PPN 1726228770 an 2 Hochschulen eingereicht -->
         <xsl:if test="./p:datafield[@tag='037C']/p:subfield[@code='f']">  <!-- 4204 Hochschulschriftenvermerk, Jahr der Verteidigung -->
           <mods:dateOther type="defence" encoding="w3cdtf">
-            <xsl:value-of select="./p:datafield[@tag='037C']/p:subfield[@code='f'][1]" />
+            <xsl:value-of select="./p:datafield[@tag='037C'][1]/p:subfield[@code='f']" />
           </mods:dateOther>
         </xsl:if>
       </mods:originInfo>
