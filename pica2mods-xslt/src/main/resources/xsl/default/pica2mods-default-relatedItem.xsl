@@ -170,7 +170,7 @@
                   </xsl:when>
                   <xsl:otherwise>
                     <mods:number>
-                      <xsl:value-of select="./p:subfield[@code='l']" />
+                      <xsl:value-of select="string-join(./p:subfield[@code='l' or @code='p' or @code='m'], ', ')" />
                     </mods:number>
                   </xsl:otherwise>
                 </xsl:choose>
