@@ -157,14 +157,9 @@
                     </mods:number>
                     <xsl:comment>[alternativ aus 4180: <xsl:value-of select="./p:subfield[@code='l']" />]</xsl:comment>
                   </xsl:when>
-                  <xsl:when test="@tag='036E'">
-                    <mods:number>
-                        <xsl:value-of select="string-join(./p:subfield[@code='l' or @code='p' or @code='m'], ', ')" />
-                    </mods:number>
-                  </xsl:when>
                   <xsl:when test="@tag='036D' and ../p:datafield[@tag='036C']">
                     <mods:number>
-                      <xsl:value-of select="../p:datafield[@tag='036C']/p:subfield[@code='l']" />
+                      <xsl:value-of select="string-join(../p:datafield[@tag='036C']/p:subfield[@code='l' or @code='p' or @code='m'], ', ')" />
                     </mods:number>
                     <xsl:comment>[alternativ aus 4160: <xsl:value-of select="./p:subfield[@code='l']" />]</xsl:comment>
                   </xsl:when>
