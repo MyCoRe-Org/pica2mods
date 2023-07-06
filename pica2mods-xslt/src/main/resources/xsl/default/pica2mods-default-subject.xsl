@@ -26,7 +26,7 @@
 
   <xsl:template name="modsSubject">
     <xsl:for-each select="./p:datafield[@tag='045R' and p:subfield[@code = 9]]/p:subfield[@code = 'k']">
-      <mods:subject>
+      <mods:subject authority="k10plus_field_045R">
         <mods:topic>
           <xsl:value-of select="."/>
         </mods:topic>
@@ -34,7 +34,7 @@
     </xsl:for-each>
 
     <xsl:for-each select="./p:datafield[@tag='044N' and p:subfield[@code = 'S']/text() = 's']/p:subfield[@code = 'a']">
-      <mods:subject>
+      <mods:subject authority="k10plus_field_045N">
         <mods:topic>
           <xsl:value-of select="."/>
         </mods:topic>
