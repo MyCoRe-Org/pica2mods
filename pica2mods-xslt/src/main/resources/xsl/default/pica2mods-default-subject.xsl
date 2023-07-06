@@ -33,6 +33,14 @@
       </mods:subject>
     </xsl:for-each>
 
+    <xsl:for-each select="./p:datafield[@tag='044N' and p:subfield[@code = 'S']/text() = 's']/p:subfield[@code = 'a']">
+      <mods:subject>
+        <mods:topic>
+          <xsl:value-of select="."/>
+        </mods:topic>
+      </mods:subject>
+    </xsl:for-each>
+
     <!-- Schlagwortketten auf lokaler Ebene aus 6500 (144Z) -->
     <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->
       <mods:subject authority="k10plus_field_6500">
