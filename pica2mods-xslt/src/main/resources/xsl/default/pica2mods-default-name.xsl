@@ -545,7 +545,7 @@
         <xsl:value-of select="concat(substring($date,6,2), '.', substring($date,9,2), '.', $year, '-', substring($date,12,2), '.', substring($date,15,2), '.', $year)" />
       </xsl:when>
       <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\d\d\-\d\d')">
-        <xsl:value-of select="concat(substring($date,9,5),'.',substring($date,6,2),'.',substring($date,1,4))" />
+        <xsl:value-of select="concat(substring($date,9,2), '.-', substring($date,12,2), '.', substring($date,6,2), '.', substring($date,1,4))" />
       </xsl:when>
       <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\d\d')">
         <xsl:value-of select="concat(substring($date,9,2),'.',substring($date,6,2),'.',substring($date,1,4))" />
