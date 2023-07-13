@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>49</version>
+    <version>51</version>
   </parent>
   <groupId>org.mycore.pica2mods</groupId>
   <artifactId>pica2mods-parent</artifactId>
@@ -25,6 +25,12 @@
     <url>https://github.com/MyCoRe-Org/pica2mods</url>
     <tag>HEAD</tag>
   </scm>
+  <properties>
+    <!-- with snakeyaml 1.30 version there is security vulnerability
+         check snakeyaml version on the next spring boot version update -->
+    <snakeyaml.version>1.31</snakeyaml.version>
+    <spring.boot.version>2.7.12</spring.boot.version>
+  </properties>
   <build>
     <plugins>
       <plugin>
@@ -119,7 +125,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
   <developers>
     <developer>
       <id>mcrsteph</id>
@@ -150,5 +155,8 @@
     <module>pica2mods-xslt</module>
     <module>pica2mods-webapp</module>
     <module>pica2mods-validation</module>
+    <module>pica2mods-runner</module>
+    <module>pica2solr</module>
+    <module>mods2solr</module>
   </modules>
 </project>

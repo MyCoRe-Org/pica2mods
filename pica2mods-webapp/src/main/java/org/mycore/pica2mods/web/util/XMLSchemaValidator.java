@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
@@ -20,6 +23,8 @@ public class XMLSchemaValidator {
     static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
 
     static final String JAXP_SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
+
+    static final String XML_FEATURE__DISSALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
 
     static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
 
@@ -33,10 +38,10 @@ public class XMLSchemaValidator {
             + " http://dfg-viewer.de/ http://purl.uni-rostock.de/ub/standards/dfg-viewer.xsd"
             + " info:srw/schema/5/picaXML-v1.0 http://www.loc.gov/standards/sru/recordSchemas/pica-xml-v1-0.xsd";
     */
-    static final String DEFAULT_METS_SCHEMA_LOCATIONS = "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd";
+    static final String DEFAULT_METS_SCHEMA_LOCATIONS
+        = "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd";
 
-    private DocumentBuilderFactory DOC_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
-
+    private DocumentBuilderFactory DOC_BUILDER_FACTORY;
     private boolean isValid = true;
 
     private String errorMsg = "";
@@ -57,18 +62,22 @@ public class XMLSchemaValidator {
                 schemas.add(s);
             }
         }
-
+        DOC_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
         DOC_BUILDER_FACTORY.setNamespaceAware(true);
         DOC_BUILDER_FACTORY.setValidating(true);
 
         try {
             DOC_BUILDER_FACTORY.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
             DOC_BUILDER_FACTORY.setAttribute(JAXP_SCHEMA_SOURCE, schemas.toArray(new String[] {}));
-
-        } catch (IllegalArgumentException x) {
+        } catch (IllegalArgumentException ex) {
             // Happens if the parser does not support JAXP 1.2
         }
-
+        try {
+            DOC_BUILDER_FACTORY.setFeature(XML_FEATURE__DISSALLOW_DOCTYPE_DECL, true);
+            DOC_BUILDER_FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException ex) {
+            // ignore
+        }
     }
 
     public boolean validate(String xmlContent) {
@@ -95,7 +104,7 @@ public class XMLSchemaValidator {
                     String msg = "Line: " + exception.getLineNumber() + ", Column: " + exception.getColumnNumber()
                         + " - " + exception.getMessage();
                     errorMsg += "\n" + msg;
-                    System.err.println(msg);
+                    LoggerFactory.getLogger(XMLSchemaValidator.class).error(msg, exception);
                     isValid = false;
                 }
             });
@@ -119,7 +128,7 @@ public class XMLSchemaValidator {
 
             docBuilder.parse(new InputSource(new StringReader(xmlContent)));
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerFactory.getLogger(XMLSchemaValidator.class).error("XML Schema validation failed.", e);
         }
 
         return isValid;

@@ -9,12 +9,16 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -32,18 +36,33 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * This class is deprecated. Use Pica2ModsManager as replacement.
+ * 
+ * @deprecated 2023-03-06
+ * @author Robert Stephan
+ *
+ */
 public class Pica2ModsGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(Pica2ModsGenerator.class);
 
     public static final String PICA2MODS_XSLT_PATH = "xsl/";
 
     private static final String NS_PICA = "info:srw/schema/5/picaXML-v1.0";
+    
+    static final String XML_FEATURE__DISSALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
 
     private static DocumentBuilderFactory DBF;
 
     static {
         DBF = DocumentBuilderFactory.newInstance();
         DBF.setNamespaceAware(true);
+        try {
+            DBF.setFeature(XML_FEATURE__DISSALLOW_DOCTYPE_DECL, true);
+            DBF.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException e) {
+           //ignore
+        }
     }
 
     public static Pica2ModsGenerator instanceForRosDok() {
@@ -161,13 +180,19 @@ public class Pica2ModsGenerator {
         }
     }
 
-    public void createMODSDocumentFromSRU(String catalogKey, String sruQuery, String xslFile, Result result, Map<String, String> parameter) {
+    public void createMODSDocumentFromSRU(String catalogKey, String sruQuery, String xslFile, Result result,
+        Map<String, String> parameter) {
         try {
             Element picaRecord = retrievePicaXMLViaSRU(catalogKey, sruQuery);
             createMODSDocumentFromPicaXML(picaRecord, xslFile, result, parameter);
         } catch (Exception e) {
             LOGGER.error("Error transforming XML", e);
         }
+    }
+
+    public void createMODSDocumentFromSRUSafe(String catalogKey, String sruQuery, String xslFile, Result result, Map<String, String> parameter) throws Exception {
+        Element picaRecord = retrievePicaXMLViaSRU(catalogKey, sruQuery);
+        createMODSDocumentFromPicaXML(picaRecord, xslFile, result, parameter);
     }
 
     public void createMODSDocumentFromUnAPI(String catalogKey, String ppn, String xslFile, Result result, Map<String, String> parameter) {
@@ -179,7 +204,8 @@ public class Pica2ModsGenerator {
         }
     }
 
-    private void createMODSDocumentFromPicaXML(Element picaRecord, String xslFile, Result result, Map<String, String> parameter) throws TransformerException {
+    private void createMODSDocumentFromPicaXML(Element picaRecord, String xslFile, Result result,
+        Map<String, String> parameter) throws TransformerException {
         //uses the configured Transformer-Factory (e.g. XALAN, if installed)
         //TransformerFactory TRANS_FACTORY = TransformerFactory.newInstance();
         //Java 9 provides a method newDefaultInstance() to retrieve the built-in system default implementation
@@ -207,8 +233,8 @@ public class Pica2ModsGenerator {
              */
 
             transformer.setParameter("WebApplicationBaseURL", mycoreBaseURL);
-            for(String key: parameter.keySet()) {
-                transformer.setParameter(key, parameter.get(key));
+            for (Entry<String,String> e : parameter.entrySet()) {
+                transformer.setParameter(e.getKey(), e.getValue());
             }
             transformer.transform(new DOMSource(picaRecord), result);
         }
@@ -217,7 +243,7 @@ public class Pica2ModsGenerator {
     public static String outputXML(Node node) {
         // ein Stylesheet zur Identitätskopie ...
         String IDENTITAETS_XSLT = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>"
-            + "<xsl:template match='/'><xsl:copy-of select='.'/>" + "</xsl:template></xsl:stylesheet>";
+            + "<xsl:template match='/'><xsl:copy-of select='.'/></xsl:template></xsl:stylesheet>";
 
         Source xmlSource = new DOMSource(node);
         Source xsltSource = new StreamSource(new StringReader(IDENTITAETS_XSLT));
@@ -225,15 +251,16 @@ public class Pica2ModsGenerator {
         StringWriter sw = new StringWriter();
         Result ergebnis = new StreamResult(sw);
 
-        TransformerFactory transFact = TransformerFactory.newInstance();
+        
 
         try {
+            TransformerFactory transFact = TransformerFactory.newInstance();
+            transFact.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             Transformer trans = transFact.newTransformer(xsltSource);
             trans.transform(xmlSource, ergebnis);
 
         } catch (TransformerException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LoggerFactory.getLogger(Pica2ModsGenerator.class).error("Could not output XML", e);
         }
 
         return sw.toString();
@@ -260,7 +287,7 @@ public class Pica2ModsGenerator {
         }
         return version;
     }
- 
+
     //does not work from Eclipse
     public static String retrieveBuildInfosFromManifest(boolean addCommitInfos) {
 
@@ -272,7 +299,7 @@ public class Pica2ModsGenerator {
 
                 Manifest manifest = new Manifest(url.openStream());
                 Attributes attributes = manifest.getMainAttributes();
-                if ("pica2mods-xslt".equals(attributes.getValue("Implementation-Artifact-ID"))) {
+                if (Objects.equals(attributes.getValue("Implementation-Artifact-ID"), "pica2mods-xslt")) {
                     StringBuilder sb = new StringBuilder();
                     sb.append(attributes.getValue("Implementation-Title"))
                         .append(" ").append(attributes.getValue("Implementation-Version"));

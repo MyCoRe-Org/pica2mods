@@ -10,16 +10,15 @@
   <packaging>jar</packaging>
   <name>Pica2Mods Web Application</name>
   <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.release>11</maven.compiler.release>
   </properties>
-
   <build>
     <plugins>
       <!-- see: https://memorynotfound.com/spring-boot-create-executable-using-maven-without-parent-pom/ -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring.boot.version}</version>
         <configuration>
           <executable>true</executable>
         </configuration>
@@ -47,10 +46,6 @@
       <artifactId>jakarta.annotation-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-core</artifactId>
     </dependency>
@@ -63,6 +58,10 @@
       <groupId>org.mycore.pica2mods</groupId>
       <artifactId>pica2mods-xslt</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -100,7 +99,6 @@
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
     </dependency>
-
     <dependency>
       <groupId>net.sf.saxon</groupId>
       <artifactId>Saxon-HE</artifactId>
@@ -158,7 +156,7 @@
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>2.4.3</version>
+        <version>${spring.boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

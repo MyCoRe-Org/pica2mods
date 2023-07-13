@@ -52,7 +52,7 @@ public class Pica2ModsTest {
 
     public static final Namespace MODS_NAMESPACE = Namespace.getNamespace("mods", MODS_URL);
 
-    private final String URL_BASE = "http://unapi.k10plus.de/?&format=picaxml&id=k10plus:ppn:";
+    private final String URL_BASE = "http://unapi.k10plus.de/?&format=picaxml&id=gvk:ppn:";
 
     private final SAXBuilder saxBuilder = new SAXBuilder();
 
@@ -156,7 +156,7 @@ public class Pica2ModsTest {
                 final StreamSource streamSource = new StreamSource(styleIS);
                 final Transformer transformer = getTFactory().newTransformer(streamSource);
                 final JDOMResult jdomResult = new JDOMResult();
-                transformer.setParameter("MCR.PICA2MODS.DATABASE", "k10plus");
+                transformer.setParameter("MCR.PICA2MODS.DATABASE", "gvk");
                 transformer.transform(new JDOMSource(jdom), jdomResult);
 
                 return jdomResult.getDocument();

@@ -18,7 +18,7 @@
 
   <xsl:template name="modsLanguage">
     <!-- relative Pfade funktionieren nicht für Classpath-Resourcen: <xsl:variable name="rfc5646" select="document('../_common/rfc5646.xml')" -->
-    <xsl:variable name="rfc5646" select="document('resource:_data/rfc5646.xml')" />
+    <xsl:variable name="rfc5646" select="document('resource:mycore-classifications/rfc5646.xml')" />
     <xsl:for-each select="./p:datafield[@tag='010@']"> <!-- 1500 Language -->
       <!-- weiter Unterfelder für Orginaltext / Zwischenübersetzung nicht abbildbar -->
       <xsl:for-each select="./p:subfield[@code='a']">

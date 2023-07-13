@@ -1,0 +1,48 @@
+spring:
+  main:
+    banner-mode: off
+  config:
+    active:
+      on-profile: prod
+
+pica2mods:
+  defaultCatalogKey: gvk
+  sruUrl: https://sru.k10plus.de
+  unapiUrl: https://unapi.k10plus.de
+  mycoreUrl: https://mycore.org/mir
+  catalogs:
+    gvk:
+      id: gvk
+      name: GVK Verbundkatalog
+      opacUrl: https://kxp.k10plus.de/DB=2.1/
+      sruKey: gvk
+      unapiKey: gvk
+      xsl: pica2mods.xsl
+    ubr:
+      id: ubr
+      name: UB Rostock
+      opacUrl: https://opac.lbs-rostock.gbv.de/DB=1/
+      sruKey: k10plus
+      unapiKey: k10plus
+      xsl: pica2mods_ubr.xsl
+    ubbs:
+      id: ubbs
+      name: UB Braunschweig
+      opacUrl: https://opac.lbs-braunschweig.gbv.de/DB=1/
+      sruKey: opac-de-84
+      unapiKey: opac-de-84
+      xsl: pica2mods.xsl
+    vd18:
+      id: vd18
+      name: VD18
+      opacUrl: https://kxp.k10plus.de/DB=1.65/
+      sruKey: vd18
+      unapiKey: vd18
+      xsl: pica2mods.xsl
+    ikar:
+      id: ikar
+      name: IKAR - Landkartendrucke vor 1850
+      opacUrl: https://kxp.k10plus.de/DB=1.68/
+      sruKey: ikar
+      unapiKey: ikar
+      xsl: pica2mods_ikar.xsl

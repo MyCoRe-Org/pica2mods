@@ -6,17 +6,18 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.mycore.pica2mods.validation.ModsValidator;
 import org.mycore.pica2mods.web.Pica2ModsWebapp;
+import org.mycore.pica2mods.web.Pica2ModsWebappConfig;
 import org.mycore.pica2mods.web.util.XMLSchemaValidator;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -35,23 +36,11 @@ public class Pica2ModsController {
 
     @Autowired
     private Pica2ModsXSLTransformerService transformerService;
+    
+    @Autowired
+    Pica2ModsWebappConfig config;
 
-    @Value("#{'${pica2mods.catalogs}'.split(',')}")
-    private List<String> catalogs;
-
-    @Value("#{${pica2mods.catalogs.names}}")
-    private Map<String, String> catalogNames;
-
-    @Value("#{${pica2mods.catalogs.urls}}")
-    private Map<String, String> catalogUrls;
-
-    @Value("#{${pica2mods.catalogs.unapikeys}}")
-    private Map<String, String> catalogKeys;
-
-    @Value("#{${pica2mods.catalogs.xsls}}")
-    private Map<String, String> catalogXSLs;
-
-    @Value("${pica2mods.validation.schematron.resource}")
+    @Value("${pica2mods.validation.schematron_resource}")
     private String schematronResource;
     
     private ModsValidator modsValidator;
@@ -66,11 +55,8 @@ public class Pica2ModsController {
         @RequestParam(name = "catalog", defaultValue = "ubr") String catalog,
         Model model) {
 
-        model.addAttribute("catalog", catalog);
-        model.addAttribute("catalogs", catalogs);
-        model.addAttribute("catalogNames", catalogNames);
-        model.addAttribute("catalogUrls", catalogUrls);
-        model.addAttribute("catalogKeys", catalogKeys);
+        model.addAttribute("catalogId", catalog==null ? config.getDefaultCatalogKey() : catalog);
+        model.addAttribute("catalogs", config.getCatalogs());
         model.addAttribute("related", transformerService.resolveOtherIssues(catalog, ppn));
         model.addAttribute("pica2modsVersion", Pica2ModsWebapp.PICA2MODS_VERSION);
 
@@ -87,7 +73,7 @@ public class Pica2ModsController {
             if (!isValid) {
                 model.addAttribute("xmlSchemaError", xsv.getErrorMsg());
             }
-            if ("ubr".equals(catalog)) {
+            if (Objects.equals(catalog, "ubr")) {
                 List<String> result = modsValidator.run(new StreamSource(new StringReader(modsXML)));
                 if (!result.isEmpty()) {
                     model.addAttribute("schematronError", result);
@@ -109,7 +95,7 @@ public class Pica2ModsController {
                 xslFiles.add(s.substring(s.lastIndexOf("xsl/") + 4));
             }
         } catch (IOException e) {
-            LogManager.getLogger(Pica2ModsController.class).error(e);
+            LoggerFactory.getLogger(Pica2ModsController.class).error("Error at listing available XSL files", e);
         }
 
         model.addAttribute("xslFiles", xslFiles);

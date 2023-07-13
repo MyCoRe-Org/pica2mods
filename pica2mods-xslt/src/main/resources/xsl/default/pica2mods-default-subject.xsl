@@ -71,6 +71,39 @@
         </xsl:for-each>
       </mods:subject>
     </xsl:for-each-group>
+
+    <!-- Geokoordinaten und Maßstab aus 4028 (035G) und 4026 (035E) 
+         sowie menschenlesbare Form des Maßstabs als mods:note (035E $a)
+         Beispiel: ikar:ppn:101493568  -->
+    <xsl:variable name="scale" select="p:datafield[@tag='035E'][1]/p:subfield[@code='g']"/>
+    <xsl:variable name="scaleHumanReadable" select="p:datafield[@tag='035E'][1]/p:subfield[@code='a']"/>
+    <xsl:variable name="coords"
+                  select="p:datafield[@tag='035G']/p:subfield[@code='a' or @code='b' or @code='c' or @code='d']"/>
+
+    <xsl:if test="string-length($scale) &gt; 0 or count($coords) &gt; 0">
+        <mods:subject authority="k10plus_field_4028">
+            <mods:cartographics>
+                <xsl:if test="string-length($scale) &gt; 0">
+                    <mods:scale>
+                        <xsl:value-of select="$scale"/>
+                    </mods:scale>
+                </xsl:if>
+                <xsl:if test="count($coords)">
+                    <xsl:variable name="a" select="p:datafield[@tag='035G']/p:subfield[@code='a']"/>
+                    <xsl:variable name="b" select="p:datafield[@tag='035G']/p:subfield[@code='b']"/>
+                    <xsl:variable name="c" select="p:datafield[@tag='035G']/p:subfield[@code='c']"/>
+                    <xsl:variable name="d" select="p:datafield[@tag='035G']/p:subfield[@code='d']"/>
+                    <mods:coordinates><xsl:value-of select="concat($a, $b, $c, $d)"/></mods:coordinates>
+                </xsl:if>
+            </mods:cartographics>
+        </mods:subject>
+    </xsl:if>
+    <xsl:if test="string-length($scaleHumanReadable) &gt; 0">
+      <mods:note type="cartographics_scale">
+        <xsl:value-of select="$scaleHumanReadable"/>
+      </mods:note>
+    </xsl:if>
+
   </xsl:template>
  
   <!-- Hilfstemplate, um Unterfelder der verschiedenen Schlagwortfelder auszuwerten -->
