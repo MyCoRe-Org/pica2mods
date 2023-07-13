@@ -528,29 +528,66 @@
   <xsl:template name="conference_date_from3160">
     <xsl:param name="date" />
     <!-- mögliche Datumsformate gem. Formatdokumentation:
-         Jahr.
-         Jahr.-Jahr.
-         Jahr.Monat.
-         Jahr.Monat.-Jahr.Monat.
-         Jahr.Monat.-Monat.
-         Jahr.Monat.Tag
-         Jahr.Monat.Tag-Tag
-         Jahr.Monat.Tag-Monat.Tag
-         Jahr.Monat.Tag-Jahr.Monat.Tag
+         Jahr.                           -> i
+         Jahr.-Jahr.                     -> h
+         Jahr.Monat.                     -> g
+         Jahr.Monat.-Jahr.Monat.         -> e
+         Jahr.Monat.-Monat.              -> f
+         Jahr.Monat.Tag                  -> d
+         Jahr.Monat.Tag-Tag              -> c
+         Jahr.Monat.Tag-Monat.Tag        -> b
+         Jahr.Monat.Tag-Jahr.Monat.Tag   -> a
          (https://format.k10plus.de/k10plushelp.pl?cmd=kat&val=3160&katalog=Standard)
     -->
     <xsl:choose>
-      <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\d\d\-\d\d.\d\d')">
+      <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\d\d\-\d\d\d\d\.\d\d\.\d\d')">
+        <!-- a) 123456789012345678901
+                2022.03.04-2023.04.05 -> 03.04.2022-04.05.2023 -->
         <xsl:variable name="year" select="substring($date,1,4)"/>
-        <xsl:value-of select="concat(substring($date,6,2), '.', substring($date,9,2), '.', $year, '-', substring($date,12,2), '.', substring($date,15,2), '.', $year)" />
+        <xsl:value-of select="concat(substring($date,9,2), '.', substring($date,6,2), '.', substring($date,1,4), '-', substring($date,20,2), '.', substring($date,17,2), '.', substring($date,12,4))" />
+      </xsl:when>
+      
+      <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\d\d\-\d\d\.\d\d')">
+        <!-- b) 1234567890123456
+                2022.03.04-05.06 -> 03.04.-05.06.2022 -->
+        <xsl:variable name="year" select="substring($date,1,4)"/>
+        <xsl:value-of select="concat(substring($date,9,2), '.', substring($date,6,2), '.', '-', substring($date,15,2), '.', substring($date,12,2), '.', substring($date,1,4))" />
       </xsl:when>
       <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\d\d\-\d\d')">
+        <!-- c) 1234567890123    PPN 1615859837
+                2022.03.04-06 -> 04.-06.03.2023 -->
         <xsl:value-of select="concat(substring($date,9,2), '.-', substring($date,12,2), '.', substring($date,6,2), '.', substring($date,1,4))" />
       </xsl:when>
       <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\d\d')">
+        <!-- d) 1234567890
+                2022.03.04  -> 04.03.2022 -->
         <xsl:value-of select="concat(substring($date,9,2),'.',substring($date,6,2),'.',substring($date,1,4))" />
       </xsl:when>
-      <!-- ToDo andere Fälle bei Bedarf -->
+      <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\-\d\d\d\d\.\d\d\.')">
+        <!-- e) 12345678901234567
+                2022.03.-2023.04. zu 03/2022-04/2023-->
+        <xsl:value-of select="concat(substring($date,6,2), '/', substring($date,1,4), '-', substring($date,15,2), '/', substring($date,10,4))" />
+      </xsl:when>
+      <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\-\d\d\d\d\.\d\d\.')">
+        <!-- f) 123456789012
+                2022.03.-04. zu 03-04/2023 -->
+        <xsl:value-of select="concat(substring($date,6,2), '-', substring($date,10,2), '/', substring($date,1,4))" />
+      </xsl:when>
+      <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.')">
+        <!-- g) 12345678
+                2022.03. -> 03/2023 -->
+        <xsl:value-of select="concat(substring($date,6,2), '/', substring($date,1,4))" />
+      </xsl:when>
+      <xsl:when test="matches($date, '\d\d\d\d\.\-\d\d\d\d\.')">
+        <!--h) 12345678901
+               2022.-2023. -> 2022-2023 -->
+        <xsl:value-of select="concat(substring($date,1,4), '-', substring($date,7,4))" />
+      </xsl:when>
+      <xsl:when test="matches($date, '\d\d\d\d\.')">
+        <!--i) 12345
+               2022. -> 2022 -->
+        <xsl:value-of select="substring($date,1,4)" />
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$date" />
       </xsl:otherwise>
