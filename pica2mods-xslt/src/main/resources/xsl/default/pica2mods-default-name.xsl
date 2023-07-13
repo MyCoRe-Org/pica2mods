@@ -567,9 +567,9 @@
                 2022.03.-2023.04. zu 03/2022-04/2023-->
         <xsl:value-of select="concat(substring($date,6,2), '/', substring($date,1,4), '-', substring($date,15,2), '/', substring($date,10,4))" />
       </xsl:when>
-      <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\-\d\d\d\d\.\d\d\.')">
+      <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\-\d\d\.')">
         <!-- f) 123456789012
-                2022.03.-04. zu 03-04/2023 -->
+                2022.03.-04. -> 03-04/2022 -->
         <xsl:value-of select="concat(substring($date,6,2), '-', substring($date,10,2), '/', substring($date,1,4))" />
       </xsl:when>
       <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.')">
