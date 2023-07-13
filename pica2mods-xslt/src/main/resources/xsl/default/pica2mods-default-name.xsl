@@ -546,7 +546,6 @@
         <xsl:variable name="year" select="substring($date,1,4)"/>
         <xsl:value-of select="concat(substring($date,9,2), '.', substring($date,6,2), '.', substring($date,1,4), '-', substring($date,20,2), '.', substring($date,17,2), '.', substring($date,12,4))" />
       </xsl:when>
-      
       <xsl:when test="matches($date, '\d\d\d\d\.\d\d\.\d\d\-\d\d\.\d\d')">
         <!-- b) 1234567890123456
                 2022.03.04-05.06 -> 03.04.-05.06.2022 -->
