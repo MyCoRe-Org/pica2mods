@@ -32,7 +32,9 @@
       <mods:subject authority="k10plus_field_5090">
         <xsl:variable name="subjects" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $ppn)" />
 
-        <xsl:for-each select="$subjects//p:datafield[@tag = '045A' or @tag = '045C'][p:subfield[@code = 'a']]">
+        <xsl:for-each select="$subjects//p:datafield[@tag = '045C' or @tag = '045A'][p:subfield[@code = 'a']]">
+          <xsl:sort select="@tag" order="descending"/>
+
           <mods:topic authority="rvk"
                       authorityURI="https://rvk.uni-regensburg.de/regensburger-verbundklassifikation-online"
                       valueURI="https://rvk.uni-regensburg.de/regensburger-verbundklassifikation-online#notation/{fn:encode-for-uri(p:subfield[@code = 'a'])}">
