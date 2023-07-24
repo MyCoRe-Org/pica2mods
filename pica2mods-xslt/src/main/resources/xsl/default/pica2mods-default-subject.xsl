@@ -5,7 +5,8 @@
                 xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
-                exclude-result-prefixes="mods pica2mods p xlink"
+                xmlns:fn="http://www.w3.org/2005/xpath-functions"
+                exclude-result-prefixes="mods pica2mods p xlink fn"
                 expand-text="yes">
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
@@ -25,12 +26,21 @@
     wieder 101@) ermitteln -->
 
   <xsl:template name="modsSubject">
-    <xsl:for-each select="./p:datafield[@tag='045R' and p:subfield[@code = 9]]/p:subfield[@code = 'k']">
+    <xsl:for-each select="./p:datafield[@tag='045R']/p:subfield[@code = '9']">
+      <xsl:variable name="ppn" select="."/>
+
       <mods:subject authority="k10plus_field_5090">
-        <mods:topic>
-          <xsl:value-of select="."/>
-        </mods:topic>
+        <xsl:variable name="subjects" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $ppn)" />
+
+        <xsl:for-each select="$subjects//p:datafield[@tag = '045A' or @tag = '045C'][p:subfield[@code = 'a']]">
+          <mods:topic authority="rvk"
+                      authorityURI="https://rvk.uni-regensburg.de/regensburger-verbundklassifikation-online"
+                      valueURI="https://rvk.uni-regensburg.de/regensburger-verbundklassifikation-online#notation/{fn:encode-for-uri(p:subfield[@code = 'a'])}">
+            <xsl:value-of select="p:subfield[@code = 'j' or @code = 'J']"/>
+          </mods:topic>
+        </xsl:for-each>
       </mods:subject>
+
     </xsl:for-each>
 
     <xsl:for-each select="./p:datafield[@tag='044N' and p:subfield[@code = 'S']/text() = 's']/p:subfield[@code = 'a']">
