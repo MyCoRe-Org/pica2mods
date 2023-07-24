@@ -65,6 +65,11 @@ public class MODS2Solr implements ApplicationRunner {
     }
 
     public static void main(String[] args) {
+        //SpringApplication.run(MODS2Solr.class, new String[] { MODS2SOLR_CMD_INIT_CORE, "--solr_core=mods_rosdok" }); 
+        // SpringApplication.run(MODS2Solr.class,
+        // new String[] { MODS2SOLR_CMD_RUN, "--solr_core=mods_rosdok",
+        //       "--mycore_rest_objects=https://rosdok.uni-rostock.de/api/v1/objects/",
+        //       "--resume_id=rosdok_document_0000007700" });
         SpringApplication.run(MODS2Solr.class, args);
     }
 
