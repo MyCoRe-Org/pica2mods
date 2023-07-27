@@ -29,7 +29,7 @@
     <xsl:for-each select="./p:datafield[@tag='045R']/p:subfield[@code = '9']">
       <xsl:variable name="ppn" select="."/>
 
-      <mods:subject authority="k10plus_field_5090">
+      <mods:subject authority="k10plus_field_5090" valueURI="https://uri.gbv.de/document/gvk:ppn:{$ppn}">
         <xsl:variable name="subjects" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $ppn)" />
 
         <xsl:for-each select="$subjects//p:datafield[@tag = '045C' or @tag = '045A'][p:subfield[@code = 'a']]">
