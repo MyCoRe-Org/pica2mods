@@ -29,7 +29,7 @@
     <xsl:for-each select="./p:datafield[@tag='045R']/p:subfield[@code = '9']">
       <xsl:variable name="ppn" select="."/>
 
-      <mods:subject authority="k10plus_field_5090" valueURI="https://uri.gbv.de/document/gvk:ppn:{$ppn}">
+      <mods:subject authority="k10plus_field_5090" valueURI="https://uri.gbv.de/document/{$MCR.PICA2MODS.DATABASE}:ppn:{$ppn}">
         <xsl:variable name="subjects" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $ppn)" />
 
         <xsl:for-each select="$subjects//p:datafield[@tag = '045A']">
@@ -79,6 +79,9 @@
          Beispiel: ikar:ppn:100659853  -->
     <xsl:for-each-group select="./p:datafield[@tag='044K']" group-by="if (not(@occurrence)) then ('00') else (@occurrence)">
       <mods:subject authority="k10plus_field_555X">
+      <xsl:if test="p:subfield[@code='9']">
+        <xsl:attribute name="valueURI">https://uri.gbv.de/document/{$MCR.PICA2MODS.DATABASE}:ppn:{p:subfield[@code='9']}</xsl:attribute>
+      </xsl:if>
         <xsl:for-each select="current-group()">
             <xsl:call-template name="processSubject" />
         </xsl:for-each>
