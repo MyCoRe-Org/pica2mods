@@ -32,14 +32,13 @@
       <mods:subject authority="k10plus_field_5090" valueURI="https://uri.gbv.de/document/gvk:ppn:{$ppn}">
         <xsl:variable name="subjects" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $ppn)" />
 
-        <xsl:for-each select="$subjects//p:datafield[@tag = '045C' or @tag = '045A'][p:subfield[@code = 'a']]">
-          <xsl:sort select="@tag" order="descending"/>
-
+        <xsl:for-each select="$subjects//p:datafield[@tag = '045A']">
           <mods:topic authority="rvk"
                       authorityURI="https://rvk.uni-regensburg.de/regensburger-verbundklassifikation-online"
-                      valueURI="https://rvk.uni-regensburg.de/regensburger-verbundklassifikation-online#notation/{fn:encode-for-uri(p:subfield[@code = 'a'])}">
-            <xsl:value-of select="p:subfield[@code = 'j' or @code = 'J']"/>
+                      valueURI="https://rvk.uni-regensburg.de/regensburger-verbundklassifikation-online#notation/{fn:encode-for-uri(fn:replace(p:subfield[@code = 'a'], '-', ' - '))}">
+            <xsl:value-of select="fn:replace(p:subfield[@code = 'a'],'-',' - ')"/>
           </mods:topic>
+          <!-- parent elements in RVK classification tree in 045C, currently ignored here -->
         </xsl:for-each>
       </mods:subject>
 
