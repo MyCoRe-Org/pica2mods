@@ -111,7 +111,7 @@
         </mods:partNumber>
       </xsl:if>
 
-      <xsl:if test="(@tag='036C' or @tag='036F') and ./../p:datafield[@tag='021A']">
+      <xsl:if test="(@tag='036C' or @tag='036F') and ./../p:datafield[@tag='021A']/p:subfield[@code='a']">
         <xsl:variable name="outPartName">
           <xsl:value-of select="translate(./../p:datafield[@tag='021A']/p:subfield[@code='a'], '@', '')" />
           <xsl:if test="./../p:datafield[@tag='021A']/p:subfield[@code='d']">
