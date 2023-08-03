@@ -5,7 +5,8 @@
                 xmlns:p="info:srw/schema/5/picaXML-v1.0"
                 xmlns:mods="http://www.loc.gov/mods/v3"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
-                exclude-result-prefixes="mods pica2mods p xlink"
+                xmlns:fn="http://www.w3.org/2005/xpath-functions"
+                exclude-result-prefixes="mods pica2mods p xlink fn"
                 expand-text="yes">
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
@@ -25,6 +26,32 @@
     wieder 101@) ermitteln -->
 
   <xsl:template name="modsSubject">
+    <xsl:for-each select="./p:datafield[@tag='045R']/p:subfield[@code = '9']">
+      <xsl:variable name="ppn" select="."/>
+
+      <mods:subject authority="k10plus_field_5090" valueURI="https://uri.gbv.de/document/{$MCR.PICA2MODS.DATABASE}:ppn:{$ppn}">
+        <xsl:variable name="subjects" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $ppn)" />
+
+        <xsl:for-each select="$subjects//p:datafield[@tag = '045A']">
+          <mods:topic authority="rvk"
+                      authorityURI="https://rvk.uni-regensburg.de/regensburger-verbundklassifikation-online"
+                      valueURI="https://rvk.uni-regensburg.de/regensburger-verbundklassifikation-online#notation/{fn:encode-for-uri(fn:replace(p:subfield[@code = 'a'], '-', ' - '))}">
+            <xsl:value-of select="fn:replace(p:subfield[@code = 'a'],'-',' - ')"/>
+          </mods:topic>
+          <!-- parent elements in RVK classification tree in 045C, currently ignored here -->
+        </xsl:for-each>
+      </mods:subject>
+
+    </xsl:for-each>
+
+    <xsl:for-each select="./p:datafield[@tag='044N' and p:subfield[@code = 'S']/text() = 's']/p:subfield[@code = 'a']">
+      <mods:subject authority="k10plus_field_5520">
+        <mods:topic>
+          <xsl:value-of select="."/>
+        </mods:topic>
+      </mods:subject>
+    </xsl:for-each>
+
     <!-- Schlagwortketten auf lokaler Ebene aus 6500 (144Z) -->
     <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->
       <mods:subject authority="k10plus_field_6500">
@@ -46,19 +73,22 @@
         </xsl:for-each>
       </mods:subject>
     </xsl:for-each>
-    
-    <!-- Schlagwortfolgen (GBV, SWB, K10plus) auf bibliograpischer Ebene aus 5550 (044K) 
+
+    <!-- Schlagwortfolgen (GBV, SWB, K10plus) auf bibliograpischer Ebene aus 5550 (044K)
          subfield 9 (GND auflösen), zusammengehörige Ketten über @occurrence="xx" erkennen
          Beispiel: ikar:ppn:100659853  -->
     <xsl:for-each-group select="./p:datafield[@tag='044K']" group-by="if (not(@occurrence)) then ('00') else (@occurrence)">
       <mods:subject authority="k10plus_field_555X">
+      <xsl:if test="p:subfield[@code='9']">
+        <xsl:attribute name="valueURI">https://uri.gbv.de/document/{$MCR.PICA2MODS.DATABASE}:ppn:{p:subfield[@code='9']}</xsl:attribute>
+      </xsl:if>
         <xsl:for-each select="current-group()">
             <xsl:call-template name="processSubject" />
         </xsl:for-each>
       </mods:subject>
     </xsl:for-each-group>
 
-    <!-- Schlagwortketten auf bibliograpischer Ebene aus 5100 (041A) 
+    <!-- Schlagwortketten auf bibliograpischer Ebene aus 5100 (041A)
          subfield 9 (GND auflösen), zusammengehörige Ketten über 1. Position in @occurrence erkennen
          Beispiel: gvk:ppn:846106841  -->
     <xsl:for-each-group select="./p:datafield[@tag='041A']" group-by="if (not(@occurrence)) then ('0') else (substring(@occurrence,1,1))">
@@ -72,7 +102,7 @@
       </mods:subject>
     </xsl:for-each-group>
 
-    <!-- Geokoordinaten und Maßstab aus 4028 (035G) und 4026 (035E) 
+    <!-- Geokoordinaten und Maßstab aus 4028 (035G) und 4026 (035E)
          sowie menschenlesbare Form des Maßstabs als mods:note (035E $a)
          Beispiel: ikar:ppn:101493568  -->
     <xsl:variable name="scale" select="p:datafield[@tag='035E'][1]/p:subfield[@code='g']"/>
@@ -105,7 +135,7 @@
     </xsl:if>
 
   </xsl:template>
- 
+
   <!-- Hilfstemplate, um Unterfelder der verschiedenen Schlagwortfelder auszuwerten -->
   <xsl:template name="processSubject">
     <xsl:choose>
@@ -148,7 +178,7 @@
         <xsl:otherwise>mods:topic</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    
+
     <xsl:element name="{$elementName}">
       <xsl:if test="$tp/p:datafield[@tag='003U']">
         <xsl:attribute name="authorityURI" select="'http://d-nb.info/gnd/'" />
