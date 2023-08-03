@@ -39,9 +39,9 @@
         <mods:recordInfoNote type="{$MCR.PICA2MODS.DATABASE}_bbg">{.}</mods:recordInfoNote>
       </xsl:for-each>
       <xsl:for-each select="./p:datafield[@tag='001A']/p:subfield[@code='0']"> <!-- 0200 Kennung und Datum der Ersterfassung -->
-        <xsl:variable name="year" select="number(substring(.,12,2))" />
+         <xsl:variable name="year" select="number(substring(.,string-length(.)-1,2))" />
         <mods:recordCreationDate encoding="w3cdtf">
-          <xsl:value-of select="concat(if ($year > 69) then ('19') else ('20'),substring(.,12,2),'-',substring(.,9,2),'-',substring(.,6,2))" />
+          <xsl:value-of select="concat(if ($year > 69) then ('19') else ('20'),substring(.,string-length(.)-1,2),'-',substring(.,string-length(.)-4,2),'-',substring(.,string-length(.)-7,2))" />
         </mods:recordCreationDate>
       </xsl:for-each>
       <mods:recordChangeDate encoding="w3cdtf">
