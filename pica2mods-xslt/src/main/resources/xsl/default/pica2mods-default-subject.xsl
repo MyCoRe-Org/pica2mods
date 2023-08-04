@@ -59,7 +59,7 @@
         <!-- kann mehrfach vorkommen -->
         <xsl:variable name="sf_x" select="./p:subfield[@code='x']" />
         <!-- TODO Schlagwortketten mit " / " habe ich in Rostock nicht gefunden -->
-        <xsl:for-each select="tokenize(./p:subfield[@code='a']/text(), ' / ')">
+        <xsl:for-each select="tokenize((./p:subfield[@code='a'])[1]/text(), ' / ')">
           <mods:topic>
             <xsl:choose>
               <xsl:when test="$sf_x">
