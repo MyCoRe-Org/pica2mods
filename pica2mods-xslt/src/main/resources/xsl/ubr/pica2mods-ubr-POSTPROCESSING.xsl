@@ -102,6 +102,11 @@
   <!-- delete all urls which look like our purls / do nothing -->
   <xsl:template match="mods:mods/mods:identifier[@type='url' and text()= ./../mods:identifier[@type='purl']/text()]"
     mode="ubrPostProcessing" />
+ 
+   <!-- delete lokal subjects from field 6500 / 144Z -->
+  <xsl:template match="mods:mods/mods:subject[@authority='k10plus_field_6500']"
+    mode="ubrPostProcessing" />   
+    
 
   <xsl:template match="*|@*|processing-instruction()|comment()" mode="ubrPostProcessing">
     <xsl:copy>

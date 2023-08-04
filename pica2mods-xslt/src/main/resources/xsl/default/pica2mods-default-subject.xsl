@@ -56,13 +56,22 @@
       </mods:subject>
     </xsl:for-each>
 
-    <!-- Schlagwortketten auf lokaler Ebene aus 6500 (144Z) -->
-    <xsl:for-each select="./p:datafield[@tag='144Z' and @occurrence]"><!-- lokale Schlagworte -->
+    <!-- Lokale Schlagwörter aus 6500 (144Z) -->
+    <xsl:for-each select="./p:datafield[@tag='144Z']"><!-- lokale Schlagworte -->
       <mods:subject authority="k10plus_field_6500">
+        <xsl:if test="p:subfield[@code='9']">
+          <xsl:attribute name="valueURI">https://uri.gbv.de/document/{$MCR.PICA2MODS.DATABASE}:ppn:{p:subfield[@code='9']}</xsl:attribute>
+        </xsl:if>
+        <!-- Ergänze ILN (internal library number) als Kommentar, um ggf. im Postprocessing darüber filtern zu können -->
+        <xsl:text>&#xA;      </xsl:text>
+        <xsl:comment>
+          <xsl:value-of select="concat('[ILN: ',./preceding-sibling::p:datafield[@tag='101@'][1]/p:subfield[@code='a'], ']')" />
+        </xsl:comment>
         <!-- Subfield x ist nicht in der Format-Dokumentation (PPN 898955750) -->
         <!-- kann mehrfach vorkommen -->
         <xsl:variable name="sf_x" select="./p:subfield[@code='x']" />
-        <!-- TODO Schlagwortketten mit " / " habe ich in Rostock nicht gefunden -->
+        <!-- TODO Es gibt hier auch (lokale) Normdatensätze mit PPN in $9 -> Werte aus Tx-Satz auslesen? -->
+        <!-- Schlagwortketten mit " / " z.B. in Neubrandenburg (PPN: 1838831800) -->
         <xsl:for-each select="tokenize((./p:subfield[@code='a'])[1]/text(), ' / ')">
           <mods:topic>
             <xsl:choose>
