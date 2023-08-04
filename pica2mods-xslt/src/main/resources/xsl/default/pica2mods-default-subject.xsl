@@ -44,11 +44,15 @@
 
     </xsl:for-each>
 
-    <xsl:for-each select="./p:datafield[@tag='044N' and p:subfield[@code = 'S']/text() = 's']/p:subfield[@code = 'a']">
+    <!-- Schlagwörter aus einem Thesaurus und freie Schlagwörter 5520 (044N) (PPN 1818469049) -->
+    <!-- erstmal nur Sachschlagworte (es gäbe auch Formschlagworte, Personen, Körperschaften, Geographika, Werktitel) -->
+    <xsl:for-each select="./p:datafield[@tag='044N' and p:subfield[@code = 'S']/text() = 's' and p:subfield[@code = 'a']]">
       <mods:subject authority="k10plus_field_5520">
-        <mods:topic>
-          <xsl:value-of select="."/>
-        </mods:topic>
+        <xsl:for-each select="./p:subfield[@code = 'a']">
+          <mods:topic>
+            <xsl:value-of select="."/>
+          </mods:topic>
+        </xsl:for-each>
       </mods:subject>
     </xsl:for-each>
 
