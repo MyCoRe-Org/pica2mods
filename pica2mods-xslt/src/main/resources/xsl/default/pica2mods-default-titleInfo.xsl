@@ -179,14 +179,17 @@
       <mods:titleInfo otherType="contained_work">
         <mods:title>
            <xsl:variable name="the_title" select="translate(./p:subfield[@code='a'], '@', '')" />
+           <xsl:variable name="the_subtitle" select="./p:subfield[@code='d']" />
            <xsl:variable name="the_responsible" select="./p:subfield[@code='h']" />
-           <xsl:value-of select="if ($the_responsible) then (concat($the_title, ' / ', $the_responsible)) else ($the_title)" />
+           <xsl:value-of select="concat($the_title, 
+                                 (if  ($the_subtitle) then (concat(' : ', $the_subtitle)) else ()),
+                                 (if  ($the_responsible) then (concat(' / ', $the_responsible)) else ()))" />
+           <!-- unstrukturierte Angaben aus Unterfeld u -->
+           <xsl:if test="./p:subfield[@code='a'] and ./p:subfield[@code='u']">
+             <xsl:value-of select="' ; '" />
+           </xsl:if>
+           <xsl:value-of select="./p:subfield[@code='u']" />
         </mods:title>
-        <xsl:if test="./p:subfield[@code='d']">
-          <mods:subTitle>
-            <xsl:value-of select="./p:subfield[@code='d']" />
-          </mods:subTitle>
-        </xsl:if>
       </mods:titleInfo>
     </xsl:for-each>
     
