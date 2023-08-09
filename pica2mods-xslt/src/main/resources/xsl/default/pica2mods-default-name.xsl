@@ -30,7 +30,7 @@
         <xsl:when test="./p:subfield[@code='9']">
           <xsl:variable name="ppn" select="./p:subfield[@code='9']" />
           <xsl:variable name="tp" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $ppn)" />
-          <xsl:if test="starts-with($tp/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tp')">
+          <xsl:if test="starts-with($tp/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tp') or starts-with($tp/p:datafield[@tag='002@']/p:subfield[@code='0'], 'Tn')">
             <mods:name type="personal">
               <xsl:if test="$tp/p:datafield[@tag='028A']/p:subfield[@code='d']">
                 <mods:namePart type="given">

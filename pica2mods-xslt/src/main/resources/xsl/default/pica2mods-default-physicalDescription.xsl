@@ -118,20 +118,13 @@
     <xsl:param name="record" />
     <xsl:variable name="pica0500" select="$record/p:datafield[@tag='002@']/p:subfield[@code='0']" />
     <xsl:if test="starts-with($pica0500, 'O')">
-      <xsl:choose>  <!-- 4238 Technische Angaben zum elektr. Dokument, RDA ok -->
-        <xsl:when
-          test="contains($record/p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Original')"> <!-- alt -->
-          <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-        </xsl:when>
-        <xsl:when
-          test="contains($record/p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Primärausgabe')">
-          <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
-        </xsl:when>
-        <xsl:when
-          test="contains($record/p:datafield[@tag='037H']/p:subfield[@code='a'], 'Digitalisierungsvorlage: Mikrofilm')">
+      <xsl:choose>  <!-- 4238 Technische Angaben zum elektr. Dokument -->
+        <!-- PPN 1750236621 -->
+        <xsl:when test="$record/p:datafield[@tag='037H']/p:subfield[@code='a' and contains(text(), 'Digitalisierungsvorlage: Mikrofilm')]">
           <mods:digitalOrigin>digitized microfilm</mods:digitalOrigin>
         </xsl:when>
         <xsl:otherwise>
+          <!-- 'Digitalisierungsvorlage: Primärausgabe' / alt: 'Digitalisierungsvorlage: Original' -->
           <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
         </xsl:otherwise>
       </xsl:choose>
