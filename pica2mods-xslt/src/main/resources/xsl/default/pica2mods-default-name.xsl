@@ -273,32 +273,24 @@
                       select="$tb/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" />
                   </mods:nameIdentifier>
                 </xsl:if>
-                <xsl:if test="$tb/p:datafield[@tag='029A']/p:subfield[@code='a']">
+                <xsl:for-each select="$tb/p:datafield[@tag='029A']">
                   <mods:namePart>
-                    <xsl:value-of select="$tb/p:datafield[@tag='029A']/p:subfield[@code='a']" />
+                    <!-- subfield $b is repeatable -->
+                    <xsl:value-of select="string-join(./p:subfield[@code='a' or @code='b'], '. ')" />
+                    <xsl:if test="./p:subfield[@code='g']">
+                       <xsl:value-of select="concat(' : ', string-join(./p:subfield[@code='g'], ' : '))" />
+                    </xsl:if>
                   </mods:namePart>
-                </xsl:if>
-                <xsl:if test="$tb/p:datafield[@tag='029A']/p:subfield[@code='b']">
+                </xsl:for-each>
+                <xsl:for-each select="$tb/p:datafield[@tag='065A']">
                   <mods:namePart>
-                    <xsl:value-of select="$tb/p:datafield[@tag='029A']/p:subfield[@code='b']" />
+                    <xsl:value-of select="./p:subfield[@code='a']" />
+                    <xsl:if test="./p:subfield[@code='g']">
+                      <xsl:value-of select="concat(' : ', string-join(./p:subfield[@code='g'], ' : '))" />
+                    </xsl:if>
                   </mods:namePart>
-                </xsl:if>
-                <xsl:if test="$tb/p:datafield[@tag='029A']/p:subfield[@code='g']">
-                  <mods:namePart>
-                    <xsl:value-of select="$tb/p:datafield[@tag='029A']/p:subfield[@code='g']" />
-                  </mods:namePart>
-                </xsl:if>
-                <xsl:if test="$tb/p:datafield[@tag='065A']/p:subfield[@code='a']">
-                  <mods:namePart>
-                    <xsl:value-of select="$tb/p:datafield[@tag='065A']/p:subfield[@code='a']" />
-                  </mods:namePart>
-                </xsl:if>
-                <xsl:if test="$tb/p:datafield[@tag='065A']/p:subfield[@code='g']">
-                  <mods:namePart>
-                    <xsl:value-of select="$tb/p:datafield[@tag='065A']/p:subfield[@code='g']" />
-                  </mods:namePart>
-                </xsl:if>
-  
+                </xsl:for-each>
+                
                 <xsl:for-each
                   select="$tb/p:datafield[@tag='060R' and (./p:subfield[@code='4']='datb' or ./p:subfield[@code='4']='datv')]">
                   <xsl:if test="./p:subfield[@code='a']">
