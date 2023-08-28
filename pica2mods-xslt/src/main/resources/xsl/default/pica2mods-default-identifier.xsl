@@ -210,7 +210,7 @@
 
     <!-- URLs -->
     <xsl:for-each
-      select="./p:datafield[@tag='017C' and (./p:subfield[@code='x']='D' or ./p:subfield[@code='x']='H')]/p:subfield[@code='u']">
+      select="./p:datafield[@tag='017C' and (./p:subfield[@code='x']='D' or ./p:subfield[@code='x']='T' or ./p:subfield[@code='x']='H')]/p:subfield[@code='u']">
       <!-- 4950 (kein eigenes Feld) -->
       <mods:identifier type="url">
         <xsl:value-of select="." />
