@@ -255,7 +255,7 @@
           </mods:part>
           <xsl:choose>
             <!-- NICHT A ODER B = keine Rostock-PURL am Aufsatz ODER Rostock-PURL am Host -->
-            <xsl:when test="not(../p:datafield[@tag='017C']/p:subfield[@code='u'][starts-with(.,'http://purl.uni-rostock.de/')]) or $parent/p:datafield[@tag='017C']/p:subfield[@code='u'][starts-with(.,'http://purl.uni-rostock.de/')]">
+            <xsl:when test="not(../p:datafield[@tag='017C']/p:subfield[@code='u'][contains(., '://purl.uni-rostock.de/')]) or $parent/p:datafield[@tag='017C']/p:subfield[@code='u'][contains(., '://purl.uni-rostock.de/')]">
               <xsl:call-template name="parent_info">
                 <xsl:with-param name="parent" select="$parent" />
               </xsl:call-template>
@@ -373,7 +373,7 @@
            <xsl:if test="starts-with($parent/p:datafield[@tag='002@']/p:subfield[@code='0'], 'O')">
             <mods:recordInfo>
               <xsl:for-each
-                 select="$parent/p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '//purl.uni-rostock.de')][1]"> <!-- 4950 URL (kein eigenes Feld) -->
+                 select="$parent/p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '://purl.uni-rostock.de')][1]"> <!-- 4950 URL (kein eigenes Feld) -->
                 <mods:recordIdentifier source="DE-28"><xsl:value-of select="substring-after(substring(.,9), '/')" /></mods:recordIdentifier>
               </xsl:for-each>
               <mods:recordInfoNote type="{$MCR.PICA2MODS.DATABASE}_ppn">
@@ -490,17 +490,17 @@
   <xsl:template name="parent_info">
     <xsl:param name="parent" />
     <xsl:for-each
-      select="$parent/p:datafield[@tag='017C']/p:subfield[@code='u'][starts-with(.,'http://purl.uni-rostock.de/')][1]">
+      select="$parent/p:datafield[@tag='017C']/p:subfield[@code='u'][contains(., '://purl.uni-rostock.de/')][1]">
       <mods:recordInfo>
         <mods:recordIdentifier source="DE-28">
-          <xsl:value-of select="substring(.,28,100) " />
+          <xsl:value-of select="substring-after(substring(.,9), '/')" />
         </mods:recordIdentifier>
         <mods:recordInfoNote type="{$MCR.PICA2MODS.DATABASE}_ppn">
           <xsl:value-of select="$parent/p:datafield[@tag='003@']/p:subfield[@code='0']" /> <!-- 0100 PPN -->
         </mods:recordInfoNote>
       </mods:recordInfo>
       <mods:identifier type="purl">
-        <xsl:value-of select="." />
+        <xsl:value-of select="replace(., 'http://', 'https://')" />
       </mods:identifier>
     </xsl:for-each>
     <xsl:for-each select="$parent/p:datafield[@tag='003@']/p:subfield[@code='0']"> <!-- 0100 PPN -->
