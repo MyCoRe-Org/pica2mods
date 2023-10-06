@@ -213,7 +213,7 @@
       select="./p:datafield[@tag='017C' and (./p:subfield[@code='x']='D' or ./p:subfield[@code='x']='H')]/p:subfield[@code='u']">
       <!-- 4950 (kein eigenes Feld) -->
       <mods:identifier type="url">
-        <xsl:value-of select="." />
+        <xsl:value-of select="replace(., 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />
       </mods:identifier>
     </xsl:for-each>
 

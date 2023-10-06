@@ -23,9 +23,9 @@
     <xsl:variable name="picaMode" select="pica2mods:detectMode(.)" />
 
     <xsl:for-each select="./p:datafield[@tag='017C']"> <!-- 4950 (kein eigenes Feld) -->
-      <xsl:if test="contains(./p:subfield[@code='u'], '//purl.uni-rostock.de')">
+      <xsl:if test="contains(./p:subfield[@code='u'], '://purl.uni-rostock.de')">
         <mods:identifier type="purl">
-          <xsl:value-of select="./p:subfield[@code='u']" />
+          <xsl:value-of select="replace(./p:subfield[@code='u'], 'http://', 'https://')" />
         </mods:identifier>
       </xsl:if>
     </xsl:for-each>
@@ -33,7 +33,7 @@
     <xsl:if test="(not(./p:datafield[@tag='004U']/p:subfield[@code='0' and starts-with(., 'urn:nbn:de:gbv:28-')])
                   and not(./p:datafield[@tag='004U']/p:subfield[@code='0' and starts-with(., 'urn:nbn:de:gbv:519-')])
                   and ./p:datafield[@tag='002@']/p:subfield[@code='0' and contains('afFsv', substring(.,2,1))])">
-      <xsl:variable name="recordID" select="substring-after(substring(./p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '//purl.uni-rostock.de')][1],9), '/')" /> <!-- 4950 URL (recordID from PURL) -->
+      <xsl:variable name="recordID" select="substring-after(substring(./p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '://purl.uni-rostock.de')][1],9), '/')" /> <!-- 4950 URL (recordID from PURL) -->
       <mods:identifier type="urn">
           <xsl:value-of select="pica2mods:createURNWithChecksumForURNBase(concat('urn:nbn:de:gbv:28-', replace($recordID,'/','_'),'-'))" />
       </mods:identifier>

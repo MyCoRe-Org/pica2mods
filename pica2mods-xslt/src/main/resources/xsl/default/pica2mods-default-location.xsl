@@ -44,18 +44,18 @@
     <!-- 4950 URL zum Volltext -->
     <!-- Whitelisting für bestimmte URLs auch wegen usage='primary' -->
     <xsl:for-each
-      select="./p:datafield[@tag='017C' and contains(./p:subfield[@code='u'], '//purl.uni-rostock.de')][1]">
+      select="./p:datafield[@tag='017C' and contains(./p:subfield[@code='u'], '://purl.uni-rostock.de')][1]">
       <mods:location>
-        <!-- TODO: delete/generalize rostok specific code -->
+        <!-- TODO: delete/generalize RosDok specific code -->
         <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/"
           valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
         <mods:url usage="primary" access="object in context">
-          <xsl:value-of select="./p:subfield[@code='u']" />
+          <xsl:value-of select="replace(./p:subfield[@code='u'], 'http://', 'https://') " />
         </mods:url>
       </mods:location>
     </xsl:for-each>
     <xsl:for-each
-      select="./p:datafield[@tag='017C' and contains(./p:subfield[@code='u'], '//digibib.hs-nb.de/resolve/id')][1]">
+      select="./p:datafield[@tag='017C' and contains(./p:subfield[@code='u'], '://digibib.hs-nb.de/resolve/id')][1]">
       <mods:location>
         <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/"
           valueURI="http://d-nb.info/gnd/1162078316">Hochschulbibliothek Neubrandenburg</mods:physicalLocation>
