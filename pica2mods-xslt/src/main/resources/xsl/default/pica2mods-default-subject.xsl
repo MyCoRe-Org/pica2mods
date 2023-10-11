@@ -26,6 +26,7 @@
     wieder 101@) ermitteln -->
 
   <xsl:template name="modsSubject">
+    <!-- RVK Systematik aus 5090 (045R) -->
     <xsl:for-each select="./p:datafield[@tag='045R']/p:subfield[@code = '9']">
       <xsl:variable name="ppn" select="."/>
 
@@ -41,7 +42,6 @@
           <!-- parent elements in RVK classification tree in 045C, currently ignored here -->
         </xsl:for-each>
       </mods:subject>
-
     </xsl:for-each>
 
     <!-- Schlagwörter aus einem Thesaurus und freie Schlagwörter 5520 (044N) (PPN 1818469049) -->
