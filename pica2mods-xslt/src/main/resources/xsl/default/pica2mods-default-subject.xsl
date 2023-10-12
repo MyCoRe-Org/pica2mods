@@ -26,6 +26,7 @@
     wieder 101@) ermitteln -->
 
   <xsl:template name="modsSubject">
+    <!-- RVK Systematik aus 5090 (045R) -->
     <xsl:for-each select="./p:datafield[@tag='045R']/p:subfield[@code = '9']">
       <xsl:variable name="ppn" select="."/>
 
@@ -41,7 +42,6 @@
           <!-- parent elements in RVK classification tree in 045C, currently ignored here -->
         </xsl:for-each>
       </mods:subject>
-
     </xsl:for-each>
 
     <!-- Schlagwörter aus einem Thesaurus und freie Schlagwörter 5520 (044N) (PPN 1818469049) -->
@@ -92,9 +92,6 @@
          Beispiel: ikar:ppn:100659853  -->
     <xsl:for-each-group select="./p:datafield[@tag='044K']" group-by="if (not(@occurrence)) then ('00') else (@occurrence)">
       <mods:subject authority="k10plus_field_555X">
-      <xsl:if test="p:subfield[@code='9']">
-        <xsl:attribute name="valueURI">https://uri.gbv.de/document/{$MCR.PICA2MODS.DATABASE}:ppn:{p:subfield[@code='9']}</xsl:attribute>
-      </xsl:if>
         <xsl:for-each select="current-group()">
             <xsl:call-template name="processSubject" />
         </xsl:for-each>
@@ -185,6 +182,11 @@
     <xsl:param name="subjectPPN" />
     <xsl:variable name="tp" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, $subjectPPN)" />
     <xsl:variable name="pica0500_2" select="substring($tp/p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
+    <xsl:text>&#xA;      </xsl:text>
+    <xsl:comment>
+      <xsl:value-of select="concat('[PPN: ', $subjectPPN, ']')" />
+    </xsl:comment>
+
     <xsl:variable name="elementName">
       <xsl:choose>
         <xsl:when test="$pica0500_2='g'">mods:geographic</xsl:when>
