@@ -107,7 +107,7 @@
       select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
     <xsl:if test="$pica0500_2='b'">
       <xsl:for-each
-        select="./p:datafield[@tag='017C'][contains(./p:subfield[@code='u'],'purl.uni-rostock.de')]/p:subfield[@code='x']">
+        select="./p:datafield[@tag='017C'][contains(./p:subfield[@code='u'], '://purl.uni-rostock.de')]/p:subfield[@code='x']">
         <mods:note type="available_volumes">
           <xsl:value-of select="substring-after(.,'; ')" />
         </mods:note>

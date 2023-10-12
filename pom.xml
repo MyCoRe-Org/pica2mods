@@ -29,7 +29,7 @@
     <!-- with snakeyaml 1.30 version there is security vulnerability
          check snakeyaml version on the next spring boot version update -->
     <snakeyaml.version>1.31</snakeyaml.version>
-    <spring.boot.version>2.7.12</spring.boot.version>
+    <spring.boot.version>2.7.16</spring.boot.version>
   </properties>
   <build>
     <plugins>
@@ -153,10 +153,10 @@
   </developers>
   <modules>
     <module>pica2mods-xslt</module>
-    <module>pica2mods-webapp</module>
     <module>pica2mods-validation</module>
-    <module>pica2mods-runner</module>
     <module>pica2solr</module>
     <module>mods2solr</module>
+    <module>pica2mods-webapp</module>
+    <module>pica2mods-runner</module>
   </modules>
 </project>

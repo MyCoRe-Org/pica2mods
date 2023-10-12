@@ -8,9 +8,10 @@
   </parent>
   <artifactId>pica2mods-runner</artifactId>
   <packaging>jar</packaging>
-  <name>Pica2Mods Application Runner</name>
+  <name>Pica2MODS Application Runner</name>
   <properties>
     <maven.compiler.release>11</maven.compiler.release>
+    <maven.deploy.skip>true</maven.deploy.skip>
   </properties>
   <build>
     <finalName>${artifactId}</finalName>
@@ -22,7 +23,7 @@
         <version>${spring.boot.version}</version>
         <configuration>
           <executable>true</executable>
-          <main-class>org.mycore.pica2mods.runner.Pica2ModsRunner</main-class>
+          <mainClass>org.mycore.pica2mods.runner.Pica2ModsRunner</mainClass>
         </configuration>
         <executions>
           <execution>

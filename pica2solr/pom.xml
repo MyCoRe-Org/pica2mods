@@ -8,7 +8,7 @@
   </parent>
   <artifactId>pica2solr</artifactId>
   <packaging>jar</packaging>
-  <name>Pica2Mods Pica2Solr Analyzer</name>
+  <name>Pica2MODS Pica2Solr Analyzer</name>
   <url>http://maven.apache.org</url>
   <properties>
     <maven.compiler.release>11</maven.compiler.release>
