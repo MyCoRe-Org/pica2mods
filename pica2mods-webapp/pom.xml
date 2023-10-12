@@ -8,7 +8,7 @@
   </parent>
   <artifactId>pica2mods-web</artifactId>
   <packaging>jar</packaging>
-  <name>Pica2Mods Web Application</name>
+  <name>Pica2MODS Web Application</name>
   <properties>
     <maven.compiler.release>11</maven.compiler.release>
   </properties>
