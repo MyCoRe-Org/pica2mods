@@ -11,6 +11,7 @@
   <name>Pica2MODS Application Runner</name>
   <properties>
     <maven.compiler.release>11</maven.compiler.release>
+    <maven.deploy.skip>true</maven.deploy.skip>
   </properties>
   <build>
     <finalName>${artifactId}</finalName>
