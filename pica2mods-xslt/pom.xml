@@ -47,7 +47,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/net.sf.saxon/Saxon-HE -->
     <dependency>
       <groupId>net.sf.saxon</groupId>
       <artifactId>Saxon-HE</artifactId>
@@ -56,7 +55,6 @@
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-classifications</artifactId>
-      <version>1.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
