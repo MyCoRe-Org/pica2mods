@@ -208,7 +208,7 @@
         <xsl:when test="$tp/p:datafield[@tag='029A']"><xsl:value-of select="$tp/p:datafield[@tag='029A']/p:subfield[@code='a']" /></xsl:when>
         <xsl:when test="$tp/p:datafield[@tag='028A']">
             <!-- Person -->
-            <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='a']" />, <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='b']" />
+            <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='a']" />, <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='d']" />
         </xsl:when>
       </xsl:choose>
     </xsl:element>
