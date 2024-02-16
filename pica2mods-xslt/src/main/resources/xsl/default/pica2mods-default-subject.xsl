@@ -211,6 +211,8 @@
           <xsl:variable name="firstName" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='d']"/>
           <xsl:variable name="lastName" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='a']"/>
           <xsl:variable name="nameAffix" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='c']"/>
+          <!-- Zählung -->
+          <xsl:variable name="counting" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='n']"/>
           <!-- persönlicher Name -->
           <xsl:variable name="personalName" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='P']"/>
           <!-- Ordnungshilfe-->
