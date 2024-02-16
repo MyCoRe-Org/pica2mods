@@ -215,19 +215,24 @@
           <xsl:variable name="counting" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='n']"/>
           <!-- persönlicher Name -->
           <xsl:variable name="personalName" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='P']"/>
-          <!-- Ordnungshilfe-->
-          <xsl:variable name="collocation" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='l']"/>
+          <!-- Beiname -->
+          <xsl:variable name="by-name" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='l']"/>
 
           <xsl:choose>
             <xsl:when test="$personalName">
               <xsl:value-of select="$personalName"/>
-              <xsl:if test="$collocation">
-                <xsl:value-of select="concat(' &lt;',$collocation,'&gt;')"/>
+
+              <xsl:if test="$counting">
+                <xsl:value-of select="concat(' ', $counting)"/>
+              </xsl:if>
+
+              <xsl:if test="$by-name">
+                <xsl:value-of select="concat(', ',$by-name)"/>
               </xsl:if>
             </xsl:when>
 
-            <xsl:when test="$firstName and $lastName and $collocation">
-              <xsl:value-of select="concat($lastName,', ',$firstName,' &lt;',$collocation,'&gt;')"/>
+            <xsl:when test="$firstName and $lastName and $by-name">
+              <xsl:value-of select="concat($lastName,', ',$firstName,', ',$by-name)"/>
             </xsl:when>
 
             <xsl:otherwise>
