@@ -207,8 +207,56 @@
         <xsl:when test="$tp/p:datafield[@tag='030A']"><xsl:value-of select="$tp/p:datafield[@tag='030A']/p:subfield[@code='a']" /></xsl:when>
         <xsl:when test="$tp/p:datafield[@tag='029A']"><xsl:value-of select="$tp/p:datafield[@tag='029A']/p:subfield[@code='a']" /></xsl:when>
         <xsl:when test="$tp/p:datafield[@tag='028A']">
-            <!-- Person -->
-            <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='a']" />, <xsl:value-of select="$tp/p:datafield[@tag='028A']/p:subfield[@code='b']" />
+          <!-- Person -->
+          <xsl:variable name="firstName" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='d']"/>
+          <xsl:variable name="lastName" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='a']"/>
+          <xsl:variable name="nameAffix" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='c']"/>
+          <!-- Zählung -->
+          <xsl:variable name="counting" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='n']"/>
+          <!-- persönlicher Name -->
+          <xsl:variable name="personalName" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='P']"/>
+          <!-- Beiname -->
+          <xsl:variable name="by-name" select="$tp/p:datafield[@tag='028A']/p:subfield[@code='l']"/>
+
+          <xsl:choose>
+            <xsl:when test="$personalName">
+              <xsl:value-of select="$personalName"/>
+
+              <xsl:if test="$counting">
+                <xsl:value-of select="concat(' ', $counting)"/>
+              </xsl:if>
+
+              <xsl:if test="$by-name">
+                <xsl:value-of select="concat(', ',$by-name)"/>
+              </xsl:if>
+            </xsl:when>
+
+            <xsl:when test="$firstName and $lastName and $by-name">
+              <xsl:value-of select="concat($lastName,', ',$firstName,', ',$by-name)"/>
+            </xsl:when>
+
+            <xsl:otherwise>
+              <xsl:if test="$firstName and $lastName and $nameAffix">
+                <xsl:value-of select="concat($lastName,', ',$firstName,' ',$nameAffix)"/>
+              </xsl:if>
+
+              <xsl:if test="$firstName and $lastName and not($nameAffix)">
+                <xsl:value-of select="concat($lastName,', ',$firstName)"/>
+              </xsl:if>
+
+              <xsl:if test="$firstName and not($lastName or $nameAffix)">
+                <xsl:value-of select="firstName"/>
+              </xsl:if>
+
+              <xsl:if test="not ($firstName) and $lastName">
+                <xsl:value-of select="$lastName"/>
+              </xsl:if>
+
+              <xsl:if test="$firstName and not($lastName)">
+                <xsl:value-of select="$firstName"/>
+              </xsl:if>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:when>
       </xsl:choose>
     </xsl:element>
