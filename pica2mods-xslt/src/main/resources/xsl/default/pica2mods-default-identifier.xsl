@@ -200,6 +200,14 @@
         </mods:identifier>
       </xsl:if>
     </xsl:for-each>
+    
+    <!-- Handschriftenportal -->
+    <!-- Präfix 'HSP-' gehört hier zum Identifier -->
+    <xsl:for-each select="./p:datafield[@tag='007Y']/p:subfield[@code='0'][starts-with(., 'HSP-')]">
+      <mods:identifier type="hsp">
+        <xsl:value-of select="." />
+      </mods:identifier>
+    </xsl:for-each>
   
     <!-- Fingerprint (Format: type="fingerprint_fei" or "fingerprint_stcnf") -->
     <xsl:for-each select="./p:datafield[@tag='007P']">
