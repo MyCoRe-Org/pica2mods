@@ -90,7 +90,6 @@
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>jakarta.json</artifactId>
-      <version>1.1.6</version>
       <scope>runtime</scope>
     </dependency>
     <!-- JSONP implementation for Spring Boot 3 with Jakarta EE 9 and 10 -->
