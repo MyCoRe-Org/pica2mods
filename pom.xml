@@ -53,6 +53,8 @@
       </plugin>
       
       <plugin>
+		<!-- The newer version io.github.git-commit-id::git-commit-id-maven-plugin::7.0.0
+		     does not build on Bamboo -->
         <groupId>pl.project13.maven</groupId>
         <artifactId>git-commit-id-plugin</artifactId>
         <version>4.9.10</version>
@@ -90,11 +92,6 @@
   </pluginRepositories>
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>io.github.git-commit-id</groupId>
-        <artifactId>git-commit-id-maven-plugin</artifactId>
-        <version>7.0.0</version>
-      </dependency>
       <dependency>
         <!-- Schematron validation -->
         <groupId>name.dmaus.schxslt</groupId>
