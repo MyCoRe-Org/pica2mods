@@ -57,6 +57,7 @@
         <version>7.0.0</version>
         <configuration>
           <useNativeGit>true</useNativeGit>
+          <injectAllReactorProjects>true</injectAllReactorProjects>
           <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
           <failOnNoGitDirectory>false</failOnNoGitDirectory>
           <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
