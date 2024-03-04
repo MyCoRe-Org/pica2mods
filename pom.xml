@@ -89,10 +89,15 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.mycore</groupId>
-        <artifactId>mycore-classifications</artifactId>
-        <version>1.1</version>
-        <scope>runtime</scope>
+        <groupId>io.github.git-commit-id</groupId>
+        <artifactId>git-commit-id-maven-plugin</artifactId>
+        <version>6.0.0</version>
+      </dependency>
+      <dependency>
+        <!-- Schematron validation -->
+        <groupId>name.dmaus.schxslt</groupId>
+        <artifactId>java</artifactId>
+        <version>3.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -100,15 +105,23 @@
         <version>[1.7.0,1.7.99]</version>
       </dependency>
       <dependency>
-        <groupId>io.github.git-commit-id</groupId>
-        <artifactId>git-commit-id-maven-plugin</artifactId>
-        <version>6.0.0</version>
-      </dependency>
-      <!-- https://mvnrepository.com/artifact/net.sf.saxon/Saxon-HE -->
-      <dependency>
         <groupId>net.sf.saxon</groupId>
         <artifactId>Saxon-HE</artifactId>
         <version>12.3</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>jakarta.json</artifactId>
+        <version>1.1.6</version>
+        <scope>runtime</scope>
+      </dependency>
+      <!-- JSONP implementation for Spring Boot 3 with Jakarta EE 9 and 10 -->
+      <!-- <dependency> <groupId>org.eclipse.parsson</groupId> <artifactId>parsson</artifactId> <version>1.1.1</version> </dependency> -->
+      <dependency>
+        <groupId>org.mycore</groupId>
+        <artifactId>mycore-classifications</artifactId>
+        <version>1.1</version>
         <scope>runtime</scope>
       </dependency>
       <dependency>
@@ -116,12 +129,6 @@
         <artifactId>xml-apis</artifactId>
         <version>1.4.01</version>
         <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <!-- Schematron validation -->
-        <groupId>name.dmaus.schxslt</groupId>
-        <artifactId>java</artifactId>
-        <version>3.1.1</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
@@ -135,14 +142,6 @@
         <version>2.0.6.1</version>
         <scope>test</scope>
       </dependency>
-      <dependency>
-        <groupId>org.glassfish</groupId>
-        <artifactId>jakarta.json</artifactId>
-        <version>1.1.6</version>
-        <scope>runtime</scope>
-      </dependency>
-      <!-- JSONP implementation for Spring Boot 3 with Jakarta EE 9 and 10 -->
-      <!-- <dependency> <groupId>org.eclipse.parsson</groupId> <artifactId>parsson</artifactId> <version>1.1.1</version> </dependency> -->
     </dependencies>
   </dependencyManagement>
   <developers>
