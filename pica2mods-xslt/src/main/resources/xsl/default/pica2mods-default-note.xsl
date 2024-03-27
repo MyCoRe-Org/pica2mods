@@ -48,20 +48,17 @@
         </xsl:for-each>
 
         <!-- Hochschulschriftenvermerk -->
+        <!-- Nicht RDA [037C/a] -->
         <xsl:if test="./p:datafield[@tag='037C']/p:subfield[@code='a']">
           <mods:note type="university_thesis_note">
             <xsl:value-of select="./p:datafield[@tag='037C'][1]/p:subfield[@code='a']" />
           </mods:note>
         </xsl:if>
 
-        <!-- RDA [037/d], [037/e], [037/f] {, [037/g]} -->
-        <xsl:if test="./p:datafield[@tag='037C'][p:subfield[@code='d']][p:subfield[@code='e']][p:subfield[@code='f']]">
+        <!-- RDA [037C/d], [037C/e], [037C/f] {, [037C/g]} -->
+        <xsl:if test="./p:datafield[@tag='037C']/p:subfield[@code='d' or @code='e' or @code='f' or @code='g']">
           <mods:note type="university_thesis_note">
-            <xsl:value-of select="concat(./p:datafield[@tag='037C']/p:subfield[@code='d'], ', ', ./p:datafield[@tag='037C']/p:subfield[@code='e'], ', ', ./p:datafield[@tag='037C']/p:subfield[@code='f'])"/>
-
-            <xsl:if test="./p:datafield[@tag='037C'][p:subfield[@code='g']]">
-              <xsl:value-of select="concat(', ', ./p:datafield[@tag='037C'][p:subfield[@code='g']])"/>
-            </xsl:if>
+            <xsl:value-of select="string-join(./p:datafield[@tag='037C']/p:subfield[@code='d' or @code='e' or @code='f' or @code='g'], ', ')"/>
           </mods:note>
         </xsl:if>
       </xsl:otherwise>
