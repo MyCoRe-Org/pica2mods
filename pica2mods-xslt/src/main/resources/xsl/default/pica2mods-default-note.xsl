@@ -24,7 +24,7 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- Für EPUB - besondere Behandlung der Gutachter
-             und aufsammeln der sonstige Anmerkungen in type='other' statt type='source_note' -->
+             und aufsammeln der sonstigen Anmerkungen in type='other' statt type='source_note' -->
         <xsl:for-each select="./p:datafield[@tag='037A']"><!-- Gutachter in Anmerkungen -->
           <xsl:choose>
             <xsl:when test="starts-with(./p:subfield[@code='a'], 'GutachterInnen:')">
@@ -46,7 +46,24 @@
             <xsl:value-of select="normalize-space(substring-after(., 'personal_details:'))" />
           </mods:note>
         </xsl:for-each>
-        
+
+        <!-- Hochschulschriftenvermerk -->
+        <xsl:if test="./p:datafield[@tag='037C']/p:subfield[@code='a']">
+          <mods:note type="university_thesis_note">
+            <xsl:value-of select="./p:datafield[@tag='037C'][1]/p:subfield[@code='a']" />
+          </mods:note>
+        </xsl:if>
+
+        <!-- RDA [037/d], [037/e], [037/f] {, [037/g]} -->
+        <xsl:if test="./p:datafield[@tag='037C'][p:subfield[@code='d']][p:subfield[@code='e']][p:subfield[@code='f']]">
+          <mods:note type="university_thesis_note">
+            <xsl:value-of select="concat(./p:datafield[@tag='037C']/p:subfield[@code='d'], ', ', ./p:datafield[@tag='037C']/p:subfield[@code='e'], ', ', ./p:datafield[@tag='037C']/p:subfield[@code='f'])"/>
+
+            <xsl:if test="./p:datafield[@tag='037C'][p:subfield[@code='g']]">
+              <xsl:value-of select="concat(', ', ./p:datafield[@tag='037C'][p:subfield[@code='g']])"/>
+            </xsl:if>
+          </mods:note>
+        </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
 

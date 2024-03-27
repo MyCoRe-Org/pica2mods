@@ -60,6 +60,9 @@
       <assert test="ends-with(mods:identifier[@type='purl'], concat('/',mods:recordInfo/mods:recordIdentifier))">
         Der RecordIdentifier muss Bestandteil der PURL sein.
       </assert>
+      <assert test="matches(mods:identifier[@type='purl'], '^https[:]//purl[.].*(/ppn[0-9]{8,9}[0-9X]|/id[0-9]{8})$')">
+        Die Syntax der PURL ist ungültig.
+      </assert>
     </rule>
     
     <rule id="mods_global" abstract="true">
