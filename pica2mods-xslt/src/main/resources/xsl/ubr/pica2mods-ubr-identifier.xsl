@@ -34,9 +34,11 @@
                   and not(./p:datafield[@tag='004U']/p:subfield[@code='0' and starts-with(., 'urn:nbn:de:gbv:519-')])
                   and ./p:datafield[@tag='002@']/p:subfield[@code='0' and contains('afFsv', substring(.,2,1))])">
       <xsl:variable name="recordID" select="substring-after(substring(./p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '://purl.uni-rostock.de')][1],9), '/')" /> <!-- 4950 URL (recordID from PURL) -->
-      <mods:identifier type="urn">
+      <xsl:if test="string-length($recordID) > 0">
+        <mods:identifier type="urn">
           <xsl:value-of select="pica2mods:createURNWithChecksumForURNBase(concat('urn:nbn:de:gbv:28-', replace($recordID,'/','_'),'-'))" />
-      </mods:identifier>
+        </mods:identifier>
+      </xsl:if>
     </xsl:if>
 
     <xsl:for-each
