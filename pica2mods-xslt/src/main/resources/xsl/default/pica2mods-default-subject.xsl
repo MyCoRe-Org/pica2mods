@@ -60,7 +60,10 @@
     <xsl:for-each select="./p:datafield[@tag='144Z']"><!-- lokale Schlagworte -->
       <mods:subject authority="k10plus_field_6500">
         <xsl:if test="p:subfield[@code='9']">
-          <xsl:attribute name="valueURI">https://uri.gbv.de/document/{$MCR.PICA2MODS.DATABASE}:ppn:{p:subfield[@code='9']}</xsl:attribute>
+          <xsl:text>&#xA;      </xsl:text>
+          <xsl:comment>
+            <xsl:value-of select="concat('[PPN: ', p:subfield[@code='9'], ']')" />
+          </xsl:comment>
         </xsl:if>
         <!-- Ergänze ILN (internal library number) als Kommentar, um ggf. im Postprocessing darüber filtern zu können -->
         <xsl:text>&#xA;      </xsl:text>
