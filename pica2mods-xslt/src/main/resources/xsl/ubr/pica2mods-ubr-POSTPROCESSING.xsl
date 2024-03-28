@@ -137,7 +137,7 @@
     </mods:mods>
   </xsl:template>
 
-  <xsl:template match="mods:name" mode="ubrPostProcessing">
+  <xsl:template match="mods:name[@type='personal']" mode="ubrPostProcessing">
     <xsl:param name="personal_details" select="()" />
     <xsl:variable name="mods_name" select="." />
     <mods:name>
