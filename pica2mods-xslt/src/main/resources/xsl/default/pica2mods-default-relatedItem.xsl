@@ -363,17 +363,9 @@
         <xsl:when test="$datafield/p:subfield[@code='9']">
           <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, ./p:subfield[@code='9'])" />
           <xsl:if test="starts-with($parent/p:datafield[@tag='002@']/p:subfield[@code='0'], 'O')">
-            <xsl:for-each select="$parent/p:datafield[@tag='003@']/p:subfield[@code='0']"> <!-- 0100 PPN-->
-              <mods:identifier type="uri">
-               <xsl:value-of select="concat('https://uri.gbv.de/document/',$MCR.PICA2MODS.DATABASE, ':ppn:', .)" />
-              </mods:identifier>
-            </xsl:for-each>
-            
-            <xsl:if test="$parent/p:datafield[@tag='021A']">
-              <xsl:call-template name="simple_title">
-                <xsl:with-param name="datafield" select="$parent/p:datafield[@tag='021A']" />
-              </xsl:call-template>
-            </xsl:if>
+            <xsl:call-template name="parent_info">
+              <xsl:with-param name="parent" select="$parent" />
+            </xsl:call-template>
             <xsl:choose>
               <xsl:when test="$parent/p:datafield[@tag='004V']">
                 <mods:identifier type='doi'><xsl:value-of select="$parent/p:datafield[@tag='004V']/p:subfield[@code='0']" /></mods:identifier>
@@ -477,10 +469,11 @@
         <xsl:value-of select="concat('https://uri.gbv.de/document/',$MCR.PICA2MODS.DATABASE,':ppn:', .)" />
       </mods:identifier>
     </xsl:for-each>
-
-    <xsl:call-template name="simple_title">
-      <xsl:with-param name="datafield" select="$parent/p:datafield[@tag='021A']" />
-    </xsl:call-template>
+    <xsl:for-each select="$parent/p:datafield[@tag='021A']">
+      <xsl:call-template name="simple_title">
+        <xsl:with-param name="datafield" select="." />
+      </xsl:call-template>
+    </xsl:for-each>
     <xsl:if test="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']">
       <mods:identifier type="zdb">
         <xsl:value-of select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']" />
