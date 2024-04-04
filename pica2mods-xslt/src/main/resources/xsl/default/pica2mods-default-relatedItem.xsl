@@ -474,10 +474,10 @@
         <xsl:with-param name="datafield" select="." />
       </xsl:call-template>
     </xsl:for-each>
-    <xsl:if test="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']">
+    <xsl:for-each select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']">
       <mods:identifier type="zdb">
-        <xsl:value-of select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']" />
+        <xsl:value-of select="." />
       </mods:identifier>
-    </xsl:if>
+    </xsl:for-each>
   </xsl:template>
 </xsl:stylesheet>
