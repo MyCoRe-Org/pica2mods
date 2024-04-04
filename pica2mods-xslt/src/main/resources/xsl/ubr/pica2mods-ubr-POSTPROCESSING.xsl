@@ -183,7 +183,7 @@
     <!-- source xml: <mods:identifier type="uri">https://uri.gbv.de/document/gvk:ppn:555513815</mods:identifier> -->
     <xsl:variable name="gbv_docid" select="substring-after(., 'document/')" />
     <xsl:variable name="database" select="substring-before($gbv_docid, ':ppn:')" />
-    <xsl:variable name="ppn" select="substring-after($docid, ':ppn:')" />
+    <xsl:variable name="ppn" select="substring-after($gbv_docid, ':ppn:')" />
     <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN($database, $ppn)" />
     <mods:recordInfo>
       <xsl:if test="$parent/*">
