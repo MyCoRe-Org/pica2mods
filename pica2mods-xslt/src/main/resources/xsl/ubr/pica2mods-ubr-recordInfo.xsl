@@ -32,6 +32,11 @@
       <xsl:for-each select="./p:datafield[@tag='004U']/p:subfield[@code='0' and contains(., 'gbv:519')]"> <!-- 4950 (kein eigenes Feld) -->
         <mods:recordIdentifier source="DE-519">dbhsnb/{substring(.,20,string-length(.)-19-2)}</mods:recordIdentifier>
       </xsl:for-each>
+      <xsl:if test="not(./p:datafield[@tag='004U']/p:subfield[@code='0' and contains(., 'gbv:519')])"> <!-- 4950 (kein eigenes Feld) -->
+        <xsl:for-each select="./p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '://digibib.hs-nb.de')][1]"> <!-- 4950 URL (kein eigenes Feld) -->
+          <mods:recordIdentifier source="DE-519">dbhsnb/dbhsnb_{substring-after(., 'dbhsnb_')}</mods:recordIdentifier>
+        </xsl:for-each>
+      </xsl:if>
       <xsl:for-each select="./p:datafield[@tag='003@']/p:subfield[@code='0']"> <!-- 0100 PPN -->
         <mods:recordInfoNote type="{$MCR.PICA2MODS.DATABASE}_ppn">{.}</mods:recordInfoNote>
       </xsl:for-each>

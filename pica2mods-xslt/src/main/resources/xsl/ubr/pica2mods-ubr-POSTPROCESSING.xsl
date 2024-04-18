@@ -178,7 +178,36 @@
     </mods:name>
   </xsl:template>
   
-  <xsl:template match="mods:identifier[@type='uri']" mode="ubrPostProcessing">
+  <xsl:template match="//mods:relatedItem/mods:identifier[@type='uri']" mode="ubrPostProcessing">
+    <!-- add recordInfo for our own relatedItems from uri -->
+    <!-- source xml: <mods:identifier type="uri">https://uri.gbv.de/document/gvk:ppn:555513815</mods:identifier> -->
+    <xsl:variable name="gbv_docid" select="substring-after(., 'document/')" />
+    <xsl:variable name="database" select="substring-before($gbv_docid, ':ppn:')" />
+    <xsl:variable name="ppn" select="substring-after($gbv_docid, ':ppn:')" />
+    <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN($database, $ppn)" />
+    <mods:recordInfo>
+      <xsl:if test="$parent/*">
+        <!-- 4950 (recordIdentifier from PURL / URL, ein eigenes Feld) -->
+        <xsl:for-each select="$parent/p:datafield[@tag='017C']/p:subfield[@code='u'][contains(., '://purl.uni-rostock.de/')][1]">
+          <mods:recordIdentifier source="DE-28">{substring-after(substring(.,9), '/')}</mods:recordIdentifier>
+        </xsl:for-each>
+        <xsl:for-each select="$parent/p:datafield[@tag='004U']/p:subfield[@code='0' and contains(., 'gbv:519')][1]"> 
+          <mods:recordIdentifier source="DE-519">dbhsnb/{substring(.,20,string-length(.)-19-2)}</mods:recordIdentifier>
+        </xsl:for-each>
+        <xsl:for-each select="$parent[not(p:datafield[@tag='004U']/p:subfield[@code='0' and contains(., 'gbv:519')])]/p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '://digibib.hs-nb.de')][1]">
+            <mods:recordIdentifier source="DE-519">dbhsnb/dbhsnb_{substring-after(., 'dbhsnb_')}</mods:recordIdentifier>
+        </xsl:for-each>
+      </xsl:if>
+      <mods:recordInfoNote type="{$database}_ppn">
+        <xsl:value-of select="$ppn" /> <!-- 0100 PPN -->
+      </mods:recordInfoNote>
+    </mods:recordInfo>
+    <xsl:for-each select="$parent/p:datafield[@tag='017C']/p:subfield[@code='u'][contains(., '://purl.uni-rostock.de/') or contains(., '://digibib.hs-nb.de/')][1]">
+      <mods:identifier type="purl">{replace(., 'http://', 'https://')}</mods:identifier>
+    </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template match="mods:mods/mods:identifier[@type='uri']" mode="ubrPostProcessing">
     <!--PPN for k10plus as URI - deleted! / we use recordInfo/recordSourceNote instead -->
   </xsl:template>
 
