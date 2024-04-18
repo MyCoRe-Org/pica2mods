@@ -40,10 +40,19 @@
           </xsl:choose>
         </xsl:for-each>
       
+        <!-- UBR Details zu Personen -->
         <xsl:for-each
-          select="./p:datafield[@tag='220B']/p:subfield[@code='a' and starts-with(., 'personal_details:')]"><!-- Details zu personen -->
+          select="./p:datafield[@tag='220B']/p:subfield[@code='a' and starts-with(., 'personal_details:')]">
           <mods:note type="personal_details">
             <xsl:value-of select="normalize-space(substring-after(., 'personal_details:'))" />
+          </mods:note>
+        </xsl:for-each>
+        
+        <!-- UBR Details zu anderen Lizenzen -->
+        <xsl:for-each
+          select="./p:datafield[@tag='220B']/p:subfield[@code='a' and starts-with(., 'license_other:')]">
+          <mods:note type="license_other">
+            <xsl:value-of select="normalize-space(substring-after(., 'license_other:'))" />
           </mods:note>
         </xsl:for-each>
 
