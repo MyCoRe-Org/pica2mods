@@ -177,7 +177,20 @@
       </xsl:for-each>
     </mods:name>
   </xsl:template>
-  
+  <xsl:template match="mods:note[@type='license_other']" mode="ubrPostProcessing">
+    <xsl:variable name="lic_details" select="json-to-xml(.)" />
+    <xsl:for-each select="$lic_details/json:array/json:map">
+      <mods:accessCondition type="local terms of use">
+        <xsl:if test="json:string[@key='link']">
+          <xsl:attribute name="xlink:href"><xsl:value-of select="json:string[@key='link']" /></xsl:attribute>
+        </xsl:if>
+        <xsl:if test="json:string[@key='text']">
+          <xsl:value-of select="json:string[@key='text']" />
+        </xsl:if>
+      </mods:accessCondition>
+    </xsl:for-each>
+  </xsl:template>
+ 
   <xsl:template match="mods:identifier[@type='uri']" mode="ubrPostProcessing">
     <!--PPN for k10plus as URI - deleted! / we use recordInfo/recordSourceNote instead -->
   </xsl:template>
