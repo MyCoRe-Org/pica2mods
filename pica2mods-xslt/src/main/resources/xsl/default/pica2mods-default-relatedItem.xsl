@@ -241,6 +241,27 @@
                   <mods:number><xsl:value-of select="./p:subfield[@code='i']" /></mods:number>
                 </mods:detail>
               </xsl:if>
+              <xsl:variable name="year" select="number(./p:subfield[@code='j'])"/>
+              <xsl:variable name="month" select="number(./p:subfield[@code='c'])"/>
+              <xsl:variable name="day" select="number(./p:subfield[@code='b'])"/>
+              <xsl:variable name="date">
+                <xsl:choose>
+                  <xsl:when test="$year and string($year)!='NaN' and $month and string($month)!='NaN' and $day and string($day)!='NaN'">
+                    <xsl:value-of select="concat(format-number($year, '0000'), '-', format-number($month, '00'), '-', format-number($day, '00'))"/>
+                  </xsl:when>
+                  <xsl:when test="$year and string($year)!='NaN' and $month and string($month)!='NaN'">
+                    <xsl:value-of select="concat(format-number($year, '0000'), '-', format-number($month, '00'))"/>
+                  </xsl:when>
+                  <xsl:when test="$year and string($year)!='NaN'">
+                    <xsl:value-of select="format-number($year, '0000')"/>
+                  </xsl:when>
+                </xsl:choose>
+              </xsl:variable>
+              <xsl:if test="string-length($date)&gt;0">
+                <mods:date encoding="w3cdtf">
+                  <xsl:value-of select="$date"/>
+                </mods:date>
+              </xsl:if>
             </xsl:for-each>  
             <xsl:if test="./p:subfield[@code='x']">
               <mods:text type="sortstring">
