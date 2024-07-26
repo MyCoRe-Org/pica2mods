@@ -246,13 +246,13 @@
               <xsl:variable name="day" select="number(./p:subfield[@code='b'])"/>
               <xsl:variable name="date">
                 <xsl:choose>
-                  <xsl:when test="$year and string($year)!='NaN' and $month and string($month)!='NaN' and $day and string($day)!='NaN'">
+                  <xsl:when test="$year and $month and $day">
                     <xsl:value-of select="concat(format-number($year, '0000'), '-', format-number($month, '00'), '-', format-number($day, '00'))"/>
                   </xsl:when>
-                  <xsl:when test="$year and string($year)!='NaN' and $month and string($month)!='NaN'">
+                  <xsl:when test="$year and $month">
                     <xsl:value-of select="concat(format-number($year, '0000'), '-', format-number($month, '00'))"/>
                   </xsl:when>
-                  <xsl:when test="$year and string($year)!='NaN'">
+                  <xsl:when test="$year">
                     <xsl:value-of select="format-number($year, '0000')"/>
                   </xsl:when>
                 </xsl:choose>
