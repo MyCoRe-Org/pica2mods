@@ -85,7 +85,7 @@
         <mods:edition>[Electronic edition]</mods:edition>
     </mods:originInfo>
     <mods:recordInfo>
-        <mods:recordIdentifier source="DE-28">rosdok/ppn1747633283</mods:recordIdentifier>
+        <mods:recordIdentifier source="DE-28">rosdok_ppn1747633283</mods:recordIdentifier>
         <mods:recordOrigin>Converted from PICA to MODS using Pica2Mods XSLT Transformator 2.0-SNAPSHOT [SCM: "master" "v1.3.1-46" "2021-02-26T20:53:04+0100"]</mods:recordOrigin>
     </mods:recordInfo>
     <mods:note type="source note">GutachterInnen: Prof. Dr. med. Timo Kirschstein (Oscar Langendorff Institut für Physiologie, Universitätsmedizin Rostock), Prof. Dr. med. Astrid Bertsche (Kinder- und Jugendklinik, Universitätsmedizin Rostock), Prof. Dr. med. Toni Schneider (Universitätsklinikum Köln, Institut für Neurophysiologie)</mods:note>
