@@ -35,6 +35,11 @@
         <xsl:value-of select="." />
       </mods:identifier>
     </xsl:for-each>
+    <xsl:for-each select="./p:datafield[@tag='004R']/p:subfield[@code='0']">
+      <mods:identifier type="hdl">
+        <xsl:value-of select="." />
+      </mods:identifier>
+    </xsl:for-each>
     <xsl:for-each select="./p:datafield[@tag='004P' or @tag='004A' or @tag='004J']/p:subfield[@code='0']"> <!-- ISBN, ISBN einer anderen phys. Form (z.B. printISBN), ISBN der Reproduktion -->
       <mods:identifier type="isbn"> <!-- 200x, ISBN-13 -->
         <xsl:value-of select="." />
