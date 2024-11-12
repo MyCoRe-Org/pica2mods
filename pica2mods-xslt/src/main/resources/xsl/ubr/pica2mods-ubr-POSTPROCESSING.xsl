@@ -203,7 +203,7 @@
       <xsl:if test="$parent/*">
         <!-- 4950 (recordIdentifier from PURL / URL, ein eigenes Feld) -->
         <xsl:for-each select="$parent/p:datafield[@tag='017C']/p:subfield[@code='u'][contains(., '://purl.uni-rostock.de/')][1]">
-          <mods:recordIdentifier source="DE-28">{substring-after(substring(.,9), '/')}</mods:recordIdentifier>
+          <mods:recordIdentifier source="DE-28">{translate(substring-after(substring(.,9), '/'),'/','_')}</mods:recordIdentifier>
         </xsl:for-each>
         <xsl:for-each select="$parent/p:datafield[@tag='004U']/p:subfield[@code='0' and contains(., 'gbv:519')][1]"> 
           <mods:recordIdentifier source="DE-519">dbhsnb/{substring(.,20,string-length(.)-19-2)}</mods:recordIdentifier>

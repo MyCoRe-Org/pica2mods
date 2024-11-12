@@ -27,7 +27,7 @@
     <mods:recordInfo>
       <xsl:for-each
         select="./p:datafield[@tag='017C']/p:subfield[@code='u' and contains(., '://purl.uni-rostock.de')][1]"> <!-- 4950 URL (kein eigenes Feld) -->
-        <mods:recordIdentifier source="DE-28">{substring-after(substring(.,9), '/')}</mods:recordIdentifier>
+        <mods:recordIdentifier source="DE-28">{translate(substring-after(substring(.,9), '/'),'/','_')}</mods:recordIdentifier>
       </xsl:for-each>
       <xsl:for-each select="./p:datafield[@tag='004U']/p:subfield[@code='0' and contains(., 'gbv:519')]"> <!-- 4950 (kein eigenes Feld) -->
         <mods:recordIdentifier source="DE-519">dbhsnb/{substring(.,20,string-length(.)-19-2)}</mods:recordIdentifier>
