@@ -43,7 +43,7 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="pica0500_2" select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
-        <xsl:for-each select="./p:datafield[@tag='036E' or @tag='036L']/p:subfield[@code='a']/text()) | ./p:datafield[@tag='037J']/p:subfield[@code='f']/text()">
+        <xsl:for-each select="./p:datafield[@tag='036E' or @tag='036L']/p:subfield[@code='a']/text() | ./p:datafield[@tag='037J']/p:subfield[@code='f']/text()">
           <xsl:variable name="pica4110" select="lower-case(.)" />
           <xsl:for-each select="document('classification:doctype')//category[./label[@xml:lang='x-pica-0500-2']]">
             <xsl:if test="starts-with($pica4110, lower-case(./label[@xml:lang='x-pica-4110']/@text)) and contains(./label[@xml:lang='x-pica-0500-2']/@text, $pica0500_2)">
