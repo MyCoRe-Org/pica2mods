@@ -110,8 +110,15 @@
  
    <!-- delete lokal subjects from field 6500 / 144Z -->
   <xsl:template match="mods:mods/mods:subject[@authority='k10plus_field_6500']"
-    mode="ubrPostProcessing" />   
+    mode="ubrPostProcessing" />
     
+  <!-- delete other originInfo[@eventType=digitization] -->
+  <xsl:template match="mods:mods/mods:originInfo[@eventType='digitization'
+    and not(contains('Universitätsbibliothek Rostock|Landesbibliothek Schwerin', ./mods:publisher))]"
+    mode="ubrPostProcessing" />
+
+  <!-- delete other mods:note[@type=available volumes] -->
+  <xsl:template match="mods:mods/mods:note[@type='available_volumes']" mode="ubrPostProcessing" />
 
   <xsl:template match="*|@*|processing-instruction()|comment()" mode="ubrPostProcessing">
     <xsl:copy>
