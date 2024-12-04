@@ -62,10 +62,15 @@
     <xsl:if test="$picaMode = 'REPRO'"> 
         <mods:originInfo eventType="digitization">
           <xsl:choose>
-            <xsl:when test="./p:datafield[@tag='011B']"> <!-- 1109 -->
+            <xsl:when test="./p:datafield[@tag='011B'] and not(./p:datafield[tag='037J']/p:subfield[@code='d'])"> <!-- 1109, not(4238) -->
               <xsl:call-template name="common_date_captured">
                 <xsl:with-param name="datafield" select="./p:datafield[@tag='011B']" />
               </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="./p:datafield[tag='037J']/p:subfield[@code='d']"> <!-- 4238 -->
+              <mods:dateCaptured keyDate="yes">
+                <xsl:value-of select="$datafield/p:subfield[@code='d']" />
+              </mods:dateCaptured>
             </xsl:when>
             <xsl:otherwise> <!-- 1100 / 011@ -->
               <xsl:call-template name="common_date_captured">
