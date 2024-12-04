@@ -113,9 +113,19 @@
     mode="ubrPostProcessing" />
     
   <!-- delete other originInfo[@eventType=digitization] -->
-  <xsl:template match="mods:mods/mods:originInfo[@eventType='digitization'
-    and not(contains('Universitätsbibliothek Rostock|Landesbibliothek Schwerin', ./mods:publisher))]"
-    mode="ubrPostProcessing" />
+  <xsl:template match="mods:mods/mods:originInfo[@eventType='digitization']" mode="ubrPostProcessing">
+    <xsl:variable name="oi" select="." />
+    <xsl:for-each select="comment()">
+      <xsl:if test="starts-with(., '[Gesamttitel: ')">
+        <xsl:variable name="pica4110" select="lower-case(replace(., '\[Gesamttitel: (.*)\]','$1'))" />
+        <xsl:for-each select="document('classification:provider')//category/label[@xml:lang='x-pica-4110']">
+          <xsl:if test="$pica4110 = replace(lower-case(./@text), '%default%', 'digitalisierte drucke der universitätsbibliothek rostock')">
+             <xsl:copy-of select="$oi" />
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
 
   <!-- delete other mods:note[@type=available volumes] -->
   <xsl:template match="mods:mods/mods:note[@type='available_volumes']" mode="ubrPostProcessing" />

@@ -74,11 +74,24 @@
                     <xsl:with-param name="datafield" select="." />
                   </xsl:call-template>
                 </xsl:if>
-                <xsl:if test="./p:subfield[@code='m']">
-                  <mods:frequency>
-                    <xsl:value-of select="./p:subfield[@code='m']" />
-                  </mods:frequency>
-                </xsl:if>      	
+                <xsl:for-each select="./p:subfield[@code='f']">
+                  <xsl:text>&#xA;      </xsl:text>
+                  <xsl:comment>
+                    <xsl:value-of select="concat('[Gesamttitel: ', ./text(), ']')" />
+                  </xsl:comment>
+                </xsl:for-each>
+                <xsl:for-each select="./p:subfield[@code='m']">
+                  <xsl:text>&#xA;      </xsl:text>
+                  <xsl:comment>
+                    <xsl:value-of select="concat('[Reproduzierte Teile: ', ./text(), ']')" />
+                  </xsl:comment>
+                </xsl:for-each>
+                <xsl:for-each select="./p:subfield[@code='n']">
+                  <xsl:text>&#xA;      </xsl:text>
+                  <xsl:comment>
+                    <xsl:value-of select="concat('[Anmerkung: ', ./text(), ']')" />
+                  </xsl:comment>
+                </xsl:for-each>      	
       	      </mods:originInfo>
       	    </xsl:for-each>
       	  </xsl:when>
