@@ -129,10 +129,9 @@
     <xsl:variable name="pica0500_2"
       select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
     <xsl:if test="$pica0500_2='b'">
-      <xsl:for-each
-        select="./p:datafield[@tag='017C'][./p:subfield[@code='x']]">
-        <mods:note type="available_volumes{if (contains(./p:subfield[@code='u'], '://purl.uni-rostock.de')) then ('@DE-28') else ('')}">
-          <xsl:value-of select="substring-after(./p:subfield[@code='x'],'; ')" />
+      <xsl:for-each select="./p:datafield[@tag='017C']/p:subfield[@code='x']">
+        <mods:note type="available_volumes{if (contains(../p:subfield[@code='u'], '://purl.uni-rostock.de')) then ('@DE-28') else ('')}">
+          <xsl:value-of select="substring-after(.,'; ')" />
         </mods:note>
       </xsl:for-each>
     </xsl:if>
