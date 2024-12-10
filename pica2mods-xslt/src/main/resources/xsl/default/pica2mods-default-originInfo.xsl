@@ -59,52 +59,90 @@
         </xsl:if>
       </mods:originInfo>
 
-    <xsl:if test="$picaMode = 'REPRO'"> 
-        <mods:originInfo eventType="digitization">
-          <xsl:choose>
-            <xsl:when test="./p:datafield[@tag='011B']"> <!-- 1109 -->
-              <xsl:call-template name="common_date_captured">
-                <xsl:with-param name="datafield" select="./p:datafield[@tag='011B']" />
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise> <!-- 1100 / 011@ -->
-              <xsl:call-template name="common_date_captured">
-                <xsl:with-param name="datafield" select="./p:datafield[@tag='011@']" />
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:choose>
-            <xsl:when test="./p:datafield[@tag='033N']"> <!-- 4048 -->
-              <xsl:for-each select="./p:datafield[@tag='033N']">
-                <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
-                  <xsl:with-param name="datafield" select="." />
-                </xsl:call-template>
-              </xsl:for-each>
-            </xsl:when>
-            <xsl:when test="./p:datafield[@tag='033B']"> <!-- 4031 (nicht RDA) -->
-              <xsl:for-each select="./p:datafield[@tag='033B']">
-                <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
-                  <xsl:with-param name="datafield" select="." />
-                </xsl:call-template>
-              </xsl:for-each>
-            </xsl:when>
-            <xsl:when test="./p:datafield[@tag='033P']"> <!-- 4067 (nicht RDA) -->
-              <xsl:for-each select="./p:datafield[@tag='033P']">
-                <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
-                  <xsl:with-param name="datafield" select="." />
-                </xsl:call-template>
-              </xsl:for-each>
-            </xsl:when>
-            <xsl:otherwise> <!-- 4030 / 033A -->
-              <xsl:for-each select="./p:datafield[@tag='033A']">
-                <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
-                  <xsl:with-param name="datafield" select="." />
-                </xsl:call-template>
-              </xsl:for-each>
-            </xsl:otherwise>
-          </xsl:choose>
-        </mods:originInfo>
-        </xsl:if>
+      <xsl:if test="$picaMode = 'REPRO'"> 
+        <xsl:choose>
+      	  <xsl:when test="./p:datafield[@tag='037J']"> <!-- 4238 -->
+            <xsl:for-each select="./p:datafield[@tag='037J' and ./p:subfield[@code='b' or @code='c']]">
+              <mods:originInfo eventType="digitization">
+                <xsl:if test="./p:subfield[@code='d']">
+                  <mods:dateCaptured keyDate="yes">
+                    <xsl:value-of select="./p:subfield[@code='d']" />
+                  </mods:dateCaptured>
+                </xsl:if>
+                <xsl:if test="./p:subfield[@code='b' or @code='c']">
+                  <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
+                    <xsl:with-param name="datafield" select="." />
+                  </xsl:call-template>
+                </xsl:if>
+                <xsl:for-each select="./p:subfield[@code='f']">
+                  <xsl:text>&#xA;      </xsl:text>
+                  <xsl:comment>
+                    <xsl:value-of select="concat('[Gesamttitel: ', ./text(), ']')" />
+                  </xsl:comment>
+                </xsl:for-each>
+                <xsl:for-each select="./p:subfield[@code='m']">
+                  <xsl:text>&#xA;      </xsl:text>
+                  <xsl:comment>
+                    <xsl:value-of select="concat('[Reproduzierte Teile: ', ./text(), ']')" />
+                  </xsl:comment>
+                </xsl:for-each>
+                <xsl:for-each select="./p:subfield[@code='n']">
+                  <xsl:text>&#xA;      </xsl:text>
+                  <xsl:comment>
+                    <xsl:value-of select="concat('[Anmerkung: ', ./text(), ']')" />
+                  </xsl:comment>
+                </xsl:for-each>      	
+      	      </mods:originInfo>
+      	    </xsl:for-each>
+      	  </xsl:when>
+      	  <xsl:otherwise>
+            <mods:originInfo eventType="digitization">
+              <xsl:choose>
+                <xsl:when test="./p:datafield[@tag='011B']"> <!-- 1109 -->
+                  <xsl:call-template name="common_date_captured">
+                    <xsl:with-param name="datafield" select="./p:datafield[@tag='011B']" />
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise> <!-- 1100 / 011@ -->
+                  <xsl:call-template name="common_date_captured">
+                    <xsl:with-param name="datafield" select="./p:datafield[@tag='011@']" />
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:choose>
+                <xsl:when test="./p:datafield[@tag='033N']"> <!-- 4048 -->
+                  <xsl:for-each select="./p:datafield[@tag='033N']">
+                    <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
+                      <xsl:with-param name="datafield" select="." />
+                    </xsl:call-template>
+                  </xsl:for-each>
+                </xsl:when>
+                <xsl:when test="./p:datafield[@tag='033B']"> <!-- 4031 (nicht RDA) -->
+                  <xsl:for-each select="./p:datafield[@tag='033B']">
+                    <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
+                      <xsl:with-param name="datafield" select="." />
+                    </xsl:call-template>
+                  </xsl:for-each>
+                </xsl:when>
+                <xsl:when test="./p:datafield[@tag='033P']"> <!-- 4067 (nicht RDA) -->
+                  <xsl:for-each select="./p:datafield[@tag='033P']">
+                    <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
+                      <xsl:with-param name="datafield" select="." />
+                    </xsl:call-template>
+                  </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise> <!-- 4030 / 033A -->
+                  <xsl:for-each select="./p:datafield[@tag='033A']">
+                    <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
+                      <xsl:with-param name="datafield" select="." />
+                    </xsl:call-template>
+                  </xsl:for-each>
+                </xsl:otherwise>
+              </xsl:choose>
+            </mods:originInfo>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:if>
 
         <xsl:if test="./p:datafield[@tag='033E']"> <!-- 4034 -->
           <mods:originInfo eventType="upload">
@@ -126,6 +164,31 @@
       <!-- Wenn es einen Namen gibt und dieser mit Universität, Universitätsbibliothek beginnt und es einen oder mehrere 
         Ortsnamen gibt, die nicht im Namen der Institution enthalten sind, dann ergänze den Ortsnamen hinter den Insitutionsnamen 
         Beachte: ($sequence = $item) prüft, ob das Item bestandteil der Liste ist -->
+      <xsl:when
+        test="$datafield/@tag='037J' and $datafield/p:subfield[@code='c' 
+                 and (tokenize('universität,universitätsbibliothek,hochschule,hochschulbibliothek,universitätsverlag,stadtarchiv',',') = tokenize(lower-case(.),' ')[1]) 
+                 and $datafield/p:subfield[@code='b' and not(contains($datafield/p:subfield[@code='c'][1], . ))]] ">
+        <mods:publisher>
+          <xsl:value-of
+            select="concat($datafield/p:subfield[@code='c'][1], ' ', $datafield/p:subfield[@code='b'][1])" />
+        </mods:publisher>
+      </xsl:when>
+      <xsl:when
+        test="$datafield/@tag='037J' and $datafield/p:subfield[@code='c' 
+                 and (tokenize('university,library',',') = tokenize(lower-case(.),' ')[1]) 
+                 and $datafield/p:subfield[@code='b' and not(contains($datafield/p:subfield[@code='c'][1], . ))]] ">
+        <mods:publisher>
+          <xsl:value-of
+            select="concat($datafield/p:subfield[@code='c'][1], ' of ', $datafield/p:subfield[@code='b'][1])" />
+        </mods:publisher>
+      </xsl:when>
+      <xsl:when test="$datafield/@tag='037J' and $datafield/p:subfield[@code='c']">
+        <xsl:for-each select="$datafield/p:subfield[@code='c']">
+          <mods:publisher>
+            <xsl:value-of select="." />
+          </mods:publisher>
+        </xsl:for-each>
+      </xsl:when>
       <xsl:when
         test="$datafield/p:subfield[@code='n' 
                  and (tokenize('universität,universitätsbibliothek,hochschule,hochschulbibliothek,universitätsverlag,stadtarchiv',',') = tokenize(lower-case(.),' ')[1]) 
@@ -152,13 +215,27 @@
         </xsl:for-each>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:for-each select="$datafield/p:subfield[@code='p']">
-      <mods:place>
-        <mods:placeTerm type="text">
-          <xsl:value-of select="." />
-        </mods:placeTerm>
-      </mods:place>
-    </xsl:for-each>
+    
+    <xsl:choose>
+      <xsl:when test="$datafield/@tag='037J' and $datafield/p:subfield[@code='b']">
+        <xsl:for-each select="$datafield/p:subfield[@code='b']">
+          <mods:place>
+            <mods:placeTerm type="text">
+              <xsl:value-of select="." />
+            </mods:placeTerm>
+          </mods:place>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="$datafield/p:subfield[@code='p']">
+          <mods:place>
+            <mods:placeTerm type="text">
+              <xsl:value-of select="." />
+            </mods:placeTerm>
+          </mods:place>
+        </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="common_issuance">

@@ -125,7 +125,7 @@
     <xsl:param name="record" as="element()" />
     <xsl:choose>
       <xsl:when
-        test="$record/p:datafield[@tag='011B']/p:subfield[@code='a'] or $record/p:datafield[@tag='011@']/p:subfield[@code='r'] or $record/p:datafield[@tag='039I']/p:subfield[@code='i' and text()='Elektronische Reproduktion von']">
+        test="$record/p:datafield[@tag='011B']/p:subfield[@code='a'] or $record/p:datafield[@tag='011@']/p:subfield[@code='r'] or $record/p:datafield[@tag='037J'] or $record/p:datafield[@tag='039I']/p:subfield[@code='i' and text()='Elektronische Reproduktion von']">
         <xsl:value-of select="'REPRO'" />
       </xsl:when>
       <xsl:otherwise>
