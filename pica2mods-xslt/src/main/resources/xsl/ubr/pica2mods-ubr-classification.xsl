@@ -107,8 +107,8 @@
 
   <xsl:template name="COMMON_UBR_Class_Doctype">
     <xsl:variable name="pica0500_2"
-      select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
-    <xsl:for-each select="./p:datafield[@tag='036E' or @tag='036L']/p:subfield[@code='a']/text()">
+      select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />    <!-- 4170, 4110 | 4238  -->
+    <xsl:for-each select="./p:datafield[@tag='036E' or @tag='036L']/p:subfield[@code='a']/text() | ./p:datafield[@tag='037J']/p:subfield[@code='f']/text()">
       <xsl:variable name="pica4110" select="lower-case(.)" />
       <xsl:for-each
         select="document('classification:doctype')//category[./label[@xml:lang='x-pica-0500-2']]">
@@ -126,7 +126,7 @@
   </xsl:template>
 
   <xsl:template name="COMMON_UBR_Class_Collection">
-    <xsl:for-each select="./p:datafield[@tag='036E' or @tag='036L']/p:subfield[@code='a']/text()">
+    <xsl:for-each select="./p:datafield[@tag='036E' or @tag='036L']/p:subfield[@code='a']/text() | ./p:datafield[@tag='037J']/p:subfield[@code='f']/text()">
       <xsl:variable name="pica4110" select="lower-case(.)" />
       <xsl:for-each select="document('classification:collection')//category/label[@xml:lang='x-pica-4110']">
         <xsl:if test="starts-with($pica4110, lower-case(./@text))">
@@ -143,7 +143,7 @@
   </xsl:template>
   <xsl:template name="COMMON_UBR_Class_Provider">
     <xsl:variable name="provider_class">
-      <xsl:for-each select="./p:datafield[@tag='036E' or @tag='036L']/p:subfield[@code='a']/text()">
+      <xsl:for-each select="./p:datafield[@tag='036E' or @tag='036L']/p:subfield[@code='a']/text() | ./p:datafield[@tag='037J']/p:subfield[@code='f']/text()">
         <xsl:variable name="pica4110" select="lower-case(.)" />
         <xsl:for-each select="document('classification:provider')//category/label[@xml:lang='x-pica-4110']">
           <xsl:if test="$pica4110 = lower-case(./@text)">

@@ -36,3 +36,10 @@ $ git checkout develop
 $ git merge --no-ff main
 $ git push origin develop
 ```
+
+### Chechk successful deployment
+- on Sonatype:  
+  <https://oss.sonatype.org/#nexus-search;quick~pica2mods>
+- later on Maven Central  
+  (synchronization with Maven Central can take up to 24 h):  
+  <https://mvnrepository.com/artifact/org.mycore.pica2mods>
