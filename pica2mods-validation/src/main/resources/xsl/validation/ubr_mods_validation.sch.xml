@@ -57,7 +57,7 @@
       <assert test="mods:identifier[@type='purl']">
         Das Dokument muss eine PURL haben.
       </assert>
-      <assert test="ends-with(mods:identifier[@type='purl'], concat('/',mods:recordInfo/mods:recordIdentifier))">
+      <assert test="ends-with(mods:identifier[@type='purl'], concat('/',replace(mods:recordInfo/mods:recordIdentifier,'_','/')))">
         Der RecordIdentifier muss Bestandteil der PURL sein.
       </assert>
       <assert test="matches(mods:identifier[@type='purl'], '^https[:]//purl[.].*(/ppn[0-9]{8,9}[0-9X]|/id[0-9]{8})$')">
