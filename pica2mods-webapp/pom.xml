@@ -6,14 +6,12 @@
     <artifactId>pica2mods-parent</artifactId>
     <version>2.12-SNAPSHOT</version>
   </parent>
-  <artifactId>pica2mods-web</artifactId>
+  <artifactId>pica2mods-webapp</artifactId>
   <packaging>jar</packaging>
   <name>Pica2MODS Web Application</name>
-  <properties>
-    <maven.compiler.release>17</maven.compiler.release>
-    <maven.deploy.skip>true</maven.deploy.skip>
-  </properties>
+  <url>https://github.com/MyCoRe-Org/pica2mods/tree/main/pica2mods-webapp</url>
   <build>
+    <finalName>${project.artifactId}</finalName>
     <plugins>
       <!-- see: https://memorynotfound.com/spring-boot-create-executable-using-maven-without-parent-pom/ -->
       <plugin>
@@ -30,21 +28,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <!-- exclude pica2mods webapp from deployment -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <configuration>
-          <skipStaging>true</skipStaging>
-		</configuration>
       </plugin>
     </plugins>
   </build>
