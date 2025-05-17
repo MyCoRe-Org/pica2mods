@@ -81,7 +81,7 @@ public class Pica2ModsManager {
         return null;
     }
 
-    //https://unapi.k10plus.de/?&format=picaxml&id=opac-de-28:ppn:1662436106
+    // https://unapi.k10plus.de/?&format=picaxml&id=opac-de-28:ppn:1662436106
     public Element retrievePicaXMLViaUnAPI(String catalogId, String ppn) throws Pica2ModsException {
         if (config.getCatalogs().get(catalogId) != null) {
             String unapiKey = config.getCatalogs().get(catalogId).getUnapiKey() + ":ppn:" + ppn;
@@ -90,7 +90,7 @@ public class Pica2ModsManager {
         return null;
     }
 
-    //https://unapi.k10plus.de/?&format=picaxml&id=opac-de-28:ppn:1662436106
+    // https://unapi.k10plus.de/?&format=picaxml&id=opac-de-28:ppn:1662436106
     public Element retrievePicaXMLViaUnAPI(String unapiKey) throws Pica2ModsException {
         String theURL = config.getUnapiUrl() + "?&format=picaxml&id=" + unapiKey;
         return retrievePicaXMLFromURL(theURL);
@@ -155,8 +155,8 @@ public class Pica2ModsManager {
         }
     }
 
-    public void createMODSDocumentViaUnAPI(String catalogId, String ppn, Result result,
-        Map<String, String> parameter) throws Pica2ModsException {
+    public void createMODSDocumentViaUnAPI(String catalogId, String ppn, Result result, Map<String, String> parameter)
+        throws Pica2ModsException {
         Element picaRecord = retrievePicaXMLViaUnAPI(catalogId, ppn);
         try {
             createMODSDocumentFromPicaXML(picaRecord, catalogId, result, parameter);
@@ -167,13 +167,12 @@ public class Pica2ModsManager {
 
     private void createMODSDocumentFromPicaXML(Element picaRecord, String catalogId, Result result,
         Map<String, String> parameter) throws TransformerException {
-        //uses the configured Transformer-Factory (e.g. XALAN, if installed)
-        //TransformerFactory TRANS_FACTORY = TransformerFactory.newInstance();
-        //Java 9 provides a method newDefaultInstance() to retrieve the built-in system default implementation
+        // uses the configured Transformer-Factory (e.g. XALAN, if installed)
+        // TransformerFactory TRANS_FACTORY = TransformerFactory.newInstance();
+        // Java 9 provides a method newDefaultInstance() to retrieve the
+        // built-in system default implementation
 
-        //for Java 8 we set the class name explicitely
-        TransformerFactory TRANS_FACTORY = TransformerFactory.newInstance(
-            "net.sf.saxon.TransformerFactoryImpl", getClass().getClassLoader());
+        TransformerFactory TRANS_FACTORY = TransformerFactory.newDefaultInstance();
 
         TRANS_FACTORY.setURIResolver(new Pica2ModsXSLTURIResolver(this));
         TRANS_FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -206,8 +205,15 @@ public class Pica2ModsManager {
 
     public static String outputXML(Node node) throws Pica2ModsException {
         // ein Stylesheet zur Identitätskopie ...
-        String IDENTITAETS_XSLT = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>"
-            + "<xsl:template match='/'><xsl:copy-of select='.'/>" + "</xsl:template></xsl:stylesheet>";
+        String IDENTITAETS_XSLT = """
+            <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+              <xsl:template match="@*|node()">
+                <xsl:copy>
+            	  <xsl:apply-templates select="@*|node()" />
+            	</xsl:copy>
+              </xsl:template>
+            </xsl:stylesheet>
+            """;
 
         Source xmlSource = new DOMSource(node);
         Source xsltSource = new StreamSource(new StringReader(IDENTITAETS_XSLT));
@@ -227,7 +233,7 @@ public class Pica2ModsManager {
         return sw.toString();
     }
 
-    //does not work when application was started inside Eclipse
+    // does not work when application was started inside Eclipse
     public static String retrieveBuildInfosFromManifest(boolean addCommitInfos) {
 
         Enumeration<URL> resources;
@@ -240,11 +246,11 @@ public class Pica2ModsManager {
                 Attributes attributes = manifest.getMainAttributes();
                 if (Objects.equals(attributes.getValue("Implementation-Artifact-ID"), "pica2mods-xslt")) {
                     StringBuilder sb = new StringBuilder();
-                    sb.append(attributes.getValue("Implementation-Title"))
-                        .append(" ").append(attributes.getValue("Implementation-Version"));
+                    sb.append(attributes.getValue("Implementation-Title")).append(" ")
+                        .append(attributes.getValue("Implementation-Version"));
                     if (addCommitInfos) {
-                        sb.append(" [SCM: \"").append(attributes.getValue("SCM-Branch"))
-                            .append("\" \"").append(attributes.getValue("SCM-Commit"))
+                        sb.append(" [SCM: \"").append(attributes.getValue("SCM-Branch")).append("\" \"")
+                            .append(attributes.getValue("SCM-Commit"))
                             .append("\" \"" + attributes.getValue("SCM-Time")).append("\"]");
                     }
                     return sb.toString();
@@ -252,7 +258,7 @@ public class Pica2ModsManager {
             }
         } catch (IOException e) {
             LOGGER.error("Unable to read manifest entry", e);
-            //do not rethrow exception, but use default value
+            // do not rethrow exception, but use default value
         }
         return "Pica2MODS";
     }
