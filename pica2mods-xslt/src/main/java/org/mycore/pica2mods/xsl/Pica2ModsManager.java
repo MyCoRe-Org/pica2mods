@@ -172,7 +172,9 @@ public class Pica2ModsManager {
         // Java 9 provides a method newDefaultInstance() to retrieve the
         // built-in system default implementation
 
-        TransformerFactory TRANS_FACTORY = TransformerFactory.newDefaultInstance();
+        //for Saxon we set the class name explicitly
+        TransformerFactory TRANS_FACTORY = TransformerFactory.newInstance(
+            "net.sf.saxon.TransformerFactoryImpl", getClass().getClassLoader());
 
         TRANS_FACTORY.setURIResolver(new Pica2ModsXSLTURIResolver(this));
         TRANS_FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
