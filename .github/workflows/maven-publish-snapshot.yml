@@ -22,7 +22,7 @@ jobs:
         with:
           servers: |
             [{
-                "id": "central",  # Wichtig: muss zur Plugin-Konfiguration passen
+                "id": "sonatype-central",
                 "username": "${{ secrets.OSSRH_USERNAME }}",
                 "password": "${{ secrets.OSSRH_TOKEN }}"
             }]
