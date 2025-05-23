@@ -22,7 +22,8 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - uses: s4u/maven-settings-action@v3.1.0
+      - name: Create .m2/settings.xml
+        uses: s4u/maven-settings-action@v3.1.0
         with:
           servers: |
             [{
