@@ -28,8 +28,11 @@ jobs:
           servers: |
             [{
                 "id": "sonatype-central",
-                "username": "${{ secrets.OSSRH_USERNAME }}",
-                "password": "${{ secrets.OSSRH_TOKEN }}"
+                "username": "${env.SONATYPE_USERNAME}",
+                "password": "${env.SONATYPE_TOKEN}"
             }]
       - name: Publish to OSSRH with Apache Maven
+        env:
+          SONATYPE_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          SONATYPE_TOKEN:  ${{ secrets.OSSRH_TOKEN }}
         run: mvn --batch-mode deploy -P deploy-to-sonatype
