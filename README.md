@@ -8,7 +8,7 @@ Pica2MODS
 Releases deployed to MavenCentral:  
 https://mvnrepository.com/artifact/org.mycore.pica2mods/pica2mods-xslt/latest
 
-Snapshots deployed to OSS Sonatype:
-https://oss.sonatype.org/content/repositories/snapshots/org/mycore/pica2mods/mods2solr/
+Snapshots deployed to Central Sonatype Snapshot Repository:
+https://central.sonatype.com/service/rest/repository/browse/maven-snapshots/org/mycore/pica2mods/
 
 

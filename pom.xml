@@ -29,6 +29,7 @@
          check snakeyaml version on the next spring boot version update -->
     <snakeyaml.version>1.33</snakeyaml.version>
     <spring.boot.version>2.7.17</spring.boot.version>
+    <java.version>17</java.version>
   </properties>
   <build>
     <pluginManagement>
