@@ -54,7 +54,17 @@
       <xsl:attribute name="usage">primary</xsl:attribute>
       <xsl:if test="./p:subfield[@code='a']">
         <!-- PPN 101942348X contains multiple 036F$a -->
-        <xsl:variable name="mainTitle" select="./p:subfield[@code='a'][1]" />
+        <xsl:variable name="mainTitle">
+          <xsl:choose>
+            <xsl:when test="./p:subfield[@code='e'][1]">
+              <xsl:value-of select="./p:subfield[@code='e'][1]"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="./p:subfield[@code='a'][1]"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+
         <xsl:choose>
           <xsl:when test="contains($mainTitle, '@')">
             <xsl:variable name="nonSort" select="normalize-space(substring-before($mainTitle, '@'))" />
@@ -83,9 +93,19 @@
         </xsl:choose>
       </xsl:if>
 
-      <xsl:if test="./p:subfield[@code='d']">
+      <xsl:if test="./p:subfield[@code='d'] or (./p:subfield[@code='a'] and ./p:subfield[@code='e'])">
         <mods:subTitle>
-          <xsl:value-of select="./p:subfield[@code='d']" />
+          <xsl:choose>
+            <xsl:when test="./p:subfield[@code='d'] and ./p:subfield[@code='a'] and ./p:subfield[@code='e']">
+              <xsl:value-of select="concat(./p:subfield[@code='d'], '; ', ./p:subfield[@code='a'])"/>
+            </xsl:when>
+            <xsl:when test="./p:subfield[@code='a'] and ./p:subfield[@code='e']">
+              <xsl:value-of select="./p:subfield[@code='a']"/>
+            </xsl:when>
+            <xsl:when test="./p:subfield[@code='d']">
+              <xsl:value-of select="./p:subfield[@code='d']"/>
+            </xsl:when>
+          </xsl:choose>
         </mods:subTitle>
       </xsl:if>
 
