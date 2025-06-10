@@ -93,21 +93,18 @@
         </xsl:choose>
       </xsl:if>
 
-      <xsl:if test="./p:subfield[@code='d'] or (./p:subfield[@code='a'] and ./p:subfield[@code='e'])">
-        <mods:subTitle>
-          <xsl:choose>
-            <xsl:when test="./p:subfield[@code='d'] and ./p:subfield[@code='a'] and ./p:subfield[@code='e']">
-              <xsl:value-of select="concat(./p:subfield[@code='d'], '; ', ./p:subfield[@code='a'])"/>
-            </xsl:when>
-            <xsl:when test="./p:subfield[@code='a'] and ./p:subfield[@code='e']">
-              <xsl:value-of select="./p:subfield[@code='a']"/>
-            </xsl:when>
-            <xsl:when test="./p:subfield[@code='d']">
-              <xsl:value-of select="./p:subfield[@code='d']"/>
-            </xsl:when>
-          </xsl:choose>
-        </mods:subTitle>
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="./p:subfield[@code='e']">
+          <mods:subTitle>
+            <xsl:value-of select="string-join((./p:subfield[@code='d'], ./p:subfield[@code='a']), '; ')"/>
+          </mods:subTitle>
+        </xsl:when>
+        <xsl:when test="./p:subfield[@code='d']">
+          <mods:subTitle>
+            <xsl:value-of select="./p:subfield[@code='d']"/>
+          </mods:subTitle>
+        </xsl:when>
+      </xsl:choose>
 
       <!-- nur in fingierten Titel 036C / 4150 -->
       <xsl:if test="./p:subfield[@code='y']">
