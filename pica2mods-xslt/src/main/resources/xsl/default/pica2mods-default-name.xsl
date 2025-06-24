@@ -325,8 +325,8 @@
                 <xsl:for-each select="$tb/p:datafield[@tag='030A']">
                   <mods:namePart>
                     <!-- Zählung -->
-                    <xsl:if test="./p:subfield[@code='n']">
-                      <xsl:variable name="num" select="./p:subfield[@code='n']" />
+                    <xsl:variable name="num" select="./p:subfield[@code='n'][./preceding-sibling::p:subfield[1][@code='a' or @code='g']]" />
+                    <xsl:if test="$num">
                       <xsl:value-of select="$num" />
                       <xsl:if test="not(ends-with($num,'.'))"><xsl:text>.</xsl:text></xsl:if>
                       <xsl:text> </xsl:text>
@@ -335,15 +335,22 @@
                     <xsl:if test="./p:subfield[@code='a']">
                       <xsl:value-of select="./p:subfield[@code='a']" />
                     </xsl:if>
-                    <xsl:if test="./p:subfield[@code='g']">
+                    <!-- Zusätze -->
+                    <xsl:for-each select="./p:subfield[@code='g']">
                       <xsl:text> : </xsl:text>
-                      <xsl:value-of select="./p:subfield[@code='g']" />
-                    </xsl:if>
-                    <!-- Untergeordnete Einheit -->
-                    <xsl:if test="./p:subfield[@code='b']">
+                      <xsl:value-of select="." />
+                    </xsl:foreach>
+                    <!-- Untergeordnete Einheit(en) -->
+                    <xsl:for-each select="./p:subfield[@code='b']">
                       <xsl:text> ; </xsl:text>
-                      <xsl:value-of select="./p:subfield[@code='b']" />
-                    </xsl:if>
+                      <xsl:variable name="num" select="../p:subfield[@code='n'][./preceding-sibling::p:subfield[1]=current()]" />
+                      <xsl:if test="$num">
+                        <xsl:value-of select="$num" />
+                        <xsl:if test="not(ends-with($num,'.'))"><xsl:text>.</xsl:text></xsl:if>
+                        <xsl:text> </xsl:text>
+                      </xsl:if>
+                      <xsl:value-of select="." />
+                    </xsl:for-each>
                     <!-- Datum / Ort -->
                     <xsl:if test="./p:subfield[@code='d' or @code='c']">
                       <xsl:text> (</xsl:text>
@@ -467,22 +474,29 @@
       <mods:name type="conference">
         <mods:namePart>
           <!-- Zählung -->
-          <xsl:if test="./p:subfield[@code='j']">
-            <!-- Im Normdatensatz mit "." - hier ohne ? -->
-            <xsl:variable name="num" select="./p:subfield[@code='j']" />
+          <xsl:variable name="num" select="./p:subfield[@code='j'][./preceding-sibling::p:subfield[1][@code='a' or @code='g']]" />
+          <xsl:if test="$num">
             <xsl:value-of select="$num" />
+            <!-- Im Normdatensatz ggf. mit "." - hier ohne ? -->
             <xsl:if test="not(ends-with($num,'.'))"><xsl:text>.</xsl:text></xsl:if>
             <xsl:text> </xsl:text>
           </xsl:if>
+          <xsl:if test="./p:subfield[@code='j']">
           <!-- Hauptname -->
           <xsl:if test="./p:subfield[@code='a']">
             <xsl:value-of select="./p:subfield[@code='a']" />
           </xsl:if>
           <!-- Untergeordnete Einheit -->
-          <xsl:if test="./p:subfield[@code='b']">
+          <xsl:for-each select="./p:subfield[@code='b']">
             <xsl:text> ; </xsl:text>
-            <xsl:value-of select="./p:subfield[@code='b']" />
-          </xsl:if>
+            <xsl:variable name="num" select="../p:subfield[@code='j'][./preceding-sibling::p:subfield[1]=current()]" />
+            <xsl:if test="$num">
+              <xsl:value-of select="$num" />
+                <xsl:if test="not(ends-with($num,'.'))"><xsl:text>.</xsl:text></xsl:if>
+                <xsl:text> </xsl:text>
+              </xsl:if>
+            <xsl:value-of select="." />
+          </xsl:for-each>
           <!-- Datum / Ort -->
           <xsl:if test="./p:subfield[@code='k' or @code='p']">
             <xsl:text> (</xsl:text>
