@@ -339,7 +339,7 @@
                     <xsl:for-each select="./p:subfield[@code='g']">
                       <xsl:text> : </xsl:text>
                       <xsl:value-of select="." />
-                    </xsl:foreach>
+                    </xsl:for-each>
                     <!-- Untergeordnete Einheit(en) -->
                     <xsl:for-each select="./p:subfield[@code='b']">
                       <xsl:text> ; </xsl:text>
@@ -481,7 +481,6 @@
             <xsl:if test="not(ends-with($num,'.'))"><xsl:text>.</xsl:text></xsl:if>
             <xsl:text> </xsl:text>
           </xsl:if>
-          <xsl:if test="./p:subfield[@code='j']">
           <!-- Hauptname -->
           <xsl:if test="./p:subfield[@code='a']">
             <xsl:value-of select="./p:subfield[@code='a']" />
@@ -494,7 +493,7 @@
               <xsl:value-of select="$num" />
                 <xsl:if test="not(ends-with($num,'.'))"><xsl:text>.</xsl:text></xsl:if>
                 <xsl:text> </xsl:text>
-              </xsl:if>
+            </xsl:if>
             <xsl:value-of select="." />
           </xsl:for-each>
           <!-- Datum / Ort -->
