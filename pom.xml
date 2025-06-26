@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.mycore</groupId>
-    <artifactId>mycore-parent</artifactId>
-    <version>53</version>
-  </parent>
   <groupId>org.mycore.pica2mods</groupId>
   <artifactId>pica2mods-parent</artifactId>
   <version>2.12-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>MyCoRe Pica2MODS</name>
+  <url>https://github.com/MyCoRe-Org/pica2mods</url>
   <description>an XSL based transformer from PicaXML to MODS</description>
   <licenses>
     <license>
@@ -26,70 +23,95 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!-- with snakeyaml 1.30 version there is security vulnerability
          check snakeyaml version on the next spring boot version update -->
     <snakeyaml.version>1.33</snakeyaml.version>
     <spring.boot.version>2.7.17</spring.boot.version>
+    <java.version>17</java.version>
   </properties>
   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <Implementation-Title>${project.name}</Implementation-Title>
-              <Implementation-Group-ID>${project.groupId}</Implementation-Group-ID>
-              <Implementation-Artifact-ID>${project.artifactId}</Implementation-Artifact-ID>
-              <Implementation-Version>${project.version}</Implementation-Version>
-              <SCM-Commit>${git.commit.id.describe-short}</SCM-Commit>
-              <SCM-Time>${git.commit.time}</SCM-Time>
-              <SCM-Branch>${git.branch}</SCM-Branch>
-              <SCM-Remote-URL>${git.remote.origin.url}</SCM-Remote-URL>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-      
-      <plugin>
-		<!-- The newer version io.github.git-commit-id::git-commit-id-maven-plugin::7.0.0
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.14.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.4.2</version>
+          <configuration>
+            <archive>
+              <manifestEntries>
+                <Implementation-Title>${project.name}</Implementation-Title>
+                <Implementation-Group-ID>${project.groupId}</Implementation-Group-ID>
+                <Implementation-Artifact-ID>${project.artifactId}</Implementation-Artifact-ID>
+                <Implementation-Version>${project.version}</Implementation-Version>
+                <SCM-Commit>${git.commit.id.describe-short}</SCM-Commit>
+                <SCM-Time>${git.commit.time}</SCM-Time>
+                <SCM-Branch>${git.branch}</SCM-Branch>
+                <SCM-Remote-URL>${git.remote.origin.url}</SCM-Remote-URL>
+              </manifestEntries>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.3.1</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.11.2</version>
+          <executions>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <!-- The newer version io.github.git-commit-id::git-commit-id-maven-plugin::7.0.0
 		     does not build on Bamboo -->
-        <groupId>pl.project13.maven</groupId>
-        <artifactId>git-commit-id-plugin</artifactId>
-        <version>4.9.10</version>
-        <configuration>
-          <useNativeGit>true</useNativeGit>
-          <injectAllReactorProjects>true</injectAllReactorProjects>
-          <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
-          <failOnNoGitDirectory>false</failOnNoGitDirectory>
-          <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
-          <offline>true</offline>
-        </configuration>
-        <executions>
-          <execution>
-            <id>get-the-git-infos</id>
-            <goals>
-              <goal>revision</goal>
-            </goals>
-            <phase>validate</phase>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
+          <groupId>pl.project13.maven</groupId>
+          <artifactId>git-commit-id-plugin</artifactId>
+          <version>4.9.10</version>
+          <configuration>
+            <useNativeGit>true</useNativeGit>
+            <injectAllReactorProjects>true</injectAllReactorProjects>
+            <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+            <failOnNoGitDirectory>false</failOnNoGitDirectory>
+            <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
+            <offline>true</offline>
+          </configuration>
+          <executions>
+            <execution>
+              <id>get-the-git-infos</id>
+              <goals>
+                <goal>revision</goal>
+              </goals>
+              <phase>validate</phase>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
-  <pluginRepositories>
-    <pluginRepository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </pluginRepository>
-  </pluginRepositories>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -116,7 +138,8 @@
         <scope>runtime</scope>
       </dependency>
       <!-- JSONP implementation for Spring Boot 3 with Jakarta EE 9 and 10 -->
-      <!-- <dependency> <groupId>org.eclipse.parsson</groupId> <artifactId>parsson</artifactId> <version>1.1.1</version> </dependency> -->
+      <!-- <dependency> <groupId>org.eclipse.parsson</groupId> <artifactId>parsson</artifactId> <version>1.1.1</version>
+      </dependency> -->
       <dependency>
         <groupId>org.mycore</groupId>
         <artifactId>mycore-classifications</artifactId>
@@ -177,4 +200,32 @@
     <module>pica2mods-webapp</module>
     <module>pica2mods-runner</module>
   </modules>
+
+  <profiles>
+    <profile>
+      <id>deploy-to-sonatype</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.7.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <centralSnapshotsUrl>https://central.sonatype.com/repository/maven-snapshots</centralSnapshotsUrl>
+              <publishingServerId>sonatype-central</publishingServerId>
+              <autoPublish>true</autoPublish>
+              <waitUntil>published</waitUntil>
+              <excludeArtifacts>
+                <excludeArtifact>pica2solr</excludeArtifact>
+                <excludeArtifact>mods2solr</excludeArtifact>
+                <excludeArtifact>pica2mods-webapp</excludeArtifact>
+                <excludeArtifact>pica2mods-runner</excludeArtifact>
+              </excludeArtifacts>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
