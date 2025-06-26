@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.mycore.pica2mods</groupId>
   <artifactId>pica2mods-parent</artifactId>
-  <version>2.12-SNAPSHOT</version>
+  <version>2.12</version>
   <packaging>pom</packaging>
   <name>MyCoRe Pica2MODS</name>
   <url>https://github.com/MyCoRe-Org/pica2mods</url>
@@ -19,7 +19,7 @@
     <connection>scm:git:https://github.com/MyCoRe-Org/pica2mods.git</connection>
     <developerConnection>scm:git:https://github.com/MyCoRe-Org/pica2mods.git</developerConnection>
     <url>https://github.com/MyCoRe-Org/pica2mods</url>
-    <tag>2.12</tag>
+    <tag>v2.12</tag>
   </scm>
   <properties>
     <maven.compiler.release>17</maven.compiler.release>
