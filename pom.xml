@@ -203,12 +203,6 @@
   <profiles>
     <profile>
       <id>sign-with-gpg</id>
-      <activation>
-        <!--Environment Property CI is always when running from Github Action -->
-        <property>
-          <name>!env.CI</name>
-        </property>
-      </activation>
       <build>
         <plugins>
           <plugin>
