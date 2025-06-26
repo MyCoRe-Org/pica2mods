@@ -204,9 +204,9 @@
     <profile>
       <id>sign-with-gpg</id>
       <activation>
+        <!--Environment Property CI is always when running from Github Action -->
         <property>
-          <name>!project.version</name>
-          <value>*-SNAPSHOT</value>
+          <name>!env.CI</name>
         </property>
       </activation>
       <build>
