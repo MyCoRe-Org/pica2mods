@@ -23,7 +23,7 @@ $ git push origin v1.2
 - using a Maven profile (`-P`) with login settings for Sonatype
 
 ```
-$ mvn release:perform -Prelease-to-ossrh
+$ mvn release:perform -Pdeploy-to-sonatype
 ```
 ### Finishing
 - remove release config files
