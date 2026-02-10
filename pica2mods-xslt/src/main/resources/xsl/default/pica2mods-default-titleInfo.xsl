@@ -129,18 +129,20 @@
       </xsl:if>
 
       <xsl:if test="(@tag='036C' or @tag='036F') and ./../p:datafield[@tag='021A']/p:subfield[@code='a']">
-        <xsl:variable name="outPartName">
-          <xsl:value-of select="translate(./../p:datafield[@tag='021A']/p:subfield[@code='a'], '@', '')" />
-          <xsl:if test="./../p:datafield[@tag='021A']/p:subfield[@code='d']">
-            :
-            <xsl:value-of select="./../p:datafield[@tag='021A']/p:subfield[@code='d']" />
+        <xsl:for-each select="./../p:datafield[@tag='021A']/p:subfield[@code='a']">
+          <xsl:variable name="outPartName">
+            <xsl:value-of select="translate(., '@', '')"/>
+            <xsl:if test="../p:subfield[@code='d']">
+              :
+              <xsl:value-of select="../p:subfield[@code='d']"/>
+            </xsl:if>
+          </xsl:variable>
+          <xsl:if test="not(normalize-space($outPartNumber) = normalize-space($outPartName))">
+            <mods:partName>
+              <xsl:value-of select="normalize-space($outPartName)"/>
+            </mods:partName>
           </xsl:if>
-        </xsl:variable>
-        <xsl:if test="not(normalize-space($outPartNumber) = normalize-space($outPartName))">
-          <mods:partName>
-            <xsl:value-of select="normalize-space($outPartName)"></xsl:value-of>
-          </mods:partName>
-        </xsl:if>
+        </xsl:for-each>
       </xsl:if>
     </mods:titleInfo>
   </xsl:template>
