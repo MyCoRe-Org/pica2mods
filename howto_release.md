@@ -16,7 +16,8 @@ $ git merge --no-ff develop
 ```
 $ mvn release:prepare
 $ git push origin main
-$ git push origin v1.2
+$ git tag -a v2.13 -m "new tag"
+$ git push origin v2.13
 ```
 
 ### Perform the release
@@ -25,6 +26,8 @@ $ git push origin v1.2
 ```
 $ mvn release:perform -Psign-with-gpg -Pdeploy-to-sonatype
 ```
+- wait... (last time it took about 12 min)
+
 ### Finishing
 - remove release config files
 - merge modified POM files back to develop
@@ -37,9 +40,9 @@ $ git merge --no-ff main
 $ git push origin develop
 ```
 
-### Chechk successful deployment
+### Check successful deployment
 - on Sonatype:  
-  <https://oss.sonatype.org/#nexus-search;quick~pica2mods>
+  <https://central.sonatype.com/artifact/org.mycore.pica2mods/pica2mods-xslt>
 - later on Maven Central  
   (synchronization with Maven Central can take up to 24 h):  
-  <https://mvnrepository.com/artifact/org.mycore.pica2mods>
+  <https://mvnrepository.com/artifact/org.mycore.pica2mods/pica2mods-xslt>
