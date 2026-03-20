@@ -78,12 +78,11 @@
                     select="$tp/p:datafield[@tag='007K' and ./p:subfield[@code='a']='gnd']/p:subfield[@code='0']" />
                 </mods:nameIdentifier>
               </xsl:if>
-              <xsl:if test="$tp/p:datafield[@tag='006X' and ./p:subfield[@code='S']='orcid']">
+              <xsl:for-each select="$tp/p:datafield[@tag='006X'][p:subfield[@code='S']='orcid']">
                 <mods:nameIdentifier type="orcid">
-                  <xsl:value-of
-                    select="$tp/p:datafield[@tag='006X' and ./p:subfield[@code='S']='orcid']/p:subfield[@code='0']" />
+                  <xsl:value-of select="p:subfield[@code='0']" />
                 </mods:nameIdentifier>
-              </xsl:if>
+              </xsl:for-each>
             </mods:name>
           </xsl:if>
         </xsl:when>
@@ -113,6 +112,11 @@
             <xsl:call-template name="COMMON_PersonalName_ROLES">
               <xsl:with-param name="datafield" select="." />
             </xsl:call-template>
+            <xsl:for-each select="./p:subfield[@code='j' and (preceding-sibling::p:subfield[1])[@code='i']='orcid']">
+              <mods:nameIdentifier type="orcid">
+                <xsl:value-of select="." />
+              </mods:nameIdentifier>
+            </xsl:for-each>
           </mods:name>
         </xsl:otherwise>
       </xsl:choose>

@@ -45,9 +45,15 @@
         <xsl:with-param name="datafield" select="." />
       </xsl:call-template>
     </xsl:for-each>
-    <xsl:for-each select="./p:datafield[@tag='039N' and starts-with(p:subfield[@code='i'], 'Überarbeit')]"> <!-- 4261 Weitere Beziehungen -->
+    <xsl:for-each select="./p:datafield[@tag='039N' and starts-with(p:subfield[@code='i'], 'Überarbeit')]"> <!-- 4249 Weitere Beziehungen -->
       <xsl:call-template name="COMMON_Reference">
         <xsl:with-param name="type">otherVersion</xsl:with-param>
+        <xsl:with-param name="datafield" select="." />
+      </xsl:call-template>
+    </xsl:for-each>
+    <xsl:for-each select="./p:datafield[@tag='039N' and not(starts-with(p:subfield[@code='i'], 'Überarbeit'))]"> <!-- 4249 Weitere Beziehungen -->
+      <xsl:call-template name="COMMON_Reference">
+        <xsl:with-param name="otherType">other_relation</xsl:with-param>
         <xsl:with-param name="datafield" select="." />
       </xsl:call-template>
     </xsl:for-each>

@@ -94,7 +94,7 @@
         <xsl:value-of select="./p:subfield[@code='0']" />
       </mods:identifier>
     </xsl:for-each>
-    <xsl:for-each select="./p:datafield[@tag='007S']"><!-- 2277 -->
+    <xsl:for-each select="./p:datafield[@tag='007S'][not(./p:subfield[@code='S']='e')]"><!-- 2277 , '$Se' = ergebnislos eingesehene Quellen-->
       <xsl:choose>
         <!-- VD16 nicht nur in 2190, sondern als bibliogr. Zitat in 2277 -->
         <xsl:when
@@ -189,7 +189,7 @@
         <xsl:value-of select="normalize-space(substring-after(., 'GW'))" />
       </mods:identifier>
     </xsl:for-each>
-    <xsl:for-each select="./p:datafield[@tag='007S']/p:subfield[@code='0'][starts-with(., 'GW')]">
+    <xsl:for-each select="./p:datafield[@tag='007S'][not(./p:subfield[@code='S']='e')]/p:subfield[@code='0'][starts-with(., 'GW')]">
       <xsl:if test="not(./p:datafield[@tag='007Y']/p:subfield[@code='0'][starts-with(., 'GW')])">
         <mods:identifier type="gw">
           <xsl:value-of select="normalize-space(substring-after(., 'GW'))" />
@@ -198,7 +198,7 @@
     </xsl:for-each>
     
     <!-- Incunabula Short Title Catalogue -->
-    <xsl:for-each select="./p:datafield[@tag='007S']/p:subfield[@code='0'][starts-with(., 'ISTC')]">
+    <xsl:for-each select="./p:datafield[@tag='007S'][not(./p:subfield[@code='S']='e')]/p:subfield[@code='0'][starts-with(., 'ISTC')]">
       <xsl:if test="not(./p:datafield[@tag='007Y']/p:subfield[@code='0'][starts-with(., 'ISTC')])">
         <mods:identifier type="istc">
           <xsl:value-of select="normalize-space(substring-after(., 'ISTC'))" />

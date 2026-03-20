@@ -103,6 +103,22 @@
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
+    <xsl:for-each select="./p:datafield[@tag='209O']/p:subfield[@code='a' and contains(text(), 'licenseinfo:work.rightsreserved.vwlis')]">
+      <xsl:variable name="classid" select="substring-before(substring-after(current(),':'),':')" />
+      <xsl:variable name="categid" select="substring-after(substring-after(current(),':'),':')" />
+      <xsl:try>
+        <xsl:variable name="class_doc" select="document(concat('classification:',$classid))" />
+        <xsl:if test="$class_doc//category[@ID=$categid]">
+          <xsl:element name="mods:accessCondition">
+            <xsl:attribute name="type">out of print work</xsl:attribute>
+            <xsl:value-of select="$class_doc//category[@ID=$categid]/label[@xml:lang='de']/@description" />
+          </xsl:element>
+        </xsl:if>
+        <xsl:catch>
+          <xsl:comment>Error resolving VW-LiS accessCondition from 8600 {.}</xsl:comment>
+        </xsl:catch>
+      </xsl:try>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="COMMON_UBR_Class_Doctype">
