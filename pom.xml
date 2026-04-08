@@ -19,7 +19,7 @@
     <connection>scm:git:https://github.com/MyCoRe-Org/pica2mods.git</connection>
     <developerConnection>scm:git:https://github.com/MyCoRe-Org/pica2mods.git</developerConnection>
     <url>https://github.com/MyCoRe-Org/pica2mods</url>
-    <tag>2.12</tag>
+    <tag>v2.13</tag>
   </scm>
   <properties>
     <maven.compiler.release>17</maven.compiler.release>
@@ -226,26 +226,10 @@
       <id>deploy-to-sonatype</id>
       <build>
         <plugins>
-	     <!--
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.5</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          -->
           <plugin>
             <groupId>org.sonatype.central</groupId>
             <artifactId>central-publishing-maven-plugin</artifactId>
-            <version>0.7.0</version>
+            <version>0.10.0</version>
             <extensions>true</extensions>
             <configuration>
               <centralSnapshotsUrl>https://central.sonatype.com/repository/maven-snapshots</centralSnapshotsUrl>
