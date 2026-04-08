@@ -28,14 +28,8 @@
           <xsl:call-template name="COMMON_Title" />
         </xsl:for-each>
       </xsl:when>
-      <xsl:when test="$pica0500_2='v' and ./p:datafield[@tag='036F']">
+      <xsl:when test="./p:datafield[@tag='036F'][starts-with(p:subfield[@code='R'],'Ob')]">
         <xsl:for-each select="./p:datafield[@tag='036F']"><!-- 4180 -->
-          <xsl:call-template name="COMMON_Title" />
-        </xsl:for-each>
-      </xsl:when>
-      <!-- ??? nicht mehr in der Format-Dokumentation ??? -->
-      <xsl:when test="$pica0500_2='v' and ./p:datafield[@tag='027D']">
-        <xsl:for-each select="./p:datafield[@tag='027D']">
           <xsl:call-template name="COMMON_Title" />
         </xsl:for-each>
       </xsl:when>

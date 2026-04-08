@@ -229,9 +229,8 @@
             <mods:recordIdentifier source="DE-519">dbhsnb/dbhsnb_{substring-after(., 'dbhsnb_')}</mods:recordIdentifier>
         </xsl:for-each>
       </xsl:if>
-      <mods:recordInfoNote type="{$database}_ppn">
-        <xsl:value-of select="$ppn" /> <!-- 0100 PPN -->
-      </mods:recordInfoNote>
+      <mods:recordInfoNote type="{$database}_ppn"><xsl:value-of select="$ppn" /></mods:recordInfoNote><!-- 0100 PPN -->
+      <mods:recordInfoNote type="{$database}_bbg"><xsl:value-of select="$parent/p:datafield[@tag='002@']/p:subfield[@code='0']" /></mods:recordInfoNote><!-- 0500 Bibl. Gattung -->
     </mods:recordInfo>
     <xsl:for-each select="$parent/p:datafield[@tag='017C']/p:subfield[@code='u'][contains(., '://purl.uni-rostock.de/') or contains(., '://digibib.hs-nb.de/')][1]">
       <mods:identifier type="purl">{replace(., 'http://', 'https://')}</mods:identifier>
