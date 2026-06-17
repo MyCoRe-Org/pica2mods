@@ -89,10 +89,10 @@ public class Pica2ModsController {
         List<String> xslFiles = new ArrayList<String>();
         try {
             PathMatchingResourcePatternResolver xslFileResolver = new PathMatchingResourcePatternResolver();
-            Resource[] resources = xslFileResolver.getResources("classpath*:xsl/**/*.x?l");
+            Resource[] resources = xslFileResolver.getResources("classpath*:xslt/**/*.x?l");
             for (Resource r : resources) {
                 String s = r.getURL().toString();
-                xslFiles.add(s.substring(s.lastIndexOf("xsl/") + 4));
+                xslFiles.add(s.substring(s.lastIndexOf("xslt/") + 5));
             }
         } catch (IOException e) {
             LoggerFactory.getLogger(Pica2ModsController.class).error("Error at listing available XSL files", e);
@@ -103,16 +103,16 @@ public class Pica2ModsController {
         return "index";
     }
 
-    @GetMapping(value = "/files/xsl/**", produces = MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(value = "/files/xslt/**", produces = MediaType.APPLICATION_XML_VALUE)
     @ResponseBody
     StreamingResponseBody returnXSLFile(HttpServletRequest request) {
         return new StreamingResponseBody() {
 
             @Override
             public void writeTo(OutputStream outputStream) throws IOException {
-                //String x = "xsl/"+filepath;
-                String x = "xsl" + request.getServletPath()
-                    .substring(request.getServletPath().indexOf("/files/xsl") + "/files/xsl".length())
+                //String x = "xslt/"+filepath;
+                String x = "xslt" + request.getServletPath()
+                    .substring(request.getServletPath().indexOf("/files/xslt") + "/files/xslt".length())
                     .replaceAll("\\.+", ".");
                 try (InputStream is = getClass().getClassLoader().getResourceAsStream(x)) {
                     //Java9: //inputStream.transferTo(targetStream);
