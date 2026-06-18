@@ -19,7 +19,6 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${spring.boot.version}</version>
         <configuration>
-          <executable>true</executable>
           <mainClass>org.mycore.pica2mods.runner.Pica2ModsRunner</mainClass>
         </configuration>
         <executions>
