@@ -143,7 +143,7 @@ public class Pica2ModsTest {
 
     private Document resolveAndConvert(PicaTest test) {
         String ppn = test.getPpn();
-        String stylePath = "xsl/" + test.getType() + "/pica2mods-" + test.getType() + "-" + test.getTopLevelElement()
+        String stylePath = "xslt/" + test.getType() + "/pica2mods-" + test.getType() + "-" + test.getTopLevelElement()
             + ".xsl";
         System.out.println("Transforming " + ppn + " with " + stylePath);
         System.setProperty("XSL_TESTING","true");
@@ -175,7 +175,7 @@ public class Pica2ModsTest {
         transformerFactory.setURIResolver((v1, v2) -> {
             System.out.println("Resolve " + v1);
             if (!v1.contains(":")) {
-                return new StreamSource(getClass().getClassLoader().getResourceAsStream("xsl/" + v1));
+                return new StreamSource(getClass().getClassLoader().getResourceAsStream("xslt/" + v1));
             } else {
                 if (v1.startsWith(HTTP_PROTOCOL) || v1.startsWith(HTTPS_PROTOCOL)) {
                     try {

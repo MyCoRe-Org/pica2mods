@@ -41,7 +41,7 @@ import org.w3c.dom.NodeList;
 public class Pica2ModsManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(Pica2ModsManager.class);
 
-    public static final String PICA2MODS_XSLT_PATH = "xsl/";
+    public static final String PICA2MODS_XSLT_PATH = "xslt/";
 
     private static final String NS_PICA = "info:srw/schema/5/picaXML-v1.0";
 
