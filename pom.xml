@@ -117,7 +117,12 @@
         <!-- Schematron validation -->
         <groupId>name.dmaus.schxslt</groupId>
         <artifactId>java</artifactId>
-        <version>3.1.1</version>
+        <version>4.0.2</version>
+      </dependency>
+      <dependency>
+        <groupId>name.dmaus.schxslt</groupId>
+        <artifactId>schxslt2</artifactId>
+        <version>1.11.1</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>

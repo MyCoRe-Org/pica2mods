@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import name.dmaus.schxslt.Result;
 import name.dmaus.schxslt.Schematron;
 import name.dmaus.schxslt.SchematronException;
+import name.dmaus.schxslt.adapter.SchXslt2;
 
 public class ModsValidator {
     private static final Logger LOGGER = LoggerFactory.getLogger(ModsValidator.class);
@@ -41,12 +42,14 @@ public class ModsValidator {
     private void run(List<Path> paths) {
         for (Path p : paths) {
             System.out.println(p.getFileName().toString());
-            run(p);
+            List<String> results = run(p);
+            for(String r:results) {
+                System.err.println(r);
+            }
         }
     }
 
     private List<String> run(Path p) {
-        System.out.println(p.getFileName().toString());
         StreamSource xmlSource;
         try {
             xmlSource = new StreamSource(Files.newBufferedReader(p));
@@ -61,7 +64,7 @@ public class ModsValidator {
         try {
             StreamSource streamSource = new StreamSource(getClass().getResourceAsStream(schematronResource),
                 schematronResource);
-            Schematron schematron = new Schematron(streamSource);
+            Schematron schematron = new Schematron(new SchXslt2(), streamSource);
             Result result = schematron.validate(source);
             if (result.isValid()) {
                 LOGGER.info("XML is valid!");

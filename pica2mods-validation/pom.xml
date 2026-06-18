@@ -28,6 +28,10 @@
       <artifactId>java</artifactId>
     </dependency>
     <dependency>
+      <groupId>name.dmaus.schxslt</groupId>
+       <artifactId>schxslt2</artifactId>
+    </dependency>
+    <dependency>
       <groupId>net.sf.saxon</groupId>
       <artifactId>Saxon-HE</artifactId>
     </dependency>
@@ -38,6 +42,11 @@
     <dependency>
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>xml-resolver</groupId>
+      <artifactId>xml-resolver</artifactId>
+      <version>1.2</version>
     </dependency>
   </dependencies>
 </project>
