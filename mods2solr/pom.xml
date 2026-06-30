@@ -69,9 +69,9 @@
       <artifactId>spring-boot-autoconfigure</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.eclipse.parsson</groupId>
-       <artifactId>parsson</artifactId>
-       <scope>runtime</scope>
+      <groupId>org.eclipse.parsson</groupId>
+      <artifactId>parsson</artifactId>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
   <dependencyManagement>
