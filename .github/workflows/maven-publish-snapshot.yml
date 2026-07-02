@@ -23,12 +23,12 @@ jobs:
 
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: Set up JDK 17 and Maven Settings
-        uses: actions/setup-java@v4
+      - name: Set up JDK 21 and Maven Settings
+        uses: actions/setup-java@v5
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           # Maven Distribution Server (step creates .m2/settings.xml)
           server-id: 'sonatype-central'
@@ -39,4 +39,4 @@ jobs:
         env:
           SONATYPE_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           SONATYPE_TOKEN:  ${{ secrets.OSSRH_TOKEN }}
-        run: mvn --batch-mode deploy -P deploy-to-sonatype
+        run: mvn --batch-mode deploy -Pdeploy-to-sonatype

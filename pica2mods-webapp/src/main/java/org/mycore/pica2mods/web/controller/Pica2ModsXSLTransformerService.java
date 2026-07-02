@@ -34,7 +34,7 @@ public class Pica2ModsXSLTransformerService {
      * ("some/pkg/resource.properties"); Class.getResourceAsStream
      * ("/some/pkg/resource.properties");
      */
-    public static String CLASSPATH_PREFIX = "xsl/";
+    public static String CLASSPATH_PREFIX = "xslt/";
 
     public static String XPATH_PARALLEL
         = "concat(//p:datafield[@tag='039D']/p:subfield[@code='n'], //p:datafield[@tag='039D']/p:subfield[@code='i' and not(./../p:subfield[@code='n'])], '|',//p:datafield[@tag='039D']/p:subfield[@code='C' and text()='KXP']/following-sibling::p:subfield[@code='6'][1])";
