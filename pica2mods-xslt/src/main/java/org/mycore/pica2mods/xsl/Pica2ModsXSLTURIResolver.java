@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 
 import javax.xml.transform.Source;
@@ -26,6 +27,7 @@ public class Pica2ModsXSLTURIResolver implements URIResolver {
         this.manager = manager;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Source resolve(String href, String base) throws TransformerException {
         //default: resolve internet sources
@@ -38,7 +40,7 @@ public class Pica2ModsXSLTURIResolver implements URIResolver {
                 }
             } else {
                 try {
-                    URL url = new URL(href);
+                    URL url = URI.create(href).toURL();
                     return new StreamSource(url.openStream());
                 } catch (MalformedURLException e) {
                     throw new TransformerException("Malformed URL", e);
@@ -98,11 +100,15 @@ public class Pica2ModsXSLTURIResolver implements URIResolver {
                 Class classMCRURIResolver = Class.forName("org.mycore.common.xml.MCRURIResolver");
 
                 try {
-                    //resolving: MCRURIResolver.instance().resolve(String href, String base)
-                    @SuppressWarnings("unchecked")
-                    Method methodInstance = classMCRURIResolver.getMethod("instance");
-                    Object o = methodInstance.invoke(null, new Object[] {});
-                    @SuppressWarnings("unchecked")
+                    //resolving: MCRURIResolver.obtainInstance().resolve(String href, String base)
+                    Method methodObtainInstance = null;
+                    try {
+                        methodObtainInstance = classMCRURIResolver.getMethod("obtainInstance");
+                    } catch (NoSuchMethodException nsme) {
+                        //fallback to MCRURIResolver.instance() (MyCoRe < 2026.06)
+                        methodObtainInstance = classMCRURIResolver.getMethod("instance");
+                    }
+                    Object o = methodObtainInstance.invoke(null, new Object[] {});
                     Method methodResolve = classMCRURIResolver.getMethod("resolve", String.class, String.class);
                     String uri = "classification:metadata:-1:children:" + classid;
                     Source s = (Source) methodResolve.invoke(o, uri, "");
@@ -110,13 +116,14 @@ public class Pica2ModsXSLTURIResolver implements URIResolver {
 
                 } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
                     | InvocationTargetException e) {
-                    LOGGER.error("Error with Java Reflection API", e);
+                    LOGGER.error("Error in Java Reflection API call to MCRURIResolver", e);
                 }
             } catch (ClassNotFoundException e) {
                 if (manager.getConfig().getMycoreUrl() != null) {
                     // load classification via MyCoRe REST API v1
                     try {
-                        URL url = new URL(manager.getConfig().getMycoreUrl() + "api/v1/classifications/" + classid);
+                        URL url = URI.create(manager.getConfig().getMycoreUrl() + "api/v1/classifications/" + classid)
+                            .toURL();
                         return new StreamSource(url.openStream());
                     } catch (MalformedURLException e1) {
                         throw new TransformerException("Malformed URL", e1);
