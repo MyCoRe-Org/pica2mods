@@ -497,11 +497,35 @@
         <xsl:value-of select="concat('https://uri.gbv.de/document/',$MCR.PICA2MODS.DATABASE,':ppn:', .)" />
       </mods:identifier>
     </xsl:for-each>
-    <xsl:for-each select="$parent/p:datafield[@tag='021A']">
-      <xsl:call-template name="simple_title">
-        <xsl:with-param name="datafield" select="." />
-      </xsl:call-template>
-    </xsl:for-each>
+    
+    <!-- TODO: Zusammenführen mit COMMON_Title template -->
+    <xsl:choose>
+      <xsl:when test="$parent/p:datafield[@tag='036E' or @tag='036F']">
+        <mods:titleInfo>
+          <xsl:for-each select="($parent/p:datafield[@tag='036E' or @tag='036F']/p:subfield[@code='a'])[1]">
+            <mods:title><xsl:value-of select="." /></mods:title>
+          </xsl:for-each>
+          <xsl:for-each select="($parent/p:datafield[@tag='036E' or @tag='036F']/p:subfield[@code='l'])[1]">
+            <mods:partNumber><xsl:value-of select="." /></mods:partNumber>
+          </xsl:for-each>
+          <xsl:for-each select="($parent/p:datafield[@tag='021A']/p:subfield[@code='a'])[1]">
+            <mods:partName><xsl:value-of select="." /></mods:partName>
+          </xsl:for-each>
+          <!-- sub title -->
+          <xsl:for-each select="($parent/p:datafield[@tag='021A']/p:subfield[@code='d'])[1]">
+            <mods:partName><xsl:value-of select="." /></mods:partName>
+          </xsl:for-each>
+        </mods:titleInfo>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="$parent/p:datafield[@tag='021A']">
+          <xsl:call-template name="simple_title">
+            <xsl:with-param name="datafield" select="." />
+          </xsl:call-template>
+        </xsl:for-each>  
+      </xsl:otherwise>
+    </xsl:choose>
+    
     <xsl:for-each select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']">
       <mods:identifier type="zdb">
         <xsl:value-of select="." />
