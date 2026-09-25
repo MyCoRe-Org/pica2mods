@@ -33,6 +33,12 @@
         <xsl:with-param name="datafield" select="." />
       </xsl:call-template>
     </xsl:for-each>
+    <xsl:for-each select="./p:datafield[@tag='039I']"> <!-- 4256 Beziehungen zur Reproduktion in anderer physischer Form -->
+      <xsl:call-template name="COMMON_Reference">
+        <xsl:with-param name="type">otherFormat</xsl:with-param>
+        <xsl:with-param name="datafield" select="." />
+      </xsl:call-template>
+    </xsl:for-each>
     <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261 Themenbeziehungen (Beziehung zu der Resource, die beschrieben wird) -->
       <xsl:call-template name="COMMON_Reference">
         <xsl:with-param name="type">references</xsl:with-param>
@@ -390,7 +396,7 @@
       <xsl:choose>
         <xsl:when test="$datafield/p:subfield[@code='9']">
           <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, ./p:subfield[@code='9'])" />
-          <xsl:if test="starts-with($parent/p:datafield[@tag='002@']/p:subfield[@code='0'], 'O')">
+         <!-- disabled for relatedItem of physical source: <xsl:if test="starts-with($parent/p:datafield[@tag='002@']/p:subfield[@code='0'], 'O')"> -->
             <xsl:call-template name="parent_info">
               <xsl:with-param name="parent" select="$parent" />
             </xsl:call-template>
@@ -407,7 +413,7 @@
               <xsl:value-of select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']" />
             </mods:identifier>
             </xsl:if>
-          </xsl:if>
+          <!-- </xsl:if> -->
         </xsl:when>
         <xsl:otherwise>
         <!-- <xsl:when test="$datafield/p:subfield[@code='C' and text()='DOI']"> -->
