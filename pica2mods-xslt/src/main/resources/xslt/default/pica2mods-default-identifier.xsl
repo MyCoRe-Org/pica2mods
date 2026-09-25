@@ -229,7 +229,15 @@
         <xsl:value-of select="replace(., 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />
       </mods:identifier>
     </xsl:for-each>
-
+    <!-- DNB-ID -->
+    <!-- Von Interesse sind für uns die zurückgespielten DNB-Links, die Hinweise auf eine erfolgreiche Langzeitarchivierung bei der DNB geben. -->
+    <!-- Hängt man "/34" an die d-nb.info-URL an, erhält man Zugriff auf das Archivexemplar (PDF) - dieses Suffix wir hier entfernt-->
+    <xsl:for-each
+      select="./p:datafield[@tag='017C' and ./p:subfield[@code='x']='N' and ./p:subfield[@code='A']='DE-101' and contains(./p:subfield[@code='u'], 'd-nb.info')]/p:subfield[@code='u']">
+      <mods:identifier type="dnb-lza">
+        <xsl:value-of select="substring-before(substring-after(., 'd-nb.info/'), '/')" />
+      </mods:identifier>
+    </xsl:for-each>
   </xsl:template>
 
 </xsl:stylesheet>
