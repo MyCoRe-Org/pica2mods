@@ -501,7 +501,6 @@
     <!-- TODO: Zusammenführen mit COMMON_Title template -->
     <xsl:choose>
       <xsl:when test="$parent/p:datafield[@tag='036E' or @tag='036F']">
-        <!-- TODO: Zusammenführen mit COMMON_Title template -->
         <mods:titleInfo>
           <xsl:for-each select="($parent/p:datafield[@tag='036E' or @tag='036F']/p:subfield[@code='a'])[1]">
             <mods:title><xsl:value-of select="." /></mods:title>
