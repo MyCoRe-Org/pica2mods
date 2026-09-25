@@ -498,28 +498,34 @@
       </mods:identifier>
     </xsl:for-each>
     
-    <xsl:variable name="parentTitle">
-      <!-- necessary to handle nonsort (@), if applicable -->
-      <xsl:call-template name="simple_title">
-        <xsl:with-param name="datafield" select="$parent/p:datafield[@tag='021A']" />
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="titlefield">
-      <p:datafield tag="021A">
-        <p:subfield code="a">
-          <xsl:value-of select="string-join((
-                                  string-join((
-                                    ($parent/p:datafield[@tag='036E' or @tag='036F']/p:subfield[@code='a'])[1],
-                                    ($parent/p:datafield[@tag='036E' or @tag='036F']/p:subfield[@code='l'])[1]
-                                  ), ', '),
-                                  if (string-length(normalize-space($parentTitle))>0) then normalize-space($parentTitle) else ()
-                                ), ' : ' )" />
-        </p:subfield>
-      </p:datafield>
-    </xsl:variable>
-    <xsl:call-template name="simple_title">
-      <xsl:with-param name="datafield" select="$titlefield/p:datafield" />
-    </xsl:call-template>
+    <!-- TODO: Zusammenführen mit COMMON_Title template -->
+    <xsl:choose>
+      <xsl:when test="$parent/p:datafield[@tag='036E' or @tag='036F']">
+        <!-- TODO: Zusammenführen mit COMMON_Title template -->
+        <mods:titleInfo>
+          <xsl:for-each select="($parent/p:datafield[@tag='036E' or @tag='036F']/p:subfield[@code='a'])[1]">
+            <mods:title><xsl:value-of select="." /></mods:title>
+          </xsl:for-each>
+          <xsl:for-each select="($parent/p:datafield[@tag='036E' or @tag='036F']/p:subfield[@code='l'])[1]">
+            <mods:partNumber><xsl:value-of select="." /></mods:partNumber>
+          </xsl:for-each>
+          <xsl:for-each select="($parent/p:datafield[@tag='021A']/p:subfield[@code='a'])[1]">
+            <mods:partName><xsl:value-of select="." /></mods:partName>
+          </xsl:for-each>
+          <!-- sub title -->
+          <xsl:for-each select="($parent/p:datafield[@tag='021A']/p:subfield[@code='d'])[1]">
+            <mods:partName><xsl:value-of select="." /></mods:partName>
+          </xsl:for-each>
+        </mods:titleInfo>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="$parent/p:datafield[@tag='021A']">
+          <xsl:call-template name="simple_title">
+            <xsl:with-param name="datafield" select="." />
+          </xsl:call-template>
+        </xsl:for-each>  
+      </xsl:otherwise>
+    </xsl:choose>
     
     <xsl:for-each select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']">
       <mods:identifier type="zdb">
