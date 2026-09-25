@@ -497,11 +497,30 @@
         <xsl:value-of select="concat('https://uri.gbv.de/document/',$MCR.PICA2MODS.DATABASE,':ppn:', .)" />
       </mods:identifier>
     </xsl:for-each>
-    <xsl:for-each select="$parent/p:datafield[@tag='021A']">
+    
+    <xsl:variable name="parentTitle">
+      <!-- necessary to handle nonsort (@), if applicable -->
       <xsl:call-template name="simple_title">
-        <xsl:with-param name="datafield" select="." />
+        <xsl:with-param name="datafield" select="$parent/p:datafield[@tag='021A']" />
       </xsl:call-template>
-    </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="titlefield">
+      <p:datafield tag="021A">
+        <p:subfield code="a">
+          <xsl:value-of select="string-join((
+                                  string-join((
+                                    ($parent/p:datafield[@tag='036E' or @tag='036F']/p:subfield[@code='a'])[1],
+                                    ($parent/p:datafield[@tag='036E' or @tag='036F']/p:subfield[@code='l'])[1]
+                                  ), ', '),
+                                  if (string-length(normalize-space($parentTitle))>0) then normalize-space($parentTitle) else ()
+                                ), ' : ' )" />
+        </p:subfield>
+      </p:datafield>
+    </xsl:variable>
+    <xsl:call-template name="simple_title">
+      <xsl:with-param name="datafield" select="$titlefield/p:datafield" />
+    </xsl:call-template>
+    
     <xsl:for-each select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']">
       <mods:identifier type="zdb">
         <xsl:value-of select="." />
