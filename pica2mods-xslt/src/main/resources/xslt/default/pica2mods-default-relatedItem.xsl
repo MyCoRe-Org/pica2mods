@@ -86,6 +86,7 @@
   </xsl:template>
 
   <xsl:template name="COMMON_HostOrSeries">
+    <xsl:comment>COMMON_HostOrSeries for <xsl:value-of select="./@tag" /></xsl:comment>
     <mods:relatedItem>
       <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, ./p:subfield[@code='9'])" />
       <xsl:variable name="parentPica0500_2" select="substring($parent/p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
@@ -207,6 +208,7 @@
 
       <xsl:choose>
         <xsl:when test="$pica0500_2='s'">
+         <xsl:comment>COMMON_AppearsIn for <xsl:value-of select="./@tag" /></xsl:comment>
          <mods:relatedItem>
          <xsl:attribute name="otherType">appears_in</xsl:attribute>
           <xsl:attribute name="type">host</xsl:attribute>
@@ -290,6 +292,7 @@
          </mods:relatedItem>
         </xsl:when>
         <xsl:when test="$pica0500_2='a'">
+         <xsl:comment>COMMON_AppearsIn for <xsl:value-of select="./@tag" /></xsl:comment>
          <mods:relatedItem>
          <xsl:attribute name="otherType">appears_in</xsl:attribute>
           <xsl:choose>
@@ -379,7 +382,7 @@
     <xsl:param name="type" required="no" />
     <xsl:param name="otherType" required="no" />
     <xsl:param name="datafield" />
-    <xsl:comment>COMMON_REFERENCE for <xsl:value-of select="$datafield/@tag" /></xsl:comment>
+    <xsl:comment>COMMON_Reference for <xsl:value-of select="$datafield/@tag" /></xsl:comment>
     <mods:relatedItem>
       <xsl:if test="$type">
         <xsl:attribute name="type" select="$type" /> 
