@@ -462,11 +462,8 @@
           </xsl:if>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:if test="$datafield/p:subfield[@code='i']">
-        <mods:note type="relation_label"><xsl:value-of select="$datafield/p:subfield[@code='i']" /></mods:note>
-      </xsl:if>
-      <xsl:if test="$datafield[@tag='039D' or @tag='039I']/p:subfield[@code='n']">  <!-- 4243 039D Beziehung auf Manifestationsebene --> <!-- 4256 039I  Beziehungen zur Reproduktion in anderer physischer Form -->
-        <mods:note type="format_type"><xsl:value-of select="$datafield/p:subfield[@code='n']" /></mods:note>
+      <xsl:if test="$datafield/p:subfield[@code='i'] | $datafield[@tag='039D' or @tag='039I']/p:subfield[@code='n']">
+        <mods:note type="relation_label"><xsl:value-of select="string-join(($datafield/p:subfield[@code='i'], $datafield[@tag='039D' or @tag='039I']/p:subfield[@code='n']),' ')" /></mods:note>
       </xsl:if>
     </mods:relatedItem>
   </xsl:template>
