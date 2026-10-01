@@ -8,6 +8,7 @@
                 exclude-result-prefixes="mods pica2mods p xlink">
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
+  <xsl:import href="default/pica2mods-default-originInfo.xsl" />
   <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
   <xsl:template name="modsRelatedItem">
     <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241 Beziehungen zur größeren Einheit -->
@@ -528,6 +529,15 @@
         </xsl:for-each>  
       </xsl:otherwise>
     </xsl:choose>
+    <mods:originInfo>
+      <xsl:attribute name="eventType">publication</xsl:attribute>
+      <xsl:call-template name="common_date_issued">
+        <xsl:with-param name="datafield" select="$parent/p:datafield[@tag='011@']" />
+      </xsl:call-template>
+      <xsl:call-template name="common_edition">
+        <xsl:with-param name="record" select="$parent" />
+      </xsl:call-template>
+    </mods:originInfo>
     
     <xsl:for-each select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']">
       <mods:identifier type="zdb">
