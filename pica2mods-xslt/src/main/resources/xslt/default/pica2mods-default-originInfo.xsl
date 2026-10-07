@@ -82,13 +82,12 @@
                     <xsl:value-of select="concat('[Reproduzierte Teile: ', ./text(), ']')" />
                   </xsl:comment>
                 </xsl:for-each>
-                <xsl:for-each select="./p:subfield[@code='n']">
-                  <xsl:text>&#xA;      </xsl:text>
-                  <xsl:comment>
-                    <xsl:value-of select="concat('[Anmerkung: ', ./text(), ']')" />
-                  </xsl:comment>
-                </xsl:for-each>      	
       	      </mods:originInfo>
+      	      <xsl:for-each select="./p:subfield[@code='n']">
+                <mods:note type="reproduction">
+                  <xsl:value-of select="." />
+                </mods:note>
+              </xsl:for-each>       
       	    </xsl:for-each>
       	  </xsl:when>
       	  <xsl:otherwise>
