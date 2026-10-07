@@ -422,9 +422,11 @@
             <xsl:when test="$parent/p:datafield[@tag='004V']">
               <mods:identifier type='doi'><xsl:value-of select="$parent/p:datafield[@tag='004V']/p:subfield[@code='0']" /></mods:identifier>
             </xsl:when>
-            <xsl:when test="$parent/p:datafield[@tag='017C']">
-              <mods:identifier type='url'><xsl:value-of select="$parent/p:datafield[@tag='017C'][1]/p:subfield[@code='u']" /></mods:identifier>
-           </xsl:when>
+            <xsl:otherwise>
+              <xsl:for-each select="$parent/p:datafield[@tag='017C' and (./p:subfield[@code='x']='D' or ./p:subfield[@code='x']='H')][1]">
+                <mods:identifier type="url"><xsl:value-of select="./p:subfield[@code='u']" /></mods:identifier>
+              </xsl:for-each>
+            </xsl:otherwise>
           </xsl:choose>
           <xsl:if test="$parent[starts-with(p:datafield[@tag='002@']/p:subfield[@code='0'], 'Ob')]/p:datafield[@tag='006Z']">
             <mods:identifier type="zdb">
