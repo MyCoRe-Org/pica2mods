@@ -114,17 +114,22 @@
     
   <!-- delete other originInfo[@eventType=digitization] -->
   <xsl:template match="mods:mods/mods:originInfo[@eventType='digitization']" mode="ubrPostProcessing">
+    <!-- if multiple 'Gesamttitel' are matching with the classification - the originInfo will be copied multiple times 
+         - make sure only one (the 'first') originInfo is returned -->
     <xsl:variable name="oi" select="." />
-    <xsl:for-each select="comment()">
-      <xsl:if test="starts-with(., '[Gesamttitel: ')">
-        <xsl:variable name="pica4110" select="lower-case(replace(., '\[Gesamttitel: (.*)\]','$1'))" />
-        <xsl:for-each select="document('classification:provider')//category/label[@xml:lang='x-pica-4110']">
-          <xsl:if test="$pica4110 = replace(lower-case(./@text), '%default%', 'digitalisierte drucke der universitätsbibliothek rostock')">
-             <xsl:copy-of select="$oi" />
-          </xsl:if>
-        </xsl:for-each>
-      </xsl:if>
-    </xsl:for-each>
+    <xsl:variable name="oi_result">
+      <xsl:for-each select="comment()">
+        <xsl:if test="starts-with(., '[Gesamttitel: ')">
+          <xsl:variable name="pica4110" select="lower-case(replace(., '\[Gesamttitel: (.*)\]','$1'))" />
+          <xsl:for-each select="document('classification:provider')//category/label[@xml:lang='x-pica-4110']">
+            <xsl:if test="$pica4110 = replace(lower-case(./@text), '%default%', 'digitalisierte drucke der universitätsbibliothek rostock')">
+               <xsl:copy-of select="$oi" />
+            </xsl:if>
+          </xsl:for-each>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:copy-of select="$oi_result/mods:originInfo[1]" />
   </xsl:template>
 
   <!-- delete other mods:note[@type=available volumes] -->
