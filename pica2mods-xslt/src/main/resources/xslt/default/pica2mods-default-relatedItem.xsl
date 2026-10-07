@@ -406,11 +406,6 @@
                 <mods:identifier type='url'><xsl:value-of select="$parent/p:datafield[@tag='017C'][1]/p:subfield[@code='u']" /></mods:identifier>
               </xsl:when>
             </xsl:choose>
-            <xsl:if test="$parent[starts-with(p:datafield[@tag='002@']/p:subfield[@code='0'], 'Ob')]/p:datafield[@tag='006Z']">
-            <mods:identifier type="zdb">
-              <xsl:value-of select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']" />
-            </mods:identifier>
-            </xsl:if>
           </xsl:if>
         </xsl:when>
         <xsl:otherwise>
