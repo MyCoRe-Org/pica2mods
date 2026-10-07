@@ -388,6 +388,78 @@
       </mods:dateCaptured>
     </xsl:if>
   </xsl:template>
+  
+  <xsl:template name="common_date_captured_037J">
+    <xsl:param name="datafield" />
+    <xsl:choose>
+      <!-- Achtung: In ZDB-Aufnahmen (Zeitschriftendatensätzen) enthalten die Unterfelder $g und $h 
+           – anders als bei den im K10plus erfassten Datensätzen – 
+             die Zählung des Originals in Sortierform. 
+             Hier nicht anzeigen! -->
+      <xsl:when test="matches($datafield/p:subfield[@code='d'], '^\d\d\d\d$')">
+        <mods:dateCaptured keyDate="yes" encoding="w3cdtf">
+          <xsl:value-of select="$datafield/p:subfield[@code='d']" />
+        </mods:dateCaptured>
+        <mods:dateCaptured>
+          <xsl:value-of select="$datafield/p:subfield[@code='d']" />
+        </mods:dateCaptured>
+      </xsl:when>
+      <xsl:when test="$datafield[p:subfield[@code='d'] and p:subfield[@code='g'] and p:subfield[@code='h']]">
+        <mods:dateCaptured keyDate="yes" encoding="w3cdtf" point="start">
+          <xsl:value-of select="$datafield/p:subfield[@code='g']" />
+        </mods:dateCaptured>
+        <mods:dateCaptured encoding="w3cdtf" point="end">
+          <xsl:value-of select="$datafield/p:subfield[@code='h']" />
+        </mods:dateCaptured>
+        <mods:dateCaptured>
+          <xsl:value-of select="$datafield/p:subfield[@code='d']" />
+        </mods:dateCaptured>
+      </xsl:when>
+      <xsl:when test="$datafield[p:subfield[@code='d'] and p:subfield[@code='g']]">
+        <mods:dateCaptured keyDate="yes" encoding="w3cdtf">
+          <xsl:value-of select="$datafield/p:subfield[@code='g']" />
+        </mods:dateCaptured>
+        <mods:dateCaptured>
+          <xsl:value-of select="$datafield/p:subfield[@code='d']" />  
+        </mods:dateCaptured>
+      </xsl:when>
+      <xsl:when test="$datafield[p:subfield[@code='g'] and p:subfield[@code='h']] and $datafield/p:subfield[@code='g'] = $datafield/p:subfield[@code='h']">
+        <mods:dateCaptured keyDate="yes" encoding="w3cdtf">
+          <xsl:value-of select="$datafield/p:subfield[@code='g']" />
+        </mods:dateCaptured>
+        <mods:dateCaptured>
+          <xsl:value-of select="$datafield/p:subfield[@code='g']" />  
+        </mods:dateCaptured>
+      </xsl:when>
+      <xsl:when test="$datafield[p:subfield[@code='g'] and p:subfield[@code='h']] and not($datafield/p:subfield[@code='g'] = $datafield/p:subfield[@code='h'])">
+        <mods:dateCaptured keyDate="yes" encoding="w3cdtf" point="start">
+          <xsl:value-of select="$datafield/p:subfield[@code='g']" />
+        </mods:dateCaptured>
+        <mods:dateCaptured encoding="w3cdtf" point="end">
+          <xsl:value-of select="$datafield/p:subfield[@code='h']" />
+        </mods:dateCaptured>
+        <mods:dateCaptured>
+          <xsl:value-of select="concat('[', $datafield/p:subfield[@code='g'], '-', $datafield/p:subfield[@code='h'], ']')" />  
+        </mods:dateCaptured>
+      </xsl:when>
+      <xsl:when test="$datafield[p:subfield[@code='d']]">
+        <mods:dateCaptured>
+          <xsl:if test="matches($datafield/p:subfield[@code='d'], '^\d\d\d\d$')">
+            <xsl:attribute name="keyDate">yes</xsl:attribute>
+            <xsl:attribute name="encoding">w3cdtf</xsl:attribute>
+          </xsl:if>  
+          <xsl:value-of select="$datafield/p:subfield[@code='d']" />
+        </mods:dateCaptured>
+      </xsl:when>
+      <xsl:when test="$datafield[p:subfield[@code='g']]">
+        <mods:dateCaptured>
+          <xsl:attribute name="keyDate">yes</xsl:attribute>
+          <xsl:attribute name="encoding">w3cdtf</xsl:attribute>
+          <xsl:value-of select="$datafield/p:subfield[@code='g']" />
+        </mods:dateCaptured>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
 
   <!-- normierte Orte 4040, außer Hochschulort $4=uvp -->
   <!-- PPN: 896299511 Petropoli -> Sankt Petersburg -->
