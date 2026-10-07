@@ -162,4 +162,28 @@
     <xsl:value-of select="string-join($output/part, '-')" />
   </xsl:function>
   
+  <xsl:function name="pica2mods:institution_place_expansion" as="xs:string">
+    <!-- ergänzt bei generischen Institutionsnamen wie Universität, Universitätsbibliothek... den Ort an den Namen -->
+    <xsl:param name="institution" as="xs:string"/>
+    <xsl:param name="place"       as="xs:string?"/>
+  
+    <xsl:choose>
+      <xsl:when test="normalize-space($place) = ''">
+        <xsl:sequence select="$institution"/>
+      </xsl:when>
+      <xsl:when test="contains(lower-case($institution), lower-case($place))">
+        <xsl:sequence select="$institution"/>
+      </xsl:when>
+      <xsl:when test="tokenize('universität,universitätsbibliothek,hochschule,hochschulbibliothek,universitätsverlag,stadtarchiv', ',') = tokenize(lower-case($institution),' ') and not(contains(lower-case($institution), lower-case($place)))">
+        <xsl:sequence select="concat($institution, ' ', $place)"/>
+      </xsl:when>
+      <xsl:when test="tokenize('university,library,archive', ',') = tokenize(lower-case($institution), ' ') and not(contains(lower-case($institution), lower-case($place)))">
+        <xsl:sequence select="concat($place, ' ', $institution)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="$institution"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+  
 </xsl:stylesheet>
