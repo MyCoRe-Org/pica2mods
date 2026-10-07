@@ -62,16 +62,14 @@
       <xsl:if test="$picaMode = 'REPRO'"> 
         <xsl:choose>
       	  <xsl:when test="./p:datafield[@tag='037J']"> <!-- 4238 -->
-            <xsl:for-each select="./p:datafield[@tag='037J' and ./p:subfield[@code='b' or @code='c']]">
+            <xsl:for-each select="./p:datafield[@tag='037J']">
               <mods:originInfo eventType="digitization">
                 <xsl:call-template name="common_date_captured_037J">
                   <xsl:with-param name="datafield" select="." />
                 </xsl:call-template>
-                <xsl:if test="./p:subfield[@code='b' or @code='c']">
-                  <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
-                    <xsl:with-param name="datafield" select="." />
-                  </xsl:call-template>
-                </xsl:if>
+                <xsl:call-template name="common_publisher_name_place_with_university_place_expansion_037J">
+                  <xsl:with-param name="datafield" select="." />
+                </xsl:call-template>
                 <xsl:for-each select="./p:subfield[@code='f']">
                   <xsl:text>&#xA;      </xsl:text>
                   <xsl:comment>
