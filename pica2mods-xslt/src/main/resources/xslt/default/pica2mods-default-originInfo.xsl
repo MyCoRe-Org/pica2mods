@@ -163,46 +163,12 @@
         Ortsnamen gibt, die nicht im Namen der Institution enthalten sind, dann ergänze den Ortsnamen hinter den Insitutionsnamen 
         Beachte: ($sequence = $item) prüft, ob das Item bestandteil der Liste ist -->
       <xsl:when
-        test="$datafield/@tag='037J' and $datafield/p:subfield[@code='c' 
-                 and (tokenize('universität,universitätsbibliothek,hochschule,hochschulbibliothek,universitätsverlag,stadtarchiv',',') = tokenize(lower-case(.),' ')[1]) 
-                 and $datafield/p:subfield[@code='b' and not(contains($datafield/p:subfield[@code='c'][1], . ))]] ">
-        <mods:publisher>
-          <xsl:value-of
-            select="concat($datafield/p:subfield[@code='c'][1], ' ', $datafield/p:subfield[@code='b'][1])" />
-        </mods:publisher>
-      </xsl:when>
-      <xsl:when
-        test="$datafield/@tag='037J' and $datafield/p:subfield[@code='c' 
-                 and (tokenize('university,library',',') = tokenize(lower-case(.),' ')[1]) 
-                 and $datafield/p:subfield[@code='b' and not(contains($datafield/p:subfield[@code='c'][1], . ))]] ">
-        <mods:publisher>
-          <xsl:value-of
-            select="concat($datafield/p:subfield[@code='c'][1], ' of ', $datafield/p:subfield[@code='b'][1])" />
-        </mods:publisher>
-      </xsl:when>
-      <xsl:when test="$datafield/@tag='037J' and $datafield/p:subfield[@code='c']">
-        <xsl:for-each select="$datafield/p:subfield[@code='c']">
-          <mods:publisher>
-            <xsl:value-of select="." />
-          </mods:publisher>
-        </xsl:for-each>
-      </xsl:when>
-      <xsl:when
         test="$datafield/p:subfield[@code='n' 
-                 and (tokenize('universität,universitätsbibliothek,hochschule,hochschulbibliothek,universitätsverlag,stadtarchiv',',') = tokenize(lower-case(.),' ')[1]) 
+                 and (tokenize('universität,universitätsbibliothek,hochschule,hochschulbibliothek,universitätsverlag,stadtarchiv,university,library',',') = tokenize(lower-case(.),' ')[1]) 
                  and $datafield/p:subfield[@code='p' and not(contains($datafield/p:subfield[@code='n'][1], . ))]] ">
         <mods:publisher>
           <xsl:value-of
             select="concat($datafield/p:subfield[@code='n'][1], ' ', $datafield/p:subfield[@code='p'][1])" />
-        </mods:publisher>
-      </xsl:when>
-      <xsl:when
-        test="$datafield/p:subfield[@code='n' 
-                 and (tokenize('university,library',',') = tokenize(lower-case(.),' ')[1]) 
-                 and $datafield/p:subfield[@code='p' and not(contains($datafield/p:subfield[@code='n'][1], . ))]] ">
-        <mods:publisher>
-          <xsl:value-of
-            select="concat($datafield/p:subfield[@code='n'][1], ' of ', $datafield/p:subfield[@code='p'][1])" />
         </mods:publisher>
       </xsl:when>
       <xsl:otherwise>
@@ -214,26 +180,33 @@
       </xsl:otherwise>
     </xsl:choose>
     
-    <xsl:choose>
-      <xsl:when test="$datafield/@tag='037J' and $datafield/p:subfield[@code='b']">
-        <xsl:for-each select="$datafield/p:subfield[@code='b']">
+    <xsl:for-each select="$datafield/p:subfield[@code='p']">
+      <mods:place>
+        <mods:placeTerm type="text">
+          <xsl:value-of select="." />
+        </mods:placeTerm>
+      </mods:place>
+    </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template name="common_publisher_name_place_with_university_place_expansion_037J">
+    <xsl:param name="datafield" />
+    <xsl:for-each select="$datafield/p:subfield[@code='c' or @code='b']">
+      <xsl:choose>
+        <xsl:when test="./@code='c'">
+          <mods:publisher>
+            <xsl:value-of select="." />
+          </mods:publisher>
+        </xsl:when>
+        <xsl:when test="./@code='b'">
           <mods:place>
             <mods:placeTerm type="text">
               <xsl:value-of select="." />
             </mods:placeTerm>
           </mods:place>
-        </xsl:for-each>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:for-each select="$datafield/p:subfield[@code='p']">
-          <mods:place>
-            <mods:placeTerm type="text">
-              <xsl:value-of select="." />
-            </mods:placeTerm>
-          </mods:place>
-        </xsl:for-each>
-      </xsl:otherwise>
-    </xsl:choose>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="common_issuance">
