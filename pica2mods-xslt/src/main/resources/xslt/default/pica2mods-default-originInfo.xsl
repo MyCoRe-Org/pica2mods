@@ -294,7 +294,7 @@
   <xsl:template name="common_date_issued">
     <xsl:param name="datafield" />
     <xsl:choose>
-      <xsl:when test="$datafield/p:subfield[@code='b']">
+      <xsl:when test="$datafield[p:subfield[@code='a'] and p:subfield[@code='b']]">
         <mods:dateIssued keyDate="yes" encoding="w3cdtf" point="start">
           <xsl:value-of select="translate($datafield/p:subfield[@code='a'], 'X','0')" />
         </mods:dateIssued>
@@ -302,7 +302,7 @@
           <xsl:value-of select="translate($datafield/p:subfield[@code='b'], 'X', '9')" />
         </mods:dateIssued>
       </xsl:when>
-      <xsl:otherwise>
+      <xsl:when test="$datafield[p:subfield[@code='a']]">
         <xsl:choose>
           <xsl:when test="contains($datafield/p:subfield[@code='a'], 'X')">
             <mods:dateIssued keyDate="yes" encoding="w3cdtf" point="start">
@@ -318,7 +318,7 @@
             </mods:dateIssued>
           </xsl:otherwise>
         </xsl:choose>
-      </xsl:otherwise>
+      </xsl:when>
     </xsl:choose>
     <xsl:if test="$datafield/p:subfield[@code='n']">
       <mods:dateIssued>
@@ -331,7 +331,7 @@
   <xsl:template name="common_date_created">
     <xsl:param name="datafield" />
     <xsl:choose>
-      <xsl:when test="$datafield/p:subfield[@code='b']">
+      <xsl:when test="$datafield[p:subfield[@code='a'] and p:subfield[@code='b']]">
         <mods:dateCreated keyDate="yes" encoding="w3cdtf" point="start">
           <xsl:value-of select="translate($datafield/p:subfield[@code='a'], 'X','0')" />
         </mods:dateCreated>
@@ -339,7 +339,7 @@
           <xsl:value-of select="translate($datafield/p:subfield[@code='b'], 'X', '9')" />
         </mods:dateCreated>
       </xsl:when>
-      <xsl:otherwise>
+      <xsl:when test="$datafield[p:subfield[@code='a']]">
         <xsl:choose>
           <xsl:when test="contains($datafield/p:subfield[@code='a'], 'X')">
             <mods:dateCreated keyDate="yes" encoding="w3cdtf" point="start">
@@ -355,7 +355,7 @@
             </mods:dateCreated>
           </xsl:otherwise>
         </xsl:choose>
-      </xsl:otherwise>
+      </xsl:when>
     </xsl:choose>
     <xsl:if test="$datafield/p:subfield[@code='n']">
       <mods:dateCreated>
@@ -364,24 +364,23 @@
     </xsl:if>
   </xsl:template>
 
-
   <!-- ähnlich zu common_date_issued, ohne Behandlung der XX-Fälle -->
   <xsl:template name="common_date_captured">
     <xsl:param name="datafield" />
     <xsl:choose>
-      <xsl:when test="$datafield/p:subfield[@code='b']">
-        <mods:dateCaptured encoding="w3cdtf" keyDate="yes" point="start">
+      <xsl:when test="$datafield[p:subfield[@code='a'] and p:subfield[@code='b']]">
+        <mods:dateCaptured keyDate="yes" encoding="w3cdtf" point="start">
           <xsl:value-of select="$datafield/p:subfield[@code='a']" />
         </mods:dateCaptured>
         <mods:dateCaptured encoding="w3cdtf" point="end">
           <xsl:value-of select="$datafield/p:subfield[@code='b']" />
         </mods:dateCaptured>
       </xsl:when>
-      <xsl:otherwise>
-        <mods:dateCaptured encoding="w3cdtf" keyDate="yes">
+      <xsl:when test="$datafield[p:subfield[@code='a']]">
+        <mods:dateCaptured keyDate="yes" encoding="w3cdtf">
           <xsl:value-of select="$datafield/p:subfield[@code='a']" />
         </mods:dateCaptured>
-      </xsl:otherwise>
+      </xsl:when>
     </xsl:choose>
     <xsl:if test="$datafield/p:subfield[@code='n']">
       <mods:dateCaptured>
