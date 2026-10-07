@@ -38,8 +38,8 @@ public class XMLSchemaValidator {
             + " http://dfg-viewer.de/ http://purl.uni-rostock.de/ub/standards/dfg-viewer.xsd"
             + " info:srw/schema/5/picaXML-v1.0 http://www.loc.gov/standards/sru/recordSchemas/pica-xml-v1-0.xsd";
     */
-    static final String DEFAULT_METS_SCHEMA_LOCATIONS
-        = "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd";
+    static final String DEFAULT_SCHEMA_LOCATIONS
+        = "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-8.xsd";
 
     private DocumentBuilderFactory DOC_BUILDER_FACTORY;
     private boolean isValid = true;
@@ -47,7 +47,7 @@ public class XMLSchemaValidator {
     private String errorMsg = "";
 
     public XMLSchemaValidator() {
-        init(DEFAULT_METS_SCHEMA_LOCATIONS);
+        init(DEFAULT_SCHEMA_LOCATIONS);
     }
 
     public XMLSchemaValidator(String schemaLocations) {
