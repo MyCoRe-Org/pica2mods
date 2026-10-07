@@ -64,11 +64,9 @@
       	  <xsl:when test="./p:datafield[@tag='037J']"> <!-- 4238 -->
             <xsl:for-each select="./p:datafield[@tag='037J' and ./p:subfield[@code='b' or @code='c']]">
               <mods:originInfo eventType="digitization">
-                <xsl:if test="./p:subfield[@code='d']">
-                  <mods:dateCaptured keyDate="yes">
-                    <xsl:value-of select="./p:subfield[@code='d']" />
-                  </mods:dateCaptured>
-                </xsl:if>
+                <xsl:call-template name="common_date_captured_037J">
+                  <xsl:with-param name="datafield" select="." />
+                </xsl:call-template>
                 <xsl:if test="./p:subfield[@code='b' or @code='c']">
                   <xsl:call-template name="common_publisher_name_place_with_university_place_expansion">
                     <xsl:with-param name="datafield" select="." />
