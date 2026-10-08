@@ -223,9 +223,9 @@
 
     <!-- URLs -->
     <xsl:for-each
-      select="./p:datafield[@tag='017C' and (./p:subfield[@code='x']='D' or ./p:subfield[@code='x']='H')]/p:subfield[@code='u']">
+      select="./p:datafield[@tag='017C' and (starts-with(./p:subfield[@code='x'],'D') or starts-with(./p:subfield[@code='x'],'H'))]/p:subfield[@code='u']">
       <!-- 4950 (kein eigenes Feld) -->
-      <mods:identifier type="url">
+      <mods:identifier ID="{generate-id(..)}" type="url">
         <xsl:value-of select="replace(., 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />
       </mods:identifier>
     </xsl:for-each>

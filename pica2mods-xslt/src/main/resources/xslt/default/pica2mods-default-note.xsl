@@ -129,10 +129,10 @@
     <xsl:variable name="pica0500_2"
       select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
     <xsl:if test="$pica0500_2='b'">
-      <xsl:for-each select="./p:datafield[@tag='017C']/p:subfield[@code='x']">
+      <xsl:for-each select="./p:datafield[@tag='017C']/p:subfield[@code='x' and (starts-with(.,'D') or starts-with(.,'H'))]">
         <xsl:variable name="avail_vol" select="substring-after(.,'; ')" />
         <xsl:if test="string-length($avail_vol) &gt; 0">
-          <mods:note type="available_volumes{if (contains(../p:subfield[@code='u'], '://purl.uni-rostock.de')) then ('@DE-28') else ('')}">
+          <mods:note IDREF="{generate-id(..)}" type="available_volumes">
             <xsl:value-of select="$avail_vol" />
           </mods:note>
         </xsl:if>

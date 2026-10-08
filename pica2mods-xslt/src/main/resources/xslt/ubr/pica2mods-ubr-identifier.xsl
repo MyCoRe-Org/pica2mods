@@ -24,7 +24,7 @@
 
     <xsl:for-each select="./p:datafield[@tag='017C']"> <!-- 4950 (kein eigenes Feld) -->
       <xsl:if test="contains(./p:subfield[@code='u'], '://purl.uni-rostock.de')">
-        <mods:identifier type="purl">
+        <mods:identifier ID="{generate-id(.)}" type="purl">
           <xsl:value-of select="replace(./p:subfield[@code='u'], 'http://', 'https://')" />
         </mods:identifier>
       </xsl:if>

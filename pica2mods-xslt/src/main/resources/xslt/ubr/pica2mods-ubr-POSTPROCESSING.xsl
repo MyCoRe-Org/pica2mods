@@ -133,8 +133,15 @@
   </xsl:template>
 
   <!-- delete other mods:note[@type=available volumes] -->
-  <xsl:template match="mods:mods/mods:note[@type='available_volumes']" mode="ubrPostProcessing" />
-
+  <!-- <xsl:template match="mods:mods/mods:note[@type='available_volumes' and not(contains(//mods:identifier[@ID=./@IDREF], 'purl.uni-rostock.de'))]" mode="ubrPostProcessing" /> -->
+  
+  <xsl:template match="mods:mods/mods:note[@type='available_volumes']" mode="ubrPostProcessing">
+   <xsl:variable name="theId" select="./@IDREF" />
+    <xsl:if test="//mods:identifier[@ID=$theId and contains(., '://purl.uni-rostock.de')]">
+       <xsl:copy-of select="." />
+    </xsl:if>
+   </xsl:template>
+  
   <xsl:template match="*|@*|processing-instruction()|comment()" mode="ubrPostProcessing">
     <xsl:copy>
       <xsl:apply-templates select="*|@*|text()|processing-instruction()|comment()"
