@@ -42,17 +42,7 @@
       </mods:location>
     </xsl:for-each>
     <!-- 4950 URL zum Volltext -->
-    <xsl:for-each select="./p:datafield[@tag='017C'][p:subfield[@code='x' and (starts-with(.,'D') or starts-with(.,'H'))]]">
-      <mods:location>
-        <mods:url access="object in context">
-          <xsl:variable name="avail_vol" select="substring-after(./p:subfield[@code='x'],'; ')" />
-          <xsl:if test="string-length($avail_vol) &gt; 0">
-            <xsl:attribute name="note" select="$avail_vol" />
-          </xsl:if>
-          <xsl:value-of select="./p:subfield[@code='u']" />
-        </mods:url>
-      </mods:location>
-    </xsl:for-each>
+    <xsl:copy-of select="pica2mods:createLocationsWithUrl(.)" />
   </xsl:template>
 
 </xsl:stylesheet>

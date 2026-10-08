@@ -423,9 +423,7 @@
               <mods:identifier type='doi'><xsl:value-of select="$parent/p:datafield[@tag='004V']/p:subfield[@code='0']" /></mods:identifier>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:for-each select="$parent/p:datafield[@tag='017C' and (./p:subfield[@code='x']='D' or ./p:subfield[@code='x']='H')][1]">
-                <mods:identifier type="url"><xsl:value-of select="./p:subfield[@code='u']" /></mods:identifier>
-              </xsl:for-each>
+                <xsl:copy-of select="pica2mods:createLocationsWithUrl($parent)" />
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
