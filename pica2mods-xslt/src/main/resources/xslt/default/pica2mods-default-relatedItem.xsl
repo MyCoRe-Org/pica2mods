@@ -28,12 +28,33 @@
       </xsl:for-each>
     </xsl:if>
 
-    <xsl:for-each select="./p:datafield[@tag='039D' and p:subfield[@code='n'] = 'Verlags-Ausgabe']"> <!-- 4243 Beziehungen auf Manifestationsebene -->
+    <xsl:for-each select="./p:datafield[@tag='039D']"> <!-- 4243 Beziehungen auf Manifestationsebene -->
       <xsl:call-template name="COMMON_Reference">
         <xsl:with-param name="type">otherFormat</xsl:with-param>
+        <xsl:with-param name="otherType">
+          <xsl:choose>
+            <xsl:when test="starts-with(./p:subfield[@code='i'], 'Digitalisiert')">digital_reproduction</xsl:when>
+             <xsl:when test="count(./../p:datafield[@tag='039D'])=1 and ./../p:datafield[@tag='037H']/p:subfield[@code='a' and contains(text(), 'Digitalisierungsvorlage:')]">analog_original</xsl:when>
+            <xsl:otherwise>other_manifestation</xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
         <xsl:with-param name="datafield" select="." />
       </xsl:call-template>
     </xsl:for-each>
+    <xsl:for-each select="./p:datafield[@tag='039I']"> <!-- 4256  Beziehungen zur Reproduktion in anderer physischer Form -->
+      <xsl:call-template name="COMMON_Reference">
+        <xsl:with-param name="type">otherFormat</xsl:with-param>
+        <xsl:with-param name="otherType">
+          <xsl:choose>
+            <xsl:when test="./p:subfield[@code='i'] ='Elektronische Reproduktion von'">analog_original</xsl:when>
+            <xsl:when test="./p:subfield[@code='i'] ='Elektronische Reproduktion'">digital_reproduction</xsl:when>
+            <xsl:otherwise>other_reproduction</xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
+        <xsl:with-param name="datafield" select="." />
+      </xsl:call-template>
+    </xsl:for-each>
+
     <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261 Themenbeziehungen (Beziehung zu der Resource, die beschrieben wird) -->
       <xsl:call-template name="COMMON_Reference">
         <xsl:with-param name="type">references</xsl:with-param>
@@ -394,22 +415,21 @@
       <xsl:choose>
         <xsl:when test="$datafield/p:subfield[@code='9']">
           <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, ./p:subfield[@code='9'])" />
-          <xsl:if test="starts-with($parent/p:datafield[@tag='002@']/p:subfield[@code='0'], 'O')">
-            <xsl:call-template name="parent_info">
-              <xsl:with-param name="parent" select="$parent" />
-            </xsl:call-template>
-            <xsl:choose>
-              <xsl:when test="$parent/p:datafield[@tag='004V']">
-                <mods:identifier type='doi'><xsl:value-of select="$parent/p:datafield[@tag='004V']/p:subfield[@code='0']" /></mods:identifier>
-              </xsl:when>
-              <xsl:when test="$parent/p:datafield[@tag='017C']">
-                <mods:identifier type='url'><xsl:value-of select="$parent/p:datafield[@tag='017C'][1]/p:subfield[@code='u']" /></mods:identifier>
-              </xsl:when>
-            </xsl:choose>
-          </xsl:if>
+          <xsl:call-template name="parent_info">
+            <xsl:with-param name="parent" select="$parent" />
+          </xsl:call-template>
+          <xsl:choose>
+            <xsl:when test="$parent/p:datafield[@tag='004V']">
+              <mods:identifier type='doi'><xsl:value-of select="$parent/p:datafield[@tag='004V']/p:subfield[@code='0']" /></mods:identifier>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:for-each select="$parent/p:datafield[@tag='017C' and (./p:subfield[@code='x']='D' or ./p:subfield[@code='x']='H')][1]">
+                <mods:identifier type="url"><xsl:value-of select="./p:subfield[@code='u']" /></mods:identifier>
+              </xsl:for-each>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-        <!-- <xsl:when test="$datafield/p:subfield[@code='C' and text()='DOI']"> -->
          <xsl:if test="$datafield/p:subfield[@code='a']">
             <xsl:variable name="titlefield">
               <p:datafield tag="021A">
@@ -439,11 +459,8 @@
           </xsl:if>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:if test="$datafield/p:subfield[@code='i']">
-        <mods:note type="relation_label"><xsl:value-of select="$datafield/p:subfield[@code='i']" /></mods:note>
-      </xsl:if>
-      <xsl:if test="$datafield[@tag='039D']/p:subfield[@code='n']">  <!-- 4243 039D Beziehung auf Manifestationsebene -->
-        <mods:note type="format_type"><xsl:value-of select="$datafield[@tag='039D']/p:subfield[@code='n']" /></mods:note>
+      <xsl:if test="$datafield/p:subfield[@code='i'] | $datafield[@tag='039D' or @tag='039I']/p:subfield[@code='n']">
+        <mods:note type="relation_label"><xsl:value-of select="string-join(($datafield/p:subfield[@code='i'], $datafield[@tag='039D' or @tag='039I']/p:subfield[@code='n']),' ')" /></mods:note>
       </xsl:if>
     </mods:relatedItem>
   </xsl:template>
