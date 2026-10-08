@@ -428,11 +428,6 @@
               </xsl:for-each>
             </xsl:otherwise>
           </xsl:choose>
-          <xsl:if test="$parent[starts-with(p:datafield[@tag='002@']/p:subfield[@code='0'], 'Ob')]/p:datafield[@tag='006Z']">
-            <mods:identifier type="zdb">
-              <xsl:value-of select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']" />
-            </mods:identifier>
-          </xsl:if>
         </xsl:when>
         <xsl:otherwise>
          <xsl:if test="$datafield/p:subfield[@code='a']">

@@ -100,8 +100,8 @@
     <xsl:for-each select="./p:datafield[@tag='017H']">
       <mods:note type="external_link">
         <xsl:attribute name="xlink:href">
-                    <xsl:value-of select="./p:subfield[@code='u']" />
-                </xsl:attribute>
+          <xsl:value-of select="./p:subfield[@code='u']" />
+        </xsl:attribute>
         <xsl:value-of select="./p:subfield[@code='y']" />
       </mods:note>
     </xsl:for-each>
@@ -130,9 +130,12 @@
       select="substring(./p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
     <xsl:if test="$pica0500_2='b'">
       <xsl:for-each select="./p:datafield[@tag='017C']/p:subfield[@code='x']">
-        <mods:note type="available_volumes{if (contains(../p:subfield[@code='u'], '://purl.uni-rostock.de')) then ('@DE-28') else ('')}">
-          <xsl:value-of select="substring-after(.,'; ')" />
-        </mods:note>
+        <xsl:variable name="avail_vol" select="substring-after(.,'; ')" />
+        <xsl:if test="string-length($avail_vol) &gt; 0">
+          <mods:note type="available_volumes{if (contains(../p:subfield[@code='u'], '://purl.uni-rostock.de')) then ('@DE-28') else ('')}">
+            <xsl:value-of select="$avail_vol" />
+          </mods:note>
+        </xsl:if>
       </xsl:for-each>
     </xsl:if>
   </xsl:template>
