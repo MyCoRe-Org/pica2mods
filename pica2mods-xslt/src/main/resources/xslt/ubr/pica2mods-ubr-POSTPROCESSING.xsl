@@ -160,7 +160,7 @@
          </mods:location>
        </xsl:when>
        <xsl:otherwise>
-         <!-- //remove other locations -->
+         <xsl:copy-of select="." />
        </xsl:otherwise>
      </xsl:choose>
   </xsl:template>
