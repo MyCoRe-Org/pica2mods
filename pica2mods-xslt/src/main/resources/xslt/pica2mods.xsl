@@ -20,7 +20,7 @@
   <xsl:import href="default/pica2mods-default-note.xsl" />
   <xsl:import href="default/pica2mods-default-abstract.xsl" />
   <xsl:import href="default/pica2mods-default-subject.xsl" />
-  <xsl:import href="default/pica2mods-default-accessCondtion.xsl" />
+  <xsl:import href="default/pica2mods-default-accessCondition.xsl" />
   <xsl:import href="default/pica2mods-default-relatedItem.xsl" />
 
   <xsl:import href="_common/pica2mods-pica-PREPROCESSING.xsl" />

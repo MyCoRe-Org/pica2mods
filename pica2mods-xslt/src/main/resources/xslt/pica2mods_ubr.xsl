@@ -63,7 +63,8 @@
       <xsl:call-template name="modsOriginInfo" />
       <xsl:call-template name="modsLocation" />
       <xsl:call-template name="modsNote" />
-      <xsl:call-template name="modsAccessCondition" />
+      <!-- disabled - we keep using our MyCoRe classification from 8600 -->
+      <!-- <xsl:call-template name="modsAccessCondition" />-->
       <xsl:call-template name="modsSubject" />
       <xsl:call-template name="modsRelatedItem" />
     </mods:mods>
