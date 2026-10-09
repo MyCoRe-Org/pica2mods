@@ -50,5 +50,23 @@
         <xsl:value-of select="./p:subfield[@code='a']" />
       </mods:accessCondition>
     </xsl:for-each>
+    <xsl:if test="not(./p:datafield[@tag='017R'])">
+      <xsl:for-each select="(./p:datafield[@tag='017C'][p:subfield[@code='x' and (starts-with(.,'D') or starts-with(.,'H'))]])[1]/p:subfield[@code='4']">
+        <xsl:choose>
+          <xsl:when test="./text()='LF'">
+            <mods:accessCondition authority="k10plus_field_4950" type="restriction on access"
+                xlink:href="http://purl.org/coar/access_right/c_abf2">Open Access</mods:accessCondition>
+          </xsl:when>
+          <xsl:when test="./text()='KW' or ./text()='NL'">
+            <mods:accessCondition authority="k10plus_field_4950" type="restriction on access"
+                xlink:href="http://purl.org/coar/access_right/c_f1cf">Embargoed Access</mods:accessCondition>
+          </xsl:when>
+          <xsl:when test="./text()='ZZ' or ./text()='EL' or ./text()='PU'">
+            <mods:accessCondition authority="k10plus_field_4950" type="restriction on access"
+                xlink:href="http://purl.org/coar/access_right/c_16ec">Restricted Access</mods:accessCondition>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:for-each>
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
