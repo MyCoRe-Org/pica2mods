@@ -19,6 +19,12 @@
   <xsl:template name="modsAccessCondition">
     <!-- 4980 Rechteinformation -->
     <xsl:for-each select="./p:datafield[@tag='017M']">
+      <xsl:if test="p:subfield[@code='b']">
+        <xsl:text>&#xA;      </xsl:text>
+        <xsl:comment>
+          <xsl:value-of select="concat('[Source: ', p:subfield[@code='b'], ']')" />
+        </xsl:comment>
+      </xsl:if>
       <mods:accessCondition authority="k10plus_field_4980" type="use and reproduction">
         <xsl:if test="./p:subfield[@code='u']">
           <xsl:attribute name="xlink:href" select="./p:subfield[@code='u']" />
@@ -31,6 +37,12 @@
     </xsl:for-each>
     <!-- 4985 AccessStatus -->
     <xsl:for-each select="./p:datafield[@tag='017R']">
+      <xsl:if test="p:subfield[@code='b']">
+        <xsl:text>&#xA;      </xsl:text>
+        <xsl:comment>
+          <xsl:value-of select="concat('[Source: ', p:subfield[@code='b'], ']')" />
+        </xsl:comment>
+      </xsl:if>
       <mods:accessCondition authority="k10plus_field_4985" type="restriction on access">
         <xsl:if test="./p:subfield[@code='u']">
           <xsl:attribute name="xlink:href" select="./p:subfield[@code='u']" />
