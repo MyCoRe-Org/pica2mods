@@ -131,10 +131,40 @@
     </xsl:variable>
     <xsl:copy-of select="$oi_result/mods:originInfo[1]" />
   </xsl:template>
-
-  <!-- delete other mods:note[@type=available volumes] -->
-  <xsl:template match="mods:mods/mods:note[@type='available_volumes']" mode="ubrPostProcessing" />
-
+  
+  
+  <!-- update location -->
+  <xsl:template match="mods:mods/mods:location[mods:url]" mode="ubrPostProcessing">
+     <xsl:choose>
+       <xsl:when test="./mods:url/text() = ../mods:identifier[@type='purl']/text()">
+         <mods:location>
+           <xsl:copy-of select="./@*" />
+           <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/"
+              valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
+           <mods:url usage="primary">
+             <xsl:copy-of select="./mods:url/@*" />
+             <xsl:value-of select="replace(./mods:url, 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />
+           </mods:url>
+         </mods:location>
+       </xsl:when>
+       
+       <xsl:when test="contains(./mods:url, '://digibib.hs-nb.de/resolve/id')">
+         <mods:location>
+           <xsl:copy-of select="./@*" />
+           <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/"
+             valueURI="http://d-nb.info/gnd/1162078316">Hochschulbibliothek Neubrandenburg</mods:physicalLocation>
+           <mods:url usage="primary">
+             <xsl:copy-of select="./mods:url/@*" />
+             <xsl:value-of select="./mods:url" />
+           </mods:url>
+         </mods:location>
+       </xsl:when>
+       <xsl:otherwise>
+         <xsl:copy-of select="." />
+       </xsl:otherwise>
+     </xsl:choose>
+  </xsl:template>
+  
   <xsl:template match="*|@*|processing-instruction()|comment()" mode="ubrPostProcessing">
     <xsl:copy>
       <xsl:apply-templates select="*|@*|text()|processing-instruction()|comment()"
