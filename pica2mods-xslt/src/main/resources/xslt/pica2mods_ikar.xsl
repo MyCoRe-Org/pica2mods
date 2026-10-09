@@ -39,6 +39,7 @@
       <xsl:call-template name="modsGenre" />
       <xsl:call-template name="modsLocation" />
       <xsl:call-template name="modsRecordInfo" />
+      <xsl:call-template name="modsNote" />
       <xsl:call-template name="modsAccessCondition" />
       <xsl:call-template name="modsSubject" />
       <xsl:call-template name="modsRelatedItem" />
