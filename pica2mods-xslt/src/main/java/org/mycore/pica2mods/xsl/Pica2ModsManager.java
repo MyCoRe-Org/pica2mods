@@ -251,9 +251,12 @@ public class Pica2ModsManager {
                     sb.append(attributes.getValue("Implementation-Title")).append(" ")
                         .append(attributes.getValue("Implementation-Version"));
                     if (addCommitInfos) {
-                        sb.append(" [SCM: \"").append(attributes.getValue("SCM-Branch")).append("\" \"")
-                            .append(attributes.getValue("SCM-Commit"))
-                            .append("\" \"" + attributes.getValue("SCM-Time")).append("\"]");
+                        String branch = attributes.getValue("SCM-Branch");
+                        if (branch != null && !branch.isBlank()) {
+                            sb.append(" [SCM: \"").append(branch).append("\" \"")
+                                .append(attributes.getValue("SCM-Commit"))
+                                .append("\" \"" + attributes.getValue("SCM-Time")).append("\"]");
+                        }
                     }
                     return sb.toString();
                 }
