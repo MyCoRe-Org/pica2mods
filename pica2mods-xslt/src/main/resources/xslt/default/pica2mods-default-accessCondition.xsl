@@ -51,6 +51,7 @@
       </mods:accessCondition>
     </xsl:for-each>
     <xsl:if test="not(./p:datafield[@tag='017R'])">
+      <!-- Access Status from 4950$4 (URL, subfield for licenseinfos) -->
       <xsl:for-each select="(./p:datafield[@tag='017C'][p:subfield[@code='x' and (starts-with(.,'D') or starts-with(.,'H'))]])[1]/p:subfield[@code='4']">
         <xsl:choose>
           <xsl:when test="./text()='LF'">
