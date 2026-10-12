@@ -134,7 +134,7 @@
     </xsl:choose>
   </xsl:function>
   
-  <xsl:function name="pica2mods:createLocationsWithUrl" as="element()?">
+  <xsl:function name="pica2mods:createLocationsWithUrl" as="element()*">
     <xsl:param name="record" as="element()" />
     <xsl:sequence>
       <xsl:for-each select="$record/p:datafield[@tag='017C'][p:subfield[@code='x' and (starts-with(.,'D') or starts-with(.,'H'))]]">
