@@ -290,4 +290,8 @@
       </mods:number>
     </mods:detail>
   </xsl:template>
+
+  <xsl:template match="mods:classification[@valueURI = preceding-sibling::mods:classification/@valueURI]" mode="ubrPostProcessing">
+    <!-- delete duplicate classifications (e.g. providers from 4110 or 8600) -->
+  </xsl:template>
 </xsl:stylesheet>
