@@ -149,7 +149,7 @@
             <xsl:if test="./p:subfield[@code='y']"> 
               <xsl:attribute name="displayLabel"><xsl:value-of select="./p:subfield[@code='y']" /></xsl:attribute>
             </xsl:if>
-            <xsl:variable name="avail_vol" select="substring-after(./p:subfield[@code='x'],'; ')" />
+            <xsl:variable name="avail_vol" select="substring-after((./p:subfield[@code='x' and (starts-with(.,'D') or starts-with(.,'H'))])[1],'; ')" />
             <xsl:if test="string-length($avail_vol) &gt; 0">
               <xsl:attribute name="note" select="$avail_vol" />
             </xsl:if>
