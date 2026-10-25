@@ -175,7 +175,7 @@
       <xsl:choose>
         <xsl:when test="./@code='c' and (count($datafield/p:subfield[@code='c']) = count($datafield/p:subfield[@code='b']))">
           <!-- matched die x. Institution mit dem x. Ort -->
-          <xsl:variable name="pos" select="index-of($datafield/p:subfield[@code='c'], .)" />
+          <xsl:variable name="pos" select="count(./preceding-sibling::p:subfield[@code='c']) + 1"/>
           <mods:publisher>
             <xsl:value-of select="pica2mods:institution_place_expansion(., ($datafield/p:subfield[@code='b'])[$pos])" />
           </mods:publisher>
