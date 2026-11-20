@@ -113,8 +113,8 @@ jobs:
       # Dauert erfahrungsgemäß ~12 min (autoPublish=true, waitUntil=published im POM)
       - name: mvn release:perform
         env:
-          SONATYPE_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          SONATYPE_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          SONATYPE_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          SONATYPE_TOKEN: ${{ secrets.MAVEN_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         run: |
           mvn --batch-mode "$RELEASE_PLUGIN:perform" \
