@@ -8,6 +8,7 @@
                 exclude-result-prefixes="mods pica2mods p xlink">
 
   <xsl:import use-when="system-property('XSL_TESTING')='true'" href="_common/pica2mods-functions.xsl" />
+  <xsl:import href="default/pica2mods-default-originInfo.xsl" />
   <xsl:param name="MCR.PICA2MODS.DATABASE" select="'k10plus'" />
   <xsl:template name="modsRelatedItem">
     <xsl:for-each select="./p:datafield[@tag='039B']"> <!-- 4241 Beziehungen zur größeren Einheit -->
@@ -27,12 +28,33 @@
       </xsl:for-each>
     </xsl:if>
 
-    <xsl:for-each select="./p:datafield[@tag='039D' and p:subfield[@code='n'] = 'Verlags-Ausgabe']"> <!-- 4243 Beziehungen auf Manifestationsebene -->
+    <xsl:for-each select="./p:datafield[@tag='039D']"> <!-- 4243 Beziehungen auf Manifestationsebene -->
       <xsl:call-template name="COMMON_Reference">
         <xsl:with-param name="type">otherFormat</xsl:with-param>
+        <xsl:with-param name="otherType">
+          <xsl:choose>
+            <xsl:when test="starts-with(./p:subfield[@code='i'], 'Digitalisiert')">digital_reproduction</xsl:when>
+             <xsl:when test="count(./../p:datafield[@tag='039D'])=1 and ./../p:datafield[@tag='037H']/p:subfield[@code='a' and contains(text(), 'Digitalisierungsvorlage:')]">analog_original</xsl:when>
+            <xsl:otherwise>other_manifestation</xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
         <xsl:with-param name="datafield" select="." />
       </xsl:call-template>
     </xsl:for-each>
+    <xsl:for-each select="./p:datafield[@tag='039I']"> <!-- 4256  Beziehungen zur Reproduktion in anderer physischer Form -->
+      <xsl:call-template name="COMMON_Reference">
+        <xsl:with-param name="type">otherFormat</xsl:with-param>
+        <xsl:with-param name="otherType">
+          <xsl:choose>
+            <xsl:when test="./p:subfield[@code='i'] ='Elektronische Reproduktion von'">analog_original</xsl:when>
+            <xsl:when test="./p:subfield[@code='i'] ='Elektronische Reproduktion'">digital_reproduction</xsl:when>
+            <xsl:otherwise>other_reproduction</xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
+        <xsl:with-param name="datafield" select="." />
+      </xsl:call-template>
+    </xsl:for-each>
+
     <xsl:for-each select="./p:datafield[@tag='039P']"> <!-- 4261 Themenbeziehungen (Beziehung zu der Resource, die beschrieben wird) -->
       <xsl:call-template name="COMMON_Reference">
         <xsl:with-param name="type">references</xsl:with-param>
@@ -86,6 +108,7 @@
   </xsl:template>
 
   <xsl:template name="COMMON_HostOrSeries">
+    <xsl:comment>COMMON_HostOrSeries for <xsl:value-of select="./@tag" /></xsl:comment>
     <mods:relatedItem>
       <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, ./p:subfield[@code='9'])" />
       <xsl:variable name="parentPica0500_2" select="substring($parent/p:datafield[@tag='002@']/p:subfield[@code='0'],2,1)" />
@@ -207,6 +230,7 @@
 
       <xsl:choose>
         <xsl:when test="$pica0500_2='s'">
+         <xsl:comment>COMMON_AppearsIn for <xsl:value-of select="./@tag" /></xsl:comment>
          <mods:relatedItem>
          <xsl:attribute name="otherType">appears_in</xsl:attribute>
           <xsl:attribute name="type">host</xsl:attribute>
@@ -290,6 +314,7 @@
          </mods:relatedItem>
         </xsl:when>
         <xsl:when test="$pica0500_2='a'">
+         <xsl:comment>COMMON_AppearsIn for <xsl:value-of select="./@tag" /></xsl:comment>
          <mods:relatedItem>
          <xsl:attribute name="otherType">appears_in</xsl:attribute>
           <xsl:choose>
@@ -379,7 +404,7 @@
     <xsl:param name="type" required="no" />
     <xsl:param name="otherType" required="no" />
     <xsl:param name="datafield" />
-    <xsl:comment>COMMON_REFERENCE for <xsl:value-of select="$datafield/@tag" /></xsl:comment>
+    <xsl:comment>COMMON_Reference for <xsl:value-of select="$datafield/@tag" /></xsl:comment>
     <mods:relatedItem>
       <xsl:if test="$type">
         <xsl:attribute name="type" select="$type" /> 
@@ -390,27 +415,19 @@
       <xsl:choose>
         <xsl:when test="$datafield/p:subfield[@code='9']">
           <xsl:variable name="parent" select="pica2mods:queryPicaFromUnAPIWithPPN($MCR.PICA2MODS.DATABASE, ./p:subfield[@code='9'])" />
-          <xsl:if test="starts-with($parent/p:datafield[@tag='002@']/p:subfield[@code='0'], 'O')">
-            <xsl:call-template name="parent_info">
-              <xsl:with-param name="parent" select="$parent" />
-            </xsl:call-template>
-            <xsl:choose>
-              <xsl:when test="$parent/p:datafield[@tag='004V']">
-                <mods:identifier type='doi'><xsl:value-of select="$parent/p:datafield[@tag='004V']/p:subfield[@code='0']" /></mods:identifier>
-              </xsl:when>
-              <xsl:when test="$parent/p:datafield[@tag='017C']">
-                <mods:identifier type='url'><xsl:value-of select="$parent/p:datafield[@tag='017C'][1]/p:subfield[@code='u']" /></mods:identifier>
-              </xsl:when>
-            </xsl:choose>
-            <xsl:if test="$parent[starts-with(p:datafield[@tag='002@']/p:subfield[@code='0'], 'Ob')]/p:datafield[@tag='006Z']">
-            <mods:identifier type="zdb">
-              <xsl:value-of select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']" />
-            </mods:identifier>
-            </xsl:if>
-          </xsl:if>
+          <xsl:call-template name="parent_info">
+            <xsl:with-param name="parent" select="$parent" />
+          </xsl:call-template>
+          <xsl:choose>
+            <xsl:when test="$parent/p:datafield[@tag='004V']">
+              <mods:identifier type='doi'><xsl:value-of select="$parent/p:datafield[@tag='004V']/p:subfield[@code='0']" /></mods:identifier>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="pica2mods:createLocationsWithUrl($parent)" />
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-        <!-- <xsl:when test="$datafield/p:subfield[@code='C' and text()='DOI']"> -->
          <xsl:if test="$datafield/p:subfield[@code='a']">
             <xsl:variable name="titlefield">
               <p:datafield tag="021A">
@@ -440,11 +457,8 @@
           </xsl:if>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:if test="$datafield/p:subfield[@code='i']">
-        <mods:note type="relation_label"><xsl:value-of select="$datafield/p:subfield[@code='i']" /></mods:note>
-      </xsl:if>
-      <xsl:if test="$datafield[@tag='039D']/p:subfield[@code='n']">  <!-- 4243 039D Beziehung auf Manifestationsebene -->
-        <mods:note type="format_type"><xsl:value-of select="$datafield[@tag='039D']/p:subfield[@code='n']" /></mods:note>
+      <xsl:if test="$datafield/p:subfield[@code='i'] | $datafield[@tag='039D' or @tag='039I']/p:subfield[@code='n']">
+        <mods:note type="relation_label"><xsl:value-of select="string-join(($datafield/p:subfield[@code='i'], $datafield[@tag='039D' or @tag='039I']/p:subfield[@code='n']),' ')" /></mods:note>
       </xsl:if>
     </mods:relatedItem>
   </xsl:template>
@@ -497,11 +511,44 @@
         <xsl:value-of select="concat('https://uri.gbv.de/document/',$MCR.PICA2MODS.DATABASE,':ppn:', .)" />
       </mods:identifier>
     </xsl:for-each>
-    <xsl:for-each select="$parent/p:datafield[@tag='021A']">
-      <xsl:call-template name="simple_title">
-        <xsl:with-param name="datafield" select="." />
+    
+    <!-- TODO: Zusammenführen mit COMMON_Title template -->
+    <xsl:choose>
+      <xsl:when test="$parent/p:datafield[@tag='036E' or @tag='036F']">
+        <mods:titleInfo>
+          <xsl:for-each select="($parent/p:datafield[@tag='036E' or @tag='036F']/p:subfield[@code='a'])[1]">
+            <mods:title><xsl:value-of select="." /></mods:title>
+          </xsl:for-each>
+          <xsl:for-each select="($parent/p:datafield[@tag='036E' or @tag='036F']/p:subfield[@code='l'])[1]">
+            <mods:partNumber><xsl:value-of select="." /></mods:partNumber>
+          </xsl:for-each>
+          <xsl:for-each select="($parent/p:datafield[@tag='021A']/p:subfield[@code='a'])[1]">
+            <mods:partName><xsl:value-of select="." /></mods:partName>
+          </xsl:for-each>
+          <!-- sub title -->
+          <xsl:for-each select="($parent/p:datafield[@tag='021A']/p:subfield[@code='d'])[1]">
+            <mods:partName><xsl:value-of select="." /></mods:partName>
+          </xsl:for-each>
+        </mods:titleInfo>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="$parent/p:datafield[@tag='021A']">
+          <xsl:call-template name="simple_title">
+            <xsl:with-param name="datafield" select="." />
+          </xsl:call-template>
+        </xsl:for-each>  
+      </xsl:otherwise>
+    </xsl:choose>
+    <mods:originInfo>
+      <xsl:attribute name="eventType">publication</xsl:attribute>
+      <xsl:call-template name="common_date_issued">
+        <xsl:with-param name="datafield" select="$parent/p:datafield[@tag='011@']" />
       </xsl:call-template>
-    </xsl:for-each>
+      <xsl:call-template name="common_edition">
+        <xsl:with-param name="record" select="$parent" />
+      </xsl:call-template>
+    </mods:originInfo>
+    
     <xsl:for-each select="$parent/p:datafield[@tag='006Z']/p:subfield[@code='0']">
       <mods:identifier type="zdb">
         <xsl:value-of select="." />

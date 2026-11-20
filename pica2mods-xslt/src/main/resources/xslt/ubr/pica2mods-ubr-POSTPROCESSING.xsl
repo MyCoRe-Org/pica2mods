@@ -114,22 +114,57 @@
     
   <!-- delete other originInfo[@eventType=digitization] -->
   <xsl:template match="mods:mods/mods:originInfo[@eventType='digitization']" mode="ubrPostProcessing">
+    <!-- if multiple 'Gesamttitel' are matching with the classification - the originInfo will be copied multiple times 
+         - make sure only one (the 'first') originInfo is returned -->
     <xsl:variable name="oi" select="." />
-    <xsl:for-each select="comment()">
-      <xsl:if test="starts-with(., '[Gesamttitel: ')">
-        <xsl:variable name="pica4110" select="lower-case(replace(., '\[Gesamttitel: (.*)\]','$1'))" />
-        <xsl:for-each select="document('classification:provider')//category/label[@xml:lang='x-pica-4110']">
-          <xsl:if test="$pica4110 = replace(lower-case(./@text), '%default%', 'digitalisierte drucke der universitätsbibliothek rostock')">
-             <xsl:copy-of select="$oi" />
-          </xsl:if>
-        </xsl:for-each>
-      </xsl:if>
-    </xsl:for-each>
+    <xsl:variable name="oi_result">
+      <xsl:for-each select="comment()">
+        <xsl:if test="starts-with(., '[Gesamttitel: ')">
+          <xsl:variable name="pica4110" select="lower-case(replace(., '\[Gesamttitel: (.*)\]','$1'))" />
+          <xsl:for-each select="document('classification:provider')//category/label[@xml:lang='x-pica-4110']">
+            <xsl:if test="$pica4110 = replace(lower-case(./@text), '%default%', 'digitalisierte drucke der universitätsbibliothek rostock')">
+               <xsl:copy-of select="$oi" />
+            </xsl:if>
+          </xsl:for-each>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:copy-of select="$oi_result/mods:originInfo[1]" />
   </xsl:template>
-
-  <!-- delete other mods:note[@type=available volumes] -->
-  <xsl:template match="mods:mods/mods:note[@type='available_volumes']" mode="ubrPostProcessing" />
-
+  
+  
+  <!-- update location -->
+  <xsl:template match="mods:mods/mods:location[mods:url]" mode="ubrPostProcessing">
+     <xsl:choose>
+       <xsl:when test="./mods:url/text() = ../mods:identifier[@type='purl']/text()">
+         <mods:location>
+           <xsl:copy-of select="./@*" />
+           <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/"
+              valueURI="http://d-nb.info/gnd/25968-8">Universitätsbibliothek Rostock</mods:physicalLocation>
+           <mods:url usage="primary">
+             <xsl:copy-of select="./mods:url/@*" />
+             <xsl:value-of select="replace(./mods:url, 'http://purl.uni-rostock.de', 'https://purl.uni-rostock.de')" />
+           </mods:url>
+         </mods:location>
+       </xsl:when>
+       
+       <xsl:when test="contains(./mods:url, '://digibib.hs-nb.de/resolve/id')">
+         <mods:location>
+           <xsl:copy-of select="./@*" />
+           <mods:physicalLocation type="online" authorityURI="http://d-nb.info/gnd/"
+             valueURI="http://d-nb.info/gnd/1162078316">Hochschulbibliothek Neubrandenburg</mods:physicalLocation>
+           <mods:url usage="primary">
+             <xsl:copy-of select="./mods:url/@*" />
+             <xsl:value-of select="./mods:url" />
+           </mods:url>
+         </mods:location>
+       </xsl:when>
+       <xsl:otherwise>
+         <xsl:copy-of select="." />
+       </xsl:otherwise>
+     </xsl:choose>
+  </xsl:template>
+  
   <xsl:template match="*|@*|processing-instruction()|comment()" mode="ubrPostProcessing">
     <xsl:copy>
       <xsl:apply-templates select="*|@*|text()|processing-instruction()|comment()"
@@ -254,5 +289,9 @@
         </xsl:choose>
       </mods:number>
     </mods:detail>
+  </xsl:template>
+
+  <xsl:template match="mods:classification[@valueURI = preceding-sibling::mods:classification/@valueURI]" mode="ubrPostProcessing">
+    <!-- delete duplicate classifications (e.g. providers from 4110 or 8600) -->
   </xsl:template>
 </xsl:stylesheet>

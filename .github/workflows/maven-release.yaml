@@ -1,0 +1,169 @@
+# Automatisiert howto_release.md:
+#   1. develop -> main mergen (--no-ff)
+#   2. mvn release:prepare (Release-Version setzen, Tag vX.Y anlegen, nächste SNAPSHOT-Version)
+#   3. mvn release:perform mit -Psign-with-gpg,deploy-to-sonatype (Upload zu Sonatype Central)
+#   4. main + Tag pushen
+#   5. main -> develop zurückmergen (--no-ff) und pushen
+#   6. optional: GitHub-Release anlegen
+#
+# Benötigte Repository-Secrets:
+#   OSSRH_USERNAME   - Sonatype Central Token-Username (wird schon für Snapshots genutzt)
+#   OSSRH_TOKEN      - Sonatype Central Token-Passwort (wird schon für Snapshots genutzt)
+#   GPG_PRIVATE_KEY  - ASCII-armored privater GPG-Schlüssel (gpg --armor --export-secret-keys <KEY_ID>)
+#   GPG_PASSPHRASE   - Passphrase dieses Schlüssels
+# Optional:
+#   RELEASE_TOKEN    - PAT / GitHub-App-Token mit Push-Rechten, falls main/develop
+#                      durch Branch-Protection für GITHUB_TOKEN gesperrt sind.
+#                      Ein Push mit diesem Token löst außerdem den Snapshot-Workflow auf develop aus
+#                      (Pushes mit GITHUB_TOKEN tun das nicht).
+
+name: Maven Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: 'Release-Version (z.B. 3.1). Leer = aktuelle SNAPSHOT-Version ohne -SNAPSHOT'
+        required: false
+        type: string
+      developmentVersion:
+        description: 'Nächste Entwicklungsversion (z.B. 3.2-SNAPSHOT). Leer = automatisch'
+        required: false
+        type: string
+      createGithubRelease:
+        description: 'GitHub-Release mit automatisch generierten Notes anlegen'
+        required: false
+        type: boolean
+        default: true
+
+# Niemals zwei Releases gleichzeitig
+concurrency:
+  group: maven-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+ 
+      # Bricht sofort ab, statt erst nach dem Build beim Signieren zu scheitern
+      - name: Check required secrets
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          OSSRH_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          OSSRH_TOKEN: ${{ secrets.MAVEN_PASSWORD  }}
+        run: |
+          missing=0
+          for s in GPG_PRIVATE_KEY GPG_PASSPHRASE OSSRH_USERNAME OSSRH_TOKEN; do
+            if [ -z "${!s}" ]; then echo "::error::Secret $s ist leer oder für diesen Workflow nicht verfügbar"; missing=1; fi
+          done
+          if [ -n "$GPG_PRIVATE_KEY" ] && ! grep -q -- '-----BEGIN PGP PRIVATE KEY BLOCK-----' <<< "$GPG_PRIVATE_KEY"; then
+            echo "::error::GPG_PRIVATE_KEY ist kein ASCII-armored privater Schlüssel (gpg --armor --export-secret-keys <KEY_ID>)"; missing=1
+          fi
+          exit $missing
+ 
+      - name: Set up JDK 21 and Maven settings
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+          # muss zu <publishingServerId> im Profil deploy-to-sonatype passen
+          server-id: 'sonatype-central'
+          server-username: SONATYPE_USERNAME
+          server-password: SONATYPE_TOKEN
+
+      - name: Configure git
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898242+github-actions[bot]@users.noreply.github.com"
+
+      # --- Schritt 1: develop nach main mergen -----------------------------
+      - name: Merge develop into main
+        run: |
+          git fetch origin develop
+          git merge --no-ff origin/develop -m "Merge branch 'develop' into main for release"
+
+      # --- Schritt 2: Release vorbereiten ----------------------------------
+      # Tag-Format v<Version> wie bisher (v2.13, v3.0, ...). Gepusht wird erst,
+      # wenn das Deployment erfolgreich war (pushChanges=false + localCheckout).
+      - name: mvn release:prepare
+        env:
+          RELEASE_VERSION: ${{ inputs.releaseVersion }}
+          DEV_VERSION: ${{ inputs.developmentVersion }}
+        run: |
+          ARGS=()
+          [ -n "$RELEASE_VERSION" ] && ARGS+=("-DreleaseVersion=$RELEASE_VERSION")
+          [ -n "$DEV_VERSION" ]     && ARGS+=("-DdevelopmentVersion=$DEV_VERSION")
+          mvn --batch-mode "release:prepare" \
+            -DtagNameFormat='v@{project.version}' \
+            -DautoVersionSubmodules=true \
+            -DpushChanges=false \
+            "${ARGS[@]}"
+
+          TAG=$(grep '^scm.tag=' release.properties | cut -d= -f2)
+          echo "RELEASE_TAG=$TAG" >> "$GITHUB_ENV"
+          echo "Release-Tag: $TAG"
+
+      # --- Schritt 3: Release durchführen (signieren + Sonatype) -----------
+      # Der geforkte Build läuft "mvn deploy -Psign-with-gpg,deploy-to-sonatype".
+      # Das Profil deploy-to-sonatype aktiviert org.sonatype.central:central-publishing-maven-plugin
+      # (extensions=true), das den Standard-Deploy ersetzt und das Bundle zu Sonatype Central hochlädt.
+      # Dauert erfahrungsgemäß ~12 min (autoPublish=true, waitUntil=published im POM)
+      - name: mvn release:perform
+        env:
+          SONATYPE_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          SONATYPE_TOKEN: ${{ secrets.MAVEN_PASSWORD  }}
+          # Signer "bc" (Bouncy Castle, maven-gpg-plugin >= 3.2.0) liest den Schlüssel
+          # direkt aus MAVEN_GPG_KEY - kein gpg-Binary, kein Keyring, kein gpg-agent nötig.
+          MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+        run: |
+          mvn --batch-mode "release:perform" \
+            -DlocalCheckout=true \
+            -Dgoals=deploy \
+            -Darguments="-Psign-with-gpg,deploy-to-sonatype -Dgpg.signer=bc"
+
+      # --- Schritt 4: main + Tag pushen ------------------------------------
+      - name: Push main and tag
+        run: |
+          git push origin main
+          git push origin "refs/tags/$RELEASE_TAG"
+
+      # --- Schritt 5: main zurück nach develop mergen ----------------------
+      # (release:clean entfällt: der Runner wird ohnehin verworfen)
+      - name: Merge main back into develop
+        run: |
+          git fetch origin develop
+          git checkout -B develop origin/develop
+          git merge --no-ff main -m "Merge branch 'main' into develop after release $RELEASE_TAG"
+          git push origin develop
+
+      # --- Schritt 6: optional GitHub-Release ------------------------------
+      - name: Create GitHub release
+        if: ${{ inputs.createGithubRelease }}
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+        run: gh release create "$RELEASE_TAG" --title "Pica2MODS ${RELEASE_TAG#v}" --generate-notes --verify-tag
+
+      - name: Summary
+        run: |
+          VERSION=${RELEASE_TAG#v}
+          {
+            echo "## Pica2MODS $VERSION released :rocket:"
+            echo ""
+            echo "- Tag: \`$RELEASE_TAG\`"
+            echo "- Sonatype: https://central.sonatype.com/artifact/org.mycore.pica2mods/pica2mods-xslt/$VERSION"
+            echo "- Maven Central (Sync bis zu 24 h): https://mvnrepository.com/artifact/org.mycore.pica2mods/pica2mods-xslt/$VERSION"
+          } >> "$GITHUB_STEP_SUMMARY"

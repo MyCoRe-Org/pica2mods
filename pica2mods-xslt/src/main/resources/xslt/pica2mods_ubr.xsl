@@ -23,6 +23,7 @@
   <xsl:import href="default/pica2mods-default-note.xsl" />
   <xsl:import href="default/pica2mods-default-abstract.xsl" />
   <xsl:import href="default/pica2mods-default-subject.xsl" />
+  <xsl:import href="default/pica2mods-default-accessCondition.xsl" />
   <xsl:import href="default/pica2mods-default-relatedItem.xsl" />
 
   <xsl:import href="ubr/pica2mods-ubr-POSTPROCESSING.xsl" />
@@ -62,8 +63,10 @@
       <xsl:call-template name="modsOriginInfo" />
       <xsl:call-template name="modsLocation" />
       <xsl:call-template name="modsNote" />
-      <xsl:call-template name="modsRelatedItem" />
+      <!-- disabled - we keep using our MyCoRe classification from 8600 -->
+      <!-- <xsl:call-template name="modsAccessCondition" />-->
       <xsl:call-template name="modsSubject" />
+      <xsl:call-template name="modsRelatedItem" />
     </mods:mods>
   </xsl:template>
 

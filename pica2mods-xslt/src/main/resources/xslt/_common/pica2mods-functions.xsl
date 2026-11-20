@@ -9,7 +9,7 @@
   xmlns:map="http://www.w3.org/2005/xpath-functions/map"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:err="http://www.w3.org/2005/xqt-errors"
-  exclude-result-prefixes="mods fn xs err">
+  exclude-result-prefixes="mods fn xs err map p pica2mods xlink">
 
   <xsl:import href="_common/functions/detect-language.xsl" />
   <xsl:import href="_common/functions/urn-processing.xsl" />
@@ -133,6 +133,32 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
+  
+  <xsl:function name="pica2mods:createLocationsWithUrl" as="element()*">
+    <xsl:param name="record" as="element()" />
+    <xsl:sequence>
+      <xsl:for-each select="$record/p:datafield[@tag='017C'][p:subfield[@code='x' and (starts-with(.,'D') or starts-with(.,'H'))]]">
+        <mods:location>
+          <mods:url>
+            <xsl:attribute name="access">
+              <xsl:choose>
+                  <xsl:when test="./p:subfield[@code='5']='34'">raw object</xsl:when>
+                  <xsl:otherwise>object in context</xsl:otherwise>
+              </xsl:choose>
+            </xsl:attribute>
+            <xsl:if test="./p:subfield[@code='y']"> 
+              <xsl:attribute name="displayLabel"><xsl:value-of select="./p:subfield[@code='y']" /></xsl:attribute>
+            </xsl:if>
+            <xsl:variable name="avail_vol" select="substring-after((./p:subfield[@code='x' and (starts-with(.,'D') or starts-with(.,'H'))])[1],'; ')" />
+            <xsl:if test="string-length($avail_vol) &gt; 0">
+              <xsl:attribute name="note" select="$avail_vol" />
+            </xsl:if>
+            <xsl:value-of select="./p:subfield[@code='u']" />
+          </mods:url>
+        </mods:location>
+      </xsl:for-each>
+    </xsl:sequence>
+  </xsl:function>
 
   <xsl:function name="pica2mods:sortableSortstring" as="xs:string">
     <xsl:param name="input" as="xs:string" />
@@ -160,6 +186,30 @@
       </xsl:for-each>
     </xsl:variable>
     <xsl:value-of select="string-join($output/part, '-')" />
+  </xsl:function>
+  
+  <xsl:function name="pica2mods:institution_place_expansion" as="xs:string">
+    <!-- ergänzt bei generischen Institutionsnamen wie Universität, Universitätsbibliothek... den Ort an den Namen -->
+    <xsl:param name="institution" as="xs:string"/>
+    <xsl:param name="place"       as="xs:string?"/>
+  
+    <xsl:choose>
+      <xsl:when test="normalize-space($place) = ''">
+        <xsl:sequence select="$institution"/>
+      </xsl:when>
+      <xsl:when test="contains(lower-case($institution), lower-case($place))">
+        <xsl:sequence select="$institution"/>
+      </xsl:when>
+      <xsl:when test="tokenize('universität,universitätsbibliothek,hochschule,hochschulbibliothek,universitätsverlag,stadtarchiv', ',') = tokenize(lower-case($institution),' ') and not(contains(lower-case($institution), lower-case($place)))">
+        <xsl:sequence select="concat($institution, ' ', $place)"/>
+      </xsl:when>
+      <xsl:when test="tokenize('university,library,archive', ',') = tokenize(lower-case($institution), ' ') and not(contains(lower-case($institution), lower-case($place)))">
+        <xsl:sequence select="concat($place, ' ', $institution)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="$institution"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:function>
   
 </xsl:stylesheet>

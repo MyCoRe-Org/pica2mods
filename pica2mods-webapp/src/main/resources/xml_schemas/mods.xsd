@@ -24,6 +24,8 @@ MODS: Metadata Object Description Schema. See http://www.loc.gov/standards/mods/
           *********************************************************************
 
 ********* November 10, 2022 the attribute @supplied has been added to the <name> definition.
+********* August 11, 2023 removed duplicate IDAttributeGroup declaration from accessCondition.
+
 
 *************** Changes in version 3.8
 
@@ -223,8 +225,9 @@ End list of "top level" MODS elements
         <xs:attribute name="altRepGroup" type="xs:string"/>
         <xs:attributeGroup ref="altFormatAttributeGroup"/>
         <!-- 
-****************** following two attribute groups added in 3.8-->
-        <xs:attributeGroup ref="IDAttributeGroup"/>
+****************** following two attribute groups added in 3.8 -->
+        <!--ID attribute group removed as duplicate. See August 11, 2023 note -->
+        <!-- <xs:attributeGroup ref="IDAttributeGroup"/> -->
         <xs:attributeGroup ref="authorityAttributeGroup"/>
         <!--  -->
       </xs:extension>

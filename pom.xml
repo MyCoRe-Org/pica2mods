@@ -234,13 +234,15 @@
           <plugin>
             <groupId>org.sonatype.central</groupId>
             <artifactId>central-publishing-maven-plugin</artifactId>
-            <version>0.10.0</version>
+            <version>0.12.0</version>
             <extensions>true</extensions>
             <configuration>
               <centralSnapshotsUrl>https://central.sonatype.com/repository/maven-snapshots</centralSnapshotsUrl>
               <publishingServerId>sonatype-central</publishingServerId>
+              <!-- disabled for testing - check deployment on Sonatype server
               <autoPublish>true</autoPublish>
               <waitUntil>published</waitUntil>
+              -->
               <excludeArtifacts>
                 <excludeArtifact>pica2solr</excludeArtifact>
                 <excludeArtifact>mods2solr</excludeArtifact>

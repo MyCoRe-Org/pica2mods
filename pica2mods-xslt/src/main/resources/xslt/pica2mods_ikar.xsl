@@ -18,6 +18,7 @@
   <xsl:import href="default/pica2mods-default-note.xsl" />
   <xsl:import href="default/pica2mods-default-abstract.xsl" />
   <xsl:import href="default/pica2mods-default-subject.xsl" />
+  <xsl:import href="default/pica2mods-default-accessCondition.xsl" />
   <xsl:import href="default/pica2mods-default-relatedItem.xsl" />
 
   <xsl:import href="_common/pica2mods-pica-PREPROCESSING.xsl" />
@@ -39,8 +40,9 @@
       <xsl:call-template name="modsLocation" />
       <xsl:call-template name="modsRecordInfo" />
       <xsl:call-template name="modsNote" />
-      <xsl:call-template name="modsRelatedItem" />
+      <xsl:call-template name="modsAccessCondition" />
       <xsl:call-template name="modsSubject" />
+      <xsl:call-template name="modsRelatedItem" />
     </mods:mods>
   </xsl:template>
 
