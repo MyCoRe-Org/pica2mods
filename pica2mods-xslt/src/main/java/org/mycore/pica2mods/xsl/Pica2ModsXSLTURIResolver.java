@@ -93,7 +93,15 @@ public class Pica2ModsXSLTURIResolver implements URIResolver {
 
         if (href.startsWith("classification:")) {
             String classid = href.substring("classification:".length());
-            // if the code runs in a MyCoRe environment, 
+
+            //classification override (for migrations):
+            //use the classification xml found in classpath, if present 
+            InputStream isClass = getClass().getResourceAsStream("/classifications/" + classid + ".xml");
+            if (isClass != null) {
+                return new StreamSource(isClass);
+            }
+
+            // if the code runs in a MyCoRe environment: 
             // use the MyCoe URIResolver to retrieve the classification
             try {
                 @SuppressWarnings("rawtypes")
