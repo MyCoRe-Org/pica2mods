@@ -60,8 +60,25 @@ jobs:
           ref: main
           fetch-depth: 0
           token: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
-
-      - name: Set up JDK 21, Maven settings and GPG key
+ 
+      # Bricht sofort ab, statt erst nach dem Build beim Signieren zu scheitern
+      - name: Check required secrets
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+        run: |
+          missing=0
+          for s in GPG_PRIVATE_KEY GPG_PASSPHRASE OSSRH_USERNAME OSSRH_TOKEN; do
+            if [ -z "${!s}" ]; then echo "::error::Secret $s ist leer oder für diesen Workflow nicht verfügbar"; missing=1; fi
+          done
+          if [ -n "$GPG_PRIVATE_KEY" ] && ! grep -q -- '-----BEGIN PGP PRIVATE KEY BLOCK-----' <<< "$GPG_PRIVATE_KEY"; then
+            echo "::error::GPG_PRIVATE_KEY ist kein ASCII-armored privater Schlüssel (gpg --armor --export-secret-keys <KEY_ID>)"; missing=1
+          fi
+          exit $missing
+ 
+      - name: Set up JDK 21 and Maven settings
         uses: actions/setup-java@v5
         with:
           java-version: '21'
@@ -71,8 +88,6 @@ jobs:
           server-id: 'sonatype-central'
           server-username: SONATYPE_USERNAME
           server-password: SONATYPE_TOKEN
-          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Configure git
         run: |
@@ -113,14 +128,17 @@ jobs:
       # Dauert erfahrungsgemäß ~12 min (autoPublish=true, waitUntil=published im POM)
       - name: mvn release:perform
         env:
-          SONATYPE_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          SONATYPE_TOKEN: ${{ secrets.MAVEN_PASSWORD }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          SONATYPE_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          SONATYPE_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          # Signer "bc" (Bouncy Castle, maven-gpg-plugin >= 3.2.0) liest den Schlüssel
+          # direkt aus MAVEN_GPG_KEY - kein gpg-Binary, kein Keyring, kein gpg-agent nötig.
+          MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE  }}
         run: |
           mvn --batch-mode "$RELEASE_PLUGIN:perform" \
             -DlocalCheckout=true \
             -Dgoals=deploy \
-            -Darguments="-Psign-with-gpg,deploy-to-sonatype"
+            -Darguments="-Psign-with-gpg,deploy-to-sonatype -Dgpg.signer=bc"
 
       # --- Schritt 4: main + Tag pushen ------------------------------------
       - name: Push main and tag
