@@ -64,10 +64,10 @@ jobs:
       # Bricht sofort ab, statt erst nach dem Build beim Signieren zu scheitern
       - name: Check required secrets
         env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          OSSRH_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          OSSRH_TOKEN: ${{ secrets.MAVEN_PASSWORD  }}
         run: |
           missing=0
           for s in GPG_PRIVATE_KEY GPG_PASSPHRASE OSSRH_USERNAME OSSRH_TOKEN; do
@@ -128,12 +128,12 @@ jobs:
       # Dauert erfahrungsgemäß ~12 min (autoPublish=true, waitUntil=published im POM)
       - name: mvn release:perform
         env:
-          SONATYPE_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          SONATYPE_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          SONATYPE_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          SONATYPE_TOKEN: ${{ secrets.MAVEN_PASSWORD  }}
           # Signer "bc" (Bouncy Castle, maven-gpg-plugin >= 3.2.0) liest den Schlüssel
           # direkt aus MAVEN_GPG_KEY - kein gpg-Binary, kein Keyring, kein gpg-agent nötig.
           MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE  }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         run: |
           mvn --batch-mode "$RELEASE_PLUGIN:perform" \
             -DlocalCheckout=true \
