@@ -3,17 +3,13 @@
 ## Branching model
 
 **Pica2MODS** uses a lightweight model between *git-flow* and *trunk-based development*. \
-It is **not** strict *git-flow*: there are no `release/*` branches for regular releases.
+It is not strict *git-flow*: there are no `release/*` branches for regular releases.
 
 | Branch | Purpose |
 | --- | --- |
-| `develop` | Ongoing development, always a `-SNAPSHOT` version. \
-Every push deploys a snapshot to Sonatype. |
-| `main` | Release line. `develop` is merged into it before each release; \
-the release commits are made here. |
-| Release tags\
-`vX.Y` | (e.g. `v3.0`).  Only tags; release branches are created on demand, \
-if fixes for a previous (major-) version are necessary |
+| `develop` | Ongoing development, always a `-SNAPSHOT` version. <br>Every push deploys a snapshot to Sonatype. |
+| `main` | Release line. `develop` is merged into it before each release; <br>the release commits are made here. |
+| Release tags <br>`vX.Y` | (e.g. `v3.0`).  Only tags; release branches are created on demand, <br>if fixes for a previous (major-) version are necessary |
 
 
 ## Regular release via (GitHub Actions)
@@ -22,7 +18,7 @@ The workflow `.github/workflows/maven-release.yml` automates the whole process.
 
 ### Start
 
-GitHub → *Actions* → *Maven Release* → *Run workflow*\
+GitHub → *Actions* → *Maven Release* → *Run workflow*
 > run the version from `develop` branch\
 > (it contains the latest changes of the workflow)
 
@@ -50,22 +46,21 @@ The release is uploaded to Sontatype only.\
 5. Merge `main` back into `develop` and push
 6. optionally Create a GitHub release
 
-If the run fails before step 4, nothing has been pushed\
+If the run fails before step 4, nothing has been pushed
 – simply fix the cause and run it again.
 
 #### Notes
-- The `maven-release-plugin` creates two commits on `main`: *prepare release vX.Y* and *prepare for next development iteration*. \
-As a consequence the tip of `main` carries the next `-SNAPSHOT` version, not the released one.  To build exactly the released state, check out the tag.
-- After a release, `main` is merged back into `develop` \
-  > never recreate `develop` from `main`: \
-  > this would drop commits made on `develop` in the meantime\
+- The `maven-release-plugin` creates two commits on `main`: *prepare release vX.Y* and *prepare for next development iteration*.  
+  As a consequence the tip of `main` carries the next `-SNAPSHOT` version, not the released one.  
+  To build exactly the released state, check out the tag.
+- After a release, `main` is merged back into `develop` 
+  > never recreate `develop` from `main`:  
+  > this would drop commits made on `develop` in the meantime
   > and close open pull requests).
-- This follows the release model of the `maven-release-plugin` itself and the *release from trunk / branch for release late* pattern of *trunk-based development*: \
-release branches are created on-demand from a tag, when a fix is actually needed.
-
+- This follows the release model of the `maven-release-plugin` itself and the *release from trunk / branch for release late* pattern of *trunk-based development*: 
+  release branches are created on-demand from a tag, when a fix is actually needed.
 
 ## Manual release (fallback only)
-
 ```
 $ git checkout main
 $ git pull
