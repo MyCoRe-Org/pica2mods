@@ -151,7 +151,7 @@ jobs:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
         run: gh release create "$RELEASE_TAG" --title "Pica2MODS ${RELEASE_TAG#v}" --generate-notes --verify-tag
 
-      # --- Schritt 7: Zusammenfassung ausgeben
+      # --- Schritt 7: Zusammenfassung ausgeben -----------------------------
       - name: Summary
         run: |
           VERSION=${RELEASE_TAG#v}
