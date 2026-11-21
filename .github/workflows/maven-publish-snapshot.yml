@@ -37,6 +37,6 @@ jobs:
 
       - name: Publish to Sontatype Central with Apache Maven
         env:
-          SONATYPE_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          SONATYPE_TOKEN:  ${{ secrets.OSSRH_TOKEN }}
+          SONATYPE_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          SONATYPE_TOKEN: ${{ secrets.MAVEN_PASSWORD }}
         run: mvn --batch-mode deploy -Pdeploy-to-sonatype
